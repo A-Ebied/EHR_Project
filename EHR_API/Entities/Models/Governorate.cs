@@ -1,4 +1,4 @@
-﻿namespace EHR_API.Entities.Models.GeneralData
+﻿namespace EHR_API.Entities.Models
 {
     public class Governorate
     {
