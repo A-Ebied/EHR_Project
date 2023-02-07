@@ -45,7 +45,7 @@ namespace EHR_API.Controllers
                 return BadRequest();
             }
 
-            var governorate = _db.Governorates.FirstOrDefault(g => g.Id == id);
+            var governorate = _db.Governorates.AsNoTracking().FirstOrDefault(g => g.Id == id);
             if (governorate == null)
             {
                 return NotFound(id);
@@ -149,6 +149,8 @@ namespace EHR_API.Controllers
             }
 
             //governoratePatch.ApplyTo(governorate, ModelState);
+            //
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
