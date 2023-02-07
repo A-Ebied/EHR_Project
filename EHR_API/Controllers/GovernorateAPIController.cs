@@ -1,7 +1,9 @@
-﻿using EHR_API.Entities.DTOs;
+﻿using EHR_API.Entities;
+using EHR_API.Entities.DTOs;
 using EHR_API.Extensions.DataStore;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EHR_API.Controllers
 {
@@ -10,6 +12,12 @@ namespace EHR_API.Controllers
     [ApiController]
     public class GovernorateController : ControllerBase
     {
+        private readonly ApplicationDbContext _db;
+        public GovernorateController(ApplicationDbContext db)
+        {
+            _db = db;
+        }
+
         [HttpGet]
         //[ProducesResponseType(200, Type = typeof(IEnumerable<GovernorateDTO>) )]
         //[ProducesResponseType(404)]
@@ -17,7 +25,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<IEnumerable<GovernorateDTO>> GetGovernorates() 
         {
-            var governorates = GovernorateStore.governorateList;
+            var governorates = _db.Governorates.AsNoTracking().ToList();
             if (governorates == null)
             {
                 return NotFound();
@@ -32,12 +40,12 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<GovernorateDTO?> GetGovernorate(int id)
         {
-            if (id == 0) 
+            if (id < 1) 
             { 
                 return BadRequest();
             }
 
-            var governorate = GovernorateStore.governorateList.FirstOrDefault(g => g.Id == id);
+            var governorate = _db.Governorates.FirstOrDefault(g => g.Id == id);
             if (governorate == null)
             {
                 return NotFound(id);
@@ -57,9 +65,10 @@ namespace EHR_API.Controllers
                 return BadRequest(governorate);
             }
 
-            if (GovernorateStore.governorateList.FirstOrDefault(g => g.Title!.ToLower() == governorate.Title!.ToLower()) != null)
+            if (_db.Governorates.FirstOrDefault(g => g.Title!.ToLower() == governorate.Title!.ToLower()) != null)
             {
                 ModelState.AddModelError("Create Governorate Error", "Governorate is already exists !");
+
                 return BadRequest(ModelState);
             }
 
@@ -68,8 +77,8 @@ namespace EHR_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            governorate.Id = GovernorateStore.governorateList.OrderByDescending(g => g.Id).FirstOrDefault().Id + 1;
-            GovernorateStore.governorateList.Add(governorate);
+            //_db.Governorates.Add(governorate);
+            //_db.SaveChanges();
 
             // للعنصر الذي تم انشاءه response في url بيدي 
            return CreatedAtRoute("GetGovernorate", new { id = governorate.Id }, governorate);
@@ -86,13 +95,15 @@ namespace EHR_API.Controllers
                 return BadRequest();
             }
 
-            var removedGoveern = GovernorateStore.governorateList.FirstOrDefault(g => g.Id == id);
+            var removedGoveern = _db.Governorates.FirstOrDefault(g => g.Id == id);
             if (removedGoveern == null) 
             {
                 return NotFound();
             }
 
-            GovernorateStore.governorateList.Remove(removedGoveern);
+            _db.Governorates.Remove(removedGoveern);
+            _db.SaveChanges();
+
             return NoContent();
         }
 
@@ -103,18 +114,20 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult UpdateGovernorate(int id, [FromBody] GovernorateDTO governorate)
         {
-            if (id != governorate.Id || governorate ==null)
+            if (id != governorate.Id || governorate == null)
             {
                 return BadRequest();
             }
 
-            var updatedGoveern = GovernorateStore.governorateList.FirstOrDefault(g => g.Id == id);
+            var updatedGoveern = _db.Governorates.FirstOrDefault(g => g.Id == id);
             if (updatedGoveern == null)
             {
                 return NotFound();
             }
 
-           // update
+            _db.Governorates.Update(updatedGoveern);
+            _db.SaveChanges();
+            
             return NoContent();
         }
 
@@ -129,13 +142,13 @@ namespace EHR_API.Controllers
                 return BadRequest(governoratePatch);
             }
 
-            var governorate = GovernorateStore.governorateList.FirstOrDefault(g => g.Id == id);
+            var governorate = _db.Governorates.AsNoTracking().FirstOrDefault(g => g.Id == id);
             if (governorate == null)
             {
                 return NotFound(governoratePatch);
             }
 
-            governoratePatch.ApplyTo(governorate, ModelState);
+            //governoratePatch.ApplyTo(governorate, ModelState);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
