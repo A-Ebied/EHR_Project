@@ -1,4 +1,4 @@
-﻿using EHR_API.Entities.DTOs;
+﻿using EHR_API.Entities.DTOs.Governorate;
 
 namespace EHR_API.Extensions.DataStore
 {

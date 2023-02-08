@@ -1,5 +1,7 @@
-﻿using EHR_API.Entities;
-using EHR_API.Entities.DTOs;
+﻿using AutoMapper;
+using EHR_API.Entities;
+using EHR_API.Entities.DTOs.Governorate;
+using EHR_API.Entities.Models;
 using EHR_API.Extensions.DataStore;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +15,12 @@ namespace EHR_API.Controllers
     public class GovernorateController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
-        public GovernorateController(ApplicationDbContext db)
+        private readonly IMapper _mapper;
+
+        public GovernorateController(ApplicationDbContext db, IMapper mapper)
         {
             _db = db;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -23,86 +28,82 @@ namespace EHR_API.Controllers
         //[ProducesResponseType(404)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<IEnumerable<GovernorateDTO>> GetGovernorates() 
+        public async Task<ActionResult<IEnumerable<GovernorateDTO>>> GetGovernorates() 
         {
-            var governorates = _db.Governorates.AsNoTracking().ToList();
-            if (governorates == null)
+            var governorates = await _db.Governorates.ToListAsync();
+            if (governorates.Count == 0)
             {
                 return NotFound();
             }
 
-            return Ok(governorates);
+            return Ok(_mapper.Map<List<GovernorateDTO>>(governorates));
         }
 
         [HttpGet("{id:int}", Name = "GetGovernorate")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<GovernorateDTO?> GetGovernorate(int id)
+        public async Task<ActionResult<GovernorateDTO?>> GetGovernorate(int id)
         {
             if (id < 1) 
             { 
                 return BadRequest();
             }
 
-            var governorate = _db.Governorates.AsNoTracking().FirstOrDefault(g => g.Id == id);
+            var governorate = await _db.Governorates.AsNoTracking().FirstOrDefaultAsync(g => g.Id == id);
             if (governorate == null)
             {
                 return NotFound(id);
             }
 
-            return Ok(governorate);
+            return Ok(_mapper.Map<GovernorateDTO>(governorate));
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<GovernorateDTO> CreateGovernorate([FromBody] GovernorateDTO governorate) 
+        public async Task<ActionResult<GovernorateDTO>> CreateGovernorate([FromBody] GovernorateCreateDTO governorateDTO) 
         {
-            if (governorate == null)
+            if (governorateDTO == null)
             {
-                return BadRequest(governorate);
+                return BadRequest(governorateDTO);
             }
 
-            if (_db.Governorates.FirstOrDefault(g => g.Title!.ToLower() == governorate.Title!.ToLower()) != null)
+            if (await _db.Governorates.FirstOrDefaultAsync(g => g.Title!.ToLower() == governorateDTO.Title!.ToLower()) != null)
             {
                 ModelState.AddModelError("Create Governorate Error", "Governorate is already exists !");
 
                 return BadRequest(ModelState);
             }
 
-            if (governorate.Id != 0)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-
-            //_db.Governorates.Add(governorate);
-            //_db.SaveChanges();
+            var governorate = _mapper.Map<Governorate>(governorateDTO);
+            await _db.Governorates.AddAsync(governorate);
+            await _db.SaveChangesAsync();
 
             // للعنصر الذي تم انشاءه response في url بيدي 
-           return CreatedAtRoute("GetGovernorate", new { id = governorate.Id }, governorate);
+            return CreatedAtRoute("GetGovernorate", new { id = governorate.Id }, governorate);
         }
         
         [HttpDelete("{id:int}", Name = "DeleteGovernorate")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public IActionResult DeleteGovernorate(int id) 
+        public async Task<IActionResult> DeleteGovernorate(int id) 
         {
             if (id == 0)
             {
                 return BadRequest();
             }
 
-            var removedGoveern = _db.Governorates.FirstOrDefault(g => g.Id == id);
+            var removedGoveern = await _db.Governorates.FirstOrDefaultAsync(g => g.Id == id);
             if (removedGoveern == null) 
             {
                 return NotFound();
             }
 
             _db.Governorates.Remove(removedGoveern);
-            _db.SaveChanges();
+           await _db.SaveChangesAsync();
 
             return NoContent();
         }
@@ -112,21 +113,21 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public IActionResult UpdateGovernorate(int id, [FromBody] GovernorateDTO governorate)
+        public async Task<IActionResult> UpdateGovernorate(int id, [FromBody] GovernorateUpdateDTO governorateDTO)
         {
-            if (id != governorate.Id || governorate == null)
+            if (id != governorateDTO.Id || governorateDTO == null)
             {
                 return BadRequest();
             }
 
-            var updatedGoveern = _db.Governorates.FirstOrDefault(g => g.Id == id);
-            if (updatedGoveern == null)
+            if (await _db.Governorates.AsNoTracking().FirstOrDefaultAsync(g => g.Id == id) == null)
             {
                 return NotFound();
             }
 
-            _db.Governorates.Update(updatedGoveern);
-            _db.SaveChanges();
+            var governorate = _mapper.Map<Governorate>(governorateDTO);
+            _db.Governorates.Update(governorate);
+            await _db.SaveChangesAsync();
             
             return NoContent();
         }
@@ -135,26 +136,29 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public IActionResult PatchGovernorate(int id, JsonPatchDocument<GovernorateDTO> governoratePatch)
+        public async Task<IActionResult> PatchGovernorate(int id, JsonPatchDocument<GovernorateUpdateDTO> governoratePatch)
         {
             if (id == 0 || governoratePatch == null)
             {
                 return BadRequest(governoratePatch);
             }
 
-            var governorate = _db.Governorates.AsNoTracking().FirstOrDefault(g => g.Id == id);
+            var governorate = await _db.Governorates.AsNoTracking().FirstOrDefaultAsync(g => g.Id == id);
             if (governorate == null)
             {
                 return NotFound(governoratePatch);
             }
 
-            //governoratePatch.ApplyTo(governorate, ModelState);
-            //
-
+            var patch = _mapper.Map<GovernorateUpdateDTO>(governorate);
+            governoratePatch.ApplyTo(patch, ModelState);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+            governorate = _mapper.Map<Governorate>(patch);
+            _db.Governorates.Update(governorate);
+            await _db.SaveChangesAsync();
 
             return NoContent();
         }

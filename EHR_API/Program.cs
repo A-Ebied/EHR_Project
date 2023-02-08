@@ -9,8 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection"))
     );
+
+builder.Services.AddAutoMapper(typeof(MappingConfig));
+
 builder.Services.AddControllers(
-    option => { option.ReturnHttpNotAcceptable = true; }
+    //option => { option.ReturnHttpNotAcceptable = true; }
     ).AddNewtonsoftJson()/*.AddXmlDataContractSerializerFormatters()*/;
 /********/
 
