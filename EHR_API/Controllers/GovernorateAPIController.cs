@@ -88,7 +88,7 @@ namespace EHR_API.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> CreateGovernorate([FromBody] GovernorateCreateDTO governorateDTO) 
         {
@@ -127,7 +127,7 @@ namespace EHR_API.Controllers
         [HttpDelete("{id:int}", Name = "DeleteGovernorate")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> DeleteGovernorate(int id) 
         {
             try
@@ -161,7 +161,7 @@ namespace EHR_API.Controllers
         [HttpPut("{id:int}", Name = "UpdateGovernorate")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> UpdateGovernorate(int id, [FromBody] GovernorateUpdateDTO governorateDTO)
         {
             try
@@ -194,7 +194,7 @@ namespace EHR_API.Controllers
         [HttpPatch("{id:int}", Name = "PatchGovernorate")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> PatchGovernorate(int id, JsonPatchDocument<GovernorateUpdateDTO> governoratePatch)
         {
             try
