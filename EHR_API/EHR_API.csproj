@@ -23,9 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\" />
     <Folder Include="Logging\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
 
 </Project>

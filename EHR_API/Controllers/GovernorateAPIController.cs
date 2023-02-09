@@ -3,6 +3,7 @@ using EHR_API.Entities;
 using EHR_API.Entities.DTOs.Governorate;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions.DataStore;
+using EHR_API.Repositories.Contracts;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +15,10 @@ namespace EHR_API.Controllers
     [ApiController]
     public class GovernorateController : ControllerBase
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IGovernorateRepository _db;
         private readonly IMapper _mapper;
 
-        public GovernorateController(ApplicationDbContext db, IMapper mapper)
+        public GovernorateController(IGovernorateRepository db, IMapper mapper)
         {
             _db = db;
             _mapper = mapper;
@@ -30,7 +31,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<GovernorateDTO>>> GetGovernorates() 
         {
-            var governorates = await _db.Governorates.ToListAsync();
+            var governorates = await _db.GetAllAsync(track: false);
             if (governorates.Count == 0)
             {
                 return NotFound();
@@ -50,7 +51,7 @@ namespace EHR_API.Controllers
                 return BadRequest();
             }
 
-            var governorate = await _db.Governorates.AsNoTracking().FirstOrDefaultAsync(g => g.Id == id);
+            var governorate = await _db.GetAsync(exception: g => g.Id == id, track: false);
             if (governorate == null)
             {
                 return NotFound(id);
@@ -70,7 +71,7 @@ namespace EHR_API.Controllers
                 return BadRequest(governorateDTO);
             }
 
-            if (await _db.Governorates.FirstOrDefaultAsync(g => g.Title!.ToLower() == governorateDTO.Title!.ToLower()) != null)
+            if (await _db.GetAsync(exception: g => g.Title!.ToLower() == governorateDTO.Title!.ToLower()) != null)
             {
                 ModelState.AddModelError("Create Governorate Error", "Governorate is already exists !");
 
@@ -78,8 +79,7 @@ namespace EHR_API.Controllers
             }
 
             var governorate = _mapper.Map<Governorate>(governorateDTO);
-            await _db.Governorates.AddAsync(governorate);
-            await _db.SaveChangesAsync();
+            await _db.CreateAsync(governorate);
 
             // للعنصر الذي تم انشاءه response في url بيدي 
             return CreatedAtRoute("GetGovernorate", new { id = governorate.Id }, governorate);
@@ -96,15 +96,13 @@ namespace EHR_API.Controllers
                 return BadRequest();
             }
 
-            var removedGoveern = await _db.Governorates.FirstOrDefaultAsync(g => g.Id == id);
+            var removedGoveern = await _db.GetAsync(exception: g => g.Id == id);
             if (removedGoveern == null) 
             {
                 return NotFound();
             }
 
-            _db.Governorates.Remove(removedGoveern);
-           await _db.SaveChangesAsync();
-
+            await _db.DeleteAsync(removedGoveern);
             return NoContent();
         }
 
@@ -120,15 +118,13 @@ namespace EHR_API.Controllers
                 return BadRequest();
             }
 
-            if (await _db.Governorates.AsNoTracking().FirstOrDefaultAsync(g => g.Id == id) == null)
+            if (await _db.GetAsync(exception: g => g.Id == id) == null)
             {
                 return NotFound();
             }
 
             var governorate = _mapper.Map<Governorate>(governorateDTO);
-            _db.Governorates.Update(governorate);
-            await _db.SaveChangesAsync();
-            
+            await _db.UpdateAsync(governorate);
             return NoContent();
         }
 
@@ -143,7 +139,7 @@ namespace EHR_API.Controllers
                 return BadRequest(governoratePatch);
             }
 
-            var governorate = await _db.Governorates.AsNoTracking().FirstOrDefaultAsync(g => g.Id == id);
+            var governorate = await _db.GetAsync(exception: g => g.Id == id, track: false);
             if (governorate == null)
             {
                 return NotFound(governoratePatch);
@@ -157,9 +153,7 @@ namespace EHR_API.Controllers
             }
 
             governorate = _mapper.Map<Governorate>(patch);
-            _db.Governorates.Update(governorate);
-            await _db.SaveChangesAsync();
-
+            await _db.UpdateAsync(governorate);
             return NoContent();
         }
     }

@@ -1,4 +1,6 @@
 using EHR_API.Entities;
+using EHR_API.Repositories.Contracts;
+using EHR_API.Repositories.Implementation;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +12,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection"))
     );
 
+builder.Services.AddScoped<IGovernorateRepository, GovernorateRepository>();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 builder.Services.AddControllers(
