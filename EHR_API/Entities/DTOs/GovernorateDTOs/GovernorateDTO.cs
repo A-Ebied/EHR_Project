@@ -1,10 +1,11 @@
-﻿namespace EHR_API.Entities.Models
+﻿using EHR_API.Entities.Models;
+
+namespace EHR_API.Entities.DTOs.GovernorateDTOs
 {
-    public class Governorate
+    public class GovernorateDTO
     {
         public int Id { get; set; }
         public string? Title { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public ICollection<HealthFacility>? HealthFacilitys { get; set; }
     }

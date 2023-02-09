@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using EHR_API.Entities.DTOs.Governorate;
+using EHR_API.Entities.DTOs.GovernorateDTOs;
+using EHR_API.Entities.DTOs.HealthFacilityDTOs;
 using EHR_API.Entities.Models;
 
 namespace EHR_API.Entities
@@ -11,6 +12,10 @@ namespace EHR_API.Entities
             CreateMap<Governorate, GovernorateDTO>().ReverseMap();
             CreateMap<Governorate, GovernorateCreateDTO>().ReverseMap();
             CreateMap<Governorate, GovernorateUpdateDTO>().ReverseMap();
+
+            CreateMap<HealthFacility, HealthFacilityDTO>().ReverseMap();
+            CreateMap<HealthFacility, HealthFacilityCreateDTO>().ReverseMap();
+            CreateMap<HealthFacility, HealthFacilityUpdateDTO>().ReverseMap();
         }
     }
 }

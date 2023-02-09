@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EHR_API.Entities.DTOs.Governorate
+namespace EHR_API.Entities.DTOs.GovernorateDTOs
 {
     public class GovernorateUpdateDTO
     {

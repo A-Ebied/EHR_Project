@@ -13,6 +13,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     );
 
 builder.Services.AddScoped<IGovernorateRepository, GovernorateRepository>();
+builder.Services.AddScoped<IHealthFacilityRepository, HealthFacilityRepository>();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 builder.Services.AddControllers(
