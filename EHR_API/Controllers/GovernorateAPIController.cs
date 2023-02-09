@@ -2,11 +2,10 @@
 using EHR_API.Entities;
 using EHR_API.Entities.DTOs.Governorate;
 using EHR_API.Entities.Models;
-using EHR_API.Extensions.DataStore;
 using EHR_API.Repositories.Contracts;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace EHR_API.Controllers
 {
@@ -15,13 +14,15 @@ namespace EHR_API.Controllers
     [ApiController]
     public class GovernorateController : ControllerBase
     {
-        private readonly IGovernorateRepository _db;
+        protected APIResponse _response;
         private readonly IMapper _mapper;
-
+        private readonly IGovernorateRepository _db;
+        
         public GovernorateController(IGovernorateRepository db, IMapper mapper)
         {
             _db = db;
             _mapper = mapper;
+            _response = new();
         }
 
         [HttpGet]
@@ -29,81 +30,131 @@ namespace EHR_API.Controllers
         //[ProducesResponseType(404)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<GovernorateDTO>>> GetGovernorates() 
+        public async Task<ActionResult<APIResponse>> GetGovernorates() 
         {
-            var governorates = await _db.GetAllAsync(track: false);
-            if (governorates.Count == 0)
+            try
             {
-                return NotFound();
-            }
+                var governorates = await _db.GetAllAsync(track: false);
+                if (governorates.Count == 0)
+                {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    return NotFound(_response);
+                }
 
-            return Ok(_mapper.Map<List<GovernorateDTO>>(governorates));
+                _response.Result = _mapper.Map<List<GovernorateDTO>>(governorates);
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Errors = new List<string> { ex.ToString() };
+                return _response;
+            }
         }
 
         [HttpGet("{id:int}", Name = "GetGovernorate")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<GovernorateDTO?>> GetGovernorate(int id)
+        public async Task<ActionResult<APIResponse>> GetGovernorate(int id)
         {
-            if (id < 1) 
-            { 
-                return BadRequest();
-            }
-
-            var governorate = await _db.GetAsync(exception: g => g.Id == id, track: false);
-            if (governorate == null)
+            try
             {
-                return NotFound(id);
-            }
+                if (id < 1)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(_response);
+                }
 
-            return Ok(_mapper.Map<GovernorateDTO>(governorate));
+                var governorate = await _db.GetAsync(exception: g => g.Id == id, track: false);
+                if (governorate == null)
+                {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    return NotFound(_response);
+                }
+
+                _response.Result = _mapper.Map<GovernorateDTO>(governorate);
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Errors = new List<string> { ex.ToString() };
+                return _response;
+            }
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<GovernorateDTO>> CreateGovernorate([FromBody] GovernorateCreateDTO governorateDTO) 
+        public async Task<ActionResult<APIResponse>> CreateGovernorate([FromBody] GovernorateCreateDTO governorateDTO) 
         {
-            if (governorateDTO == null)
+            try
             {
-                return BadRequest(governorateDTO);
-            }
+                if (governorateDTO == null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(_response);
+                }
 
-            if (await _db.GetAsync(exception: g => g.Title!.ToLower() == governorateDTO.Title!.ToLower()) != null)
+                if (await _db.GetAsync(exception: g => g.Title!.ToLower() == governorateDTO.Title!.ToLower()) != null)
+                {
+                    ModelState.AddModelError("Create Governorate Error", "Governorate is already exists !");
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.Result = ModelState;
+                    return BadRequest(_response);
+                }
+
+                var governorate = _mapper.Map<Governorate>(governorateDTO);
+                await _db.CreateAsync(governorate);
+                _response.Result = _mapper.Map<GovernorateDTO>(governorate);
+                _response.StatusCode = HttpStatusCode.Created;
+
+                // للعنصر الذي تم انشاءه response في url بيدي 
+                return CreatedAtRoute("GetGovernorate", new { id = governorate.Id }, _response);
+            }
+            catch (Exception ex)
             {
-                ModelState.AddModelError("Create Governorate Error", "Governorate is already exists !");
-
-                return BadRequest(ModelState);
+                _response.IsSuccess = false;
+                _response.Errors = new List<string> { ex.ToString() };
+                return _response;
             }
-
-            var governorate = _mapper.Map<Governorate>(governorateDTO);
-            await _db.CreateAsync(governorate);
-
-            // للعنصر الذي تم انشاءه response في url بيدي 
-            return CreatedAtRoute("GetGovernorate", new { id = governorate.Id }, governorate);
         }
         
         [HttpDelete("{id:int}", Name = "DeleteGovernorate")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> DeleteGovernorate(int id) 
+        public async Task<ActionResult<APIResponse>> DeleteGovernorate(int id) 
         {
-            if (id == 0)
+            try
             {
-                return BadRequest();
-            }
+                if (id == 0)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(_response);
+                }
 
-            var removedGoveern = await _db.GetAsync(exception: g => g.Id == id);
-            if (removedGoveern == null) 
+                var removedGoveern = await _db.GetAsync(exception: g => g.Id == id);
+                if (removedGoveern == null)
+                {
+                    return NotFound();
+                }
+
+                await _db.DeleteAsync(removedGoveern);
+
+                _response.StatusCode = HttpStatusCode.NoContent;
+                return Ok(_response);
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                _response.IsSuccess = false;
+                _response.Errors = new List<string> { ex.ToString() };
+                return _response;
             }
-
-            await _db.DeleteAsync(removedGoveern);
-            return NoContent();
         }
 
 
@@ -111,50 +162,76 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateGovernorate(int id, [FromBody] GovernorateUpdateDTO governorateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateGovernorate(int id, [FromBody] GovernorateUpdateDTO governorateDTO)
         {
-            if (id != governorateDTO.Id || governorateDTO == null)
+            try
             {
-                return BadRequest();
-            }
+                if (id != governorateDTO.Id || governorateDTO == null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(_response);
+                }
 
-            if (await _db.GetAsync(exception: g => g.Id == id) == null)
+                if (await _db.GetAsync(exception: g => g.Id == id) == null)
+                {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    return NotFound(_response);
+                }
+
+                var governorate = _mapper.Map<Governorate>(governorateDTO);
+                await _db.UpdateAsync(governorate);
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                _response.IsSuccess = false;
+                _response.Errors = new List<string> { ex.ToString() };
+                return _response;
             }
-
-            var governorate = _mapper.Map<Governorate>(governorateDTO);
-            await _db.UpdateAsync(governorate);
-            return NoContent();
         }
 
         [HttpPatch("{id:int}", Name = "PatchGovernorate")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> PatchGovernorate(int id, JsonPatchDocument<GovernorateUpdateDTO> governoratePatch)
+        public async Task<ActionResult<APIResponse>> PatchGovernorate(int id, JsonPatchDocument<GovernorateUpdateDTO> governoratePatch)
         {
-            if (id == 0 || governoratePatch == null)
+            try
             {
-                return BadRequest(governoratePatch);
-            }
+                if (id == 0 || governoratePatch == null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(_response);
+                }
 
-            var governorate = await _db.GetAsync(exception: g => g.Id == id, track: false);
-            if (governorate == null)
+                var governorate = await _db.GetAsync(exception: g => g.Id == id, track: false);
+                if (governorate == null)
+                {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    return NotFound(_response);
+                }
+
+                var patch = _mapper.Map<GovernorateUpdateDTO>(governorate);
+                governoratePatch.ApplyTo(patch, ModelState);
+                if (!ModelState.IsValid)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.Result = ModelState;
+                    return BadRequest(_response);
+                }
+
+                governorate = _mapper.Map<Governorate>(patch);
+                await _db.UpdateAsync(governorate);
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
             {
-                return NotFound(governoratePatch);
+                _response.IsSuccess = false;
+                _response.Errors = new List<string> { ex.ToString() };
+                return _response;
             }
-
-            var patch = _mapper.Map<GovernorateUpdateDTO>(governorate);
-            governoratePatch.ApplyTo(patch, ModelState);
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            governorate = _mapper.Map<Governorate>(patch);
-            await _db.UpdateAsync(governorate);
-            return NoContent();
         }
     }
 }
