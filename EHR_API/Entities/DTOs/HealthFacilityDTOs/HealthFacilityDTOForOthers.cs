@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace EHR_API.Entities.DTOs.HealthFacilityDTOs
 {
-    public class HealthFacilityDTO
+    public class HealthFacilityDTOForOthers
     {
         [DisplayName("Health Facility No.")]
         public int Id { get; set; }
@@ -19,8 +19,5 @@ namespace EHR_API.Entities.DTOs.HealthFacilityDTOs
         public string Email { get; set; }
         public string Address { get; set; }
         public string Description { get; set; }
-
-        public int GovernorateId { get; set; }
-        public GovernorateDTOForOthers Governorate { get; set; }
     }
 }

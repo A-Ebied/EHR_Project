@@ -18,7 +18,7 @@ builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 builder.Services.AddControllers(
     //option => { option.ReturnHttpNotAcceptable = true; }
-    ).AddNewtonsoftJson()/*.AddXmlDataContractSerializerFormatters()*/;
+    ).AddNewtonsoftJson(/*x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore*/)/*.AddXmlDataContractSerializerFormatters()*/;
 /********/
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

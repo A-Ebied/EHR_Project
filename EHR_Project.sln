@@ -5,8 +5,6 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EHR_API", "EHR_API\EHR_API.csproj", "{23E80659-D768-44D7-B7F0-D8AEB773E750}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EHR_Web", "EHR_Web\EHR_Web.csproj", "{F26BDED6-BD2A-4474-9741-1AB5EA25780F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{23E80659-D768-44D7-B7F0-D8AEB773E750}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23E80659-D768-44D7-B7F0-D8AEB773E750}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23E80659-D768-44D7-B7F0-D8AEB773E750}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F26BDED6-BD2A-4474-9741-1AB5EA25780F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F26BDED6-BD2A-4474-9741-1AB5EA25780F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F26BDED6-BD2A-4474-9741-1AB5EA25780F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F26BDED6-BD2A-4474-9741-1AB5EA25780F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

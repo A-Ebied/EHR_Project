@@ -1,4 +1,4 @@
-namespace EHR_Web.Models
+namespace EHR_Web.Entities.Models
 {
     public class ErrorViewModel
     {

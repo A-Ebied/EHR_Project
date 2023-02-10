@@ -28,7 +28,31 @@ namespace EHR_API.Repositories.Implementation
             await SaveAsync();
         }
 
-        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? exception = null, bool track = true)
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? exception = null, bool track = true, string includeProperties = null)
+        {
+            IQueryable<T> entities = _dbSet;
+            if (!track)
+            {
+                entities = entities.AsNoTracking();
+            }
+
+            if (exception != null)
+            {
+                entities = entities.Where(exception);
+            }
+
+            if (includeProperties != null)
+            {
+                foreach (var item in includeProperties.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    entities = entities.Include(item);
+                }
+            }
+
+            return await entities.ToListAsync();
+        }
+
+        public async Task<T> GetAsync(Expression<Func<T, bool>> exception, bool track = true, string includeProperties = null)
         {
             IQueryable<T> entity = _dbSet;
             if (!track)
@@ -41,19 +65,14 @@ namespace EHR_API.Repositories.Implementation
                 entity = entity.Where(exception);
             }
 
-            return await entity.ToListAsync();
-        }
-
-        public async Task<T> GetAsync(Expression<Func<T, bool>> exception, bool track = true)
-        {
-            IQueryable<T> entity = _dbSet;
-            if (!track)
+            if (includeProperties != null)
             {
-                entity = entity.AsNoTracking();
+                foreach (var item in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    entity = entity.Include(item);
+                }
             }
 
-            entity = entity.Where(exception);
-            
             return await entity.SingleOrDefaultAsync();
         }
 

@@ -32,7 +32,7 @@ namespace EHR_API.Controllers
         {
             try
             {
-                var entities = await _db.GetAllAsync(track: false);
+                var entities = await _db.GetAllAsync(track: false, includeProperties: "Governorate");
                 if (entities.Count == 0)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
@@ -65,7 +65,7 @@ namespace EHR_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var entity = await _db.GetAsync(exception: g => g.Id == id, track: false);
+                var entity = await _db.GetAsync(exception: g => g.Id == id, track: false, includeProperties: "Governorate");
                 if (entity == null)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
