@@ -1,9 +1,10 @@
 using EHR_API.Entities;
-using EHR_API.Extensions.Utility;
+using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
 using EHR_API.Repositories.Implementation;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,8 +19,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     );
 builder.Services.ConfigureInterfaces();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
-
-
+builder.Services.AddAuthentication();
+builder.Services.ConfigureIdentity();
+builder.Services.ConfigureJWT(builder.Configuration);
 builder.Services.AddControllers(
     //option => { option.ReturnHttpNotAcceptable = true; }
     ).AddNewtonsoftJson(/*x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore*/)/*.AddXmlDataContractSerializerFormatters()*/;
@@ -27,7 +29,39 @@ builder.Services.AddControllers(
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(
+    options =>
+    {
+        options.AddSecurityDefinition(
+            "Bearer", new OpenApiSecurityScheme()
+            {
+                Description = """
+                Enter 'Bearer ' then your token, ex: Bearer 1234
+                """,
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Scheme = "Bearer"
+            });
+
+        options.AddSecurityRequirement(
+            new OpenApiSecurityRequirement()
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        },
+                        Scheme = "oath2",
+                        Name = "Bearer",
+                        In = ParameterLocation.Header
+                    },
+                    new List<string>()
+                }
+            });
+    });
 
 var app = builder.Build();
 
@@ -43,6 +77,8 @@ app.UseHttpsRedirection();
 // enables using static files for the request.
 app.UseStaticFiles();
 app.UseCors("CorsPolicy");
+/*-------------------*/
+app.UseAuthentication();
 /*-------------------*/
 app.UseAuthorization();
 

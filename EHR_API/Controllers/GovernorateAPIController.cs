@@ -2,7 +2,9 @@
 using EHR_API.Entities;
 using EHR_API.Entities.DTOs.GovernorateDTOs;
 using EHR_API.Entities.Models;
+using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -26,6 +28,8 @@ namespace EHR_API.Controllers
         }
 
         [HttpGet]
+        //[Authorize]
+        //[Authorize(Roles = SD.SystemManager)]
         //[ProducesResponseType(200, Type = typeof(IEnumerable<GovernorateDTO>) )]
         //[ProducesResponseType(404)]
         [ProducesResponseType(StatusCodes.Status200OK)]
