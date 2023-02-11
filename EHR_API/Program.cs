@@ -3,6 +3,7 @@ using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
 using EHR_API.Repositories.Implementation;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -22,8 +23,22 @@ builder.Services.AddAutoMapper(typeof(MappingConfig));
 builder.Services.AddAuthentication();
 builder.Services.ConfigureIdentity();
 builder.Services.ConfigureJWT(builder.Configuration);
+//builder.Services.AddApiVersioning( option =>
+//   {
+//       option.AssumeDefaultVersionWhenUnspecified = true;
+//       option.DefaultApiVersion = new ApiVersion(1, 0);
+//});
+builder.Services.AddResponseCaching();
 builder.Services.AddControllers(
-    //option => { option.ReturnHttpNotAcceptable = true; }
+    option => 
+    {
+        // option.ReturnHttpNotAcceptable = true;
+        option.CacheProfiles.Add("Def60",
+            new CacheProfile
+            {
+                Duration = 60
+            });
+    }
     ).AddNewtonsoftJson(/*x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore*/)/*.AddXmlDataContractSerializerFormatters()*/;
 /*-------------------*/
 

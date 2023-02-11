@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Text.Json;
 
 namespace EHR_API.Controllers
 {
@@ -27,24 +28,36 @@ namespace EHR_API.Controllers
             _response = new();
         }
 
-        [HttpGet]
+        [HttpGet("GetGovernorates")]
+        [ResponseCache(CacheProfileName = SD.ProfileName)]
         //[Authorize]
         //[Authorize(Roles = SD.SystemManager)]
         //[ProducesResponseType(200, Type = typeof(IEnumerable<GovernorateDTO>) )]
         //[ProducesResponseType(404)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetGovernorates() 
+        public async Task<ActionResult<APIResponse>> GetGovernorates([FromQuery(Name = "searchTitle")]string title = null, int pageNumber = 1, int pageSize = 5) 
         {
             try
             {
-                var governorates = await _db.GetAllAsync(track: false, includeProperties: "HealthFacilitys");
-                if (governorates.Count == 0)
+                var governorates = await _db.GetAllAsync(
+                    track: false,
+                    includeProperties: "HealthFacilitys",
+                    exception: title==null? null : g => g.Title.ToLower().Contains(title.ToLower()),
+                    pageNumber: pageNumber,
+                    pageSize: pageSize
+                    );
+                 
+                if (governorates.Count  == 0)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.IsSuccess = false;
+                    _response.Result = "There are no result";
                     return NotFound(_response);
                 }
 
+                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize};
+                Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
                 _response.Result = _mapper.Map<List<GovernorateDTO>>(governorates);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -58,6 +71,7 @@ namespace EHR_API.Controllers
         }
 
         [HttpGet("{id:int}", Name = "GetGovernorate")]
+        [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

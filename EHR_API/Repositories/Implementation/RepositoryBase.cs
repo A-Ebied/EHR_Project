@@ -28,17 +28,15 @@ namespace EHR_API.Repositories.Implementation
             await SaveAsync();
         }
 
-        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? exception = null, bool track = true, string includeProperties = null)
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> exception = null, bool track = true, string includeProperties = null, int pageNumber = 1, int pageSize = 0)
         {
-            IQueryable<T> entities = _dbSet;
-            if (!track)
-            {
-                entities = entities.AsNoTracking();
-            }
+            IQueryable<T> entities = track==true? _dbSet : _dbSet.AsNoTracking();
 
-            if (exception != null)
+            entities = exception!=null? entities.Where(exception) : entities;
+
+            if (pageSize > 0)
             {
-                entities = entities.Where(exception);
+                entities = entities.Skip(pageSize * (pageNumber - 1)).Take(pageSize);
             }
 
             if (includeProperties != null)
@@ -48,6 +46,10 @@ namespace EHR_API.Repositories.Implementation
                     entities = entities.Include(item);
                 }
             }
+
+           
+
+
 
             return await entities.ToListAsync();
         }

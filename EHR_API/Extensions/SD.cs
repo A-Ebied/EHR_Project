@@ -9,5 +9,8 @@
         public const string Nurse = "Nurse";
         public const string Pharmacist = "Pharmacist";
         public const string Patient = "Patient";
+
+
+        public const string ProfileName = "Def60";
     }
 }
