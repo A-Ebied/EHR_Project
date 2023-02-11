@@ -38,12 +38,16 @@ namespace EHR_API.Repositories.Implementation
             return result;
         }
 
-        public async Task<bool> ValidateUser(LoginRequestDTO loginRequestDTO)
+        public async Task<RegistrationData> ValidateUser(LoginRequestDTO loginRequestDTO)
         {
             _user = await _userManager.FindByEmailAsync(loginRequestDTO.Email); 
-            var result = (_user != null && await _userManager.CheckPasswordAsync(_user, loginRequestDTO.Password)); 
-            
-            return result;
+            var result = (_user != null && await _userManager.CheckPasswordAsync(_user, loginRequestDTO.Password));
+
+            if (!result)
+            {
+                _user = null;
+            }
+            return _user;
         }
 
         public async Task<string> CreateToken() 

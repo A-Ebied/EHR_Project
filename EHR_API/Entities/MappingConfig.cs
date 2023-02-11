@@ -23,6 +23,7 @@ namespace EHR_API.Entities
 
             CreateMap<RegistrationData, RegistrationDataDTO>().ReverseMap();
             CreateMap<RegistrationData, LoginResponseDTO>().ReverseMap();
+            CreateMap<RegistrationData, LoginResponseaDataDTO>().ReverseMap();
         }
     }
 }

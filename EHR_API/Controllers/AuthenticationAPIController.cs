@@ -7,6 +7,7 @@ using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -18,10 +19,15 @@ namespace EHR_API.Controllers
     {
         protected APIResponse _response;
         private readonly IAuthenticationRepository _db;
-        public AuthenticationAPIController(IAuthenticationRepository db)
+        private readonly IMapper _mapper;
+        private readonly UserManager<RegistrationData> _userManager;
+
+        public AuthenticationAPIController(IAuthenticationRepository db, IMapper mapper, UserManager<RegistrationData> userManager)
         {
-            _db= db;
-            _response= new();
+            _db = db;
+            _response = new();
+            _mapper = mapper;
+            _userManager = userManager;
         }
 
         [HttpPost("RegisterUser")]
@@ -66,14 +72,28 @@ namespace EHR_API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Authenticate([FromBody] LoginRequestDTO user) 
+        public async Task<ActionResult<APIResponse>> Authenticate([FromBody] LoginRequestDTO user) 
         {
-            if (!await _db.ValidateUser(user))
+            var _user = await _db.ValidateUser(user);
+            if ( _user == null)
             {
-                return Unauthorized("The Email and Password are wrong");
+                _response.Errors = new() { "The Email and Password are wrong" };
+                _response.IsSuccess=false;
+                _response.StatusCode=HttpStatusCode.Unauthorized;
+                return Unauthorized(_response);
             }
-            
-            return Ok(new { Token = await _db.CreateToken() }); 
+
+            var loginResponse = new LoginResponseDTO()
+            {
+                User = _mapper.Map<LoginResponseaDataDTO>(_user),
+                Roles = await _userManager.GetRolesAsync(_user),
+                Token = await _db.CreateToken()
+            };
+
+            _response.Result = loginResponse;
+            _response.StatusCode = HttpStatusCode.OK;
+            return Ok(_response);
         }
+
     }
 }
