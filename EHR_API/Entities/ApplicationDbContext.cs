@@ -9,7 +9,10 @@ namespace EHR_API.Entities
 {
     public class ApplicationDbContext : IdentityDbContext<RegistrationData>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) 
+        {
+            InitalizeContext();
+        }
 
         public DbSet<Governorate> Governorates { get; set; }
         public DbSet<HealthFacility> HealthFacilities { get; set; }
@@ -41,6 +44,15 @@ namespace EHR_API.Entities
                .WithOne(p => p.RegistrationData)
                .HasForeignKey<InsuranceData>(p => p.Id);
 
+        }
+
+
+        protected virtual void InitalizeContext()
+        {
+
+            ChangeTracker.AutoDetectChangesEnabled = false;
+            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            Database.SetCommandTimeout(360);
         }
     }
 }

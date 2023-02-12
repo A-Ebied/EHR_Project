@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 /*-------------------*/
 builder.Services.ConfigureCors();
-builder.Services.ConfigureIISIntegration();
+//builder.Services.ConfigureIISIntegration();
 
 builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection"))
@@ -33,10 +33,10 @@ builder.Services.AddControllers(
     option => 
     {
         // option.ReturnHttpNotAcceptable = true;
-        option.CacheProfiles.Add("Def60",
+        option.CacheProfiles.Add("DefCache",
             new CacheProfile
             {
-                Duration = 60
+                Duration = 10
             });
     }
     ).AddNewtonsoftJson(/*x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore*/)/*.AddXmlDataContractSerializerFormatters()*/;

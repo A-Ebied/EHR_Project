@@ -19,13 +19,13 @@ namespace EHR_API.Repositories.Implementation
         public async Task CreateAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
-            await SaveAsync();
+            await _db.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(T entity)
         {
             _dbSet.Remove(entity);
-            await SaveAsync();
+            await _db.SaveChangesAsync();
         }
 
         public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> exception = null, bool track = true, string includeProperties = null, int pageNumber = 1, int pageSize = 0)
@@ -46,10 +46,6 @@ namespace EHR_API.Repositories.Implementation
                     entities = entities.Include(item);
                 }
             }
-
-           
-
-
 
             return await entities.ToListAsync();
         }
@@ -78,9 +74,11 @@ namespace EHR_API.Repositories.Implementation
             return await entity.SingleOrDefaultAsync();
         }
 
-        public async Task SaveAsync()
+        public async Task<T> UpdateAsync(T entity)
         {
+            _dbSet.Update(entity);
             await _db.SaveChangesAsync();
+            return entity;
         }
     }
 }

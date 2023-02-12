@@ -2,8 +2,5 @@
 
 namespace EHR_API.Repositories.Contracts
 {
-    public interface IHealthFacilityRepository : IRepositoryBase<HealthFacility>
-    {
-        Task<HealthFacility> UpdateAsync(HealthFacility entity);
-    }
+    public interface IHealthFacilityRepository : IRepositoryBase<HealthFacility> {}
 }

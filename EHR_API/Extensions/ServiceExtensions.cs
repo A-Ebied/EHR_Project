@@ -43,10 +43,10 @@ namespace EHR_API.Extensions
         /*
             - IIS integration help us with the deployment to IIS
          */
-        public static void ConfigureIISIntegration(this IServiceCollection services)
-        {
-            services.Configure<IISOptions>(options => { });
-        }
+        //public static void ConfigureIISIntegration(this IServiceCollection services)
+        //{
+        //    services.Configure<IISOptions>(options => { });
+        //}
 
         public static void ConfigureIdentity(this IServiceCollection services)
         {
@@ -65,9 +65,10 @@ namespace EHR_API.Extensions
 
         public static void ConfigureInterfaces(this IServiceCollection services)
         {
-            services.AddScoped<IGovernorateRepository, GovernorateRepository>();
-            services.AddScoped<IHealthFacilityRepository, HealthFacilityRepository>();
-            services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
+            //services.AddScoped<IGovernorateRepository, GovernorateRepository>();
+            //services.AddScoped<IHealthFacilityRepository, HealthFacilityRepository>();
+            //services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
+            services.AddScoped<IMainRepository, MainRepository>();
         }
 
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration) 

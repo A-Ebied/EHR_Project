@@ -2,8 +2,5 @@
 
 namespace EHR_API.Repositories.Contracts
 {
-    public interface IGovernorateRepository : IRepositoryBase<Governorate>
-    {
-        Task<Governorate> UpdateAsync(Governorate governorate);
-    }
+    public interface IGovernorateRepository : IRepositoryBase<Governorate> { }
 }

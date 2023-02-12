@@ -4,8 +4,6 @@ using EHR_API.Entities.DTOs.GovernorateDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text.Json;
@@ -19,9 +17,9 @@ namespace EHR_API.Controllers
     {
         protected APIResponse _response;
         private readonly IMapper _mapper;
-        private readonly IGovernorateRepository _db;
+        private readonly IMainRepository _db;
         
-        public GovernorateController(IGovernorateRepository db, IMapper mapper)
+        public GovernorateController(IMainRepository db, IMapper mapper)
         {
             _db = db;
             _mapper = mapper;
@@ -40,7 +38,7 @@ namespace EHR_API.Controllers
         {
             try
             {
-                var governorates = await _db.GetAllAsync(
+                var governorates = await _db._governorate.GetAllAsync(
                     track: false,
                     includeProperties: "HealthFacilitys",
                     exception: title==null? null : g => g.Title.ToLower().Contains(title.ToLower()),
@@ -85,7 +83,7 @@ namespace EHR_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var governorate = await _db.GetAsync(exception: g => g.Id == id, track: false, includeProperties: "HealthFacilitys");
+                var governorate = await _db._governorate.GetAsync(exception: g => g.Id == id, track: false, includeProperties: "HealthFacilitys");
                 if (governorate == null)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
@@ -118,7 +116,7 @@ namespace EHR_API.Controllers
                     return BadRequest(_response);
                 }
 
-                if (await _db.GetAsync(exception: g => g.Title!.ToLower() == governorateDTO.Title!.ToLower()) != null)
+                if (await _db._governorate.GetAsync(exception: g => g.Title!.ToLower() == governorateDTO.Title!.ToLower()) != null)
                 {
                     ModelState.AddModelError("Create Governorate Error", "Governorate is already exists !");
                     _response.StatusCode = HttpStatusCode.BadRequest;
@@ -127,7 +125,7 @@ namespace EHR_API.Controllers
                 }
 
                 var governorate = _mapper.Map<Governorate>(governorateDTO);
-                await _db.CreateAsync(governorate);
+                await _db._governorate.CreateAsync(governorate);
                 _response.Result = _mapper.Map<GovernorateDTO>(governorate);
                 _response.StatusCode = HttpStatusCode.Created;
 
@@ -156,13 +154,13 @@ namespace EHR_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var removedGoveern = await _db.GetAsync(exception: g => g.Id == id);
+                var removedGoveern = await _db._governorate.GetAsync(exception: g => g.Id == id);
                 if (removedGoveern == null)
                 {
                     return NotFound();
                 }
 
-                await _db.DeleteAsync(removedGoveern);
+                await _db._governorate.DeleteAsync(removedGoveern);
 
                 _response.StatusCode = HttpStatusCode.NoContent;
                 return Ok(_response);
@@ -190,14 +188,14 @@ namespace EHR_API.Controllers
                     return BadRequest(_response);
                 }
 
-                if (await _db.GetAsync(exception: g => g.Id == id) == null)
+                if (await _db._governorate.GetAsync(exception: g => g.Id == id) == null)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
                     return NotFound(_response);
                 }
 
                 var governorate = _mapper.Map<Governorate>(governorateDTO);
-                await _db.UpdateAsync(governorate);
+                await _db._governorate.UpdateAsync(governorate);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -208,48 +206,5 @@ namespace EHR_API.Controllers
                 return _response;
             }
         }
-
-        //[HttpPatch("{id:int}", Name = "PatchGovernorate")]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //public async Task<ActionResult<APIResponse>> PatchGovernorate(int id, JsonPatchDocument<GovernorateUpdateDTO> governoratePatch)
-        //{
-        //    try
-        //    {
-        //        if (id == 0 || governoratePatch == null)
-        //        {
-        //            _response.StatusCode = HttpStatusCode.BadRequest;
-        //            return BadRequest(_response);
-        //        }
-
-        //        var governorate = await _db.GetAsync(exception: g => g.Id == id, track: false);
-        //        if (governorate == null)
-        //        {
-        //            _response.StatusCode = HttpStatusCode.NotFound;
-        //            return NotFound(_response);
-        //        }
-
-        //        var patch = _mapper.Map<GovernorateUpdateDTO>(governorate);
-        //        governoratePatch.ApplyTo(patch, ModelState);
-        //        if (!ModelState.IsValid)
-        //        {
-        //            _response.StatusCode = HttpStatusCode.BadRequest;
-        //            _response.Result = ModelState;
-        //            return BadRequest(_response);
-        //        }
-
-        //        governorate = _mapper.Map<Governorate>(patch);
-        //        await _db.UpdateAsync(governorate);
-        //        _response.StatusCode = HttpStatusCode.OK;
-        //        return Ok(_response);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _response.IsSuccess = false;
-        //        _response.Errors = new List<string> { ex.ToString() };
-        //        return _response;
-        //    }
-        //}
     }
 }

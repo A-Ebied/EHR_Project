@@ -7,8 +7,7 @@ namespace EHR_API.Repositories.Contracts
         Task<List<T>> GetAllAsync(Expression<Func<T, bool>> exception = null, bool track = true, string includeProperties = null, int pageNumber = 1, int pageSize = 0);
         Task<T> GetAsync(Expression<Func<T, bool>> exception, bool track = true, string includeProperties = null);
         Task CreateAsync(T entity);
-        //Task<T> UpdateAsync(T entity);
+        Task<T> UpdateAsync(T entity);
         Task DeleteAsync(T entity);
-        Task SaveAsync();
     }
 }

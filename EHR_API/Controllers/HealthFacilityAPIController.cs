@@ -14,13 +14,11 @@ namespace EHR_API.Controllers
     {
         protected APIResponse _response;
         private readonly IMapper _mapper;
-        private readonly IHealthFacilityRepository _db;
-        private readonly IGovernorateRepository _dbGov;
-        
-        public HealthFacilityController(IHealthFacilityRepository db, IMapper mapper, IGovernorateRepository dbGov)
+        private readonly IMainRepository _db;
+
+        public HealthFacilityController(IMainRepository db, IMapper mapper)
         {
             _db = db;
-            _dbGov = dbGov;
             _mapper = mapper;
             _response = new();
         }
@@ -32,7 +30,7 @@ namespace EHR_API.Controllers
         {
             try
             {
-                var entities = await _db.GetAllAsync(track: false, includeProperties: "Governorate");
+                var entities = await _db._healthFacility.GetAllAsync(track: false, includeProperties: "Governorate");
                 if (entities.Count == 0)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
@@ -65,7 +63,7 @@ namespace EHR_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var entity = await _db.GetAsync(exception: g => g.Id == id, track: false, includeProperties: "Governorate");
+                var entity = await _db._healthFacility.GetAsync(exception: g => g.Id == id, track: false, includeProperties: "Governorate");
                 if (entity == null)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
@@ -97,7 +95,7 @@ namespace EHR_API.Controllers
                     return BadRequest(_response);
                 }
 
-                if (await _db.GetAsync(exception: g => g.Title!.ToLower() == entityCreateDTO.Title!.ToLower()) != null)
+                if (await _db._healthFacility.GetAsync(exception: g => g.Title!.ToLower() == entityCreateDTO.Title!.ToLower()) != null)
                 {
                     ModelState.AddModelError("Create Health Facility Error", "Health Facility is already exists !");
                     _response.StatusCode = HttpStatusCode.BadRequest;
@@ -105,7 +103,7 @@ namespace EHR_API.Controllers
                     return BadRequest(_response);
                 }
                 
-                if (await _dbGov.GetAsync(exception: e => e.Id == entityCreateDTO.GovernorateId) == null)
+                if (await _db._governorate.GetAsync(exception: e => e.Id == entityCreateDTO.GovernorateId, track: false) == null)
                 {
                     ModelState.AddModelError("Create Health Facility Error", "Governorate is not exists !");
                     _response.StatusCode = HttpStatusCode.BadRequest;
@@ -114,7 +112,7 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = _mapper.Map<HealthFacility>(entityCreateDTO);
-                await _db.CreateAsync(entity);
+                await _db._healthFacility.CreateAsync(entity);
                 _response.Result = _mapper.Map<HealthFacilityDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;
 
@@ -143,14 +141,14 @@ namespace EHR_API.Controllers
                     return BadRequest(_response);
                 }
 
-                var removedEntity = await _db.GetAsync(exception: g => g.Id == id);
+                var removedEntity = await _db._healthFacility.GetAsync(exception: g => g.Id == id);
                 if (removedEntity == null)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
                     return NotFound(_response);
                 }
 
-                await _db.DeleteAsync(removedEntity);
+                await _db._healthFacility.DeleteAsync(removedEntity);
 
                 _response.StatusCode = HttpStatusCode.NoContent;
                 return Ok(_response);
@@ -178,13 +176,13 @@ namespace EHR_API.Controllers
                     return BadRequest(_response);
                 }
 
-                if (await _db.GetAsync(exception: g => g.Id == id) == null)
+                if (await _db._healthFacility.GetAsync(exception: g => g.Id == id) == null)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
                     return NotFound(_response);
                 }
 
-                if (await _dbGov.GetAsync(exception: e => e.Id == entityUpdateDTO.GovernorateId) == null)
+                if (await _db._governorate.GetAsync(exception: e => e.Id == entityUpdateDTO.GovernorateId, track: false) == null)
                 {
                     ModelState.AddModelError("Update Health Facility Error", "Governorate is not exists !");
                     _response.StatusCode = HttpStatusCode.BadRequest;
@@ -193,7 +191,7 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = _mapper.Map<HealthFacility>(entityUpdateDTO);
-                await _db.UpdateAsync(entity);
+                await _db._healthFacility.UpdateAsync(entity);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
