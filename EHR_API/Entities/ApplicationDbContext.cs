@@ -25,11 +25,21 @@ namespace EHR_API.Entities
             modelBuilder.Entity<Governorate>().ToTable("Governorate");
             modelBuilder.Entity<HealthFacility>().ToTable("HealthFacility");
 
-            //modelBuilder.Entity<RegistrationData>(b =>
-            //{
-            //    b.Property(u => u.PhoneNumber).d;
-                
-            //});
+            //one-to-one
+            modelBuilder.Entity<RegistrationData>()
+               .HasOne(a => a.PersonalData)
+               .WithOne(p => p.RegistrationData)
+               .HasForeignKey<PersonalData>(p => p.Id);
+
+            modelBuilder.Entity<RegistrationData>()
+               .HasOne(a => a.MedicalData)
+               .WithOne(p => p.RegistrationData)
+               .HasForeignKey<MedicalData>(p => p.Id);
+
+            modelBuilder.Entity<RegistrationData>()
+               .HasOne(a => a.InsuranceData)
+               .WithOne(p => p.RegistrationData)
+               .HasForeignKey<InsuranceData>(p => p.Id);
 
         }
     }
