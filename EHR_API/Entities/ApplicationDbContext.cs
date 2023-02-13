@@ -49,7 +49,6 @@ namespace EHR_API.Entities
 
         protected virtual void InitalizeContext()
         {
-
             ChangeTracker.AutoDetectChangesEnabled = false;
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             Database.SetCommandTimeout(360);
