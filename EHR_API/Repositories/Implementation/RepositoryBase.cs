@@ -28,11 +28,9 @@ namespace EHR_API.Repositories.Implementation
             await _db.SaveChangesAsync();
         }
 
-        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> exception = null, string includeProperties = null, int pageNumber = 1, int pageSize = 0)
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> expression = null, string includeProperties = null, int pageNumber = 1, int pageSize = 0)
         {
-            IQueryable<T> entities =  _dbSet;
-
-            entities = exception!=null? entities.Where(exception) : entities;
+            IQueryable<T> entities = expression != null ? _dbSet.Where(expression) : _dbSet;
 
             if (pageSize > 0)
             {
@@ -50,14 +48,9 @@ namespace EHR_API.Repositories.Implementation
             return await entities.ToListAsync();
         }
 
-        public async Task<T> GetAsync(Expression<Func<T, bool>> exception, string includeProperties = null)
+        public async Task<T> GetAsync(Expression<Func<T, bool>> expression, string includeProperties = null)
         {
-            IQueryable<T> entity = _dbSet;
-           
-            if (exception != null)
-            {
-                entity = entity.Where(exception);
-            }
+            IQueryable<T> entity = expression != null ? _dbSet.Where(expression) : _dbSet;
 
             if (includeProperties != null)
             {

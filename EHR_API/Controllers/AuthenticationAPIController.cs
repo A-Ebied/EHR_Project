@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using EHR_API.Entities;
-using EHR_API.Entities.DTOs.HealthFacilityDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
-using EHR_API.Entities.Models;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
@@ -105,9 +103,10 @@ namespace EHR_API.Controllers
         {
             try
             {
+
                 var entities = await _db._authentication.GetAllAsync(
                     includeProperties: "HealthFacility",
-                    exception: userName == null ? null : g => g.UserName.ToLower().Contains(userName.ToLower()),
+                    expression: userName == null ? null : g => g.UserName.ToLower().Contains(userName.ToLower()),
                     pageNumber: pageNumber,
                     pageSize: pageSize
                     );
@@ -120,7 +119,13 @@ namespace EHR_API.Controllers
                 Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
                 Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
 
-                _response.Result = _mapper.Map<List<RegistrationDataDTO>>(entities);
+                var newEntities = _mapper.Map<List<RegistrationDataDTO>>(entities);
+                foreach (var item in newEntities)
+                {
+                    item.Roles = await _userManager.GetRolesAsync(_mapper.Map<RegistrationData>(item)); 
+                }
+
+                _response.Result = newEntities;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -144,13 +149,16 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
-                var entity = await _db._authentication.GetAsync(exception: g => g.Id == id, includeProperties: "HealthFacility");
+                var entity = await _db._authentication.GetAsync(expression: g => g.Id == id, includeProperties: "HealthFacility");
                 if (entity == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
                 }
 
-                _response.Result = _mapper.Map<RegistrationDataDTO>(entity);
+                var newEntity = _mapper.Map<RegistrationDataDTO>(entity);
+                newEntity.Roles = await _userManager.GetRolesAsync(_mapper.Map<RegistrationData>(entity));
+                
+                _response.Result = newEntity;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -178,16 +186,15 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
-                if (await _db._authentication.GetAsync(exception: g => g.Id == id) == null)
+                if (await _db._authentication.GetAsync(expression: g => g.Id == id) == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
                 }
 
-                var entity = _mapper.Map<RegistrationData>(entityUpdateDTO);
-                await _db._authentication.UpdateAsync(entity);
+                await _db._authentication.UpdateAsync(entityUpdateDTO);
 
                 _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = _mapper.Map<RegistrationDataDTO>(entity);
+                _response.Result = _mapper.Map<RegistrationDataDTO>(entityUpdateDTO);
                 return Ok(_response);
             }
             catch (Exception ex)

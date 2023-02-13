@@ -6,6 +6,7 @@ using EHR_API.Entities.Models.UsersData;
 using EHR_API.Repositories.Contracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -101,11 +102,10 @@ namespace EHR_API.Repositories.Implementation
             return tokenOptions; 
         }
 
-        public async Task<List<RegistrationData>> GetAllAsync(Expression<Func<RegistrationData, bool>> exception = null, string includeProperties = null, int pageNumber = 1, int pageSize = 0)
+        public async Task<List<RegistrationData>> GetAllAsync(Expression<Func<RegistrationData, bool>> expression = null, string includeProperties = null, int pageNumber = 1, int pageSize = 0)
         {
             IQueryable<RegistrationData> entities = _userManager.Users;
-
-            entities = exception != null ? entities.Where(exception) : entities;
+            entities = expression != null ? entities.Where(expression) : entities;
 
             if (pageSize > 0)
             {
@@ -120,17 +120,13 @@ namespace EHR_API.Repositories.Implementation
                 }
             }
 
-            return await entities.ToListAsync();
+            return await entities.ToListAsync(); 
         }
 
-        public async Task<RegistrationData> GetAsync(Expression<Func<RegistrationData, bool>> exception, string includeProperties = null)
+        public async Task<RegistrationData> GetAsync(Expression<Func<RegistrationData, bool>> expression, string includeProperties = null)
         {
             IQueryable<RegistrationData> entity = _userManager.Users;
-
-            if (exception != null)
-            {
-                entity = entity.Where(exception);
-            }
+            entity = expression != null ? entity.Where(expression) : entity;
 
             if (includeProperties != null)
             {
@@ -143,10 +139,11 @@ namespace EHR_API.Repositories.Implementation
             return await entity.SingleOrDefaultAsync();
         }
 
-        public async Task<RegistrationData> UpdateAsync(RegistrationData entity)
+        public async Task<RegistrationData> UpdateAsync(RegistrationDataUpdateDTO entity)
         {
-            await _userManager.UpdateAsync(entity);
-            return entity;
+            var newEntity = _mapper.Map<RegistrationData>(entity);
+            await _userManager.UpdateAsync(newEntity);
+            return newEntity;
         }
     }
 }

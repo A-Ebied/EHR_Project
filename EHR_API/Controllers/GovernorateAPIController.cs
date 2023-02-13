@@ -37,7 +37,7 @@ namespace EHR_API.Controllers
             {
                 var entities = await _db._governorate.GetAllAsync(
                     includeProperties: "HealthFacilitys",
-                    exception: title==null? null : g => g.Title.ToLower().Contains(title.ToLower()),
+                    expression: title==null? null : g => g.Title.ToLower().Contains(title.ToLower()),
                     pageNumber: pageNumber,
                     pageSize: pageSize
                     );
@@ -74,7 +74,7 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id less than 1"));
                 }
 
-                var entity = await _db._governorate.GetAsync(exception: g => g.Id == id, includeProperties: "HealthFacilitys");
+                var entity = await _db._governorate.GetAsync(expression: g => g.Id == id, includeProperties: "HealthFacilitys");
                 if (entity == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
@@ -102,7 +102,7 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
 
-                if (await _db._governorate.GetAsync(exception: g => g.Title!.ToLower() == entityCreateDTO.Title!.ToLower()) != null)
+                if (await _db._governorate.GetAsync(expression: g => g.Title!.ToLower() == entityCreateDTO.Title!.ToLower()) != null)
                 {
                     return BadRequest(APIResponses.BadRequest("The object is already exists"));
                 }
@@ -134,7 +134,7 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id less than 1"));
                 }
 
-                var removedEntity = await _db._governorate.GetAsync(exception: g => g.Id == id);
+                var removedEntity = await _db._governorate.GetAsync(expression: g => g.Id == id);
                 if (removedEntity == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
@@ -171,7 +171,7 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
-                if (await _db._governorate.GetAsync(exception: g => g.Id == id) == null)
+                if (await _db._governorate.GetAsync(expression: g => g.Id == id) == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
                 }
