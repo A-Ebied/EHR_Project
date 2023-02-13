@@ -39,7 +39,7 @@ builder.Services.AddControllers(
                 Duration = 10
             });
     }
-    ).AddNewtonsoftJson(/*x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore*/)/*.AddXmlDataContractSerializerFormatters()*/;
+    ).AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)/*.AddXmlDataContractSerializerFormatters()*/;
 /*-------------------*/
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

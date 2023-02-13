@@ -36,11 +36,10 @@ namespace EHR_API.Controllers
             try
             {
                 var entities = await _db._governorate.GetAllAsync(
-                    includeProperties: "HealthFacilitys",
+                    includeProperties: "HealthFacilitys,PersonalData",
                     expression: title==null? null : g => g.Title.ToLower().Contains(title.ToLower()),
                     pageNumber: pageNumber,
-                    pageSize: pageSize
-                    );
+                    pageSize: pageSize);
                  
                 if (entities.Count  == 0)
                 {
@@ -74,7 +73,10 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id less than 1"));
                 }
 
-                var entity = await _db._governorate.GetAsync(expression: g => g.Id == id, includeProperties: "HealthFacilitys");
+                var entity = await _db._governorate.GetAsync(
+                    expression: g => g.Id == id, 
+                    includeProperties: "HealthFacilitys,PersonalData");
+
                 if (entity == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
@@ -177,6 +179,7 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = _mapper.Map<Governorate>(entityUpdateDTO);
+                entity.UpdateddAt = DateTime.Now;
                 await _db._governorate.UpdateAsync(entity);
 
                 _response.StatusCode = HttpStatusCode.OK;

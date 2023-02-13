@@ -38,35 +38,23 @@ namespace EHR_API.Controllers
             {
                 if (registrationDataDTO == null)
                 {
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.IsSuccess = false;
-                    return BadRequest(_response);
+                    return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
-
 
                var result = await _db._authentication.RegisterUser(registrationDataDTO);
                 if (!result.Succeeded)
                 {
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.IsSuccess = false;
-                    _response.Errors = new List<string> { result.ToString() };
-
-                    return BadRequest(_response);
+                    return BadRequest(APIResponses.BadRequest(result.ToString()));
                 }
 
                 _response.Result = result;
                 _response.StatusCode = HttpStatusCode.Created;
-
                 return Ok(_response);
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.Errors = new List<string> { ex.ToString() };
-                return _response;
+                return APIResponses.InternalServerError(ex);
             }
-
-
         }
 
         [HttpPost("Login")]
@@ -75,10 +63,7 @@ namespace EHR_API.Controllers
             var _user = await _db._authentication.ValidateUser(user);
             if ( _user == null)
             {
-                _response.Errors = new() { "The Email and Password are wrong" };
-                _response.IsSuccess=false;
-                _response.StatusCode=HttpStatusCode.Unauthorized;
-                return Unauthorized(_response);
+                return APIResponses.Unauthorized();
             }
 
             var loginResponse = new LoginResponseDTO()
@@ -103,13 +88,11 @@ namespace EHR_API.Controllers
         {
             try
             {
-
                 var entities = await _db._authentication.GetAllAsync(
-                    includeProperties: "HealthFacility",
+                    includeProperties: "PersonalData",
                     expression: userName == null ? null : g => g.UserName.ToLower().Contains(userName.ToLower()),
                     pageNumber: pageNumber,
-                    pageSize: pageSize
-                    );
+                    pageSize: pageSize);
 
                 if (entities.Count == 0)
                 {
@@ -149,7 +132,10 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
-                var entity = await _db._authentication.GetAsync(expression: g => g.Id == id, includeProperties: "HealthFacility");
+                var entity = await _db._authentication.GetAsync(
+                    expression: g => g.Id == id, 
+                    includeProperties: "PersonalData");
+
                 if (entity == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));

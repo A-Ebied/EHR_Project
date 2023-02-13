@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EHRAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class add1 : Migration
+    public partial class add : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -64,7 +64,8 @@ namespace EHRAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateddAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -273,6 +274,8 @@ namespace EHRAPI.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateddAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     GovernorateId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -333,13 +336,13 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "1f1656ba-f036-45c7-9dad-96024f6448e6", null, "Patient", "PATIENT" },
-                    { "2bf0042c-cf65-40c9-947f-a19ee5a9ccc9", null, "Nurse", "NURSE" },
-                    { "4a38a42f-676c-467f-85c0-3b4c4a1ba86d", null, "HealthFacilityManager", "HEALTHFACILITYAMANAGER" },
-                    { "9579517e-55c6-454e-9454-d1a68ef96963", null, "Pharmacist", "PHARMACIST" },
-                    { "98bb0407-b74e-428e-8a21-910b92f4b273", null, "SystemManager", "SYSTEMMANAGER" },
-                    { "df16f062-3b91-4c2f-a9af-96b4bac85e86", null, "HealthFacilitiesAdministrator", "HEALTHFACILITIESADMINISTRATOR" },
-                    { "e0835e9b-b7d3-407c-b1f2-be49af62431d", null, "Physician", "PHYSICIAN" }
+                    { "13c5aae0-9542-466f-ae0f-6a79e61a8a92", null, "HealthFacilityManager", "HEALTHFACILITYAMANAGER" },
+                    { "477a45a9-d63e-434b-9cd8-8af998f42261", null, "HealthFacilitiesAdministrator", "HEALTHFACILITIESADMINISTRATOR" },
+                    { "6736cc4c-81c6-4797-ab3d-11beb5def9c0", null, "SystemManager", "SYSTEMMANAGER" },
+                    { "8a5342b8-1d45-458e-8399-a4116ed5c572", null, "Patient", "PATIENT" },
+                    { "b1216176-21b5-4658-b58e-abf08aebe84c", null, "Physician", "PHYSICIAN" },
+                    { "c27e387b-2446-4241-895a-ae2bcae44f52", null, "Nurse", "NURSE" },
+                    { "f85f62da-573b-4d85-a041-e3fdf9c32fa8", null, "Pharmacist", "PHARMACIST" }
                 });
 
             migrationBuilder.CreateIndex(

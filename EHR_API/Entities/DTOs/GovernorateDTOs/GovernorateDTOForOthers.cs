@@ -1,4 +1,5 @@
 ﻿using EHR_API.Entities.Models;
+using System.ComponentModel;
 
 namespace EHR_API.Entities.DTOs.GovernorateDTOs
 {

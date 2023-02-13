@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EHR_API.Entities.DTOs.GovernorateDTOs;
 using EHR_API.Entities.DTOs.HealthFacilityDTOs;
+using EHR_API.Entities.DTOs.UserDataDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
@@ -30,6 +31,11 @@ namespace EHR_API.Entities
 
             CreateMap<RegistrationData, LoginResponseDTO>().ReverseMap();
             CreateMap<RegistrationData, LoginResponseaDataDTO>().ReverseMap();
+
+            CreateMap<PersonalData, PersonalDataCreateDTO>().ReverseMap();
+            CreateMap<PersonalData, PersonalDataUpdateDTO>().ReverseMap();
+            CreateMap<PersonalData, PersonalDataDTO>().ReverseMap();
+            CreateMap<PersonalData, PersonalDataDTOForOthers>().ReverseMap();
         }
     }
 }

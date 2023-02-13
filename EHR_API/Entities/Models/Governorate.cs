@@ -7,6 +7,7 @@ namespace EHR_API.Entities.Models
         public int Id { get; set; }
         public string Title { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime UpdateddAt { get; set; } = DateTime.Now;
 
         public ICollection<HealthFacility> HealthFacilitys { get; set; }
         public ICollection<PersonalData> PersonalData { get; set; }

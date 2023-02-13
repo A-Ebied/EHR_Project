@@ -13,12 +13,12 @@ namespace EHR_API.Repositories.Implementation
             _governorate = new GovernorateRepository(db);
             _healthFacility = new HealthFacilityRepository(db);
             _authentication = new AuthenticationRepository(mapper, userManager, configuration);
+            _personal = new PersonalDataRepository(db);
         }
 
         public IGovernorateRepository _governorate { get; private set; }
-
         public IHealthFacilityRepository _healthFacility { get; private set; }
-
         public IAuthenticationRepository _authentication { get; private set; }
+        public IPersonalDataRepository _personal { get; private set; }
     }
 }

@@ -31,7 +31,15 @@ namespace EHR_API.Extensions
             APIResponse _response = new();
             _response.IsSuccess = false;
             _response.StatusCode = HttpStatusCode.InternalServerError;
-            _response.Errors = new List<string> { ex.ToString() };
+            _response.Errors = new List<string> { ex.GetBaseException().ToString() };
+            return _response;
+        }
+        public static APIResponse Unauthorized()
+        {
+            APIResponse _response = new();
+            _response.Errors = new() { "The Email and Password are wrong" };
+            _response.IsSuccess = false;
+            _response.StatusCode = HttpStatusCode.Unauthorized;
             return _response;
         }
     }

@@ -36,6 +36,9 @@ namespace EHRAPI.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("UpdateddAt")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.ToTable("Governorate", (string)null);
@@ -48,6 +51,9 @@ namespace EHRAPI.Migrations
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -75,6 +81,9 @@ namespace EHRAPI.Migrations
 
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdateddAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -325,43 +334,43 @@ namespace EHRAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "98bb0407-b74e-428e-8a21-910b92f4b273",
+                            Id = "6736cc4c-81c6-4797-ab3d-11beb5def9c0",
                             Name = "SystemManager",
                             NormalizedName = "SYSTEMMANAGER"
                         },
                         new
                         {
-                            Id = "df16f062-3b91-4c2f-a9af-96b4bac85e86",
+                            Id = "477a45a9-d63e-434b-9cd8-8af998f42261",
                             Name = "HealthFacilitiesAdministrator",
                             NormalizedName = "HEALTHFACILITIESADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "4a38a42f-676c-467f-85c0-3b4c4a1ba86d",
+                            Id = "13c5aae0-9542-466f-ae0f-6a79e61a8a92",
                             Name = "HealthFacilityManager",
                             NormalizedName = "HEALTHFACILITYAMANAGER"
                         },
                         new
                         {
-                            Id = "e0835e9b-b7d3-407c-b1f2-be49af62431d",
+                            Id = "b1216176-21b5-4658-b58e-abf08aebe84c",
                             Name = "Physician",
                             NormalizedName = "PHYSICIAN"
                         },
                         new
                         {
-                            Id = "2bf0042c-cf65-40c9-947f-a19ee5a9ccc9",
+                            Id = "c27e387b-2446-4241-895a-ae2bcae44f52",
                             Name = "Nurse",
                             NormalizedName = "NURSE"
                         },
                         new
                         {
-                            Id = "9579517e-55c6-454e-9454-d1a68ef96963",
+                            Id = "f85f62da-573b-4d85-a041-e3fdf9c32fa8",
                             Name = "Pharmacist",
                             NormalizedName = "PHARMACIST"
                         },
                         new
                         {
-                            Id = "1f1656ba-f036-45c7-9dad-96024f6448e6",
+                            Id = "8a5342b8-1d45-458e-8399-a4116ed5c572",
                             Name = "Patient",
                             NormalizedName = "PATIENT"
                         });
@@ -475,7 +484,7 @@ namespace EHRAPI.Migrations
 
             modelBuilder.Entity("EHR_API.Entities.Models.HealthFacility", b =>
                 {
-                    b.HasOne("EHR_API.Entities.Models.Governorate", "Governorate")
+                    b.HasOne("EHR_API.Entities.Models.Governorate", null)
                         .WithMany("HealthFacilitys")
                         .HasForeignKey("GovernorateId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -486,8 +495,6 @@ namespace EHRAPI.Migrations
                         .HasForeignKey("EHR_API.Entities.Models.HealthFacility", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Governorate");
 
                     b.Navigation("RegistrationData");
                 });
@@ -538,7 +545,7 @@ namespace EHRAPI.Migrations
 
             modelBuilder.Entity("EHR_API.Entities.Models.UsersData.PersonalData", b =>
                 {
-                    b.HasOne("EHR_API.Entities.Models.Governorate", "Governorate")
+                    b.HasOne("EHR_API.Entities.Models.Governorate", null)
                         .WithMany("PersonalData")
                         .HasForeignKey("GovernorateId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -549,8 +556,6 @@ namespace EHRAPI.Migrations
                         .HasForeignKey("EHR_API.Entities.Models.UsersData.PersonalData", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Governorate");
 
                     b.Navigation("RegistrationData");
                 });

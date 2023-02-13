@@ -6,6 +6,6 @@ namespace EHR_API.Entities.DTOs.GovernorateDTOs
     {
         [Required]
         [MaxLength(40)]
-        public string? Title { get; set; }
+        public string Title { get; set; }
     }
 }

@@ -1,14 +1,19 @@
-﻿namespace EHR_API.Entities.DTOs.UserDataDTOs
+﻿using System.ComponentModel;
+
+namespace EHR_API.Entities.DTOs.UserDataDTOs
 {
     public class PersonalDataDTOForOthers
     {
         public string Id { get; set; }
-        public string IdType { get; set; }
-        public string Nationality { get; set; }
-        public string FullName { get; set; }
-        public string UserName { get; init; }
-        public string Password { get; init; }
-        public string Email { get; init; }
-        public string PhoneNumber { get; init; }
+        public string UserImageUrl { get; set; }
+        public string Occupation { get; set; }
+        [DisplayName("Number Of Children")]
+        public DateTime BirthDate { get; set; }
+        public int GovernorateId { get; set; }
+        public string Phone1 { get; set; }
+        [DisplayName("Emergency Phone_1")]
+        public string EmergencyPhone1 { get; set; }
+        [DisplayName("Emergency Phone_2")]
+        public string Gender { get; set; }
     }
 }

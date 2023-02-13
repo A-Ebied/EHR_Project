@@ -8,6 +8,6 @@ namespace EHR_API.Entities.DTOs.GovernorateDTOs
         public int Id { get; set; }
         [Required]
         [MaxLength(40)]
-        public string? Title { get; set; }
+        public string Title { get; set; }
     }
 }

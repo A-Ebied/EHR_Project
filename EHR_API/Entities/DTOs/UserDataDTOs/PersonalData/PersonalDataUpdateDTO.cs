@@ -6,21 +6,23 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration
     {
         [Required]
         public string Id { get; set; }
+        public string UserImageUrl { get; set; }
+        public string IdImageUrl { get; set; }
+        public string Occupation { get; set; }
+        public int NumOfChildren { get; set; }
         [Required]
-        public string IdType { get; set; }
+        public DateTime BirthDate { get; set; }
         [Required]
-        public string Nationality { get; set; }
+        public int GovernorateId { get; set; }
+        public string Address { get; set; }
+        [MaxLength(11, ErrorMessage = "The maximum length is 11 characters")]
+        public string Phone1 { get; set; }
         [Required]
-        public string FullName { get; set; }
+        [MaxLength(11, ErrorMessage = "The maximum length is 11 characters")]
+        public string EmergencyPhone1 { get; set; }
+        [MaxLength(11, ErrorMessage = "The maximum length is 11 characters")]
+        public string EmergencyPhone2 { get; set; }
         [Required]
-        public string UserName { get; init; }
-        [Required]
-        public string Password { get; init; }
-        [Required]
-        public string Email { get; init; }
-        public string PhoneNumber { get; init; }
-
-        [Required]
-        public ICollection<string> Roles { get; init; }
+        public string Gender { get; set; }
     }
 }
