@@ -43,11 +43,8 @@ namespace EHRAPI.Migrations
 
             modelBuilder.Entity("EHR_API.Entities.Models.HealthFacility", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -134,6 +131,38 @@ namespace EHRAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MedicalData");
+                });
+
+            modelBuilder.Entity("EHR_API.Entities.Models.UsersData.MedicalTeam", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Degree")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MedicalSpecializationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MedicalTeam");
+                });
+
+            modelBuilder.Entity("EHR_API.Entities.Models.UsersData.Patient", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AgeGroup")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsSane")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Patient");
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.UsersData.PersonalData", b =>
@@ -296,43 +325,43 @@ namespace EHRAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "77c27281-a7c1-4e5e-b359-5e2c67ac9ab9",
+                            Id = "98bb0407-b74e-428e-8a21-910b92f4b273",
                             Name = "SystemManager",
                             NormalizedName = "SYSTEMMANAGER"
                         },
                         new
                         {
-                            Id = "da1615b5-2d69-48d9-a453-cdc7516a3244",
+                            Id = "df16f062-3b91-4c2f-a9af-96b4bac85e86",
                             Name = "HealthFacilitiesAdministrator",
                             NormalizedName = "HEALTHFACILITIESADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "0deb9968-2f2b-46b6-8088-d2973ec830d0",
+                            Id = "4a38a42f-676c-467f-85c0-3b4c4a1ba86d",
                             Name = "HealthFacilityManager",
                             NormalizedName = "HEALTHFACILITYAMANAGER"
                         },
                         new
                         {
-                            Id = "e648f93e-c555-4fcd-b9c6-8c42672290cc",
+                            Id = "e0835e9b-b7d3-407c-b1f2-be49af62431d",
                             Name = "Physician",
                             NormalizedName = "PHYSICIAN"
                         },
                         new
                         {
-                            Id = "8685be63-7c3b-4470-9e07-ebf4f0cf4588",
+                            Id = "2bf0042c-cf65-40c9-947f-a19ee5a9ccc9",
                             Name = "Nurse",
                             NormalizedName = "NURSE"
                         },
                         new
                         {
-                            Id = "fd885b14-4014-4714-a538-8b2654494e47",
+                            Id = "9579517e-55c6-454e-9454-d1a68ef96963",
                             Name = "Pharmacist",
                             NormalizedName = "PHARMACIST"
                         },
                         new
                         {
-                            Id = "1062b39a-ad4c-44a4-9f37-ded3ad0a89c6",
+                            Id = "1f1656ba-f036-45c7-9dad-96024f6448e6",
                             Name = "Patient",
                             NormalizedName = "PATIENT"
                         });
@@ -452,7 +481,15 @@ namespace EHRAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("EHR_API.Entities.Models.UsersData.RegistrationData", "RegistrationData")
+                        .WithOne("HealthFacility")
+                        .HasForeignKey("EHR_API.Entities.Models.HealthFacility", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Governorate");
+
+                    b.Navigation("RegistrationData");
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.UsersData.InsuranceData", b =>
@@ -477,10 +514,32 @@ namespace EHRAPI.Migrations
                     b.Navigation("RegistrationData");
                 });
 
+            modelBuilder.Entity("EHR_API.Entities.Models.UsersData.MedicalTeam", b =>
+                {
+                    b.HasOne("EHR_API.Entities.Models.UsersData.RegistrationData", "RegistrationData")
+                        .WithOne("MedicalTeam")
+                        .HasForeignKey("EHR_API.Entities.Models.UsersData.MedicalTeam", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RegistrationData");
+                });
+
+            modelBuilder.Entity("EHR_API.Entities.Models.UsersData.Patient", b =>
+                {
+                    b.HasOne("EHR_API.Entities.Models.UsersData.RegistrationData", "RegistrationData")
+                        .WithOne("Patient")
+                        .HasForeignKey("EHR_API.Entities.Models.UsersData.Patient", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RegistrationData");
+                });
+
             modelBuilder.Entity("EHR_API.Entities.Models.UsersData.PersonalData", b =>
                 {
                     b.HasOne("EHR_API.Entities.Models.Governorate", "Governorate")
-                        .WithMany()
+                        .WithMany("PersonalData")
                         .HasForeignKey("GovernorateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -550,13 +609,21 @@ namespace EHRAPI.Migrations
             modelBuilder.Entity("EHR_API.Entities.Models.Governorate", b =>
                 {
                     b.Navigation("HealthFacilitys");
+
+                    b.Navigation("PersonalData");
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.UsersData.RegistrationData", b =>
                 {
+                    b.Navigation("HealthFacility");
+
                     b.Navigation("InsuranceData");
 
                     b.Navigation("MedicalData");
+
+                    b.Navigation("MedicalTeam");
+
+                    b.Navigation("Patient");
 
                     b.Navigation("PersonalData");
                 });

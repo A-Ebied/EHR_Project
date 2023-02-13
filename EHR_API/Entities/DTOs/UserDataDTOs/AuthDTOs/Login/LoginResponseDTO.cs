@@ -1,7 +1,7 @@
 ﻿using EHR_API.Entities.Models.UsersData;
 using Microsoft.AspNetCore.Identity;
 
-namespace EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs
+namespace EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login
 {
     public class LoginResponseDTO
     {

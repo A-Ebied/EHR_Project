@@ -11,6 +11,6 @@
         public const string Patient = "Patient";
 
 
-        public const string ProfileName = "Cache";
+        public const string ProfileName = "DefCache";
     }
 }

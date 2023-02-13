@@ -1,15 +1,16 @@
 ﻿using AutoMapper;
-using Azure;
 using EHR_API.Entities;
-using EHR_API.Entities.DTOs.GovernorateDTOs;
-using EHR_API.Entities.DTOs.UserDataDTOs;
-using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs;
+using EHR_API.Entities.DTOs.HealthFacilityDTOs;
+using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login;
+using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
 using EHR_API.Entities.Models;
 using EHR_API.Entities.Models.UsersData;
+using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Text.Json;
 
 namespace EHR_API.Controllers
 {
@@ -18,11 +19,11 @@ namespace EHR_API.Controllers
     public class AuthenticationAPIController : ControllerBase
     {
         protected APIResponse _response;
-        private readonly IAuthenticationRepository _db;
+        private readonly IMainRepository _db;
         private readonly IMapper _mapper;
         private readonly UserManager<RegistrationData> _userManager;
 
-        public AuthenticationAPIController(IAuthenticationRepository db, IMapper mapper, UserManager<RegistrationData> userManager)
+        public AuthenticationAPIController(IMainRepository db, IMapper mapper, UserManager<RegistrationData> userManager)
         {
             _db = db;
             _response = new();
@@ -31,10 +32,9 @@ namespace EHR_API.Controllers
         }
 
         [HttpPost("RegisterUser")]
-        //[ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> RegisterUser([FromBody] RegistrationDataDTO registrationDataDTO)
+        public async Task<ActionResult<APIResponse>> RegisterUser([FromBody] RegistrationDataCreateDTO registrationDataDTO)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace EHR_API.Controllers
                 }
 
 
-               var result = await _db.RegisterUser(registrationDataDTO);
+               var result = await _db._authentication.RegisterUser(registrationDataDTO);
                 if (!result.Succeeded)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
@@ -71,10 +71,10 @@ namespace EHR_API.Controllers
 
         }
 
-        [HttpPost("login")]
-        public async Task<ActionResult<APIResponse>> Authenticate([FromBody] LoginRequestDTO user) 
+        [HttpPost("Login")]
+        public async Task<ActionResult<APIResponse>> Login([FromBody] LoginRequestDTO user) 
         {
-            var _user = await _db.ValidateUser(user);
+            var _user = await _db._authentication.ValidateUser(user);
             if ( _user == null)
             {
                 _response.Errors = new() { "The Email and Password are wrong" };
@@ -87,7 +87,7 @@ namespace EHR_API.Controllers
             {
                 User = _mapper.Map<LoginResponseaDataDTO>(_user),
                 Roles = await _userManager.GetRolesAsync(_user),
-                Token = await _db.CreateToken()
+                Token = await _db._authentication.CreateToken()
             };
 
             _response.Result = loginResponse;
@@ -95,5 +95,105 @@ namespace EHR_API.Controllers
             return Ok(_response);
         }
 
+        [HttpGet("GetUsersRegistrationData")]
+        [ResponseCache(CacheProfileName = SD.ProfileName)]
+        //[Authorize]
+        //[Authorize(Roles = SD.SystemManager)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<APIResponse>> GetUsersRegistrationData([FromQuery(Name = "searchUsername")] string userName = null, int pageNumber = 1, int pageSize = 0)
+        {
+            try
+            {
+                var entities = await _db._authentication.GetAllAsync(
+                    includeProperties: "HealthFacility",
+                    exception: userName == null ? null : g => g.UserName.ToLower().Contains(userName.ToLower()),
+                    pageNumber: pageNumber,
+                    pageSize: pageSize
+                    );
+
+                if (entities.Count == 0)
+                {
+                    return NotFound(APIResponses.NotFound("No data has been found"));
+                }
+
+                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
+                Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
+
+                _response.Result = _mapper.Map<List<RegistrationDataDTO>>(entities);
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                return APIResponses.InternalServerError(ex);
+            }
+        }
+
+        [HttpGet("{id}", Name = "GetUserRegistrationData")]
+        [ResponseCache(CacheProfileName = SD.ProfileName)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<APIResponse>> GetUserRegistrationData(string id)
+        {
+            try
+            {
+                if (id == null)
+                {
+                    return BadRequest(APIResponses.BadRequest("Id is null"));
+                }
+
+                var entity = await _db._authentication.GetAsync(exception: g => g.Id == id, includeProperties: "HealthFacility");
+                if (entity == null)
+                {
+                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+                }
+
+                _response.Result = _mapper.Map<RegistrationDataDTO>(entity);
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                return APIResponses.InternalServerError(ex);
+            }
+        }
+
+        [HttpPut("{id}", Name = "UpdateRegistrationData")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<APIResponse>> UpdateRegistrationData(string id, [FromBody] RegistrationDataUpdateDTO entityUpdateDTO)
+        {
+            try
+            {
+                if (entityUpdateDTO == null)
+                {
+                    return BadRequest(APIResponses.BadRequest("No data has been sent"));
+                }
+
+                if (id != entityUpdateDTO.Id)
+                {
+                    return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
+                }
+
+                if (await _db._authentication.GetAsync(exception: g => g.Id == id) == null)
+                {
+                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+                }
+
+                var entity = _mapper.Map<RegistrationData>(entityUpdateDTO);
+                await _db._authentication.UpdateAsync(entity);
+
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.Result = _mapper.Map<RegistrationDataDTO>(entity);
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                return APIResponses.InternalServerError(ex);
+            }
+        }
     }
 }

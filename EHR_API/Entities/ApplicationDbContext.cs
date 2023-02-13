@@ -31,18 +31,33 @@ namespace EHR_API.Entities
             //one-to-one
             modelBuilder.Entity<RegistrationData>()
                .HasOne(a => a.PersonalData)
-               .WithOne(p => p.RegistrationData)
+               .WithOne(r => r.RegistrationData)
                .HasForeignKey<PersonalData>(p => p.Id);
 
             modelBuilder.Entity<RegistrationData>()
                .HasOne(a => a.MedicalData)
-               .WithOne(p => p.RegistrationData)
-               .HasForeignKey<MedicalData>(p => p.Id);
+               .WithOne(r => r.RegistrationData)
+               .HasForeignKey<MedicalData>(m => m.Id);
 
             modelBuilder.Entity<RegistrationData>()
                .HasOne(a => a.InsuranceData)
-               .WithOne(p => p.RegistrationData)
-               .HasForeignKey<InsuranceData>(p => p.Id);
+               .WithOne(r => r.RegistrationData)
+               .HasForeignKey<InsuranceData>(i => i.Id);
+            
+            modelBuilder.Entity<RegistrationData>()
+               .HasOne(a => a.Patient)
+               .WithOne(r => r.RegistrationData)
+               .HasForeignKey<Patient>(p => p.Id);
+             
+            modelBuilder.Entity<RegistrationData>()
+               .HasOne(m => m.MedicalTeam)
+               .WithOne(r => r.RegistrationData)
+               .HasForeignKey<MedicalTeam>(m => m.Id);
+             
+            modelBuilder.Entity<RegistrationData>()
+               .HasOne(m => m.HealthFacility)
+               .WithOne(r => r.RegistrationData)
+               .HasForeignKey<HealthFacility>(h => h.Id);
 
         }
 

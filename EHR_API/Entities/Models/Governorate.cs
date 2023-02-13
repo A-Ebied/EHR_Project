@@ -1,4 +1,6 @@
-﻿namespace EHR_API.Entities.Models
+﻿using EHR_API.Entities.Models.UsersData;
+
+namespace EHR_API.Entities.Models
 {
     public class Governorate
     {
@@ -7,5 +9,6 @@
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public ICollection<HealthFacility> HealthFacilitys { get; set; }
+        public ICollection<PersonalData> PersonalData { get; set; }
     }
 }

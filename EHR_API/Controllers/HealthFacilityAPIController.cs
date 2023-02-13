@@ -59,18 +59,18 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpGet("{id:int}", Name = "GetHealthFacility")]
+        [HttpGet("{id}", Name = "GetHealthFacility")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetHealthFacility(int id)
+        public async Task<ActionResult<APIResponse>> GetHealthFacility(string id)
         {
             try
             {
-                if (id < 1)
+                if (id == null)
                 {
-                    return BadRequest(APIResponses.BadRequest("Id less than 1"));
+                    return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
                 var entity = await _db._healthFacility.GetAsync(exception: g => g.Id == id, includeProperties: "Governorate");
@@ -124,17 +124,17 @@ namespace EHR_API.Controllers
             }
         }
         
-        [HttpDelete("{id:int}", Name = "DeleteHealthFacility")]
+        [HttpDelete("{id}", Name = "DeleteHealthFacility")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> DeleteHealthFacility(int id) 
+        public async Task<ActionResult<APIResponse>> DeleteHealthFacility(string id) 
         {
             try
             {
-                if (id == 0)
+                if (id == null)
                 {
-                    return BadRequest(APIResponses.BadRequest("Id less than 1"));
+                    return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
                 var removedEntity = await _db._healthFacility.GetAsync(exception: g => g.Id == id);
@@ -155,11 +155,11 @@ namespace EHR_API.Controllers
         }
 
 
-        [HttpPut("{id:int}", Name = "UpdateHealthFacility")]
+        [HttpPut("{id}", Name = "UpdateHealthFacility")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> UpdateHealthFacility(int id, [FromBody] HealthFacilityUpdateDTO entityUpdateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateHealthFacility(string id, [FromBody] HealthFacilityUpdateDTO entityUpdateDTO)
         {
             try
             {

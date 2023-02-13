@@ -6,7 +6,7 @@ namespace EHR_API.Entities.DTOs.HealthFacilityDTOs
     public class HealthFacilityUpdateDTO
     {
         [Required, DisplayName("Health Facility No.")]
-        public int Id { get; set; }
+        public string Id { get; set; }
         [Required, MaxLength(80, ErrorMessage = "The maximum length is 80 characters")]
         public string? Title { get; set; }
         [Required, MaxLength(20, ErrorMessage = "The maximum length is 20 characters")]

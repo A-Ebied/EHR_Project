@@ -4,7 +4,6 @@
     {
         IGovernorateRepository _governorate { get; }
         IHealthFacilityRepository _healthFacility { get; }
-
-        Task SaveAsync();
+        IAuthenticationRepository _authentication { get; }
     }
 }

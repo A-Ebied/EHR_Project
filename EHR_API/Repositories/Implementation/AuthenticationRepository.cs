@@ -1,11 +1,15 @@
 ﻿using AutoMapper;
-using EHR_API.Entities.DTOs.UserDataDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs;
+using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login;
+using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Repositories.Contracts;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text;
 
@@ -25,7 +29,7 @@ namespace EHR_API.Repositories.Implementation
             _configuration = configuration;
         }
 
-        public async Task<IdentityResult> RegisterUser(RegistrationDataDTO registrationDataDTO)
+        public async Task<IdentityResult> RegisterUser(RegistrationDataCreateDTO registrationDataDTO)
         {
             var user = _mapper.Map<RegistrationData>(registrationDataDTO); 
             var result = await _userManager.CreateAsync(user, registrationDataDTO.Password); 
@@ -95,6 +99,54 @@ namespace EHR_API.Repositories.Implementation
                 ); 
             
             return tokenOptions; 
+        }
+
+        public async Task<List<RegistrationData>> GetAllAsync(Expression<Func<RegistrationData, bool>> exception = null, string includeProperties = null, int pageNumber = 1, int pageSize = 0)
+        {
+            IQueryable<RegistrationData> entities = _userManager.Users;
+
+            entities = exception != null ? entities.Where(exception) : entities;
+
+            if (pageSize > 0)
+            {
+                entities = entities.Skip(pageSize * (pageNumber - 1)).Take(pageSize);
+            }
+
+            if (includeProperties != null)
+            {
+                foreach (var item in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    entities = entities.Include(item);
+                }
+            }
+
+            return await entities.ToListAsync();
+        }
+
+        public async Task<RegistrationData> GetAsync(Expression<Func<RegistrationData, bool>> exception, string includeProperties = null)
+        {
+            IQueryable<RegistrationData> entity = _userManager.Users;
+
+            if (exception != null)
+            {
+                entity = entity.Where(exception);
+            }
+
+            if (includeProperties != null)
+            {
+                foreach (var item in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    entity = entity.Include(item);
+                }
+            }
+
+            return await entity.SingleOrDefaultAsync();
+        }
+
+        public async Task<RegistrationData> UpdateAsync(RegistrationData entity)
+        {
+            await _userManager.UpdateAsync(entity);
+            return entity;
         }
     }
 }

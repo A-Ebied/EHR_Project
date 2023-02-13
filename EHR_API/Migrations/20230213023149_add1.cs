@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EHRAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class AddDb : Migration
+    public partial class add1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -178,11 +178,92 @@ namespace EHRAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "InsuranceData",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    HasGovernmentInsurance = table.Column<bool>(type: "bit", nullable: false),
+                    HasAnotherInsurance = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateddAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InsuranceData", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_InsuranceData_AspNetUsers_Id",
+                        column: x => x.Id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MedicalData",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    BloodGroup = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FamilyHistory = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MedicalHistory = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DNAImageResultUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateddAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MedicalData", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MedicalData_AspNetUsers_Id",
+                        column: x => x.Id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MedicalTeam",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    MedicalSpecializationId = table.Column<int>(type: "int", nullable: false),
+                    Degree = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MedicalTeam", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MedicalTeam_AspNetUsers_Id",
+                        column: x => x.Id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Patient",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AgeGroup = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsSane = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Patient", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Patient_AspNetUsers_Id",
+                        column: x => x.Id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "HealthFacility",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SubordinateTo = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -198,7 +279,49 @@ namespace EHRAPI.Migrations
                 {
                     table.PrimaryKey("PK_HealthFacility", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_HealthFacility_AspNetUsers_Id",
+                        column: x => x.Id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_HealthFacility_Governorate_GovernorateId",
+                        column: x => x.GovernorateId,
+                        principalTable: "Governorate",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PersonalData",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Occupation = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NumOfChildren = table.Column<int>(type: "int", nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    GovernorateId = table.Column<int>(type: "int", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Phone1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EmergencyPhone1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EmergencyPhone2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateddAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PersonalData", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PersonalData_AspNetUsers_Id",
+                        column: x => x.Id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PersonalData_Governorate_GovernorateId",
                         column: x => x.GovernorateId,
                         principalTable: "Governorate",
                         principalColumn: "Id",
@@ -210,13 +333,13 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "08743721-c384-43f6-993e-896851b06e6f", null, "HealthFacilityManager", "HEALTHFACILITYAMANAGER" },
-                    { "47efb674-7465-4771-bd96-69d06922efce", null, "HealthFacilitiesAdministrator", "HEALTHFACILITIESADMINISTRATOR" },
-                    { "4c0ac3ae-c4b4-4e4b-b9dd-adc31b383d7a", null, "Nurse", "NURSE" },
-                    { "af1c3b81-14d9-4d7b-988a-822e6cda0f91", null, "Pharmacist", "PHARMACIST" },
-                    { "b859c7bc-0f1f-44d1-8392-eef61b1bcd7c", null, "Patient", "PATIENT" },
-                    { "d68078f9-a510-4750-be63-c3db4b63299b", null, "SystemManager", "SYSTEMMANAGER" },
-                    { "e276388a-e9bb-413f-8257-53acaea1c399", null, "Physician", "PHYSICIAN" }
+                    { "1f1656ba-f036-45c7-9dad-96024f6448e6", null, "Patient", "PATIENT" },
+                    { "2bf0042c-cf65-40c9-947f-a19ee5a9ccc9", null, "Nurse", "NURSE" },
+                    { "4a38a42f-676c-467f-85c0-3b4c4a1ba86d", null, "HealthFacilityManager", "HEALTHFACILITYAMANAGER" },
+                    { "9579517e-55c6-454e-9454-d1a68ef96963", null, "Pharmacist", "PHARMACIST" },
+                    { "98bb0407-b74e-428e-8a21-910b92f4b273", null, "SystemManager", "SYSTEMMANAGER" },
+                    { "df16f062-3b91-4c2f-a9af-96b4bac85e86", null, "HealthFacilitiesAdministrator", "HEALTHFACILITIESADMINISTRATOR" },
+                    { "e0835e9b-b7d3-407c-b1f2-be49af62431d", null, "Physician", "PHYSICIAN" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -262,6 +385,11 @@ namespace EHRAPI.Migrations
                 name: "IX_HealthFacility_GovernorateId",
                 table: "HealthFacility",
                 column: "GovernorateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonalData_GovernorateId",
+                table: "PersonalData",
+                column: "GovernorateId");
         }
 
         /// <inheritdoc />
@@ -284,6 +412,21 @@ namespace EHRAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "HealthFacility");
+
+            migrationBuilder.DropTable(
+                name: "InsuranceData");
+
+            migrationBuilder.DropTable(
+                name: "MedicalData");
+
+            migrationBuilder.DropTable(
+                name: "MedicalTeam");
+
+            migrationBuilder.DropTable(
+                name: "Patient");
+
+            migrationBuilder.DropTable(
+                name: "PersonalData");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

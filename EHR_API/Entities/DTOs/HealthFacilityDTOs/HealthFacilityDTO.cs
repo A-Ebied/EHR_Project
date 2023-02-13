@@ -8,7 +8,7 @@ namespace EHR_API.Entities.DTOs.HealthFacilityDTOs
     public class HealthFacilityDTO
     {
         [DisplayName("Health Facility No.")]
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
         public string Type { get; set; }
         [DisplayName("Subordinate To")]

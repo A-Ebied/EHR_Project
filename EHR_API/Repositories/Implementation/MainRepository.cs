@@ -1,26 +1,24 @@
-﻿using EHR_API.Entities;
+﻿using AutoMapper;
+using EHR_API.Entities;
+using EHR_API.Entities.Models.UsersData;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Identity;
 
 namespace EHR_API.Repositories.Implementation
 {
     public class MainRepository : IMainRepository
     {
-        private ApplicationDbContext _db;
-
-        public MainRepository(ApplicationDbContext  db)
+        public MainRepository(ApplicationDbContext  db, IMapper mapper, UserManager<RegistrationData> userManager, IConfiguration configuration)
         {
-            _db = db;
-            _governorate = new GovernorateRepository(_db);
-            _healthFacility = new HealthFacilityRepository(_db);
+            _governorate = new GovernorateRepository(db);
+            _healthFacility = new HealthFacilityRepository(db);
+            _authentication = new AuthenticationRepository(mapper, userManager, configuration);
         }
 
         public IGovernorateRepository _governorate { get; private set; }
 
         public IHealthFacilityRepository _healthFacility { get; private set; }
 
-        public async Task SaveAsync()
-        {
-            await _db.SaveChangesAsync();
-        }
+        public IAuthenticationRepository _authentication { get; private set; }
     }
 }
