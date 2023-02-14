@@ -18,6 +18,7 @@ namespace EHR_API.Repositories.Implementation
             _medicalTeam = new MedicalTeamRepository(db);
             _medicalData = new MedicalDataRepository(db);
             _insuranceData = new InsuranceDataRepository(db);
+            _userInsurance = new UserInsuranceRepository(db);
         }
 
         public IGovernorateRepository _governorate { get; private set; }
@@ -28,5 +29,6 @@ namespace EHR_API.Repositories.Implementation
         public IMedicalTeamRepository _medicalTeam { get; private set; }
         public IMedicalDataRepository _medicalData { get; private set; }
         public IInsuranceDataRepository _insuranceData { get; private set; }
+        public IUserInsuranceRepository _userInsurance { get; private set; }
     }
 }

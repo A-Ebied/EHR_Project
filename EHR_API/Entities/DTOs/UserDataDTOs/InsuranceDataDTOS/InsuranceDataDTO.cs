@@ -16,7 +16,7 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs
         public DateTime CreatedAt { get; set; }
         [DisplayName("Updated at")]
         public DateTime UpdateddAt { get; set; }
-        
-       // public ICollection<UserInsurance> UserInsurances { get; set; }
+
+        public ICollection<UserInsuranceDTOForOthers> UserInsurances { get; set; }
     }
 }

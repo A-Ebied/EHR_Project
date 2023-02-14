@@ -39,8 +39,7 @@ namespace EHR_API.Controllers
                 var entities = await _db._personal.GetAllAsync(
                     expression: id==null? null : g => g.Id.ToLower().Contains(id.ToLower()),
                     pageNumber: pageNumber,
-                    pageSize: pageSize
-                    );
+                    pageSize: pageSize);
                  
                 if (entities.Count  == 0)
                 {
@@ -102,14 +101,14 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
 
-                if (await _db._personal.GetAsync(expression: g => g.Id.ToLower() == entityCreateDTO.Id.ToLower()) != null)
-                {
-                    return BadRequest(APIResponses.BadRequest("The object is already exists"));
-                }
-
                 if (await _db._governorate.GetAsync(expression: e => e.Id == entityCreateDTO.GovernorateId) == null)
                 {
                     return BadRequest(APIResponses.BadRequest("Governorate is not exists"));
+                }
+
+                if (await _db._personal.GetAsync(expression: g => g.Id.ToLower() == entityCreateDTO.Id.ToLower()) != null)
+                {
+                    return BadRequest(APIResponses.BadRequest("The object is already exists"));
                 }
 
                 var entity = _mapper.Map<PersonalData>(entityCreateDTO);
