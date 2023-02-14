@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\DTOs\UserDataDTOs\MedicalTeam\" />
     <Folder Include="Entities\DTOs\UserDataDTOs\MedicalData\" />
     <Folder Include="Entities\DTOs\UserDataDTOs\InsuranceData\" />
     <Folder Include="Entities\DTOs\UserDataDTOs\UserInsuranceData\" />

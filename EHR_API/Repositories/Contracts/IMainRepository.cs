@@ -7,5 +7,6 @@
         IAuthenticationRepository _authentication { get; }
         IPersonalDataRepository _personal { get; }
         IPatientRepository _patient { get; }
+        IMedicalTeamRepository _medicalTeam { get; }
     }
 }
