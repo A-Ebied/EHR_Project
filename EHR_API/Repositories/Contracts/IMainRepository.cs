@@ -11,5 +11,6 @@
         IMedicalDataRepository _medicalData { get; }
         IInsuranceDataRepository _insuranceData { get; }
         IUserInsuranceRepository _userInsurance { get; }
+        IRoleRepository _role { get; }
     }
 }

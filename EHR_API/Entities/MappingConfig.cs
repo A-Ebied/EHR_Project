@@ -5,8 +5,10 @@ using EHR_API.Entities.DTOs.UserDataDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
+using EHR_API.Entities.DTOs.UserDataDTOs.UserRolesDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Entities.Models.UsersData;
+using Microsoft.AspNetCore.Identity;
 
 namespace EHR_API.Entities
 {
@@ -61,6 +63,8 @@ namespace EHR_API.Entities
             CreateMap<UserInsurance, UserInsuranceUpdateDTO>().ReverseMap();
             CreateMap<UserInsurance, UserInsuranceDTO>().ReverseMap();
             CreateMap<UserInsurance, UserInsuranceDTOForOthers>().ReverseMap();
+
+            CreateMap<IdentityRole, RolesDTO>().ReverseMap();
         }
     }
 }

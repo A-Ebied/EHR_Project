@@ -2,6 +2,7 @@
 using EHR_API.Entities;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
+using EHR_API.Entities.DTOs.UserDataDTOs.UserRolesDTOs;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
@@ -181,6 +182,32 @@ namespace EHR_API.Controllers
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = _mapper.Map<RegistrationDataDTO>(entityUpdateDTO);
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                return APIResponses.InternalServerError(ex);
+            }
+        }
+
+        [HttpGet("GetRoles")]
+        [ResponseCache(CacheProfileName = SD.ProfileName)]
+        //[Authorize]
+        //[Authorize(Roles = SD.SystemManager)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<APIResponse>> GetRoles()
+        {
+            try
+            {
+                var entities = await _db._role.GetRolesAsync();
+                if (entities.Count == 0)
+                {
+                    return NotFound(APIResponses.NotFound("No data has been found"));
+                }
+
+                _response.Result = _mapper.Map<List<RolesDTO>>(entities);
+                _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
             catch (Exception ex)
