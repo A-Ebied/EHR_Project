@@ -9,5 +9,6 @@
         IPatientRepository _patient { get; }
         IMedicalTeamRepository _medicalTeam { get; }
         IMedicalDataRepository _medicalData { get; }
+        IInsuranceDataRepository _insuranceData { get; }
     }
 }

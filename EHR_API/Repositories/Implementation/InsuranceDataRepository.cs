@@ -5,8 +5,8 @@ using EHR_API.Repositories.Contracts;
 
 namespace EHR_API.Repositories.Implementation
 {
-    public class GovernorateRepository : RepositoryBase<Governorate>, IGovernorateRepository
+    public class InsuranceDataRepository : RepositoryBase<InsuranceData>, IInsuranceDataRepository
     {
-        public GovernorateRepository(ApplicationDbContext db) : base(db) { }
+        public InsuranceDataRepository(ApplicationDbContext db) : base(db) { }
     }
 }

@@ -1,11 +1,12 @@
 ﻿using EHR_API.Entities;
 using EHR_API.Entities.Models;
+using EHR_API.Entities.Models.UsersData;
 using EHR_API.Repositories.Contracts;
 
 namespace EHR_API.Repositories.Implementation
 {
-    public class GovernorateRepository : RepositoryBase<Governorate>, IGovernorateRepository
+    public class PersonalDataRepository : RepositoryBase<PersonalData>, IPersonalDataRepository
     {
-        public GovernorateRepository(ApplicationDbContext db) : base(db) { }
+        public PersonalDataRepository(ApplicationDbContext db) : base(db) { }
     }
 }
