@@ -21,5 +21,6 @@ namespace EHR_API.Entities.Models.UsersData
         public DateTime UpdateddAt { get; set; } = DateTime.Now;
 
         public RegistrationData RegistrationData { get; set; }
+        public Governorate Governorate { get; set; }
     }
 }

@@ -31,7 +31,6 @@
     <Folder Include="Entities\DTOs\UserDataDTOs\MedicalData\" />
     <Folder Include="Entities\DTOs\UserDataDTOs\InsuranceData\" />
     <Folder Include="Entities\DTOs\UserDataDTOs\UserInsuranceData\" />
-    <Folder Include="Entities\DTOs\UserDataDTOs\Patient\" />
   </ItemGroup>
 
 </Project>

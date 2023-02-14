@@ -6,5 +6,6 @@
         IHealthFacilityRepository _healthFacility { get; }
         IAuthenticationRepository _authentication { get; }
         IPersonalDataRepository _personal { get; }
+        IPatientRepository _patient { get; }
     }
 }

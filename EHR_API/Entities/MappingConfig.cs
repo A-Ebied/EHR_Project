@@ -36,6 +36,11 @@ namespace EHR_API.Entities
             CreateMap<PersonalData, PersonalDataUpdateDTO>().ReverseMap();
             CreateMap<PersonalData, PersonalDataDTO>().ReverseMap();
             CreateMap<PersonalData, PersonalDataDTOForOthers>().ReverseMap();
+            
+            CreateMap<Patient, PatientCreateDTO>().ReverseMap();
+            CreateMap<Patient, PatientUpdateDTO>().ReverseMap();
+            CreateMap<Patient, PatientDTO>().ReverseMap();
+            CreateMap<Patient, PatientDTOForOthers>().ReverseMap();
         }
     }
 }

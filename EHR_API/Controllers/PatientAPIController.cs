@@ -11,32 +11,32 @@ using System.Text.Json;
 
 namespace EHR_API.Controllers
 {
-    [Route("api/PersonalDataAPI")]
+    [Route("api/PatientAPI")]
     [ApiController]
-    public class PersonalDataAPIController : ControllerBase
+    public class PatientAPIController : ControllerBase
     {
         protected APIResponse _response;
         private readonly IMapper _mapper;
         private readonly IMainRepository _db;
         
-        public PersonalDataAPIController(IMainRepository db, IMapper mapper)
+        public PatientAPIController(IMainRepository db, IMapper mapper)
         {
             _db = db;
             _mapper = mapper;
             _response = new();
         }
 
-        [HttpGet("GetUsersPersonalData")]
+        [HttpGet("GetPatients")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         //[Authorize]
         //[Authorize(Roles = SD.SystemManager)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetUsersPersonalData([FromQuery(Name = "searchId")]string id = null, int pageNumber = 1, int pageSize = 0) 
+        public async Task<ActionResult<APIResponse>> GetUsersGetPatients([FromQuery(Name = "searchId")]string id = null, int pageNumber = 1, int pageSize = 0) 
         {
             try
             {
-                var entities = await _db._personal.GetAllAsync(
+                var entities = await _db._patient.GetAllAsync(
                     expression: id==null? null : g => g.Id.ToLower().Contains(id.ToLower()),
                     pageNumber: pageNumber,
                     pageSize: pageSize
@@ -50,7 +50,7 @@ namespace EHR_API.Controllers
                 Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize};
                 Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
 
-                _response.Result = _mapper.Map<List<PersonalData>>(entities);
+                _response.Result = _mapper.Map<List<Patient>>(entities);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -60,12 +60,12 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpGet("{id}", Name = "GetUserPersonalData")]
+        [HttpGet("{id}", Name = "GetPatient")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetUserPersonalData(string id)
+        public async Task<ActionResult<APIResponse>> GetGetPatient(string id)
         {
             try
             {
@@ -74,13 +74,13 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
-                var entity = await _db._personal.GetAsync(expression: g => g.Id == id);
+                var entity = await _db._patient.GetAsync(expression: g => g.Id == id);
                 if (entity == null)
                 {
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id} "));
                 }
 
-                _response.Result = _mapper.Map<PersonalDataDTO>(entity);
+                _response.Result = _mapper.Map<PatientDTO>(entity);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -90,10 +90,10 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpPost(Name = "CreateUserPersonalData")]
+        [HttpPost(Name = "CreatePatient")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> CreateUserPersonalData([FromBody] PersonalDataCreateDTO entityCreateDTO) 
+        public async Task<ActionResult<APIResponse>> CreatePatient([FromBody] PatientCreateDTO entityCreateDTO) 
         {
             try
             {
@@ -102,22 +102,17 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
 
-                if (await _db._personal.GetAsync(expression: g => g.Id.ToLower() == entityCreateDTO.Id.ToLower()) != null)
+                if (await _db._patient.GetAsync(expression: g => g.Id.ToLower() == entityCreateDTO.Id.ToLower()) != null)
                 {
                     return BadRequest(APIResponses.BadRequest("The object is already exists"));
                 }
 
-                if (await _db._governorate.GetAsync(expression: e => e.Id == entityCreateDTO.GovernorateId) == null)
-                {
-                    return BadRequest(APIResponses.BadRequest("Governorate is not exists"));
-                }
+                var entity = _mapper.Map<Patient>(entityCreateDTO);
+                await _db._patient.CreateAsync(entity);
 
-                var entity = _mapper.Map<PersonalData>(entityCreateDTO);
-                await _db._personal.CreateAsync(entity);
-
-                _response.Result = _mapper.Map<PersonalDataDTO>(entity);
+                _response.Result = _mapper.Map<PatientDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;
-                return CreatedAtRoute("GetUserPersonalData", new { id = entity.Id }, _response);
+                return CreatedAtRoute("GetPatient", new { id = entity.Id }, _response);
             }
             catch (Exception ex)
             {
@@ -125,11 +120,11 @@ namespace EHR_API.Controllers
             }
         }
         
-        [HttpDelete("{id}", Name = "DeletePersonalData")]
+        [HttpDelete("{id}", Name = "DeletePatient")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> DeletePersonalData(string id) 
+        public async Task<ActionResult<APIResponse>> DeletePatient(string id) 
         {
             try
             {
@@ -138,13 +133,13 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
-                var removedEntity = await _db._personal.GetAsync(expression: g => g.Id == id);
+                var removedEntity = await _db._patient.GetAsync(expression: g => g.Id == id);
                 if (removedEntity == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
                 }
 
-                await _db._personal.DeleteAsync(removedEntity);
+                await _db._patient.DeleteAsync(removedEntity);
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = "The object has been deleted";
@@ -157,11 +152,11 @@ namespace EHR_API.Controllers
         }
 
 
-        [HttpPut("{id}", Name = "UpdateUserPersonalData")]
+        [HttpPut("{id}", Name = "UpdatePatient")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> UpdateUserPersonalData(string id, [FromBody] PersonalDataUpdateDTO entityUpdateDTO)
+        public async Task<ActionResult<APIResponse>> UpdatePatient(string id, [FromBody] PatientUpdateDTO entityUpdateDTO)
         {
             try
             {
@@ -175,17 +170,17 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
-                if (await _db._personal.GetAsync(expression: g => g.Id == id) == null)
+                if (await _db._patient.GetAsync(expression: g => g.Id == id) == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
                 }
- 
-                var entity = _mapper.Map<PersonalData>(entityUpdateDTO);
+
+                var entity = _mapper.Map<Patient>(entityUpdateDTO);
                 entity.UpdateddAt = DateTime.Now;
-                await _db._personal.UpdateAsync(entity);
+                await _db._patient.UpdateAsync(entity);
 
                 _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = _mapper.Map<PersonalDataDTO>(entity);
+                _response.Result = _mapper.Map<PatientDTO>(entity);
                 return Ok(_response);
             }
             catch (Exception ex)
