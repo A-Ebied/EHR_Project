@@ -8,5 +8,6 @@
         IPersonalDataRepository _personal { get; }
         IPatientRepository _patient { get; }
         IMedicalTeamRepository _medicalTeam { get; }
+        IMedicalDataRepository _medicalData { get; }
     }
 }

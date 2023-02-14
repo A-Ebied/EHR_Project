@@ -16,6 +16,7 @@ namespace EHR_API.Repositories.Implementation
             _personal = new PersonalDataRepository(db);
             _patient = new PatientRepository(db);
             _medicalTeam = new MedicalTeamRepository(db);
+            _medicalData = new MedicalDataRepository(db);
         }
 
         public IGovernorateRepository _governorate { get; private set; }
@@ -24,5 +25,6 @@ namespace EHR_API.Repositories.Implementation
         public IPersonalDataRepository _personal { get; private set; }
         public IPatientRepository _patient { get; private set; }
         public IMedicalTeamRepository _medicalTeam { get; private set; }
+        public IMedicalDataRepository _medicalData { get; private set; }
     }
 }

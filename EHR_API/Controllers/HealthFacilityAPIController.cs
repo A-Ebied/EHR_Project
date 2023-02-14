@@ -12,13 +12,13 @@ namespace EHR_API.Controllers
 {
     [Route("api/HealthFacilityAPI")]
     [ApiController]
-    public class HealthFacilityController : ControllerBase
+    public class HealthFacilityAPIController : ControllerBase
     {
         protected APIResponse _response;
         private readonly IMapper _mapper;
         private readonly IMainRepository _db;
 
-        public HealthFacilityController(IMainRepository db, IMapper mapper)
+        public HealthFacilityAPIController(IMainRepository db, IMapper mapper)
         {
             _db = db;
             _mapper = mapper;
