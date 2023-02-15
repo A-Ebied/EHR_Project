@@ -23,8 +23,8 @@ namespace EHR_API.Entities
 
             // ApplyConfiguration
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
-            modelBuilder.ApplyConfiguration(new GovernorateConfiguration());
-            //modelBuilder.ApplyConfiguration(new HealthFacilityConfiguration());
+            modelBuilder.ApplyConfiguration(new UsersConfiguration());
+            modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
 
             //one-to-one
             modelBuilder.Entity<RegistrationData>()

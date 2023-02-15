@@ -4,7 +4,9 @@ using EHR_API.Repositories.Contracts;
 using EHR_API.Repositories.Implementation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 namespace EHR_API.Extensions
@@ -42,11 +44,12 @@ namespace EHR_API.Extensions
 
         /*
             - IIS integration help us with the deployment to IIS
-         */
-        //public static void ConfigureIISIntegration(this IServiceCollection services)
-        //{
-        //    services.Configure<IISOptions>(options => { });
-        //}
+         
+        public static void ConfigureIISIntegration(this IServiceCollection services)
+        {
+            services.Configure<IISOptions>(options => { });
+        }
+        */
 
         public static void ConfigureIdentity(this IServiceCollection services)
         {
@@ -96,5 +99,59 @@ namespace EHR_API.Extensions
                         }; 
                     }); 
         }
+
+        public static void AddControllersConfiguration(this IServiceCollection services)
+        {
+            services.AddControllers(
+                option =>
+                {
+                    // option.ReturnHttpNotAcceptable = true;
+                    option.CacheProfiles.Add("DefCache",
+                        new CacheProfile
+                        {
+                            Duration = 10
+                        });
+                }
+                ).AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)/*.AddXmlDataContractSerializerFormatters()*/;
+        }
+
+        public static void AddSwaggerGenConfiguration(this IServiceCollection services)
+        {
+            services.AddSwaggerGen(
+                options =>
+                {
+                    options.AddSecurityDefinition(
+                        "Bearer", new OpenApiSecurityScheme()
+                        {
+                            Description = """
+                            Enter 'Bearer ' then your token, ex: Bearer 1234
+                            """,
+                            Name = "Authorization",
+                            In = ParameterLocation.Header,
+                            Scheme = "Bearer"
+                        });
+
+                    options.AddSecurityRequirement(
+                        new OpenApiSecurityRequirement()
+                        {
+                            {
+                                new OpenApiSecurityScheme
+                                {
+                                    Reference = new OpenApiReference
+                                    {
+                                        Type = ReferenceType.SecurityScheme,
+                                        Id = "Bearer"
+                                    },
+                                    Scheme = "oath2",
+                                    Name = "Bearer",
+                                    In = ParameterLocation.Header
+                                },
+                                new List<string>()
+                            }
+                        });
+                });
+        }
+
+
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EHRAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class AddDb1 : Migration
+    public partial class add : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -364,27 +364,35 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "30aa89c4-bf7d-4030-9c52-561ead5b64e0", null, "Patient", "PATIENT" },
-                    { "3cfc154e-487d-4858-b80b-e243d6cfac94", null, "Physician", "PHYSICIAN" },
-                    { "50240b34-bee5-4a79-9130-56fbd1622d20", null, "Nurse", "NURSE" },
-                    { "68d80182-3213-46ee-9334-3e17538d729e", null, "HealthFacilitiesAdministrator", "HEALTHFACILITIESADMINISTRATOR" },
-                    { "c6772942-7ae5-4b17-971e-8a493a686433", null, "SystemManager", "SYSTEMMANAGER" },
-                    { "ce331bdd-5c4f-40f1-9a12-03fb888686b4", null, "Pharmacist", "PHARMACIST" },
-                    { "d12c824b-57ad-459a-b233-3c179148c812", null, "HealthFacilityManager", "HEALTHFACILITYAMANAGER" }
+                    { "1", null, "SystemManager", "SYSTEMMANAGER" },
+                    { "2", null, "HealthFacilitiesAdministrator", "HEALTHFACILITIESADMINISTRATOR" },
+                    { "3", null, "HealthFacilityManager", "HEALTHFACILITYAMANAGER" },
+                    { "4", null, "Physician", "PHYSICIAN" },
+                    { "5", null, "Nurse", "NURSE" },
+                    { "6", null, "Pharmacist", "PHARMACIST" },
+                    { "7", null, "Patient", "PATIENT" }
                 });
 
             migrationBuilder.InsertData(
-                table: "Governorates",
-                columns: new[] { "Id", "CreatedAt", "Title", "UpdateddAt" },
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedAt", "Email", "EmailConfirmed", "FullName", "IdType", "LockoutEnabled", "LockoutEnd", "Nationality", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UpdateddAt", "UserName" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5933), "الشرقية", new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5946) },
-                    { 2, new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5950), "شمال سيناء", new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5951) },
-                    { 3, new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5952), "القاهرة", new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5952) },
-                    { 4, new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5953), "المنيا", new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5954) },
-                    { 5, new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5955), "الدقهلية", new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5955) },
-                    { 6, new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5956), "الإسكندرية", new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5957) },
-                    { 7, new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5957), "الإسماعيلية", new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5958) }
+                    { "12345678902341", 0, "68378a8b-ab9f-4f80-ba14-2b5bc049b937", new DateTime(2023, 2, 15, 18, 22, 53, 391, DateTimeKind.Local).AddTicks(5666), "A@gmail.com", false, "أحمد محمد أحمد", "الهوية الوطنية", false, null, "مصري", null, null, null, "", false, "41726a12-4269-4d42-98ee-79a34c768e7e", false, new DateTime(2023, 2, 15, 18, 22, 53, 391, DateTimeKind.Local).AddTicks(5667), "@Ahmed123" },
+                    { "12345678912345", 0, "ef749a03-ed2b-4b22-9545-0808b902c784", new DateTime(2023, 2, 15, 18, 22, 53, 391, DateTimeKind.Local).AddTicks(5633), "k@gmail.com", false, "أحمد محمد كمال", "الهوية الوطنية", false, null, "مصري", null, null, null, "01234567890", false, "3608a13e-cda7-48ed-891e-e48b268c495f", false, new DateTime(2023, 2, 15, 18, 22, 53, 391, DateTimeKind.Local).AddTicks(5645), "@Kamal123" },
+                    { "12345678921345", 0, "67e35ad2-b5b4-4a15-b087-e546828cccee", new DateTime(2023, 2, 15, 18, 22, 53, 391, DateTimeKind.Local).AddTicks(5673), "M@gmail.com", false, "أحمد محمد محمد", "الهوية الوطنية", false, null, "مصري", null, null, null, "01234567899", false, "34cf5d4e-3eeb-4966-93fc-684f10850bb6", false, new DateTime(2023, 2, 15, 18, 22, 53, 391, DateTimeKind.Local).AddTicks(5673), "@Muhammad123" },
+                    { "92345678912345", 0, "22492dd0-e307-49f2-b308-3e453264228b", new DateTime(2023, 2, 15, 18, 22, 53, 391, DateTimeKind.Local).AddTicks(5680), "Al@gmail.com", false, "أحمد محمد علي", "الهوية الوطنية", false, null, "مصري", null, null, null, "01234567890", false, "0aa4507c-e336-4a38-9647-d310bad71ae2", false, new DateTime(2023, 2, 15, 18, 22, 53, 391, DateTimeKind.Local).AddTicks(5681), "@Ali123" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[,]
+                {
+                    { "3", "12345678902341" },
+                    { "3", "12345678912345" },
+                    { "3", "12345678921345" },
+                    { "1", "92345678912345" }
                 });
 
             migrationBuilder.CreateIndex(

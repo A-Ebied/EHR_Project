@@ -34,7 +34,6 @@ namespace EHR_API.Controllers
             try
             {
                 var entities = await _db._healthFacility.GetAllAsync(
-                    includeProperties: "Governorate",
                     expression: title == null ? null : g => g.Title.ToLower().Contains(title.ToLower()),
                     pageNumber: pageNumber,
                     pageSize: pageSize

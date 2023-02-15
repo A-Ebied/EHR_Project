@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EHRAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230215015519_AddDb1")]
-    partial class AddDb1
+    [Migration("20230215162253_add")]
+    partial class add
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,57 +45,6 @@ namespace EHRAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Governorates");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5933),
-                            Title = "الشرقية",
-                            UpdateddAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5946)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5950),
-                            Title = "شمال سيناء",
-                            UpdateddAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5951)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5952),
-                            Title = "القاهرة",
-                            UpdateddAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5952)
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5953),
-                            Title = "المنيا",
-                            UpdateddAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5954)
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5955),
-                            Title = "الدقهلية",
-                            UpdateddAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5955)
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CreatedAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5956),
-                            Title = "الإسكندرية",
-                            UpdateddAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5957)
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CreatedAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5957),
-                            Title = "الإسماعيلية",
-                            UpdateddAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5958)
-                        });
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.HealthFacility", b =>
@@ -369,6 +318,84 @@ namespace EHRAPI.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "12345678912345",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "ef749a03-ed2b-4b22-9545-0808b902c784",
+                            CreatedAt = new DateTime(2023, 2, 15, 18, 22, 53, 391, DateTimeKind.Local).AddTicks(5633),
+                            Email = "k@gmail.com",
+                            EmailConfirmed = false,
+                            FullName = "أحمد محمد كمال",
+                            IdType = "الهوية الوطنية",
+                            LockoutEnabled = false,
+                            Nationality = "مصري",
+                            PhoneNumber = "01234567890",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "3608a13e-cda7-48ed-891e-e48b268c495f",
+                            TwoFactorEnabled = false,
+                            UpdateddAt = new DateTime(2023, 2, 15, 18, 22, 53, 391, DateTimeKind.Local).AddTicks(5645),
+                            UserName = "@Kamal123"
+                        },
+                        new
+                        {
+                            Id = "12345678902341",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "68378a8b-ab9f-4f80-ba14-2b5bc049b937",
+                            CreatedAt = new DateTime(2023, 2, 15, 18, 22, 53, 391, DateTimeKind.Local).AddTicks(5666),
+                            Email = "A@gmail.com",
+                            EmailConfirmed = false,
+                            FullName = "أحمد محمد أحمد",
+                            IdType = "الهوية الوطنية",
+                            LockoutEnabled = false,
+                            Nationality = "مصري",
+                            PhoneNumber = "",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "41726a12-4269-4d42-98ee-79a34c768e7e",
+                            TwoFactorEnabled = false,
+                            UpdateddAt = new DateTime(2023, 2, 15, 18, 22, 53, 391, DateTimeKind.Local).AddTicks(5667),
+                            UserName = "@Ahmed123"
+                        },
+                        new
+                        {
+                            Id = "12345678921345",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "67e35ad2-b5b4-4a15-b087-e546828cccee",
+                            CreatedAt = new DateTime(2023, 2, 15, 18, 22, 53, 391, DateTimeKind.Local).AddTicks(5673),
+                            Email = "M@gmail.com",
+                            EmailConfirmed = false,
+                            FullName = "أحمد محمد محمد",
+                            IdType = "الهوية الوطنية",
+                            LockoutEnabled = false,
+                            Nationality = "مصري",
+                            PhoneNumber = "01234567899",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "34cf5d4e-3eeb-4966-93fc-684f10850bb6",
+                            TwoFactorEnabled = false,
+                            UpdateddAt = new DateTime(2023, 2, 15, 18, 22, 53, 391, DateTimeKind.Local).AddTicks(5673),
+                            UserName = "@Muhammad123"
+                        },
+                        new
+                        {
+                            Id = "92345678912345",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "22492dd0-e307-49f2-b308-3e453264228b",
+                            CreatedAt = new DateTime(2023, 2, 15, 18, 22, 53, 391, DateTimeKind.Local).AddTicks(5680),
+                            Email = "Al@gmail.com",
+                            EmailConfirmed = false,
+                            FullName = "أحمد محمد علي",
+                            IdType = "الهوية الوطنية",
+                            LockoutEnabled = false,
+                            Nationality = "مصري",
+                            PhoneNumber = "01234567890",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "0aa4507c-e336-4a38-9647-d310bad71ae2",
+                            TwoFactorEnabled = false,
+                            UpdateddAt = new DateTime(2023, 2, 15, 18, 22, 53, 391, DateTimeKind.Local).AddTicks(5681),
+                            UserName = "@Ali123"
+                        });
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.UsersData.UserInsurance", b =>
@@ -436,43 +463,43 @@ namespace EHRAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "c6772942-7ae5-4b17-971e-8a493a686433",
+                            Id = "1",
                             Name = "SystemManager",
                             NormalizedName = "SYSTEMMANAGER"
                         },
                         new
                         {
-                            Id = "68d80182-3213-46ee-9334-3e17538d729e",
+                            Id = "2",
                             Name = "HealthFacilitiesAdministrator",
                             NormalizedName = "HEALTHFACILITIESADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "d12c824b-57ad-459a-b233-3c179148c812",
+                            Id = "3",
                             Name = "HealthFacilityManager",
                             NormalizedName = "HEALTHFACILITYAMANAGER"
                         },
                         new
                         {
-                            Id = "3cfc154e-487d-4858-b80b-e243d6cfac94",
+                            Id = "4",
                             Name = "Physician",
                             NormalizedName = "PHYSICIAN"
                         },
                         new
                         {
-                            Id = "50240b34-bee5-4a79-9130-56fbd1622d20",
+                            Id = "5",
                             Name = "Nurse",
                             NormalizedName = "NURSE"
                         },
                         new
                         {
-                            Id = "ce331bdd-5c4f-40f1-9a12-03fb888686b4",
+                            Id = "6",
                             Name = "Pharmacist",
                             NormalizedName = "PHARMACIST"
                         },
                         new
                         {
-                            Id = "30aa89c4-bf7d-4030-9c52-561ead5b64e0",
+                            Id = "7",
                             Name = "Patient",
                             NormalizedName = "PATIENT"
                         });
@@ -563,6 +590,28 @@ namespace EHRAPI.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "12345678912345",
+                            RoleId = "3"
+                        },
+                        new
+                        {
+                            UserId = "12345678902341",
+                            RoleId = "3"
+                        },
+                        new
+                        {
+                            UserId = "12345678921345",
+                            RoleId = "3"
+                        },
+                        new
+                        {
+                            UserId = "92345678912345",
+                            RoleId = "1"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

@@ -29,7 +29,7 @@ namespace EHR_API.Repositories.Implementation
 
         public async Task<IdentityResult> RegisterUser(RegistrationDataCreateDTO registrationDataDTO)
         {
-            var user = _mapper.Map<RegistrationData>(registrationDataDTO); 
+            var user = _mapper.Map<RegistrationData>(registrationDataDTO);
             var result = await _userManager.CreateAsync(user, registrationDataDTO.Password); 
             
             if (result.Succeeded)
