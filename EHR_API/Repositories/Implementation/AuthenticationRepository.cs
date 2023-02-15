@@ -1,15 +1,12 @@
 ﻿using AutoMapper;
-using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Repositories.Contracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text;

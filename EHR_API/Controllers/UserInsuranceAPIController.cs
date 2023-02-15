@@ -2,7 +2,6 @@
 using EHR_API.Entities;
 using EHR_API.Entities.DTOs.UserDataDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
-using EHR_API.Entities.DTOs.UserDataDTOs.UserRolesDTOs;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
@@ -128,49 +127,49 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpPost(Name = "CreateUserInsurances")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> CreateUserInsurances([FromBody] List<UserInsuranceCreateDTO> entityCreateDTOList)
-        {
-            try
-            {
-                if (entityCreateDTOList == null)
-                {
-                    return BadRequest(APIResponses.BadRequest("No data has been sent"));
-                }
+        //[HttpPost(Name = "CreateInsurances")]
+        //[ProducesResponseType(StatusCodes.Status201Created)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //public async Task<ActionResult<APIResponse>> CreateInsurances([FromBody] ICollection<UserInsuranceCreateDTO> entityCreateDTOList)
+        //{
+        //    try
+        //    {
+        //        if (entityCreateDTOList == null)
+        //        {
+        //            return BadRequest(APIResponses.BadRequest("No data has been sent"));
+        //        }
 
-                foreach (var item in entityCreateDTOList)
-                {
-                    if (await _db._insuranceData.GetAsync(expression: e => e.Id == item.InsuranceDataId) == null)
-                    {
-                        return BadRequest(APIResponses.BadRequest("Insurance Data is not exists"));
-                    }
-                }
+        //        foreach (var item in entityCreateDTOList)
+        //        {
+        //            if (await _db._insuranceData.GetAsync(expression: e => e.Id == item.InsuranceDataId) == null)
+        //            {
+        //                return BadRequest(APIResponses.BadRequest("Insurance Data is not exists"));
+        //            }
+        //        }
 
-                foreach (var item in entityCreateDTOList)
-                {
-                    if (await _db._userInsurance.GetAsync(expression: g => g.InsuranceDataId.ToLower() == item.InsuranceDataId.ToLower()) != null)
-                    {
-                        if (await _db._userInsurance.GetAsync(expression: g => g.InsuranceOrganizationName.ToLower() == item.InsuranceOrganizationName.ToLower()) != null)
-                        {
-                            return BadRequest(APIResponses.BadRequest("The object is already exists"));
-                        }
-                    }
-                }
+        //        foreach (var item in entityCreateDTOList)
+        //        {
+        //            if (await _db._userInsurance.GetAsync(expression: g => g.InsuranceDataId.ToLower() == item.InsuranceDataId.ToLower()) != null)
+        //            {
+        //                if (await _db._userInsurance.GetAsync(expression: g => g.InsuranceOrganizationName.ToLower() == item.InsuranceOrganizationName.ToLower()) != null)
+        //                {
+        //                    return BadRequest(APIResponses.BadRequest("The object is already exists"));
+        //                }
+        //            }
+        //        }
 
-                var entities = _mapper.Map<List<UserInsurance>>(entityCreateDTOList);
-                await _db._userInsurance.CreateRangeAsync(entities);
+        //        var entities = _mapper.Map<List<UserInsurance>>(entityCreateDTOList);
+        //        await _db._userInsurance.CreateRangeAsync(entities);
 
-                _response.Result = _mapper.Map<List<UserInsuranceDTO>>(entities);
-                _response.StatusCode = HttpStatusCode.Created;
-                return CreatedAtRoute("GetUserInsurances", new { id = entities[0].InsuranceDataId }, _response);
-            }
-            catch (Exception ex)
-            {
-                return APIResponses.InternalServerError(ex);
-            }
-        }
+        //        _response.Result = _mapper.Map<List<UserInsuranceDTO>>(entities);
+        //        _response.StatusCode = HttpStatusCode.Created;
+        //        return CreatedAtRoute("GetUserInsurances", new { id = entities[0].InsuranceDataId }, _response);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return APIResponses.InternalServerError(ex);
+        //    }
+        //}
 
         [HttpDelete("{id:int}", Name = "DeleteUserInsurance")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -202,7 +201,6 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
-
 
         [HttpPut("{id:int}", Name = "UpdateUserInsurance")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

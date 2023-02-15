@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EHRAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230214004723_add3")]
-    partial class add3
+    [Migration("20230215015519_AddDb1")]
+    partial class AddDb1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,7 +44,58 @@ namespace EHRAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Governorate", (string)null);
+                    b.ToTable("Governorates");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5933),
+                            Title = "الشرقية",
+                            UpdateddAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5946)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5950),
+                            Title = "شمال سيناء",
+                            UpdateddAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5951)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5952),
+                            Title = "القاهرة",
+                            UpdateddAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5952)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5953),
+                            Title = "المنيا",
+                            UpdateddAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5954)
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5955),
+                            Title = "الدقهلية",
+                            UpdateddAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5955)
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5956),
+                            Title = "الإسكندرية",
+                            UpdateddAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5957)
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CreatedAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5957),
+                            Title = "الإسماعيلية",
+                            UpdateddAt = new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5958)
+                        });
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.HealthFacility", b =>
@@ -92,7 +143,7 @@ namespace EHRAPI.Migrations
 
                     b.HasIndex("GovernorateId");
 
-                    b.ToTable("HealthFacility", (string)null);
+                    b.ToTable("HealthFacilities");
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.UsersData.InsuranceData", b =>
@@ -320,6 +371,42 @@ namespace EHRAPI.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("EHR_API.Entities.Models.UsersData.UserInsurance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("InsuranceDataId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("InsuranceNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InsuranceOrganizationName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InsuranceType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RelationshipWithOrganization")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdateddAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InsuranceDataId");
+
+                    b.ToTable("UserInsurance");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -349,43 +436,43 @@ namespace EHRAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "64465600-f4e3-4c36-aac8-4ea852d90e59",
+                            Id = "c6772942-7ae5-4b17-971e-8a493a686433",
                             Name = "SystemManager",
                             NormalizedName = "SYSTEMMANAGER"
                         },
                         new
                         {
-                            Id = "dea9d273-dc91-4e2c-aed8-0f986bbc039e",
+                            Id = "68d80182-3213-46ee-9334-3e17538d729e",
                             Name = "HealthFacilitiesAdministrator",
                             NormalizedName = "HEALTHFACILITIESADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "1dae6b2f-36bf-473b-8fd4-d07c2a6f26ed",
+                            Id = "d12c824b-57ad-459a-b233-3c179148c812",
                             Name = "HealthFacilityManager",
                             NormalizedName = "HEALTHFACILITYAMANAGER"
                         },
                         new
                         {
-                            Id = "ea3edd88-6f6d-46c1-91c8-059a50cf7238",
+                            Id = "3cfc154e-487d-4858-b80b-e243d6cfac94",
                             Name = "Physician",
                             NormalizedName = "PHYSICIAN"
                         },
                         new
                         {
-                            Id = "3fd68925-4454-4b21-bdaf-b36e3902a2aa",
+                            Id = "50240b34-bee5-4a79-9130-56fbd1622d20",
                             Name = "Nurse",
                             NormalizedName = "NURSE"
                         },
                         new
                         {
-                            Id = "1dc906c4-ece8-48af-aea1-650345b5554a",
+                            Id = "ce331bdd-5c4f-40f1-9a12-03fb888686b4",
                             Name = "Pharmacist",
                             NormalizedName = "PHARMACIST"
                         },
                         new
                         {
-                            Id = "b8a35f10-2a07-4570-adc1-5f871453f070",
+                            Id = "30aa89c4-bf7d-4030-9c52-561ead5b64e0",
                             Name = "Patient",
                             NormalizedName = "PATIENT"
                         });
@@ -577,6 +664,15 @@ namespace EHRAPI.Migrations
                     b.Navigation("RegistrationData");
                 });
 
+            modelBuilder.Entity("EHR_API.Entities.Models.UsersData.UserInsurance", b =>
+                {
+                    b.HasOne("EHR_API.Entities.Models.UsersData.InsuranceData", "InsuranceData")
+                        .WithMany("UserInsurances")
+                        .HasForeignKey("InsuranceDataId");
+
+                    b.Navigation("InsuranceData");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -633,6 +729,11 @@ namespace EHRAPI.Migrations
                     b.Navigation("HealthFacilitys");
 
                     b.Navigation("PersonalData");
+                });
+
+            modelBuilder.Entity("EHR_API.Entities.Models.UsersData.InsuranceData", b =>
+                {
+                    b.Navigation("UserInsurances");
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.UsersData.RegistrationData", b =>

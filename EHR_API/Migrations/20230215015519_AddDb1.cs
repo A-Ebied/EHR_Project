@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EHRAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class add : Migration
+    public partial class AddDb1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -58,7 +58,7 @@ namespace EHRAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Governorate",
+                name: "Governorates",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -69,7 +69,7 @@ namespace EHRAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Governorate", x => x.Id);
+                    table.PrimaryKey("PK_Governorates", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -227,8 +227,10 @@ namespace EHRAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    MedicalSpecializationId = table.Column<int>(type: "int", nullable: false),
-                    Degree = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    MedicalSpecialization = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Degree = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateddAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -247,7 +249,9 @@ namespace EHRAPI.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AgeGroup = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsSane = table.Column<bool>(type: "bit", nullable: false)
+                    IsSane = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateddAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -261,7 +265,7 @@ namespace EHRAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HealthFacility",
+                name: "HealthFacilities",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -280,17 +284,17 @@ namespace EHRAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HealthFacility", x => x.Id);
+                    table.PrimaryKey("PK_HealthFacilities", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_HealthFacility_AspNetUsers_Id",
+                        name: "FK_HealthFacilities_AspNetUsers_Id",
                         column: x => x.Id,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_HealthFacility_Governorate_GovernorateId",
+                        name: "FK_HealthFacilities_Governorates_GovernorateId",
                         column: x => x.GovernorateId,
-                        principalTable: "Governorate",
+                        principalTable: "Governorates",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -324,11 +328,35 @@ namespace EHRAPI.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PersonalData_Governorate_GovernorateId",
+                        name: "FK_PersonalData_Governorates_GovernorateId",
                         column: x => x.GovernorateId,
-                        principalTable: "Governorate",
+                        principalTable: "Governorates",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserInsurance",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    InsuranceNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InsuranceOrganizationName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RelationshipWithOrganization = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InsuranceType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateddAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    InsuranceDataId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserInsurance", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserInsurance_InsuranceData_InsuranceDataId",
+                        column: x => x.InsuranceDataId,
+                        principalTable: "InsuranceData",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.InsertData(
@@ -336,13 +364,27 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "13c5aae0-9542-466f-ae0f-6a79e61a8a92", null, "HealthFacilityManager", "HEALTHFACILITYAMANAGER" },
-                    { "477a45a9-d63e-434b-9cd8-8af998f42261", null, "HealthFacilitiesAdministrator", "HEALTHFACILITIESADMINISTRATOR" },
-                    { "6736cc4c-81c6-4797-ab3d-11beb5def9c0", null, "SystemManager", "SYSTEMMANAGER" },
-                    { "8a5342b8-1d45-458e-8399-a4116ed5c572", null, "Patient", "PATIENT" },
-                    { "b1216176-21b5-4658-b58e-abf08aebe84c", null, "Physician", "PHYSICIAN" },
-                    { "c27e387b-2446-4241-895a-ae2bcae44f52", null, "Nurse", "NURSE" },
-                    { "f85f62da-573b-4d85-a041-e3fdf9c32fa8", null, "Pharmacist", "PHARMACIST" }
+                    { "30aa89c4-bf7d-4030-9c52-561ead5b64e0", null, "Patient", "PATIENT" },
+                    { "3cfc154e-487d-4858-b80b-e243d6cfac94", null, "Physician", "PHYSICIAN" },
+                    { "50240b34-bee5-4a79-9130-56fbd1622d20", null, "Nurse", "NURSE" },
+                    { "68d80182-3213-46ee-9334-3e17538d729e", null, "HealthFacilitiesAdministrator", "HEALTHFACILITIESADMINISTRATOR" },
+                    { "c6772942-7ae5-4b17-971e-8a493a686433", null, "SystemManager", "SYSTEMMANAGER" },
+                    { "ce331bdd-5c4f-40f1-9a12-03fb888686b4", null, "Pharmacist", "PHARMACIST" },
+                    { "d12c824b-57ad-459a-b233-3c179148c812", null, "HealthFacilityManager", "HEALTHFACILITYAMANAGER" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Governorates",
+                columns: new[] { "Id", "CreatedAt", "Title", "UpdateddAt" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5933), "الشرقية", new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5946) },
+                    { 2, new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5950), "شمال سيناء", new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5951) },
+                    { 3, new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5952), "القاهرة", new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5952) },
+                    { 4, new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5953), "المنيا", new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5954) },
+                    { 5, new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5955), "الدقهلية", new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5955) },
+                    { 6, new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5956), "الإسكندرية", new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5957) },
+                    { 7, new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5957), "الإسماعيلية", new DateTime(2023, 2, 15, 3, 55, 18, 939, DateTimeKind.Local).AddTicks(5958) }
                 });
 
             migrationBuilder.CreateIndex(
@@ -385,14 +427,19 @@ namespace EHRAPI.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HealthFacility_GovernorateId",
-                table: "HealthFacility",
+                name: "IX_HealthFacilities_GovernorateId",
+                table: "HealthFacilities",
                 column: "GovernorateId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PersonalData_GovernorateId",
                 table: "PersonalData",
                 column: "GovernorateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserInsurance_InsuranceDataId",
+                table: "UserInsurance",
+                column: "InsuranceDataId");
         }
 
         /// <inheritdoc />
@@ -414,10 +461,7 @@ namespace EHRAPI.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "HealthFacility");
-
-            migrationBuilder.DropTable(
-                name: "InsuranceData");
+                name: "HealthFacilities");
 
             migrationBuilder.DropTable(
                 name: "MedicalData");
@@ -432,13 +476,19 @@ namespace EHRAPI.Migrations
                 name: "PersonalData");
 
             migrationBuilder.DropTable(
+                name: "UserInsurance");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Governorates");
 
             migrationBuilder.DropTable(
-                name: "Governorate");
+                name: "InsuranceData");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }
