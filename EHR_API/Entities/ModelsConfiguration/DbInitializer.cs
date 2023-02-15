@@ -1,8 +1,4 @@
-﻿using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
-using EHR_API.Entities.Models;
-using EHR_API.Entities.Models.UsersData;
-using EHR_API.Extensions;
-using Microsoft.AspNetCore.Identity;
+﻿using EHR_API.Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EHR_API.Entities.ModelsConfiguration

@@ -8,6 +8,7 @@ using EHR_API.Repositories.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text.Json;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace EHR_API.Controllers
 {
@@ -18,7 +19,7 @@ namespace EHR_API.Controllers
         protected APIResponse _response;
         private readonly IMapper _mapper;
         private readonly IMainRepository _db;
-        
+
         public PersonalDataAPIController(IMainRepository db, IMapper mapper)
         {
             _db = db;
@@ -174,14 +175,15 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
-                if (await _db._personal.GetAsync(expression: g => g.Id == id) == null)
+                var oldEntity = await _db._personal.GetAsync(expression: g => g.Id == id);
+                if (oldEntity == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
                 }
  
                 var entity = _mapper.Map<PersonalData>(entityUpdateDTO);
                 entity.UpdateddAt = DateTime.Now;
-                await _db._personal.UpdateAsync(entity);
+                await _db._personal.UpdateAsync(entity, oldEntity);
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = _mapper.Map<PersonalDataDTO>(entity);

@@ -16,13 +16,13 @@ namespace EHR_API.Repositories.Implementation
             _dbSet = _db.Set<T>();
         }
 
-        public async Task CreateAsync(T entity)
+        public virtual async Task CreateAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
             await _db.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(T entity)
+        public virtual async Task DeleteAsync(T entity)
         {
             _dbSet.Remove(entity);
             await _db.SaveChangesAsync();
@@ -63,7 +63,7 @@ namespace EHR_API.Repositories.Implementation
             return await entity.SingleOrDefaultAsync();
         }
 
-        public async Task<T> UpdateAsync(T entity)
+        public virtual async Task<T> UpdateAsync(T entity, T oldEntity = null)
         {
             _dbSet.Update(entity);
             await _db.SaveChangesAsync();
