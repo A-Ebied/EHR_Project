@@ -2,9 +2,12 @@
 using EHR_API.Entities;
 using EHR_API.Entities.DTOs.GovernorateDTOs;
 using EHR_API.Entities.Models;
+using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Text.Json;
 
@@ -27,31 +30,46 @@ namespace EHR_API.Controllers
 
         [HttpGet("GetGovernorates")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
-        //[Authorize]
-        //[Authorize(Roles = SD.SystemManager)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetGovernorates([FromQuery(Name = "searchTitle")]string title = null, int pageNumber = 1, int pageSize = 0) 
+        public async Task<ActionResult<APIResponse>> GetGovernorates([FromQuery(Name = "searchTitle")]string title = null, int pageNumber = 1, int pageSize = 0, [FromHeader] string jwtToken = null) 
         {
             try
             {
-                var entities = await _db._governorate.GetAllAsync(
-                    includeProperties: "HealthFacilitys,PersonalData",
-                    expression: title==null? null : g => g.Title.ToLower().Contains(title.ToLower()),
-                    pageNumber: pageNumber,
-                    pageSize: pageSize);
-                 
-                if (entities.Count  == 0)
+                IEnumerable<Governorate> entities = new List<Governorate>();
+                entities = await _db._governorate.GetAllAsync(
+                                    includeProperties: "HealthFacilitys",
+                                    expression: title == null ? null : g => g.Title.ToLower().Contains(title.ToLower()),
+                                    pageNumber: pageNumber,
+                                    pageSize: pageSize);
+
+                if (entities.ToList().Count == 0)
                 {
                     return NotFound(APIResponses.NotFound("No data has been found"));
                 }
 
-                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize};
+                if (jwtToken != null)
+                {
+                    string headerRole = null;
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[1].Value;
+
+                    if (headerRole == SD.SystemManager)
+                    {
+                        entities = await _db._governorate.GetAllAsync(
+                                         includeProperties: "HealthFacilitys,PersonalData",
+                                         expression: title == null ? null : g => g.Title.ToLower().Contains(title.ToLower()),
+                                         pageNumber: pageNumber,
+                                         pageSize: pageSize);
+                    }
+                }
+                
+                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
                 Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
 
                 _response.Result = _mapper.Map<List<GovernorateDTO>>(entities);
                 _response.StatusCode = HttpStatusCode.OK;
-                return Ok(_response);
+                return Ok(_response);                    
             }
             catch (Exception ex)
             {
@@ -64,7 +82,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetGovernorate(int id)
+        public async Task<ActionResult<APIResponse>> GetGovernorate(int id, [FromHeader] string jwtToken = null)
         {
             try
             {
@@ -73,13 +91,28 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id less than 1"));
                 }
 
-                var entity = await _db._governorate.GetAsync(
+                var entity = new Governorate();
+                 entity = await _db._governorate.GetAsync(
                     expression: g => g.Id == id, 
-                    includeProperties: "HealthFacilitys,PersonalData");
+                    includeProperties: "HealthFacilitys");
 
                 if (entity == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+                }
+
+                if (jwtToken != null)
+                {
+                    string headerRole = null;
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[1].Value;
+
+                    if (headerRole == SD.SystemManager)
+                    {
+                        entity = await _db._governorate.GetAsync(
+                                           expression: g => g.Id == id,
+                                           includeProperties: "HealthFacilitys,PersonalData");
+                    }
                 }
 
                 _response.Result = _mapper.Map<GovernorateDTO>(entity);
@@ -92,6 +125,7 @@ namespace EHR_API.Controllers
             }
         }
 
+        [Authorize(Roles = SD.SystemManager)]
         [HttpPost("CreateGovernorate")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -124,7 +158,8 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
-        
+
+        [Authorize(Roles = SD.SystemManager)]
         [HttpDelete("{id:int}", Name = "DeleteGovernorate")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -156,7 +191,7 @@ namespace EHR_API.Controllers
             }
         }
 
-
+        [Authorize(Roles = SD.SystemManager)]
         [HttpPut("{id:int}", Name = "UpdateGovernorate")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
