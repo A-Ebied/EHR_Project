@@ -1,4 +1,7 @@
 ﻿using EHR_API.Entities.Models;
+using EHR_API.Entities.Models.UsersData;
+using EHR_API.Extensions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace EHR_API.Entities.ModelsConfiguration
@@ -6,10 +9,11 @@ namespace EHR_API.Entities.ModelsConfiguration
     public class DbInitializer
     {
         private readonly ApplicationDbContext _db;
-
-        public DbInitializer(ApplicationDbContext db)
+        private UserManager<RegistrationData> _dbUsers;
+        public DbInitializer(ApplicationDbContext db, UserManager<RegistrationData> dbUsers)
         {
             _db = db;
+            _dbUsers= dbUsers;
         }
 
         public void Initialize()
@@ -94,6 +98,55 @@ namespace EHR_API.Entities.ModelsConfiguration
             }
             _db.SaveChanges();
 
+            var user = (_dbUsers.GetUsersInRoleAsync(SD.HealthFacilityManager) as IEnumerable<RegistrationData>).ToList();
+            var healthFacilities = new HealthFacility[]
+            {
+                new HealthFacility
+                {
+                     Id = user[0].Id,
+                    Title = "المستشفى العسكري بالشرقية",
+                    Type = "مستشفى عسكري",
+                    SubordinateTo = "المؤسسة العسكرية",
+                    Phone1 = "01123456878",
+                    Phone2 = "",
+                    Phone3 = "",
+                    Email = "m@gmail.com",
+                    Address = "Address1",
+                    Description = "Description1",
+                },
+                 new HealthFacility
+                 {
+                     Id = user[1].Id,
+                     Title = "المستشفى العام بالعريش",
+                     Type = "مستشفى عام",
+                     SubordinateTo = "وزارة الصحة",
+                     Phone1 = "01122456878",
+                     Phone2 = "",
+                     Phone3 = "",
+                     Email = "a@gmail.com",
+                     Address = "Address2",
+                     Description = "Description2",
+                 },
+                  new HealthFacility
+                  {
+                      Id = user[3].Id,
+                      Title = "مستشفى الجامعة بالزقازيق",
+                      Type = "مستشفى جامعي",
+                      SubordinateTo = "مستشفيات الجامعة",
+                      Phone1 = "01123416878",
+                      Phone2 = "",
+                      Phone3 = "",
+                      Email = "j@gmail.com",
+                      Address = "Address3",
+                      Description = "Description3",
+                  }
+            };
+            foreach (var i in healthFacilities)
+            {
+                _db.HealthFacilities.Add(i);
+            }
+            _db.SaveChanges();
+
             //var badHbits = new BadHabit[]
             //{
             //    new BadHabit
@@ -111,74 +164,74 @@ namespace EHR_API.Entities.ModelsConfiguration
             //}
             //_db.SaveChanges();
 
-           // var vaccinations = new Vaccination[]
-           //{
-           //     new Vaccination
-           //     {
-           //        Code="1",
-           //        Name="Influvac tetra",
-           //        Type="موسمي",
-           //        Reason="للعلاج من البرد",
-           //        Route="حقن",
-           //        AgeRange="من 15 ل 60",
-           //        Duration="-",
-           //        NumberOfTimes="غير محدد",
-           //        Dosage="-",
-           //        DosageNote="-",
-           //        Quantity="-",
-           //        Contraindication="-",
-           //        SideEffects="ارتفاع درجة الحرارة",
-           //        IsMandatory=false,
-           //        Note="-",
-           //        CreatedAt=DateTime.Now,
-           //     },
-           //};
-           // foreach (var i in vaccinations)
-           // {
-           //     _context.Vaccinations.Add(i);
-           // }
-           // _db.SaveChanges();
+            // var vaccinations = new Vaccination[]
+            //{
+            //     new Vaccination
+            //     {
+            //        Code="1",
+            //        Name="Influvac tetra",
+            //        Type="موسمي",
+            //        Reason="للعلاج من البرد",
+            //        Route="حقن",
+            //        AgeRange="من 15 ل 60",
+            //        Duration="-",
+            //        NumberOfTimes="غير محدد",
+            //        Dosage="-",
+            //        DosageNote="-",
+            //        Quantity="-",
+            //        Contraindication="-",
+            //        SideEffects="ارتفاع درجة الحرارة",
+            //        IsMandatory=false,
+            //        Note="-",
+            //        CreatedAt=DateTime.Now,
+            //     },
+            //};
+            // foreach (var i in vaccinations)
+            // {
+            //     _context.Vaccinations.Add(i);
+            // }
+            // _db.SaveChanges();
 
-           // var vitalSigns = new VitalSign[]
-           //{
-           //     new VitalSign
-           //     {
-           //        Title="ضغط الدم",
-           //     },
-           //    new VitalSign
-           //     {
-           //        Title="درجة الحرارة",
-           //     },
-           //    new VitalSign
-           //     {
-           //        Title="النبض",
-           //     },
-           //};
-           // foreach (var i in vitalSigns)
-           // {
-           //     _context.VitalSigns.Add(i);
-           // }
-           // _db.SaveChanges();
+            // var vitalSigns = new VitalSign[]
+            //{
+            //     new VitalSign
+            //     {
+            //        Title="ضغط الدم",
+            //     },
+            //    new VitalSign
+            //     {
+            //        Title="درجة الحرارة",
+            //     },
+            //    new VitalSign
+            //     {
+            //        Title="النبض",
+            //     },
+            //};
+            // foreach (var i in vitalSigns)
+            // {
+            //     _context.VitalSigns.Add(i);
+            // }
+            // _db.SaveChanges();
 
             //var radLabTests = new RadLabTest[]
-           //{
-           //     new RadLabTest
-           //     {
-           //        Type="تحاليل",
-           //        TestType="دم"
-           //     },
-           //    new RadLabTest
-           //     {
-           //        Type="أشعة",
-           //        TestType="عظام"
-           //     },
-           //};
+            //{
+            //     new RadLabTest
+            //     {
+            //        Type="تحاليل",
+            //        TestType="دم"
+            //     },
+            //    new RadLabTest
+            //     {
+            //        Type="أشعة",
+            //        TestType="عظام"
+            //     },
+            //};
             //foreach (var i in radLabTests)
             //{
             //    _context.RadLabTests.Add(i);
             //}
             //_db.SaveChanges();
-   
+
             //var medicalSpecializations = new MedicalSpecialization[]
             //{
             //    new MedicalSpecialization

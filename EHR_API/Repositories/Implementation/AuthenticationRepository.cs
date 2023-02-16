@@ -1,14 +1,18 @@
 ﻿using AutoMapper;
+using EHR_API.Entities;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Expressions;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace EHR_API.Repositories.Implementation
@@ -19,12 +23,14 @@ namespace EHR_API.Repositories.Implementation
         private readonly UserManager<RegistrationData> _userManager; 
         private readonly IConfiguration _configuration;
         private RegistrationData _user;
+        private ApplicationDbContext _db;
 
-        public AuthenticationRepository(IMapper mapper, UserManager<RegistrationData> userManager, IConfiguration configuration)
+        public AuthenticationRepository(IMapper mapper, UserManager<RegistrationData> userManager, IConfiguration configuration, ApplicationDbContext db)
         {
             _mapper = mapper;
             _userManager = userManager;
             _configuration = configuration;
+            _db = db;
         }
 
         public async Task<IdentityResult> RegisterUser(RegistrationDataCreateDTO registrationDataDTO)
@@ -52,13 +58,25 @@ namespace EHR_API.Repositories.Implementation
             return _user;
         }
 
+        // https://www.endpointdev.com/blog/2022/06/implementing-authentication-in-asp.net-core-web-apis/
         public async Task<string> CreateToken() 
         { 
             var signingCredentials = GetSigningCredentials(); 
             var claims = await GetClaims();
-            var tokenOptions = GenerateTokenOptions(signingCredentials, claims); 
-            
-            return new JwtSecurityTokenHandler().WriteToken(tokenOptions); 
+            var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
+
+            var tokenValue = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            IdentityUserToken<string> userToken = new()
+            {
+                Name = _user.UserName,
+                LoginProvider = "",
+                UserId= _user.Id,
+                Value = tokenValue
+            };
+
+            await _userManager.SetAuthenticationTokenAsync(_user, "EHR", _user.UserName, tokenValue);
+           
+            return tokenValue; 
         }
 
         private SigningCredentials GetSigningCredentials() 
@@ -92,7 +110,7 @@ namespace EHR_API.Repositories.Implementation
                 issuer: jwtSettings["validIssuer"], 
                 audience: jwtSettings["validAudience"], 
                 claims: claims, 
-                expires: DateTime.Now.AddDays(Convert.ToDouble(jwtSettings["expires"])), 
+                expires: null, 
                 signingCredentials: signingCredentials
                 ); 
             
@@ -138,9 +156,52 @@ namespace EHR_API.Repositories.Implementation
 
         public async Task<RegistrationData> UpdateAsync(RegistrationDataUpdateDTO entity)
         {
-            var newEntity = _mapper.Map<RegistrationData>(entity);
-            await _userManager.UpdateAsync(newEntity);
+            var user = await _userManager.FindByIdAsync(entity.Id);
+            user.FullName =    entity.FullName;
+            user.IdType =     entity.IdType;
+            user.Nationality =     entity.Nationality;
+            user.UserName =    entity.UserName;
+            user.Email =       entity.Email;
+            user.PhoneNumber = entity.PhoneNumber;
+
+            PasswordHasher<string> pw = new PasswordHasher<string>();
+            user.PasswordHash = pw.HashPassword(entity.UserName, entity.Password);
+
+            await _userManager.UpdateAsync(user);
+            var newEntity = _mapper.Map<RegistrationData>(user);
             return newEntity;
         }
+        
+        public async Task<bool> LogoutAsync(LogoutRequestDTO entity)
+        {
+            var user = await _userManager.FindByEmailAsync(entity.Email);
+
+            IdentityUserToken<string> userToken = new()
+                        {
+                            Name = user.UserName,
+                            LoginProvider = "EHR",
+                            UserId= user.Id,
+                            Value = entity.Token
+                        };
+
+            var result = _userManager.GetAuthenticationTokenAsync(user, "EHR", userToken.Name).Result;
+
+            if (result == null)
+            {
+                return false;
+            }
+
+            _db.UserTokens.Remove(userToken);
+            await _db.SaveChangesAsync();
+
+             result = _userManager.GetAuthenticationTokenAsync(user, "EHR", userToken.Name).Result;
+            if (result == null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+
     }
 }

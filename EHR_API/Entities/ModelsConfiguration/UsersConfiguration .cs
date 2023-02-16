@@ -29,7 +29,8 @@ namespace EHR_API.Entities.ModelsConfiguration
                      FullName = "أحمد محمد أحمد",
                      UserName = "@Ahmed123",
                      Email = "A@gmail.com",
-                     PhoneNumber = ""
+                     PhoneNumber = "",
+
                  },
                   new RegistrationData
                   {
@@ -39,7 +40,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                       FullName = "أحمد محمد محمد",
                       UserName = "@Muhammad123",
                       Email = "M@gmail.com",
-                      PhoneNumber = "01234567899"
+                      PhoneNumber = "01234567899",
                   },
                    new RegistrationData
                    {
@@ -49,7 +50,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                        FullName = "أحمد محمد علي",
                        UserName = "@Ali123",
                        Email = "Al@gmail.com",
-                       PhoneNumber = "01234567890"
+                       PhoneNumber = "01234567890",
                    });
         }
     }

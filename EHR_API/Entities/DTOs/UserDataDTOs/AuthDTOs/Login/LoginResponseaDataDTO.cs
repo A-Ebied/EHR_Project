@@ -4,7 +4,7 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login
 {
     public class LoginResponseaDataDTO
     {
-        public string Id { get; set; }
+        
         public string Nationality { get; set; }
         public string FullName { get; set; }
         public string UserName { get; init; }

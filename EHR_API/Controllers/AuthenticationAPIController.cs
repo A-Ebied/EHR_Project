@@ -6,8 +6,10 @@ using EHR_API.Entities.DTOs.UserDataDTOs.UserRolesDTOs;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Text.Json;
 
@@ -79,18 +81,37 @@ namespace EHR_API.Controllers
             return Ok(_response);
         }
 
+        [HttpPost("Logout")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [Authorize]
+        public async Task<ActionResult<APIResponse>> Logout([FromBody] LogoutRequestDTO user)
+        {
+            var result =  await _db._authentication.LogoutAsync(user);
+ 
+            if (result)
+            {
+                _response.Result = result;
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+
+            return BadRequest(APIResponses.BadRequest("Logout failed"));
+            
+        }
+
         [HttpGet("GetUsersRegistrationData")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
-        //[Authorize]
+        [Authorize]
         //[Authorize(Roles = SD.SystemManager)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetUsersRegistrationData([FromQuery(Name = "searchUsername")] string userName = null, int pageNumber = 1, int pageSize = 0)
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<APIResponse>> GetUsersRegistrationData([FromQuery(Name = "searchUsername")] string userName = null, string role = null, int pageNumber = 1, int pageSize = 0)
         {
             try
             {
                 var entities = await _db._authentication.GetAllAsync(
-                    includeProperties: "PersonalData",
+                    includeProperties: "PersonalData,InsuranceData,MedicalData,MedicalTeam,Patient",
                     expression: userName == null ? null : g => g.UserName.ToLower().Contains(userName.ToLower()),
                     pageNumber: pageNumber,
                     pageSize: pageSize);
@@ -103,10 +124,15 @@ namespace EHR_API.Controllers
                 Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
                 Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
 
-                var newEntities = _mapper.Map<List<RegistrationDataDTO>>(entities);
+                var newEntities = _mapper.Map<IEnumerable<RegistrationDataDTO>>(entities);
                 foreach (var item in newEntities)
                 {
                     item.Roles = await _userManager.GetRolesAsync(_mapper.Map<RegistrationData>(item)); 
+                }
+
+                if (role != null)
+                {
+                    newEntities = newEntities.Where(e => e.Roles.Contains(role));
                 }
 
                 _response.Result = newEntities;
@@ -135,7 +161,7 @@ namespace EHR_API.Controllers
 
                 var entity = await _db._authentication.GetAsync(
                     expression: g => g.Id == id, 
-                    includeProperties: "PersonalData");
+                    includeProperties: "PersonalData,InsuranceData,MedicalData,MedicalTeam,Patient");
 
                 if (entity == null)
                 {
@@ -178,7 +204,7 @@ namespace EHR_API.Controllers
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
                 }
 
-                await _db._authentication.UpdateAsync(entityUpdateDTO);
+               await _db._authentication.UpdateAsync(entityUpdateDTO);
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = _mapper.Map<RegistrationDataDTO>(entityUpdateDTO);
@@ -196,24 +222,70 @@ namespace EHR_API.Controllers
         //[Authorize(Roles = SD.SystemManager)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetRoles()
+        public async Task<ActionResult<APIResponse>> GetRoles([FromHeader] string jwtToken = null)
         {
+            //var claimIdentity = (ClaimsIdentity)User.Identity;
+            //var claim = claimIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
             try
             {
-                var entities = await _db._role.GetRolesAsync();
-                if (entities.Count == 0)
+                IEnumerable<IdentityRole> entities = await _db._role.GetRolesAsync(); 
+                if (entities.ToList().Count == 0)
                 {
                     return NotFound(APIResponses.NotFound("No data has been found"));
                 }
 
-                _response.Result = _mapper.Map<List<RolesDTO>>(entities);
+                IdentityRole result = null;
+                string role = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    role = user.Claims.ToList()[1].Value;
+ 
+                    if (role == SD.Physician || role == SD.Nurse)
+                    {
+                        result = entities.Where(r => r.Name == SD.Patient).SingleOrDefault();
+                    }
+
+                    if (role == SD.SystemManager)
+                    {
+                        result = entities.Where(r => r.Name == SD.HealthFacilitiesAdministrator).SingleOrDefault();
+                    }
+
+                    if (role == SD.HealthFacilitiesAdministrator)
+                    {
+                        result = entities.Where(r => r.Name == SD.HealthFacilityManager).SingleOrDefault();
+                    }
+
+                    if (role == SD.HealthFacilityManager)
+                    {
+                        entities = entities.Where(r => r.Name == SD.Physician || r.Name == SD.Nurse || r.Name == SD.Pharmacist);
+                    }
+                }
+
+                if (role == null)
+                {
+                    result = entities.Where(r => r.Name == SD.Patient).SingleOrDefault();
+                }
+
+                if (result != null)
+                {
+                    _response.Result = _mapper.Map<RolesDTO>(result);
+                }
+                else
+                {
+                    _response.Result = _mapper.Map<List<RolesDTO>>(entities);
+                }
+
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
             catch (Exception ex)
             {
-                return APIResponses.InternalServerError(ex);
+                return BadRequest(APIResponses.InternalServerError(ex));
             }
         }
+
     }
 }
