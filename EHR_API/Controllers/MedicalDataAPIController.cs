@@ -5,6 +5,7 @@ using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text.Json;
@@ -28,19 +29,17 @@ namespace EHR_API.Controllers
 
         [HttpGet("GetUsersMedicalData")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
-        //[Authorize]
-        //[Authorize(Roles = SD.SystemManager)]
+        [Authorize(Roles = SD.SystemManager)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetUsersMedicalData([FromQuery(Name = "searchId")]string id = null, int pageNumber = 1, int pageSize = 0) 
+        public async Task<ActionResult<APIResponse>> GetUsersMedicalData([FromQuery(Name = "searchBloodGroup")]string bloodGroup = null, int pageNumber = 1, int pageSize = 0) 
         {
             try
             {
                 var entities = await _db._medicalData.GetAllAsync(
-                    expression: id==null? null : g => g.Id.ToLower().Contains(id.ToLower()),
+                    expression: bloodGroup==null? null : g => g.BloodGroup.ToLower().Contains(bloodGroup.ToLower()),
                     pageNumber: pageNumber,
-                    pageSize: pageSize
-                    );
+                    pageSize: pageSize);
                  
                 if (entities.Count  == 0)
                 {
@@ -60,6 +59,7 @@ namespace EHR_API.Controllers
             }
         }
 
+        [Authorize(Roles = SD.Patient + "," + SD.Physician + "," + SD.Pharmacist + "," + SD.Nurse + "," + SD.Technician + "," + SD.HealthFacilityManager)]
         [HttpGet("{id}", Name = "GetUserMedicalData")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -90,6 +90,7 @@ namespace EHR_API.Controllers
             }
         }
 
+        [Authorize(Roles = SD.Physician + SD.Nurse + "," + SD.Technician + "," + SD.HealthFacilityManager)]
         [HttpPost("CreateUserMedicalData")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -119,7 +120,8 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
-        
+
+        [Authorize(Roles = SD.Physician + "," + SD.Nurse + "," + SD.Technician + "," + SD.HealthFacilityManager)]
         [HttpDelete("{id}", Name = "DeleteUserMedicalData")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -151,7 +153,7 @@ namespace EHR_API.Controllers
             }
         }
 
-
+        [Authorize(Roles = SD.Pharmacist + "," + SD.Nurse + "," + SD.Technician + "," + SD.HealthFacilityManager)]
         [HttpPut("{id}", Name = "UpdateMedicalDataUser")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
