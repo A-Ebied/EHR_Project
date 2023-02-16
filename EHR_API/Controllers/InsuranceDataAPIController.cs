@@ -5,7 +5,9 @@ using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
 using System.Net;
 using System.Text.Json;
 
@@ -26,24 +28,39 @@ namespace EHR_API.Controllers
             _response = new();
         }
 
+        [Authorize(Roles = SD.SystemManager)]
         [HttpGet("GetUsersInsuranceData")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
-        //[Authorize]
-        //[Authorize(Roles = SD.SystemManager)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetUsersInsuranceData([FromQuery(Name = "searchId")]string id = null, int pageNumber = 1, int pageSize = 0) 
+        public async Task<ActionResult<APIResponse>> GetUsersInsuranceData([FromQuery(Name = "hasGovernmentInsurance")]string govInsurance = null, [FromQuery(Name = "hasAnotherInsurance")] string anotherInsurance = null, int pageNumber = 1, int pageSize = 0) 
         {
             try
             {
-                var entities = await _db._insuranceData.GetAllAsync(
-                    expression: id==null? null : g => g.Id.ToLower().Contains(id.ToLower()),
-                    includeProperties: "UserInsurances",
-                    pageNumber: pageNumber,
-                    pageSize: pageSize
-                    );
+                IEnumerable<InsuranceData> entities = await _db._insuranceData.GetAllAsync(
+                   includeProperties: "UserInsurances",
+                   pageNumber: pageNumber,
+                   pageSize: pageSize);
+
+                if (govInsurance.ToLower() == "true")
+                {
+                    entities = entities.Where(g => g.HasGovernmentInsurance == true);
+                }
+                else if (govInsurance.ToLower() == "false")
+                {
+                    entities = entities.Where(g => g.HasGovernmentInsurance == false);
+                }
                  
-                if (entities.Count  == 0)
+                if (anotherInsurance.ToLower() == "true")
+                {
+                    entities = entities.Where(g => g.HasAnotherInsurance == true);
+                }
+                else if (anotherInsurance.ToLower() == "false")
+                {
+                    entities = entities.Where(g => g.HasAnotherInsurance == false);
+                }
+
+                if (entities.ToList().Count  == 0)
                 {
                     return NotFound(APIResponses.NotFound("No data has been found"));
                 }
@@ -61,6 +78,7 @@ namespace EHR_API.Controllers
             }
         }
 
+        [Authorize(Roles = SD.Patient +","+ SD.Physician + "," + SD.Pharmacist + "," + SD.Nurse + "," + SD.Technician + "," + SD.HealthFacilityManager)]
         [HttpGet("{id}", Name = "GetUserInsuranceData")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -75,7 +93,10 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
-                var entity = await _db._insuranceData.GetAsync(expression: g => g.Id == id);
+                var entity = await _db._insuranceData.GetAsync(
+                     includeProperties: "UserInsurances",
+                    expression: g => g.Id == id);
+
                 if (entity == null)
                 {
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id} "));
@@ -91,6 +112,7 @@ namespace EHR_API.Controllers
             }
         }
 
+        [Authorize(Roles = SD.Physician + "," + SD.Pharmacist + "," + SD.Nurse + "," + SD.Technician + "," + SD.HealthFacilityManager)]
         [HttpPost("CreateUserInsuranceData")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -115,8 +137,7 @@ namespace EHR_API.Controllers
                 if (entityCreateDTO.UserInsurancesCreateDTO != null)
                 {
                     await _db._userInsurance.CreateRangeAsync(
-                        _mapper.Map<List<UserInsurance>>(entityCreateDTO.UserInsurancesCreateDTO._userInsurances.ToList())
-                        );
+                        _mapper.Map<List<UserInsurance>>(entityCreateDTO.UserInsurancesCreateDTO._userInsurances.ToList()));
                 }
 
                 _response.Result = _mapper.Map<InsuranceDataDTO>(entity);
@@ -128,7 +149,9 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
-        
+
+        [Authorize(Roles = SD.Physician + "," + SD.Pharmacist + "," + SD.Nurse + "," + SD.Technician + "," + SD.HealthFacilityManager)]
+        [HttpPost("CreateUserInsuranceData")]
         [HttpDelete("{id}", Name = "DeleteInsuranceData")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -160,7 +183,8 @@ namespace EHR_API.Controllers
             }
         }
 
-
+        [Authorize(Roles = SD.Physician + "," + SD.Pharmacist + "," + SD.Nurse + "," + SD.Technician + "," + SD.HealthFacilityManager)]
+        [HttpPost("CreateUserInsuranceData")]
         [HttpPut("{id}", Name = "UpdateUserInsuranceData")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
