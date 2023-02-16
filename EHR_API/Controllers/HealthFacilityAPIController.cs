@@ -4,7 +4,9 @@ using EHR_API.Entities.DTOs.HealthFacilityDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Net;
 using System.Text.Json;
 
@@ -34,10 +36,10 @@ namespace EHR_API.Controllers
             try
             {
                 var entities = await _db._healthFacility.GetAllAsync(
+                    includeProperties: "RegistrationData",
                     expression: title == null ? null : g => g.Title.ToLower().Contains(title.ToLower()),
                     pageNumber: pageNumber,
-                    pageSize: pageSize
-                    );
+                    pageSize: pageSize);
 
                 if (entities.Count == 0)
                 {
@@ -71,7 +73,10 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
-                var entity = await _db._healthFacility.GetAsync(expression: g => g.Id == id, includeProperties: "Governorate");
+                var entity = await _db._healthFacility.GetAsync(
+                    expression: g => g.Id == id,
+                     includeProperties: "RegistrationData");
+
                 if (entity == null)
                 {
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id} "));
@@ -87,6 +92,7 @@ namespace EHR_API.Controllers
             }
         }
 
+        [Authorize(Roles = SD.HealthFacilitiesAdministrator)]
         [HttpPost("CreateHealthFacility")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -123,7 +129,8 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
-        
+
+        [Authorize(Roles = SD.HealthFacilitiesAdministrator)]
         [HttpDelete("{id}", Name = "DeleteHealthFacility")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -154,7 +161,7 @@ namespace EHR_API.Controllers
             }
         }
 
-
+        [Authorize(Roles = SD.HealthFacilitiesAdministrator)]
         [HttpPut("{id}", Name = "UpdateHealthFacility")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
