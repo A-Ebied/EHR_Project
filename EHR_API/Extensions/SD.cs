@@ -7,6 +7,7 @@
         public const string HealthFacilityManager = "HealthFacilityManager";
         public const string Physician = "Physician";
         public const string Nurse = "Nurse";
+        public const string Technician = "Technician";
         public const string Pharmacist = "Pharmacist";
         public const string Patient = "Patient";
 

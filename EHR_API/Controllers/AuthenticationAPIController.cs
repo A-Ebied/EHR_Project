@@ -32,9 +32,204 @@ namespace EHR_API.Controllers
             _userManager = userManager;
         }
 
+        [Authorize]
+        [HttpGet("GetUsersRegistrationData")]
+        [ResponseCache(CacheProfileName = SD.ProfileName)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<APIResponse>> GetUsersRegistrationData([FromQuery(Name = "searchUsername")] string userName = null, [FromQuery(Name = "filterByUserRole")] string role = null, int pageNumber = 1, int pageSize = 0, [FromHeader] string jwtToken = null)
+        {
+            try
+            {
+                IEnumerable<RegistrationData> entities = new List<RegistrationData>();
+                string headerRole = null;
+                if(jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[1].Value;
+
+                    if (headerRole == SD.Physician || headerRole == SD.Nurse || headerRole == SD.HealthFacilityManager || headerRole == SD.Pharmacist || headerRole == SD.Technician)
+                    {
+                       entities =  await _db._authentication.GetAllAsync(
+                                includeProperties: "PersonalData,InsuranceData,MedicalData,MedicalTeam,Patient",
+                                expression: userName == null ? null : g => g.UserName.ToLower().Contains(userName.ToLower()),
+                                pageNumber: pageNumber,
+                                pageSize: pageSize);
+                    }
+                    else
+                    {
+                        entities = await _db._authentication.GetAllAsync(
+                                 includeProperties: "PersonalData,MedicalTeam,Patient",
+                                 expression: userName == null ? null : g => g.UserName.ToLower().Contains(userName.ToLower()),
+                                 pageNumber: pageNumber,
+                                 pageSize: pageSize);
+                    }
+
+                    if (entities.ToList().Count == 0)
+                    {
+                        return NotFound(APIResponses.NotFound("No data has been found"));
+                    }
+
+                    Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
+                    Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
+
+                    var newEntities = _mapper.Map<IEnumerable<RegistrationDataDTO>>(entities);
+                    foreach (var item in newEntities)
+                    {
+                        item.Roles = await _userManager.GetRolesAsync(_mapper.Map<RegistrationData>(item));
+                    }
+
+                    if (role != null)
+                    {
+                        newEntities = newEntities.Where(e => e.Roles.Contains(role));
+                    }
+
+                    _response.Result = newEntities;
+                    _response.StatusCode = HttpStatusCode.OK;
+                    return Ok(_response);
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest("jwtToken is empty"));
+                }
+            }
+            catch (Exception ex)
+            {
+                return APIResponses.InternalServerError(ex);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("{id}", Name = "GetUserRegistrationData")]
+        [ResponseCache(CacheProfileName = SD.ProfileName)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<APIResponse>> GetUserRegistrationData(string id, [FromHeader] string jwtToken = null)
+        {
+            try
+            {
+                if (id == null)
+                {
+                    return BadRequest(APIResponses.BadRequest("Id is null"));
+                }
+
+                var entity = new RegistrationData();
+                string headerRole = null;
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[1].Value;
+
+                    if (headerRole == SD.Physician || headerRole == SD.Nurse || headerRole == SD.HealthFacilityManager || headerRole == SD.Pharmacist || headerRole == SD.Technician)
+                    {
+                        entity = await _db._authentication.GetAsync(
+                                 expression: g => g.Id == id,
+                                 includeProperties: "PersonalData,InsuranceData,MedicalData,MedicalTeam,Patient");
+                    }
+                    else
+                    {
+                        entity = await _db._authentication.GetAsync(
+                                 expression: g => g.Id == id,
+                                 includeProperties: "PersonalData,MedicalTeam,Patient");
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest("jwtToken is empty"));
+                }
+ 
+
+                if (entity == null)
+                {
+                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+                }
+
+                var newEntity = _mapper.Map<RegistrationDataDTO>(entity);
+                newEntity.Roles = await _userManager.GetRolesAsync(_mapper.Map<RegistrationData>(entity));
+                
+                _response.Result = newEntity;
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                return APIResponses.InternalServerError(ex);
+            }
+        }
+
+        [HttpGet("GetRoles")]
+        [ResponseCache(CacheProfileName = SD.ProfileName)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<APIResponse>> GetRoles([FromHeader] string jwtToken = null)
+        {
+            try
+            {
+                IEnumerable<IdentityRole> entities = await _db._role.GetRolesAsync(); 
+                if (entities.ToList().Count == 0)
+                {
+                    return NotFound(APIResponses.NotFound("No data has been found"));
+                }
+
+                IdentityRole result = null;
+                string headerRole = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[1].Value;
+ 
+                    if (headerRole == SD.Physician || headerRole == SD.Nurse)
+                    {
+                        result = entities.Where(r => r.Name == SD.Patient).SingleOrDefault();
+                    }
+
+                    if (headerRole == SD.SystemManager)
+                    {
+                        result = entities.Where(r => r.Name == SD.HealthFacilitiesAdministrator).SingleOrDefault();
+                    }
+
+                    if (headerRole == SD.HealthFacilitiesAdministrator)
+                    {
+                        result = entities.Where(r => r.Name == SD.HealthFacilityManager).SingleOrDefault();
+                    }
+
+                    if (headerRole == SD.HealthFacilityManager)
+                    {
+                        entities = entities.Where(r => r.Name == SD.Physician || r.Name == SD.Nurse || r.Name == SD.Pharmacist);
+                    }
+                }
+
+                if (headerRole == null)
+                {
+                    result = entities.Where(r => r.Name == SD.Patient).SingleOrDefault();
+                }
+
+                if (result != null)
+                {
+                    _response.Result = _mapper.Map<RolesDTO>(result);
+                }
+                else
+                {
+                    _response.Result = _mapper.Map<List<RolesDTO>>(entities);
+                }
+
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(APIResponses.InternalServerError(ex));
+            }
+        }
+
         [HttpPost("RegisterUser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<APIResponse>> RegisterUser([FromBody] RegistrationDataCreateDTO registrationDataDTO)
         {
             try
@@ -61,81 +256,27 @@ namespace EHR_API.Controllers
         }
 
         [HttpPost("Login")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<APIResponse>> Login([FromBody] LoginRequestDTO user) 
         {
-            var _user = await _db._authentication.ValidateUser(user);
-            if ( _user == null)
-            {
-                return APIResponses.Unauthorized();
-            }
-
-            var loginResponse = new LoginResponseDTO()
-            {
-                User = _mapper.Map<LoginResponseaDataDTO>(_user),
-                Roles = await _userManager.GetRolesAsync(_user),
-                Token = await _db._authentication.CreateToken()
-            };
-
-            _response.Result = loginResponse;
-            _response.StatusCode = HttpStatusCode.OK;
-            return Ok(_response);
-        }
-
-        [HttpPost("Logout")]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [Authorize]
-        public async Task<ActionResult<APIResponse>> Logout([FromBody] LogoutRequestDTO user)
-        {
-            var result =  await _db._authentication.LogoutAsync(user);
- 
-            if (result)
-            {
-                _response.Result = result;
-                _response.StatusCode = HttpStatusCode.OK;
-                return Ok(_response);
-            }
-
-            return BadRequest(APIResponses.BadRequest("Logout failed"));
-            
-        }
-
-        [HttpGet("GetUsersRegistrationData")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [Authorize]
-        //[Authorize(Roles = SD.SystemManager)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<APIResponse>> GetUsersRegistrationData([FromQuery(Name = "searchUsername")] string userName = null, string role = null, int pageNumber = 1, int pageSize = 0)
-        {
             try
             {
-                var entities = await _db._authentication.GetAllAsync(
-                    includeProperties: "PersonalData,InsuranceData,MedicalData,MedicalTeam,Patient",
-                    expression: userName == null ? null : g => g.UserName.ToLower().Contains(userName.ToLower()),
-                    pageNumber: pageNumber,
-                    pageSize: pageSize);
-
-                if (entities.Count == 0)
+                var _user = await _db._authentication.ValidateUser(user);
+                if (_user == null)
                 {
-                    return NotFound(APIResponses.NotFound("No data has been found"));
+                    return APIResponses.Unauthorized();
                 }
 
-                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
-                Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
-
-                var newEntities = _mapper.Map<IEnumerable<RegistrationDataDTO>>(entities);
-                foreach (var item in newEntities)
+                var loginResponse = new LoginResponseDTO()
                 {
-                    item.Roles = await _userManager.GetRolesAsync(_mapper.Map<RegistrationData>(item)); 
-                }
+                    User = _mapper.Map<LoginResponseaDataDTO>(_user),
+                    Roles = await _userManager.GetRolesAsync(_user),
+                    Token = await _db._authentication.CreateToken()
+                };
 
-                if (role != null)
-                {
-                    newEntities = newEntities.Where(e => e.Roles.Contains(role));
-                }
-
-                _response.Result = newEntities;
+                _response.Result = loginResponse;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -145,42 +286,33 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpGet("{id}", Name = "GetUserRegistrationData")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetUserRegistrationData(string id)
-        {
-            try
-            {
-                if (id == null)
-                {
-                    return BadRequest(APIResponses.BadRequest("Id is null"));
-                }
+        //[HttpPost("Logout")]
+        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[Authorize]
+        //public async Task<ActionResult<APIResponse>> Logout([FromBody] LogoutRequestDTO user)
+        //{
+        //    try
+        //    {
+        //        var result = await _db._authentication.LogoutAsync(user);
+        //        if (result)
+        //        {
+        //            _response.Result = result;
+        //            _response.StatusCode = HttpStatusCode.OK;
+        //            return Ok(_response);
+        //        }
 
-                var entity = await _db._authentication.GetAsync(
-                    expression: g => g.Id == id, 
-                    includeProperties: "PersonalData,InsuranceData,MedicalData,MedicalTeam,Patient");
-
-                if (entity == null)
-                {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
-                }
-
-                var newEntity = _mapper.Map<RegistrationDataDTO>(entity);
-                newEntity.Roles = await _userManager.GetRolesAsync(_mapper.Map<RegistrationData>(entity));
-                
-                _response.Result = newEntity;
-                _response.StatusCode = HttpStatusCode.OK;
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                return APIResponses.InternalServerError(ex);
-            }
-        }
-
+        //        return BadRequest(APIResponses.BadRequest("Logout failed"));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return APIResponses.InternalServerError(ex);
+        //    }
+        //}
+        
+        
+        [Authorize]
         [HttpPut("{id}", Name = "UpdateRegistrationData")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -216,76 +348,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpGet("GetRoles")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        //[Authorize]
-        //[Authorize(Roles = SD.SystemManager)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetRoles([FromHeader] string jwtToken = null)
-        {
-            //var claimIdentity = (ClaimsIdentity)User.Identity;
-            //var claim = claimIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            try
-            {
-                IEnumerable<IdentityRole> entities = await _db._role.GetRolesAsync(); 
-                if (entities.ToList().Count == 0)
-                {
-                    return NotFound(APIResponses.NotFound("No data has been found"));
-                }
-
-                IdentityRole result = null;
-                string role = null;
-
-                if (jwtToken != null)
-                {
-                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
-                    role = user.Claims.ToList()[1].Value;
- 
-                    if (role == SD.Physician || role == SD.Nurse)
-                    {
-                        result = entities.Where(r => r.Name == SD.Patient).SingleOrDefault();
-                    }
-
-                    if (role == SD.SystemManager)
-                    {
-                        result = entities.Where(r => r.Name == SD.HealthFacilitiesAdministrator).SingleOrDefault();
-                    }
-
-                    if (role == SD.HealthFacilitiesAdministrator)
-                    {
-                        result = entities.Where(r => r.Name == SD.HealthFacilityManager).SingleOrDefault();
-                    }
-
-                    if (role == SD.HealthFacilityManager)
-                    {
-                        entities = entities.Where(r => r.Name == SD.Physician || r.Name == SD.Nurse || r.Name == SD.Pharmacist);
-                    }
-                }
-
-                if (role == null)
-                {
-                    result = entities.Where(r => r.Name == SD.Patient).SingleOrDefault();
-                }
-
-                if (result != null)
-                {
-                    _response.Result = _mapper.Map<RolesDTO>(result);
-                }
-                else
-                {
-                    _response.Result = _mapper.Map<List<RolesDTO>>(entities);
-                }
-
-                _response.StatusCode = HttpStatusCode.OK;
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(APIResponses.InternalServerError(ex));
-            }
-        }
 
     }
 }

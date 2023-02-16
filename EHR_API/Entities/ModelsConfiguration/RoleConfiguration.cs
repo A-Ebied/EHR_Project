@@ -16,7 +16,8 @@ namespace EHR_API.Entities.ModelsConfiguration
                 new IdentityRole { Id = "4", Name = SD.Physician, NormalizedName = "PHYSICIAN" },
                 new IdentityRole { Id = "5", Name = SD.Nurse, NormalizedName = "NURSE" },
                 new IdentityRole { Id = "6", Name = SD.Pharmacist, NormalizedName = "PHARMACIST" },
-                new IdentityRole { Id = "7", Name = SD.Patient, NormalizedName = "PATIENT" }
+                new IdentityRole { Id = "7", Name = SD.Patient, NormalizedName = "PATIENT" },
+                new IdentityRole { Id = "8", Name = SD.Technician, NormalizedName = "TECHNICIAN" }
                 );
         }
     }

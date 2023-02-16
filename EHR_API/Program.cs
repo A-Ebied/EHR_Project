@@ -1,6 +1,7 @@
 using EHR_API.Entities;
 using EHR_API.Entities.ModelsConfiguration;
 using EHR_API.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

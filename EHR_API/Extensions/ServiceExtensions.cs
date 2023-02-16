@@ -111,6 +111,7 @@ namespace EHR_API.Extensions
                         {
                             Duration = 10
                         });
+
                 }
                 ).AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)/*.AddXmlDataContractSerializerFormatters()*/;
         }

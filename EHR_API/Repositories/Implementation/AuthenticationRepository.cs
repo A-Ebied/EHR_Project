@@ -4,15 +4,12 @@ using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Repositories.Contracts;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Expressions;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace EHR_API.Repositories.Implementation
@@ -66,15 +63,14 @@ namespace EHR_API.Repositories.Implementation
             var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
 
             var tokenValue = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-            IdentityUserToken<string> userToken = new()
-            {
-                Name = _user.UserName,
-                LoginProvider = "",
-                UserId= _user.Id,
-                Value = tokenValue
-            };
-
-            await _userManager.SetAuthenticationTokenAsync(_user, "EHR", _user.UserName, tokenValue);
+            //IdentityUserToken<string> userToken = new()
+            //{
+            //    Name = _user.UserName,
+            //    LoginProvider = "",
+            //    UserId= _user.Id,
+            //    Value = tokenValue
+            //};
+            //await _userManager.SetAuthenticationTokenAsync(_user, "EHR", _user.UserName, tokenValue);
            
             return tokenValue; 
         }
@@ -91,7 +87,9 @@ namespace EHR_API.Repositories.Implementation
         { 
             var claims = new List<Claim> 
             { 
-                new Claim(ClaimTypes.Name, _user.UserName) 
+                new Claim("User Id", _user.Id), 
+                new Claim("UserName", _user.UserName), 
+                new Claim("User Email", _user.Email) 
             };
             
             var roles = await _userManager.GetRolesAsync(_user); 
@@ -110,9 +108,8 @@ namespace EHR_API.Repositories.Implementation
                 issuer: jwtSettings["validIssuer"], 
                 audience: jwtSettings["validAudience"], 
                 claims: claims, 
-                expires: null, 
-                signingCredentials: signingCredentials
-                ); 
+                expires: DateTime.Now.AddDays(Convert.ToDouble(jwtSettings["expires"])), 
+                signingCredentials: signingCredentials); 
             
             return tokenOptions; 
         }
@@ -172,36 +169,33 @@ namespace EHR_API.Repositories.Implementation
             return newEntity;
         }
         
-        public async Task<bool> LogoutAsync(LogoutRequestDTO entity)
-        {
-            var user = await _userManager.FindByEmailAsync(entity.Email);
+        //public async Task<bool> LogoutAsync(LogoutRequestDTO entity)
+        //{
+        //    var user = await _userManager.FindByEmailAsync(entity.Email);
 
-            IdentityUserToken<string> userToken = new()
-                        {
-                            Name = user.UserName,
-                            LoginProvider = "EHR",
-                            UserId= user.Id,
-                            Value = entity.Token
-                        };
+        //    IdentityUserToken<string> userToken = new()
+        //                {
+        //                    Name = user.UserName,
+        //                    LoginProvider = "EHR",
+        //                    UserId= user.Id,
+        //                    Value = entity.Token
+        //                };
 
-            var result = _userManager.GetAuthenticationTokenAsync(user, "EHR", userToken.Name).Result;
+        //    var result = _userManager.GetAuthenticationTokenAsync(user, "EHR", userToken.Name).Result;
+        //    if (result == null)
+        //    {
+        //        return false;
+        //    }
 
-            if (result == null)
-            {
-                return false;
-            }
+        //    _db.UserTokens.Remove(userToken);
+        //    await _db.SaveChangesAsync();
 
-            _db.UserTokens.Remove(userToken);
-            await _db.SaveChangesAsync();
-
-             result = _userManager.GetAuthenticationTokenAsync(user, "EHR", userToken.Name).Result;
-            if (result == null)
-            {
-                return true;
-            }
-            return false;
-        }
-
-
+        //     result = _userManager.GetAuthenticationTokenAsync(user, "EHR", userToken.Name).Result;
+        //    if (result == null)
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
     }
 }
