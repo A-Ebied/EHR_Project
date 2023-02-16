@@ -10,5 +10,6 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs
         public bool HasGovernmentInsurance { get; set; }
         [Required]
         public bool HasAnotherInsurance { get; set; }
+        public UserInsurancesCreateDTO UserInsurancesCreateDTO { get; set; }
     }
 }

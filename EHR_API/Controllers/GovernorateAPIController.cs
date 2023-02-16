@@ -92,7 +92,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("CreateGovernorate")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> CreateGovernorate([FromBody] GovernorateCreateDTO entityCreateDTO) 
@@ -110,6 +110,8 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = _mapper.Map<Governorate>(entityCreateDTO);
+                entity.CreatedAt = DateTime.Now;
+                entity.UpdateddAt = DateTime.Now;
                 await _db._governorate.CreateAsync(entity);
 
                 _response.Result = _mapper.Map<GovernorateDTO>(entity);

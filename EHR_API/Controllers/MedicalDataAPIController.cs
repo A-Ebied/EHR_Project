@@ -90,7 +90,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpPost(Name = "CreateUserMedicalData")]
+        [HttpPost("CreateUserMedicalData")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> CreateUserMedicalData([FromBody] MedicalDataCreateDTO entityCreateDTO) 

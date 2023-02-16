@@ -91,7 +91,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpPost(Name = "CreateUserInsuranceData")]
+        [HttpPost("CreateUserInsuranceData")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> CreateUserInsuranceData([FromBody] InsuranceDataCreateDTO entityCreateDTO) 
@@ -109,7 +109,15 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = _mapper.Map<InsuranceData>(entityCreateDTO);
+                entity.CreatedAt = DateTime.Now;
+                entity.UpdateddAt = DateTime.Now;
                 await _db._insuranceData.CreateAsync(entity);
+                if (entityCreateDTO.UserInsurancesCreateDTO != null)
+                {
+                    await _db._userInsurance.CreateRangeAsync(
+                        _mapper.Map<List<UserInsurance>>(entityCreateDTO.UserInsurancesCreateDTO._userInsurances.ToList())
+                        );
+                }
 
                 _response.Result = _mapper.Map<InsuranceDataDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;

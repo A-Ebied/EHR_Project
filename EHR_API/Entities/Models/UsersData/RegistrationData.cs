@@ -16,8 +16,8 @@ namespace EHR_API.Entities.Models.UsersData
         // UserName
         // PhoneNumber
         // Roles
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdateddAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; } 
+        public DateTime UpdateddAt { get; set; }
 
 
         public PersonalData PersonalData { get; set; }

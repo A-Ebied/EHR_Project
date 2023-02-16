@@ -33,6 +33,8 @@ namespace EHR_API.Repositories.Implementation
         public async Task<IdentityResult> RegisterUser(RegistrationDataCreateDTO registrationDataDTO)
         {
             var user = _mapper.Map<RegistrationData>(registrationDataDTO);
+            user.CreatedAt = DateTime.Now;
+            user.UpdateddAt = DateTime.Now;
             var result = await _userManager.CreateAsync(user, registrationDataDTO.Password); 
             
             if (result.Succeeded)
@@ -160,13 +162,13 @@ namespace EHR_API.Repositories.Implementation
             user.UserName =    entity.UserName;
             user.Email =       entity.Email;
             user.PhoneNumber = entity.PhoneNumber;
+            user.UpdateddAt = DateTime.Now;
 
-            PasswordHasher<string> pw = new PasswordHasher<string>();
+            var pw = new PasswordHasher<string>();
             user.PasswordHash = pw.HashPassword(entity.UserName, entity.Password);
 
             await _userManager.UpdateAsync(user);
-            var newEntity = _mapper.Map<RegistrationData>(user);
-            return newEntity;
+            return user;
         }
         
         //public async Task<bool> LogoutAsync(LogoutRequestDTO entity)

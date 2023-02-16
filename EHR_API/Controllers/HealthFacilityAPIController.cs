@@ -87,7 +87,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("CreateHealthFacility")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> CreateHealthFacility([FromBody] HealthFacilityCreateDTO entityCreateDTO) 
@@ -110,6 +110,8 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = _mapper.Map<HealthFacility>(entityCreateDTO);
+                entity.CreatedAt = DateTime.Now;
+                entity.UpdateddAt = DateTime.Now;
                 await _db._healthFacility.CreateAsync(entity);
 
                 _response.Result = _mapper.Map<HealthFacilityDTO>(entity);
