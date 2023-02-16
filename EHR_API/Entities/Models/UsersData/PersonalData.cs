@@ -22,8 +22,8 @@ namespace EHR_API.Entities.Models.UsersData
         public string EmergencyPhone1 { get; set; }
         public string EmergencyPhone2 { get; set; }
         public string Gender { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdateddAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; }  
+        public DateTime UpdateddAt { get; set; } 
 
         public RegistrationData RegistrationData { get; set; }
         public Governorate Governorate { get; set; }
