@@ -65,33 +65,40 @@ namespace EHR_API.Repositories.Implementation
             var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
 
             var tokenValue = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-            //IdentityUserToken<string> userToken = new()
+            /*IdentityUserToken<string> userToken = new()
             //{
             //    Name = _user.UserName,
             //    LoginProvider = "",
             //    UserId= _user.Id,
             //    Value = tokenValue
             //};
-            //await _userManager.SetAuthenticationTokenAsync(_user, "EHR", _user.UserName, tokenValue);
-           
+            await _userManager.SetAuthenticationTokenAsync(_user, "EHR", _user.UserName, tokenValue);
+           */
             return tokenValue; 
         }
 
+        //tells the JwtSecurityToken how to cryptographically sign the token.
         private SigningCredentials GetSigningCredentials() 
         {
             var key = Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JwtSettings:Secret")); 
-            var secret = new SymmetricSecurityKey(key); 
-            
+            var secret = new SymmetricSecurityKey(key);
+                                                    //the algorithm to use to produce key.
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256); 
         }
 
         private async Task<List<Claim>> GetClaims() 
-        { 
+        {
+            /*
+             * a claim is essentially a statement about the entity for which the token is generated, some data that identifies it.
+             * 
+             * The data that we put in here will make its way into the encoded token that our API caller eventually sees.
+             */
             var claims = new List<Claim> 
             { 
                 new Claim("User Id", _user.Id), 
                 new Claim("UserName", _user.UserName), 
-                new Claim("User Email", _user.Email) 
+                new Claim("User Email", _user.Email), 
+                new Claim("Expiration Date", $"{DateTime.Now.AddDays(Convert.ToDouble(_configuration.GetSection("JwtSettings")["expires"]))}"), 
             };
             
             var roles = await _userManager.GetRolesAsync(_user); 
@@ -109,7 +116,8 @@ namespace EHR_API.Repositories.Implementation
             var tokenOptions = new JwtSecurityToken(
                 issuer: jwtSettings["validIssuer"], 
                 audience: jwtSettings["validAudience"], 
-                claims: claims, 
+                claims: claims,
+                //the expiration date of the token
                 expires: DateTime.Now.AddDays(Convert.ToDouble(jwtSettings["expires"])), 
                 signingCredentials: signingCredentials); 
             

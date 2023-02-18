@@ -30,7 +30,7 @@ namespace EHR_API.Controllers
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetHealthFacilities([FromQuery(Name = "searchTitle")] string title = null, int pageNumber = 1, int pageSize = 0) 
+        public async Task<ActionResult<APIResponse>> GetHealthFacilities([FromQuery(Name = "searchTitle")] string title = null, int pageNumber = 1, int pageSize = 0)
         {
             try
             {
@@ -95,7 +95,7 @@ namespace EHR_API.Controllers
         [HttpPost("CreateHealthFacility")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> CreateHealthFacility([FromBody] HealthFacilityCreateDTO entityCreateDTO) 
+        public async Task<ActionResult<APIResponse>> CreateHealthFacility([FromBody] HealthFacilityCreateDTO entityCreateDTO)
         {
             try
             {
@@ -134,7 +134,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> DeleteHealthFacility(string id) 
+        public async Task<ActionResult<APIResponse>> DeleteHealthFacility(string id)
         {
             try
             {
@@ -145,8 +145,8 @@ namespace EHR_API.Controllers
 
                 var removedEntity = await _db._healthFacility.GetAsync(expression: g => g.Id == id);
                 if (removedEntity == null)
-                {             
-                    return NotFound(APIResponses.NotFound( $"No object with Id = {id} "));
+                {
+                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
                 }
 
                 await _db._healthFacility.DeleteAsync(removedEntity);

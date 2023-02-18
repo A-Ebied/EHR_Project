@@ -18,7 +18,7 @@ namespace EHR_API.Controllers
         protected APIResponse _response;
         private readonly IMapper _mapper;
         private readonly IMainRepository _db;
-        
+
         public UserInsuranceAPIController(IMainRepository db, IMapper mapper)
         {
             _db = db;
@@ -32,21 +32,21 @@ namespace EHR_API.Controllers
         //[Authorize(Roles = SD.SystemManager)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetUsersInsurance([FromQuery(Name = "InsuranceOrganizationName")]string name = null, int pageNumber = 1, int pageSize = 0) 
+        public async Task<ActionResult<APIResponse>> GetUsersInsurance([FromQuery(Name = "InsuranceOrganizationName")] string name = null, int pageNumber = 1, int pageSize = 0)
         {
             try
             {
                 var entities = await _db._userInsurance.GetAllAsync(
-                    expression: name==null? null : g => g.InsuranceOrganizationName.ToLower().Contains(name.ToLower()),
+                    expression: name == null ? null : g => g.InsuranceOrganizationName.ToLower().Contains(name.ToLower()),
                     pageNumber: pageNumber,
                     pageSize: pageSize);
-                 
-                if (entities.Count  == 0)
+
+                if (entities.Count == 0)
                 {
                     return NotFound(APIResponses.NotFound("No data has been found"));
                 }
 
-                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize};
+                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
                 Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
 
                 _response.Result = _mapper.Map<List<UserInsurance>>(entities);
@@ -172,7 +172,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> DeleteUserInsurance(int id) 
+        public async Task<ActionResult<APIResponse>> DeleteUserInsurance(int id)
         {
             try
             {

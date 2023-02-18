@@ -25,11 +25,6 @@ namespace EHR_API.Repositories.Implementation
                 var path = CreateImage.CreateFiles(_webHost, entity.UserImage, "UserImage");
                 entity.UserImageUrl = path;
             }
-            if (entity.IdImage != null)
-            {
-                var path = CreateImage.CreateFiles(_webHost, entity.UserImage, "IdImage");
-                entity.IdImageUrl = path;
-            }
 
             await _dbSet.AddAsync(entity);
             await _db.SaveChangesAsync();
@@ -51,20 +46,6 @@ namespace EHR_API.Repositories.Implementation
                 var path = CreateImage.CreateFiles(_webHost, entity.UserImage, "UserImage");
                 entity.UserImageUrl = path;
             }
-            if (entity.IdImage != null)
-            {
-                if (oldEntity.IdImageUrl != null)
-                {
-                    var oldPath = Path.Combine(_webHost.WebRootPath, oldEntity.IdImageUrl.TrimStart('\\'));
-                    if (System.IO.File.Exists(oldPath))
-                    {
-                        System.IO.File.Delete(oldPath);
-                    }
-                }
-
-                var path = CreateImage.CreateFiles(_webHost, entity.IdImage, "IdImage");
-                entity.IdImageUrl = path;
-            }
 
             _dbSet.Update(entity);
             await _db.SaveChangesAsync();
@@ -76,14 +57,6 @@ namespace EHR_API.Repositories.Implementation
             if (entity.UserImageUrl != null)
             {
                 var oldPath = Path.Combine(_webHost.WebRootPath, entity.UserImageUrl.TrimStart('\\'));
-                if (System.IO.File.Exists(oldPath))
-                {
-                    System.IO.File.Delete(oldPath);
-                }
-            }
-            if (entity.IdImageUrl != null)
-            {
-                var oldPath = Path.Combine(_webHost.WebRootPath, entity.IdImageUrl.TrimStart('\\'));
                 if (System.IO.File.Exists(oldPath))
                 {
                     System.IO.File.Delete(oldPath);

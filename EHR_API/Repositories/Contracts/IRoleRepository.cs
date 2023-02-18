@@ -7,5 +7,6 @@ namespace EHR_API.Repositories.Contracts
     public interface IRoleRepository
     {
         Task<List<IdentityRole>> GetRolesAsync();
+        Task<string> GetRoleAsync(string roleName);
     }
 }

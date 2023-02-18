@@ -8,11 +8,8 @@ namespace EHR_API.Entities.Models.UsersData
         [Key]
         public string Id { get; set; }
         public string UserImageUrl { get; set; }
-        public string IdImageUrl { get; set; }
         [NotMapped]
         public IFormFile UserImage { get; set; }
-        [NotMapped]
-        public IFormFile IdImage { get; set; }
         public string Occupation { get; set; } // مهنة
         public int NumOfChildren { get; set; }
         public DateTime BirthDate { get; set; }

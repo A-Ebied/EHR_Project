@@ -74,6 +74,11 @@ namespace EHR_API.Extensions
             services.AddScoped<IMainRepository, MainRepository>();
         }
 
+        /*
+         * JSON Web Token (JWT) is a way for securely transmitting information between parties as a JSON object. 
+         * JWTs can be signed using a secret (with the HMAC algorithm) or a public/private key pair using RSA or ECDSA.
+         */
+
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration) 
         {
             var jwtSettings = configuration.GetSection("JwtSettings");
@@ -83,10 +88,12 @@ namespace EHR_API.Extensions
                 opt => 
                 { 
                     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; 
+                    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                 // it allows the app to perform authentication checks based on an incoming JWT token.
                 }).AddJwtBearer(
                     options => 
-                    { 
+                    {
+                        // specify which aspects of the incoming JWTs to validate
                         options.TokenValidationParameters = new TokenValidationParameters 
                         {
                             ValidateIssuer = true, 

@@ -32,67 +32,95 @@ namespace EHR_API.Controllers
             _userManager = userManager;
         }
 
-        [Authorize]
-        [HttpGet("GetUsersRegistrationData")]
+        [Authorize(Roles = SD.SystemManager)]
+        [HttpGet("GetAllUsersData")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<APIResponse>> GetUsersRegistrationData([FromQuery(Name = "searchUsername")] string userName = null, [FromQuery(Name = "filterByUserRole")] string role = null, int pageNumber = 1, int pageSize = 0, [FromHeader] string jwtToken = null)
+        public async Task<ActionResult<APIResponse>> GetAllUsersData([FromQuery(Name = "filterByUserRole")] string role = null, int pageNumber = 1, int pageSize = 0)
         {
             try
             {
                 IEnumerable<RegistrationData> entities = new List<RegistrationData>();
-                string headerRole = null;
-                if(jwtToken != null)
+                entities = await _db._authentication.GetAllAsync(
+                        includeProperties: "PersonalData,InsuranceData,MedicalData,MedicalTeam,Patient",
+                        pageNumber: pageNumber,
+                        pageSize: pageSize);
+
+                if (entities.ToList().Count == 0)
                 {
-                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
-                    headerRole = user.Claims.ToList()[1].Value;
-
-                    if (headerRole == SD.Physician || headerRole == SD.Nurse || headerRole == SD.HealthFacilityManager || headerRole == SD.Pharmacist || headerRole == SD.Technician)
-                    {
-                       entities =  await _db._authentication.GetAllAsync(
-                                includeProperties: "PersonalData,InsuranceData,MedicalData,MedicalTeam,Patient",
-                                expression: userName == null ? null : g => g.UserName.ToLower().Contains(userName.ToLower()),
-                                pageNumber: pageNumber,
-                                pageSize: pageSize);
-                    }
-                    else
-                    {
-                        entities = await _db._authentication.GetAllAsync(
-                                 includeProperties: "PersonalData,MedicalTeam,Patient",
-                                 expression: userName == null ? null : g => g.UserName.ToLower().Contains(userName.ToLower()),
-                                 pageNumber: pageNumber,
-                                 pageSize: pageSize);
-                    }
-
-                    if (entities.ToList().Count == 0)
-                    {
-                        return NotFound(APIResponses.NotFound("No data has been found"));
-                    }
-
-                    Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
-                    Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
-
-                    var newEntities = _mapper.Map<IEnumerable<RegistrationDataDTO>>(entities);
-                    foreach (var item in newEntities)
-                    {
-                        item.Roles = await _userManager.GetRolesAsync(_mapper.Map<RegistrationData>(item));
-                    }
-
-                    if (role != null)
-                    {
-                        newEntities = newEntities.Where(e => e.Roles.Contains(role));
-                    }
-
-                    _response.Result = newEntities;
-                    _response.StatusCode = HttpStatusCode.OK;
-                    return Ok(_response);
+                    return NotFound(APIResponses.NotFound("No data has been found"));
                 }
-                else
+
+                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
+                Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
+
+                var newEntities = _mapper.Map<IEnumerable<RegistrationDataDTO>>(entities);
+                foreach (var item in newEntities)
                 {
-                    return BadRequest(APIResponses.BadRequest("jwtToken is empty"));
+                    item.Roles = await _userManager.GetRolesAsync(_mapper.Map<RegistrationData>(item));
                 }
+
+                if (role != null)
+                {
+                    newEntities = newEntities.Where(e => e.Roles.Contains(role));
+                }
+
+                _response.Result = newEntities;
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+
+            }
+            catch (Exception ex)
+            {
+                return APIResponses.InternalServerError(ex);
+            }
+        }
+
+        [Authorize(Roles = SD.HealthFacilitiesAdministrator + "," + SD.HealthFacilityManager)]
+        [HttpGet("GetMedicalUsers")]
+        [ResponseCache(CacheProfileName = SD.ProfileName)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<APIResponse>> GetMedicalUsers([FromQuery(Name = "filterByMedicalSpecialization")] string medicalSpecialization = null, int pageNumber = 1, int pageSize = 0)
+        {
+            try
+            {
+                IEnumerable<MedicalTeam> medicalTeam = new List<MedicalTeam>();
+                var entities = new List<RegistrationData>();
+
+                medicalTeam = await _db._medicalTeam.GetAllAsync(
+                    expression: medicalSpecialization == null ? null : m => m.MedicalSpecialization.Contains(medicalSpecialization),
+                    pageNumber: pageNumber,
+                    pageSize: pageSize);
+
+                foreach (var entity in medicalTeam) 
+                {
+                    entities.Add(await _db._authentication.GetAsync(
+                        includeProperties: "PersonalData,MedicalData,MedicalTeam",
+                        expression: e => e.Id == entity.Id));
+                }
+
+                if (entities.ToList().Count == 0)
+                {
+                    return NotFound(APIResponses.NotFound("No data has been found"));
+                }
+
+                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
+                Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
+
+                var newEntities = _mapper.Map<IEnumerable<RegistrationDataDTO>>(entities);
+                foreach (var item in newEntities)
+                {
+                    item.Roles = await _userManager.GetRolesAsync(_mapper.Map<RegistrationData>(item));
+                }
+
+                _response.Result = newEntities;
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+
             }
             catch (Exception ex)
             {
@@ -101,13 +129,13 @@ namespace EHR_API.Controllers
         }
 
         [Authorize]
-        [HttpGet("{id}", Name = "GetUserRegistrationData")]
+        [HttpGet("{id}", Name = "GetUser")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> GetUserRegistrationData(string id, [FromHeader] string jwtToken = null)
+        public async Task<ActionResult<APIResponse>> GetUser(string id, [FromHeader] string jwtToken = null)
         {
             try
             {
@@ -121,7 +149,7 @@ namespace EHR_API.Controllers
                 if (jwtToken != null)
                 {
                     var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
-                    headerRole = user.Claims.ToList()[1].Value;
+                    headerRole = user.Claims.ToList()[3].Value;
 
                     if (headerRole == SD.Physician || headerRole == SD.Nurse || headerRole == SD.HealthFacilityManager || headerRole == SD.Pharmacist || headerRole == SD.Technician)
                     {
@@ -140,8 +168,7 @@ namespace EHR_API.Controllers
                 {
                     return BadRequest(APIResponses.BadRequest("jwtToken is empty"));
                 }
- 
-
+                 
                 if (entity == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
@@ -149,7 +176,7 @@ namespace EHR_API.Controllers
 
                 var newEntity = _mapper.Map<RegistrationDataDTO>(entity);
                 newEntity.Roles = await _userManager.GetRolesAsync(_mapper.Map<RegistrationData>(entity));
-                
+
                 _response.Result = newEntity;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -168,7 +195,7 @@ namespace EHR_API.Controllers
         {
             try
             {
-                IEnumerable<IdentityRole> entities = await _db._role.GetRolesAsync(); 
+                IEnumerable<IdentityRole> entities = await _db._role.GetRolesAsync();
                 if (entities.ToList().Count == 0)
                 {
                     return NotFound(APIResponses.NotFound("No data has been found"));
@@ -181,7 +208,7 @@ namespace EHR_API.Controllers
                 {
                     var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
                     headerRole = user.Claims.ToList()[1].Value;
- 
+
                     if (headerRole == SD.Physician || headerRole == SD.Nurse)
                     {
                         result = entities.Where(r => r.Name == SD.Patient).SingleOrDefault();
@@ -239,7 +266,7 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
 
-               var result = await _db._authentication.RegisterUser(registrationDataDTO);
+                var result = await _db._authentication.RegisterUser(registrationDataDTO);
                 if (!result.Succeeded)
                 {
                     return BadRequest(APIResponses.BadRequest(result.ToString()));
@@ -259,7 +286,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> Login([FromBody] LoginRequestDTO user) 
+        public async Task<ActionResult<APIResponse>> Login([FromBody] LoginRequestDTO user)
         {
             try
             {
@@ -286,32 +313,6 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[HttpPost("Logout")]
-        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[Authorize]
-        //public async Task<ActionResult<APIResponse>> Logout([FromBody] LogoutRequestDTO user)
-        //{
-        //    try
-        //    {
-        //        var result = await _db._authentication.LogoutAsync(user);
-        //        if (result)
-        //        {
-        //            _response.Result = result;
-        //            _response.StatusCode = HttpStatusCode.OK;
-        //            return Ok(_response);
-        //        }
-
-        //        return BadRequest(APIResponses.BadRequest("Logout failed"));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return APIResponses.InternalServerError(ex);
-        //    }
-        //}
-        
-        
         [Authorize]
         [HttpPut("{id}", Name = "UpdateRegistrationData")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -336,7 +337,7 @@ namespace EHR_API.Controllers
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
                 }
 
-               await _db._authentication.UpdateAsync(entityUpdateDTO);
+                await _db._authentication.UpdateAsync(entityUpdateDTO);
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = _mapper.Map<RegistrationDataDTO>(entityUpdateDTO);
@@ -347,8 +348,5 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
-
-
-
     }
 }

@@ -9,7 +9,6 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration
         //public string UserImageUrl { get; set; }
         //public string IdImageUrl { get; set; }
         public IFormFile UserImage { get; set; }
-        public IFormFile IdImage { get; set; }
         public string Occupation { get; set; }
         public int NumOfChildren { get; set; }
         [Required]

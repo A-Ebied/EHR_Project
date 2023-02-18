@@ -8,7 +8,6 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs
     {
         public string Id { get; set; }
         public string UserImageUrl { get; set; }
-        public string IdImageUrl { get; set; }
         public string Occupation { get; set; }
         [DisplayName("Number Of Children")]
         public int NumOfChildren { get; set; }

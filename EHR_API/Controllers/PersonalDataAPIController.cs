@@ -5,13 +5,14 @@ using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text.Json;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace EHR_API.Controllers
 {
+    [Authorize]
     [Route("api/PersonalDataAPI")]
     [ApiController]
     public class PersonalDataAPIController : ControllerBase
@@ -27,39 +28,39 @@ namespace EHR_API.Controllers
             _response = new();
         }
 
-        [HttpGet("GetUsersPersonalData")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        //[Authorize]
-        //[Authorize(Roles = SD.SystemManager)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetUsersPersonalData([FromQuery(Name = "searchId")]string id = null, int pageNumber = 1, int pageSize = 0) 
-        {
-            try
-            {
-                var entities = await _db._personal.GetAllAsync(
-                    expression: id==null? null : g => g.Id.ToLower().Contains(id.ToLower()),
-                    pageNumber: pageNumber,
-                    pageSize: pageSize);
+        //[Authorize(Roles = SD.SystemManager + "," + SD.HealthFacilityManager)]
+        //[HttpGet("GetUsersPersonalData")]
+        //[ResponseCache(CacheProfileName = SD.ProfileName)]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //public async Task<ActionResult<APIResponse>> GetUsersPersonalData([FromQuery(Name = "searchId")]string id = null, int pageNumber = 1, int pageSize = 0) 
+        //{
+        //    try
+        //    {
+        //        var entities = await _db._personal.GetAllAsync(
+        //            expression: id==null? null : g => g.Id.ToLower().Contains(id.ToLower()),
+        //            pageNumber: pageNumber,
+        //            pageSize: pageSize);
                  
-                if (entities.Count  == 0)
-                {
-                    return NotFound(APIResponses.NotFound("No data has been found"));
-                }
+        //        if (entities.Count  == 0)
+        //        {
+        //            return NotFound(APIResponses.NotFound("No data has been found"));
+        //        }
 
-                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize};
-                Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
+        //        Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize};
+        //        Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
 
-                _response.Result = _mapper.Map<List<PersonalData>>(entities);
-                _response.StatusCode = HttpStatusCode.OK;
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                return APIResponses.InternalServerError(ex);
-            }
-        }
+        //        _response.Result = _mapper.Map<List<PersonalData>>(entities);
+        //        _response.StatusCode = HttpStatusCode.OK;
+        //        return Ok(_response);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return APIResponses.InternalServerError(ex);
+        //    }
+        //}
 
+        [Authorize]
         [HttpGet("{id}", Name = "GetUserPersonalData")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -89,6 +90,7 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
+
 
         [HttpPost("CreateUserPersonalData")]
         [ProducesResponseType(StatusCodes.Status201Created)]

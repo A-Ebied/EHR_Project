@@ -5,6 +5,7 @@ using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text.Json;
@@ -18,7 +19,7 @@ namespace EHR_API.Controllers
         protected APIResponse _response;
         private readonly IMapper _mapper;
         private readonly IMainRepository _db;
-        
+
         public MedicalTeamAPIController(IMainRepository db, IMapper mapper)
         {
             _db = db;
@@ -28,29 +29,35 @@ namespace EHR_API.Controllers
 
         [HttpGet("GetMedicalTeamUsers")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
-        //[Authorize]
-        //[Authorize(Roles = SD.SystemManager)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetMedicalTeamUsers([FromQuery(Name = "searchId")]string id = null, int pageNumber = 1, int pageSize = 0) 
+        public async Task<ActionResult<APIResponse>> GetMedicalTeamUsers([FromQuery(Name = "MedicalSpecialization")] string medicalSpecialization = null, int pageNumber = 1, int pageSize = 0)
         {
             try
             {
                 var entities = await _db._medicalTeam.GetAllAsync(
-                    expression: id==null? null : g => g.Id.ToLower().Contains(id.ToLower()),
+                    expression: medicalSpecialization == null ? null : g => g.MedicalSpecialization.ToLower().Contains(medicalSpecialization.ToLower()),
                     pageNumber: pageNumber,
-                    pageSize: pageSize
-                    );
-                 
-                if (entities.Count  == 0)
+                    pageSize: pageSize);
+
+                if (entities.Count == 0)
                 {
                     return NotFound(APIResponses.NotFound("No data has been found"));
                 }
 
-                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize};
+                //List<RegistrationData> entities = new();
+                //foreach (var item in temp)
+                //{
+                //    entities.Add(
+                //        await _db._authentication.GetAsync(
+                //           expression: g => g.Id.ToLower().Contains(item.Id.ToLower()),
+                //           includeProperties: "PersonalData,MedicalTeam"));
+                //}
+
+                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
                 Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
 
-                _response.Result = _mapper.Map<List<MedicalTeamDTO>>(entities);
+                _response.Result = _mapper.Map<List<MedicalDataDTO>>(entities);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -74,13 +81,15 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
-                var entity = await _db._medicalTeam.GetAsync(expression: g => g.Id == id);
+                var entity = await _db._medicalData.GetAsync(
+                           expression: g => g.Id.ToLower().Contains(id.ToLower()));
+
                 if (entity == null)
                 {
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id} "));
                 }
 
-                _response.Result = _mapper.Map<MedicalTeamDTO>(entity);
+                _response.Result = _mapper.Map<RegistrationDataDTO>(entity);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -90,10 +99,11 @@ namespace EHR_API.Controllers
             }
         }
 
+        [Authorize(Roles = SD.HealthFacilitiesAdministrator + "," + SD.HealthFacilityManager)]
         [HttpPost("CreateMedicalTeamUser")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> CreateMedicalTeamUser([FromBody] MedicalTeamCreateDTO entityCreateDTO) 
+        public async Task<ActionResult<APIResponse>> CreateMedicalTeamUser([FromBody] MedicalTeamCreateDTO entityCreateDTO)
         {
             try
             {
@@ -119,12 +129,13 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
-        
+
+        [Authorize(Roles = SD.HealthFacilitiesAdministrator + "," + SD.HealthFacilityManager)]
         [HttpDelete("{id}", Name = "DeleteMedicalTeamUser")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> DeleteMedicalTeamUser(string id) 
+        public async Task<ActionResult<APIResponse>> DeleteMedicalTeamUser(string id)
         {
             try
             {
@@ -151,7 +162,7 @@ namespace EHR_API.Controllers
             }
         }
 
-
+        [Authorize(Roles = SD.HealthFacilitiesAdministrator + "," + SD.HealthFacilityManager)]
         [HttpPut("{id}", Name = "UpdateMedicalTeamUser")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

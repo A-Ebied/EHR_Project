@@ -16,6 +16,13 @@ namespace EHR_API.Repositories.Implementation
            _db= db;
         }
 
+        public async Task<string> GetRoleAsync(string roleName)
+        {
+            var roleStore = new RoleStore<IdentityRole>(_db);
+            var role = await roleStore.Roles.FirstOrDefaultAsync(r => r.Name == roleName);
+            return role.Id;
+        }
+
         public async Task<List<IdentityRole>> GetRolesAsync()
         {
             var roleStore = new RoleStore<IdentityRole>(_db);
