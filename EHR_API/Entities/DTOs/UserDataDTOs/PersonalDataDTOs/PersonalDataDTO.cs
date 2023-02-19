@@ -1,6 +1,4 @@
-﻿using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
-using EHR_API.Entities.DTOs.GovernorateDTOs;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace EHR_API.Entities.DTOs.UserDataDTOs
 {

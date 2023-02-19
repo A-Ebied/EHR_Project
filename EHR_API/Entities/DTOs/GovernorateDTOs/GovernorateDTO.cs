@@ -14,6 +14,6 @@ namespace EHR_API.Entities.DTOs.GovernorateDTOs
         public DateTime UpdateddAt { get; set; }
 
         public ICollection<HealthFacilityDTOForOthers> HealthFacilitys { get; set; }
-        public ICollection<PersonalDataDTOForOthers> PersonalData { get; set; }
+        public ICollection<UserDTOForOthers> Users { get; set; }
     }
 }

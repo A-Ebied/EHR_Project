@@ -150,7 +150,6 @@
 //        }
 
 //        [Authorize(Roles = SD.Physician + "," + SD.Pharmacist + "," + SD.Nurse + "," + SD.Technician + "," + SD.HealthFacilityManager)]
-//        [HttpPost("CreateUserInsuranceData")]
 //        [HttpDelete("{id}", Name = "DeleteInsuranceData")]
 //        [ProducesResponseType(StatusCodes.Status400BadRequest)]
 //        [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -183,7 +182,6 @@
 //        }
 
 //        [Authorize(Roles = SD.Physician + "," + SD.Pharmacist + "," + SD.Nurse + "," + SD.Technician + "," + SD.HealthFacilityManager)]
-//        [HttpPost("CreateUserInsuranceData")]
 //        [HttpPut("{id}", Name = "UpdateUserInsuranceData")]
 //        [ProducesResponseType(StatusCodes.Status400BadRequest)]
 //        [ProducesResponseType(StatusCodes.Status404NotFound)]

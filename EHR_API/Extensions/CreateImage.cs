@@ -15,7 +15,7 @@ namespace EHR_API.Extensions
                 file.CopyTo(fileStreams);
             }
 
-            var path = $@"\images\{folderName}\" + fileName + extension;
+            var path = $@"{uploads}\images\{folderName}\" + fileName + extension;
             return path;
         }
     }
