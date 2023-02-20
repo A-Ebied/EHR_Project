@@ -5,6 +5,6 @@ namespace EHR_MVC.Repositories.Contracts
     public interface IBaseService
     {
         APIResponse responseModel { get; set; }
-        Task<T> SendAsync<T>(APIResponse apiResponse);
+        Task<T> SendAsync<T>(APIRequest apiRequest);
     }
 }

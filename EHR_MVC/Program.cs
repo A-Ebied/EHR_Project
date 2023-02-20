@@ -1,3 +1,4 @@
+using EHR_API.Extensions;
 using EHR_MVC.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,6 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
+builder.Services.ConfigureInterfaces();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
