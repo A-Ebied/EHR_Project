@@ -1,4 +1,4 @@
-﻿namespace EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login
+﻿namespace EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Login
 {
     public class LoginResponseDTO
     {

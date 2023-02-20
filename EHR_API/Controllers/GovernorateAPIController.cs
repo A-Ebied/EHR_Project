@@ -29,6 +29,78 @@
 //            _response = new();
 //        }
 
+//        //[Authorize(Roles = SD.SystemManager)]
+//        [HttpPost("CreateGovernorate")]
+//        [ProducesResponseType(StatusCodes.Status201Created)]
+//        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+//        public async Task<ActionResult<APIResponse>> CreateGovernorate([FromBody] GovernorateCreateDTO entityCreateDTO)
+//        {
+//            try
+//            {
+//                if (entityCreateDTO == null)
+//                {
+//                    return BadRequest(APIResponses.BadRequest("No data has been sent"));
+//                }
+
+//                if (await _db._governorate.GetAsync(expression: g => g.Title!.ToLower() == entityCreateDTO.Title!.ToLower()) != null)
+//                {
+//                    return BadRequest(APIResponses.BadRequest("The object is already exists"));
+//                }
+
+//                var entity = _mapper.Map<Governorate>(entityCreateDTO);
+//                entity.CreatedAt = DateTime.Now;
+//                entity.UpdateddAt = DateTime.Now;
+//                await _db._governorate.CreateAsync(entity);
+
+//                _response.Result = _mapper.Map<GovernorateDTO>(entity);
+//                _response.StatusCode = HttpStatusCode.Created;
+//                // للعنصر الذي تم انشاءه response في url بيدي 
+//                return CreatedAtRoute("GetGovernorate", new { id = entity.Id }, _response);
+//            }
+//            catch (Exception ex)
+//            {
+//                return APIResponses.InternalServerError(ex);
+//            }
+//        }
+
+//        //[Authorize(Roles = SD.SystemManager)]
+//        [HttpPut("{id:int}", Name = "UpdateGovernorate")]
+//        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+//        [ProducesResponseType(StatusCodes.Status404NotFound)]
+//        [ProducesResponseType(StatusCodes.Status200OK)]
+//        public async Task<ActionResult<APIResponse>> UpdateGovernorate(int id, [FromBody] GovernorateUpdateDTO entityUpdateDTO)
+//        {
+//            try
+//            {
+//                if (entityUpdateDTO == null)
+//                {
+//                    return BadRequest(APIResponses.BadRequest("No data has been sent"));
+//                }
+
+//                if (id != entityUpdateDTO.Id)
+//                {
+//                    return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
+//                }
+
+//                if (await _db._governorate.GetAsync(expression: g => g.Id == id) == null)
+//                {
+//                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+//                }
+
+//                var entity = _mapper.Map<Governorate>(entityUpdateDTO);
+//                entity.UpdateddAt = DateTime.Now;
+//                await _db._governorate.UpdateAsync(entity);
+
+//                _response.StatusCode = HttpStatusCode.OK;
+//                _response.Result = _mapper.Map<GovernorateDTO>(entity);
+//                return Ok(_response);
+//            }
+//            catch (Exception ex)
+//            {
+//                return APIResponses.InternalServerError(ex);
+//            }
+//        }
+
 //        [HttpGet("GetGovernorates")]
 //        [ResponseCache(CacheProfileName = SD.ProfileName)]
 //        [ProducesResponseType(StatusCodes.Status200OK)]
@@ -88,7 +160,6 @@
 //                var temp = await _db._medicalTeam.GetAllAsync();
 //                var medicalTeam = new RegistrationData();
 //                var users = new List<UserDTOForOthers>();
-//                var user = new UserDTOForOthers();
 
 //                foreach (var item in entity.PersonalData)
 //                {
@@ -98,17 +169,14 @@
 //                            includeProperties: "MedicalTeam",
 //                            expression: r => r.Id == item.Id);
 
-//                        user.Id = medicalTeam.Id;
-//                        user.Name = medicalTeam.FullName;
-//                        user.UserImageUrl   = item.UserImageUrl;
-//                        user.Specialization = medicalTeam.MedicalTeam.MedicalSpecialization;
+//                        medicalTeam.PersonalData = item;
 
-//                        users.Add(user);
+//                        users.Add(APIResponses.User(medicalTeam));
 //                    }
 //                }
 
 //                var result = _mapper.Map<GovernorateDTO>(entity);
-//                result.Users= users;
+//                result.Users = users;
 //                _response.Result = result;
 //                _response.StatusCode = HttpStatusCode.OK;
 //                return Ok(_response);
@@ -118,43 +186,9 @@
 //                return APIResponses.InternalServerError(ex);
 //            }
 //        }
-
-//        [Authorize(Roles = SD.SystemManager)]
-//        [HttpPost("CreateGovernorate")]
-//        [ProducesResponseType(StatusCodes.Status201Created)]
-//        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-//        public async Task<ActionResult<APIResponse>> CreateGovernorate([FromBody] GovernorateCreateDTO entityCreateDTO)
-//        {
-//            try
-//            {
-//                if (entityCreateDTO == null)
-//                {
-//                    return BadRequest(APIResponses.BadRequest("No data has been sent"));
-//                }
-
-//                if (await _db._governorate.GetAsync(expression: g => g.Title!.ToLower() == entityCreateDTO.Title!.ToLower()) != null)
-//                {
-//                    return BadRequest(APIResponses.BadRequest("The object is already exists"));
-//                }
-
-//                var entity = _mapper.Map<Governorate>(entityCreateDTO);
-//                entity.CreatedAt = DateTime.Now;
-//                entity.UpdateddAt = DateTime.Now;
-//                await _db._governorate.CreateAsync(entity);
-
-//                _response.Result = _mapper.Map<GovernorateDTO>(entity);
-//                _response.StatusCode = HttpStatusCode.Created;
-//                // للعنصر الذي تم انشاءه response في url بيدي 
-//                return CreatedAtRoute("GetGovernorate", new { id = entity.Id }, _response);
-//            }
-//            catch (Exception ex)
-//            {
-//                return APIResponses.InternalServerError(ex);
-//            }
-//        }
-
-//        [Authorize(Roles = SD.SystemManager)]
-//        [HttpDelete("{id:int}", Name ="DeleteGovernorate")]
+         
+//        //[Authorize(Roles = SD.SystemManager)]
+//        [HttpDelete("{id:int}", Name = "DeleteGovernorate")]
 //        [ProducesResponseType(StatusCodes.Status400BadRequest)]
 //        [ProducesResponseType(StatusCodes.Status404NotFound)]
 //        [ProducesResponseType(StatusCodes.Status200OK)]
@@ -177,44 +211,6 @@
 
 //                _response.StatusCode = HttpStatusCode.OK;
 //                _response.Result = "The object has been deleted";
-//                return Ok(_response);
-//            }
-//            catch (Exception ex)
-//            {
-//                return APIResponses.InternalServerError(ex);
-//            }
-//        }
-
-//        [Authorize(Roles = SD.SystemManager)]
-//        [HttpPut("{id:int}", Name = "UpdateGovernorate")]
-//        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-//        [ProducesResponseType(StatusCodes.Status404NotFound)]
-//        [ProducesResponseType(StatusCodes.Status200OK)]
-//        public async Task<ActionResult<APIResponse>> UpdateGovernorate(int id, [FromBody] GovernorateUpdateDTO entityUpdateDTO)
-//        {
-//            try
-//            {
-//                if (entityUpdateDTO == null)
-//                {
-//                    return BadRequest(APIResponses.BadRequest("No data has been sent"));
-//                }
-
-//                if (id != entityUpdateDTO.Id)
-//                {
-//                    return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
-//                }
-
-//                if (await _db._governorate.GetAsync(expression: g => g.Id == id) == null)
-//                {
-//                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
-//                }
-
-//                var entity = _mapper.Map<Governorate>(entityUpdateDTO);
-//                entity.UpdateddAt = DateTime.Now;
-//                await _db._governorate.UpdateAsync(entity);
-
-//                _response.StatusCode = HttpStatusCode.OK;
-//                _response.Result = _mapper.Map<GovernorateDTO>(entity);
 //                return Ok(_response);
 //            }
 //            catch (Exception ex)
