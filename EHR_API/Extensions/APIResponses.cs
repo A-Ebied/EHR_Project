@@ -1,5 +1,8 @@
 ﻿using Azure;
 using EHR_API.Entities;
+using EHR_API.Entities.DTOs.UserDataDTOs;
+using EHR_API.Entities.Models.UsersData;
+using EHR_API.Repositories.Contracts;
 using System.Net;
 
 namespace EHR_API.Extensions
@@ -42,5 +45,22 @@ namespace EHR_API.Extensions
             _response.StatusCode = HttpStatusCode.Unauthorized;
             return _response;
         }
+
+        public static UserDTOForOthers User(RegistrationData registrationData)
+        {
+            UserDTOForOthers user = new();
+            user.Id = registrationData.Id;
+            user.Name = registrationData.FullName;
+            if (registrationData.PersonalData != null)
+            {
+                user.UserImageUrl = registrationData.PersonalData.UserImageUrl;
+            }
+            if (registrationData.MedicalTeam != null)
+            {
+                user.Specialization = registrationData.MedicalTeam.MedicalSpecialization;
+            }
+
+            return user;
+        }   
     }
 }

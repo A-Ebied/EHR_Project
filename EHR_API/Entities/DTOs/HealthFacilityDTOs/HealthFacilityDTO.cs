@@ -1,4 +1,5 @@
 ﻿using EHR_API.Entities.DTOs.GovernorateDTOs;
+using EHR_API.Entities.DTOs.UserDataDTOs;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
@@ -24,7 +25,7 @@ namespace EHR_API.Entities.DTOs.HealthFacilityDTOs
         [DisplayName("Updated at")]
         public DateTime UpdateddAt { get; set; }
 
-        public int GovernorateId { get; set; }
-        public GovernorateDTOForOthers Governorate { get; set; }
+        public string Governorate { get; set; }
+        public UserDTOForOthers Manager { get; set; }
     }
 }
