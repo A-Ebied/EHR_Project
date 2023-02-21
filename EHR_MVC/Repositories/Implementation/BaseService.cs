@@ -26,7 +26,7 @@ namespace EHR_MVC.Repositories.Implementation
                 var client = _clientFactory.CreateClient("EHRAPI");
 
                 var message = new HttpRequestMessage();
-                message.Headers.Add("Content-Type", "application/json");
+                message.Headers.Add("Accept", "application/json");
                 message.RequestUri = new Uri(apiRequest.URL);
                 if (apiRequest.Data != null)
                 {

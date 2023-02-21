@@ -21,7 +21,7 @@ namespace EHR_MVC.Repositories.Implementation
             {
                 ApiType = ApiType.POST,
                 Data = entity,
-                URL = $"{_url}/api/GovernorateAPI"
+                URL = $"{_url}/api/GovernorateAPI/CreateGovernorate"
             });
         }
 
@@ -39,7 +39,7 @@ namespace EHR_MVC.Repositories.Implementation
             return SendAsync<T>(new Models.APIRequest()
             {
                 ApiType = ApiType.GET,
-                URL = $"{_url}/api/GovernorateAPI"
+                URL = $"{_url}/api/GovernorateAPI/GetGovernorates"
             });
         }
 

@@ -1,5 +1,4 @@
-﻿using EHR_MVC.Entities;
-using EHR_MVC.Models;
+﻿using EHR_MVC.Models;
 using System.Net;
 
 namespace EHR_MVC.Extensions

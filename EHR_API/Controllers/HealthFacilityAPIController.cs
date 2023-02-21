@@ -136,7 +136,7 @@
 //                UserDTOForOthers manager = APIResponses.User(entity.RegistrationData);
 //                var gov = await _db._governorate.GetAsync(
 //                    expression: g => g.Id == entity.GovernorateId);
- 
+
 //                var result = _mapper.Map<HealthFacilityDTO>(entity);
 //                result.Manager = manager;
 //                result.Governorate = gov.Title;
@@ -169,7 +169,8 @@
 //                    return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
 //                }
 
-//                if (await _db._healthFacility.GetAsync(expression: g => g.Id == id) == null)
+//var oldOne = await _db._healthFacility.GetAsync(expression: g => g.Id == id);
+//                if (oldOne == null)
 //                {
 //                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
 //                }
@@ -181,6 +182,7 @@
 
 //                var entity = _mapper.Map<HealthFacility>(entityUpdateDTO);
 //                entity.UpdateddAt = DateTime.Now;
+//                entity.CreatedAt = oldOne.CreatedAt;
 //                await _db._healthFacility.UpdateAsync(entity);
 
 //                _response.StatusCode = HttpStatusCode.OK;
