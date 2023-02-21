@@ -6,12 +6,12 @@ namespace EHR_MVC.Repositories.Implementation
 {
     public class GovernorateService : BaseService, IGovernorateService
     {
-        private readonly IHttpClientFactory _clientFactory;
+        //private readonly IHttpClientFactory _clientFactory;
         private string _url;
 
         public GovernorateService(IHttpClientFactory clientFactory, IConfiguration configuration) : base(clientFactory) 
         {
-            _clientFactory = clientFactory;
+            //_clientFactory = clientFactory;
             _url = configuration.GetValue<string>("URLs:EHRAPI");
         }
 

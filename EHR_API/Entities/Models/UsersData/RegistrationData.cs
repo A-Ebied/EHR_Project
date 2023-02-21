@@ -8,7 +8,6 @@ namespace EHR_API.Entities.Models.UsersData
     {
         [Key,DatabaseGenerated(DatabaseGeneratedOption.None)]
         public override string Id { get; set; }
-        public string IdType { get; set; }
         public string Nationality { get; set; }
         public string FullName { get; set; }
         // email

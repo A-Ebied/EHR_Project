@@ -7,11 +7,9 @@ namespace EHR_MVC.DTOs.HealthFacilityDTOs
 {
     public class HealthFacilityDTOForOthers
     {
-        [DisplayName("Health Facility No.")]
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
         public string Type { get; set; }
-        [DisplayName("Subordinate To")]
         public string SubordinateTo { get; set; }
     }
 }

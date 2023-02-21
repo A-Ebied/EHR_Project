@@ -22,9 +22,11 @@ namespace EHR_API.Entities
             base.OnModelCreating(modelBuilder);
 
             // ApplyConfiguration
+            modelBuilder.ApplyConfiguration(new GovernorateConfiguration());
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new UsersConfiguration());
             modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
+            modelBuilder.ApplyConfiguration(new HealthFacilityConfiguration());
 
             //one-to-one
             modelBuilder.Entity<RegistrationData>()
@@ -52,11 +54,9 @@ namespace EHR_API.Entities
                .WithOne(r => r.RegistrationData)
                .HasForeignKey<MedicalTeam>(m => m.Id);
              
-            modelBuilder.Entity<RegistrationData>()
-               .HasOne(m => m.HealthFacility)
-               .WithOne(r => r.RegistrationData)
-               .HasForeignKey<HealthFacility>(h => h.Id);
-
+            modelBuilder.Entity<HealthFacility>()
+           .HasAlternateKey(c => c.RegistrationDataId)
+           .HasName("AlternateKey_RegistrationDataId");
         }
 
 

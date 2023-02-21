@@ -165,7 +165,6 @@ namespace EHR_API.Repositories.Implementation
         {
             var user = await _userManager.FindByIdAsync(entity.Id);
             user.FullName =    entity.FullName;
-            user.IdType =     entity.IdType;
             user.Nationality =     entity.Nationality;
             user.UserName =    entity.UserName;
             user.Email =       entity.Email;

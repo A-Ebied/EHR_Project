@@ -1,48 +1,46 @@
 ﻿using AutoMapper;
-using EHR_MVC.DTOs.GovernorateDTOs;
+using EHR_MVC.DTOs.HealthFacilityDTOs;
 using EHR_MVC.Models;
 using EHR_MVC.Repositories.Contracts;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace EHR_MVC.Controllers
 {
-    public class GovernorateController : Controller
+    public class HealthFacilityController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly IGovernorateService _service;
-        public GovernorateController(IMapper mapper, IGovernorateService service)
+        private readonly IHealthFacilityService _service;
+        public HealthFacilityController(IMapper mapper, IHealthFacilityService service)
         {
             _mapper = mapper;
             _service = service;
         }
-         
-        // GET: GovernorateController
+
+        // GET: HealthFacilityController
         public async Task<IActionResult> Index()
         {
-            List<GovernorateDTOForOthers> list = new();
+            List<HealthFacilityDTOForOthers> list = new();
 
             var respnse = await _service.GetAllAsync<APIResponse>();
             if (respnse != null && respnse.IsSuccess)
             {
-                list = JsonConvert.DeserializeObject<List<GovernorateDTOForOthers>>(
+                list = JsonConvert.DeserializeObject<List<HealthFacilityDTOForOthers>>(
                     Convert.ToString(respnse.Result));
             }
 
             return View(list);
         }
 
-        // GET: GovernorateController/Details/5
+        // GET: HealthFacilityController/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            GovernorateDTO entity = new();
+            HealthFacilityDTO entity = new();
 
             var respnse = await _service.GetAsync<APIResponse>(id);
             if (respnse != null && respnse.IsSuccess)
             {
-                entity = JsonConvert.DeserializeObject<GovernorateDTO>(
+                entity = JsonConvert.DeserializeObject<HealthFacilityDTO>(
                     Convert.ToString(respnse.Result));
 
                 return View(entity);
@@ -51,16 +49,16 @@ namespace EHR_MVC.Controllers
             return NotFound(entity);
         }
 
-        // GET: GovernorateController/Create
+        // GET: HealthFacilityController/Create
         public async Task<IActionResult> Create()
         {
             return View();
         }
 
-        // POST: GovernorateController/Create
+        // POST: HealthFacilityController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(GovernorateCreateDTO entity)
+        public async Task<IActionResult> Create(HealthFacilityCreateDTO entity)
         {
             try
             {
@@ -81,27 +79,27 @@ namespace EHR_MVC.Controllers
             }
         }
 
-        // GET: GovernorateController/Edit/5
+        // GET: HealthFacilityController/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            GovernorateDTO entity = new();
+            HealthFacilityDTO entity = new();
 
             var respnse = await _service.GetAsync<APIResponse>(id);
             if (respnse != null && respnse.IsSuccess)
             {
-                entity = JsonConvert.DeserializeObject<GovernorateDTO>(
+                entity = JsonConvert.DeserializeObject<HealthFacilityDTO>(
                     Convert.ToString(respnse.Result));
 
-                return View(_mapper.Map<GovernorateUpdateDTO>(entity));
+                return View(_mapper.Map<HealthFacilityUpdateDTO>(entity));
             }
 
             return NotFound();
         }
 
-        // POST: GovernorateController/Edit/5
+        // POST: HealthFacilityController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, GovernorateUpdateDTO entity)
+        public async Task<IActionResult> Edit(int id, HealthFacilityUpdateDTO entity)
         {
             try
             {
@@ -122,27 +120,27 @@ namespace EHR_MVC.Controllers
             }
         }
 
-        // GET: GovernorateController/Delete/5
+        // GET: HealthFacilityController/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            GovernorateDTO entity = new();
+            HealthFacilityDTO entity = new();
 
             var respnse = await _service.GetAsync<APIResponse>(id);
             if (respnse != null && respnse.IsSuccess)
             {
-                entity = JsonConvert.DeserializeObject<GovernorateDTO>(
+                entity = JsonConvert.DeserializeObject<HealthFacilityDTO>(
                     Convert.ToString(respnse.Result));
 
-                return View(_mapper.Map<GovernorateDTOForOthers>(entity));
+                return View(_mapper.Map<HealthFacilityDTOForOthers>(entity));
             }
 
             return NotFound();
         }
 
-        // POST: GovernorateController/Delete/5
+        // POST: HealthFacilityController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(GovernorateDTOForOthers entity)
+        public async Task<IActionResult> Delete(HealthFacilityDTOForOthers entity)
         {
             try
             {

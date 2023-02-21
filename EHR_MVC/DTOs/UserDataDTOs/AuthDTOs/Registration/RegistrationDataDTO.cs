@@ -12,7 +12,6 @@ namespace EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Registration
     public class RegistrationDataDTO
     {
         public string Id { get; set; }
-        public string IdType { get; set; }
         public string Nationality { get; set; }
         public string FullName { get; set; }
         public string UserName { get; set; }

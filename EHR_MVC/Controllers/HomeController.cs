@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EHR_MVC.DTOs.GovernorateDTOs;
+using EHR_MVC.DTOs.HealthFacilityDTOs;
 using EHR_MVC.Models;
 using EHR_MVC.Repositories.Contracts;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,9 @@ namespace EHR_MVC.Controllers
             if (respnse != null && respnse.IsSuccess)
             {
                 homeData.Governorates = JsonConvert.DeserializeObject<List<GovernorateDTOForOthers>>(
+                    Convert.ToString(respnse.Result)).Take(4);
+                
+                homeData.HealthFacilities = JsonConvert.DeserializeObject<List<HealthFacilityDTOForOthers>>(
                     Convert.ToString(respnse.Result)).Take(4);
             }
 

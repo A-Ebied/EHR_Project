@@ -14,7 +14,6 @@ namespace EHR_API.Entities.ModelsConfiguration
             var user = new RegistrationData
             {
                 Id = "12345678912345",
-                IdType = "الهوية الوطنية",
                 Nationality = "مصري",
                 FullName = "أحمد محمد كمال",
                 UserName = "@Kamal123",
@@ -29,7 +28,6 @@ namespace EHR_API.Entities.ModelsConfiguration
             user = new RegistrationData
             {
                 Id = "12345678902341",
-                IdType = "الهوية الوطنية",
                 Nationality = "مصري",
                 FullName = "أحمد محمد أحمد",
                 UserName = "@Ahmed123",
@@ -44,7 +42,6 @@ namespace EHR_API.Entities.ModelsConfiguration
             user = new RegistrationData
             {
                 Id = "12345678921345",
-                IdType = "الهوية الوطنية",
                 Nationality = "مصري",
                 FullName = "أحمد محمد محمد",
                 UserName = "@Muhammad123",
@@ -59,7 +56,6 @@ namespace EHR_API.Entities.ModelsConfiguration
             user = new RegistrationData
             {
                 Id = "92345678912345",
-                IdType = "الهوية الوطنية",
                 Nationality = "مصري",
                 FullName = "أحمد محمد علي",
                 UserName = "@Ali123",

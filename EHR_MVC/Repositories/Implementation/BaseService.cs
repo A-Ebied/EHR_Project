@@ -17,8 +17,7 @@ namespace EHR_MVC.Repositories.Implementation
             responseModel = new();
             _clientFactory = clientFactory;
         }
-
-
+         
         public async Task<T> SendAsync<T>(APIRequest apiRequest)
         {
             try
@@ -44,8 +43,7 @@ namespace EHR_MVC.Repositories.Implementation
                     _ => HttpMethod.Get,
                 };
 
-                HttpResponseMessage apiResponse = null;
-                apiResponse = await client.SendAsync(message);
+                HttpResponseMessage apiResponse = await client.SendAsync(message);
 
                 var apiContent = await apiResponse.Content.ReadAsStringAsync();
                 var Response = JsonConvert.DeserializeObject<T>(apiContent);

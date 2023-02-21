@@ -7,8 +7,6 @@ namespace EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Registration
         [Required]
         public string Id { get; set; }
         [Required]
-        public string IdType { get; set; }
-        [Required]
         public string Nationality { get; set; }
         [Required]
         public string FullName { get; set; }

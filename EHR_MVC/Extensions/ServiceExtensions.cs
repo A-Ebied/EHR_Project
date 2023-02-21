@@ -10,6 +10,9 @@ namespace EHR_API.Extensions
         {
             services.AddHttpClient<IGovernorateService, GovernorateService>();
             services.AddScoped<IGovernorateService, GovernorateService>();
+
+            services.AddHttpClient<IHealthFacilityService, HealthFacilityIService>();
+            services.AddScoped<IHealthFacilityService, HealthFacilityIService>();
         }
 
     }
