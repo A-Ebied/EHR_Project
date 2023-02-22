@@ -9,5 +9,6 @@ namespace EHR_MVC.Repositories.Contracts
     {
         Task<T> LoginAsync<T>(LoginRequestDTO login);
         Task<T> RegisterAsync<T>(RegistrationDataCreateDTO registration);
+        Task<T> GetHealthFacilityManagersAsync<T>(string token = null);
     }
 }

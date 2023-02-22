@@ -17,11 +17,13 @@ namespace EHR_MVC.Controllers
         private readonly IMapper _mapper;
         private readonly IHealthFacilityService _service;
         private readonly IGovernorateService _govService;
-        public HealthFacilityController(IMapper mapper, IHealthFacilityService service, IGovernorateService govService)
+        private readonly IAuthenService _autService;
+        public HealthFacilityController(IMapper mapper, IHealthFacilityService service, IGovernorateService govService, IAuthenService authenService)
         {
             _mapper = mapper;
             _service = service;
             _govService = govService;
+            _autService = authenService;
         }
 
         // GET: HealthFacilityController
@@ -37,12 +39,16 @@ namespace EHR_MVC.Controllers
             }
             else
             {
-                if (respnse.Errors.Count > 0)
+                if (respnse != null && respnse.Errors != null)
                 {
                     for (int i = 0; i < respnse.Errors.Count; i++)
                     {
                         ModelState.AddModelError("Error", respnse.Errors[i]);
                     }
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "Unauthorized");
                 }
             }
 
@@ -64,12 +70,16 @@ namespace EHR_MVC.Controllers
             }
             else
             {
-                if (respnse.Errors.Count > 0)
+                if (respnse != null && respnse.Errors != null)
                 {
                     for (int i = 0; i < respnse.Errors.Count; i++)
                     {
                         ModelState.AddModelError("Error", respnse.Errors[i]);
                     }
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "Unauthorized");
                 }
             }
 
@@ -92,35 +102,43 @@ namespace EHR_MVC.Controllers
             }
             else
             {
-                if (respnse1.Errors.Count > 0)
+                if (respnse1 != null && respnse1.Errors != null)
                 {
                     for (int i = 0; i < respnse1.Errors.Count; i++)
                     {
                         ModelState.AddModelError("Error", respnse1.Errors[i]);
                     }
                 }
+                else
+                {
+                    ModelState.AddModelError("Error", "Unauthorized");
+                }
             }
-            /*var respnse2 = await _govService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
-                //if (respnse2 != null && respnse2.IsSuccess)
-                //{
-                //    healthFacility.ManagerList = JsonConvert.DeserializeObject<List<UserDTOForOthers>>(
-                //        Convert.ToString(respnse2.Result)).Select(i => new SelectListItem()
-                //        {
-                //            Text = i.UserName,
-                //            Value = i.Id.ToString()
-                //        });
-                 }
-            else
+
+            var respnse2 = await _autService.GetHealthFacilityManagersAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
+            if (respnse2 != null && respnse2.IsSuccess)
+            {
+                healthFacility.ManagerList = JsonConvert.DeserializeObject<List<UserDTOForOthers>>(
+                    Convert.ToString(respnse2.Result)).Select(i => new SelectListItem()
                     {
-                        if (respnse2.Errors.Count > 0)
-                        {
-                            for (int i = 0; i < respnse2.Errors.Count; i++)
-                            {
-                                ModelState.AddModelError("Error", respnse2.Errors[i]);
-                            }
-                        }
+                        Text = i.UserName,
+                        Value = i.Id.ToString()
+                    });
+            }
+            else
+            {
+                if (respnse2 != null && respnse2.Errors != null)
+                {
+                    for (int i = 0; i < respnse2.Errors.Count; i++)
+                    {
+                        ModelState.AddModelError("Error", respnse2.Errors[i]);
                     }
-            */
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "Unauthorized");
+                }
+            }
 
             return View(healthFacility);
         }
@@ -141,16 +159,20 @@ namespace EHR_MVC.Controllers
                     }
                     else
                     {
-                        if (respnse.Errors.Count > 0)
+                        if (respnse != null && respnse.Errors != null)
                         {
                             for (int i = 0; i < respnse.Errors.Count; i++)
                             {
                                 ModelState.AddModelError("Error", respnse.Errors[i]);
                             }
                         }
+                        else
+                        {
+                            ModelState.AddModelError("Error", "Unauthorized");
+                        }
                     }
                 }
-                 
+
                 var respnse1 = await _govService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
                 if (respnse1 != null && respnse1.IsSuccess)
                 {
@@ -163,35 +185,44 @@ namespace EHR_MVC.Controllers
                 }
                 else
                 {
-                    if (respnse1.Errors.Count > 0)
+                    if (respnse1 != null && respnse1.Errors != null)
                     {
                         for (int i = 0; i < respnse1.Errors.Count; i++)
                         {
                             ModelState.AddModelError("Error", respnse1.Errors[i]);
                         }
                     }
-                }
-                /*var respnse2 = await _govService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
-                //if (respnse2 != null && respnse2.IsSuccess)
-                //{
-                //    healthFacility.ManagerList = JsonConvert.DeserializeObject<List<UserDTOForOthers>>(
-                //        Convert.ToString(respnse2.Result)).Select(i => new SelectListItem()
-                //        {
-                //            Text = i.UserName,
-                //            Value = i.Id.ToString()
-                //        });
-                 }
-                else
+                    else
                     {
-                        if (respnse2.Errors.Count > 0)
+                        ModelState.AddModelError("Error", "Unauthorized");
+                    }
+                }
+
+                var respnse2 = await _autService.GetHealthFacilityManagersAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
+                if (respnse2 != null && respnse2.IsSuccess)
+                {
+                    entity.ManagerList = JsonConvert.DeserializeObject<List<UserDTOForOthers>>(
+                        Convert.ToString(respnse2.Result)).Select(i => new SelectListItem()
                         {
-                            for (int i = 0; i < respnse2.Errors.Count; i++)
-                            {
-                                ModelState.AddModelError("Error", respnse2.Errors[i]);
-                            }
+                            Text = i.UserName,
+                            Value = i.Id.ToString()
+                        });
+                }
+                else
+                {
+                    if (respnse2 != null && respnse2.Errors != null)
+                    {
+                        for (int i = 0; i < respnse2.Errors.Count; i++)
+                        {
+                            ModelState.AddModelError("Error", respnse2.Errors[i]);
                         }
                     }
-                 */
+                    else
+                    {
+                        ModelState.AddModelError("Error", "Unauthorized");
+                    }
+                }
+
                 return View(entity);
             }
             catch
@@ -224,47 +255,59 @@ namespace EHR_MVC.Controllers
                 }
                 else
                 {
-                    if (respnse.Errors.Count > 0)
+                    if (respnse1 != null && respnse1.Errors != null)
                     {
-                        for (int i = 0; i < respnse.Errors.Count; i++)
+                        for (int i = 0; i < respnse1.Errors.Count; i++)
                         {
-                            ModelState.AddModelError("Error", respnse.Errors[i]);
+                            ModelState.AddModelError("Error", respnse1.Errors[i]);
                         }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Error", "Unauthorized");
                     }
                 }
-                /*var respnse2 = await _govService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
-                //if (respnse2 != null && respnse2.IsSuccess)
-                //{
-                //    healthFacility.ManagerList = JsonConvert.DeserializeObject<List<UserDTOForOthers>>(
-                //        Convert.ToString(respnse2.Result)).Select(i => new SelectListItem()
-                //        {
-                //            Text = i.UserName,
-                //            Value = i.Id.ToString()
-                //        });
-                 }
-                else
-                    {
-                        if (respnse2.Errors.Count > 0)
+
+                var respnse2 = await _autService.GetHealthFacilityManagersAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
+                if (respnse2 != null && respnse2.IsSuccess)
+                {
+                    healthFacility.ManagerList = JsonConvert.DeserializeObject<List<UserDTOForOthers>>(
+                        Convert.ToString(respnse2.Result)).Select(i => new SelectListItem()
                         {
-                            for (int i = 0; i < respnse2.Errors.Count; i++)
-                            {
-                                ModelState.AddModelError("Error", respnse2.Errors[i]);
-                            }
+                            Text = i.UserName,
+                            Value = i.Id.ToString()
+                        });
+                }
+                else
+                {
+                    if (respnse2 != null && respnse2.Errors != null)
+                    {
+                        for (int i = 0; i < respnse2.Errors.Count; i++)
+                        {
+                            ModelState.AddModelError("Error", respnse2.Errors[i]);
                         }
                     }
-                 */
+                    else
+                    {
+                        ModelState.AddModelError("Error", "Unauthorized");
+                    }
+                }
 
                 healthFacility.HealthFacility = _mapper.Map<HealthFacilityUpdateDTO>(entity);
                 return View(healthFacility);
             }
             else
             {
-                if (respnse.Errors.Count > 0)
+                if (respnse != null && respnse.Errors != null)
                 {
                     for (int i = 0; i < respnse.Errors.Count; i++)
                     {
                         ModelState.AddModelError("Error", respnse.Errors[i]);
                     }
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "Unauthorized");
                 }
             }
 
@@ -287,12 +330,16 @@ namespace EHR_MVC.Controllers
                     }
                     else
                     {
-                        if (respnse.Errors.Count > 0)
+                        if (respnse != null && respnse.Errors != null)
                         {
                             for (int i = 0; i < respnse.Errors.Count; i++)
                             {
                                 ModelState.AddModelError("Error", respnse.Errors[i]);
                             }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("Error", "Unauthorized");
                         }
                     }
                 }
@@ -309,35 +356,44 @@ namespace EHR_MVC.Controllers
                 }
                 else
                 {
-                    if (respnse1.Errors.Count > 0)
+                    if (respnse1 != null && respnse1.Errors != null)
                     {
                         for (int i = 0; i < respnse1.Errors.Count; i++)
                         {
                             ModelState.AddModelError("Error", respnse1.Errors[i]);
                         }
                     }
-                }
-                /*var respnse2 = await _govService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
-                //if (respnse2 != null && respnse2.IsSuccess)
-                //{
-                //    healthFacility.ManagerList = JsonConvert.DeserializeObject<List<UserDTOForOthers>>(
-                //        Convert.ToString(respnse2.Result)).Select(i => new SelectListItem()
-                //        {
-                //            Text = i.UserName,
-                //            Value = i.Id.ToString()
-                //        });
-                 }
-                else
+                    else
                     {
-                        if (respnse2.Errors.Count > 0)
+                        ModelState.AddModelError("Error", "Unauthorized");
+                    }
+                }
+
+                var respnse2 = await _autService.GetHealthFacilityManagersAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
+                if (respnse2 != null && respnse2.IsSuccess)
+                {
+                    entity.ManagerList = JsonConvert.DeserializeObject<List<UserDTOForOthers>>(
+                        Convert.ToString(respnse2.Result)).Select(i => new SelectListItem()
                         {
-                            for (int i = 0; i < respnse2.Errors.Count; i++)
-                            {
-                                ModelState.AddModelError("Error", respnse2.Errors[i]);
-                            }
+                            Text = i.UserName,
+                            Value = i.Id.ToString()
+                        });
+                }
+                else
+                {
+                    if (respnse2 != null && respnse2.Errors != null)
+                    {
+                        for (int i = 0; i < respnse2.Errors.Count; i++)
+                        {
+                            ModelState.AddModelError("Error", respnse2.Errors[i]);
                         }
                     }
-                 */
+                    else
+                    {
+                        ModelState.AddModelError("Error", "Unauthorized");
+                    }
+                }
+
                 return View(entity);
             }
             catch
@@ -361,12 +417,16 @@ namespace EHR_MVC.Controllers
             }
             else
             {
-                if (respnse.Errors.Count > 0)
+                if (respnse != null && respnse.Errors != null)
                 {
                     for (int i = 0; i < respnse.Errors.Count; i++)
                     {
                         ModelState.AddModelError("Error", respnse.Errors[i]);
                     }
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "Unauthorized");
                 }
             }
 
@@ -387,12 +447,16 @@ namespace EHR_MVC.Controllers
                 }
                 else
                 {
-                    if (respnse.Errors.Count > 0)
+                    if (respnse != null && respnse.Errors != null)
                     {
                         for (int i = 0; i < respnse.Errors.Count; i++)
                         {
                             ModelState.AddModelError("Error", respnse.Errors[i]);
                         }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Error", "Unauthorized");
                     }
                 }
 

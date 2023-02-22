@@ -37,7 +37,7 @@ namespace EHR_API.Controllers
         public async Task<ActionResult<APIResponse>> CreateGovernorate([FromBody] GovernorateCreateDTO entityCreateDTO)
         {
             try
-            {
+            { 
                 if (entityCreateDTO == null)
                 {
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));

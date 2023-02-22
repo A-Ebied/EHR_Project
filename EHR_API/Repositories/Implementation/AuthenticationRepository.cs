@@ -124,15 +124,15 @@ namespace EHR_API.Repositories.Implementation
             return tokenOptions; 
         }
 
-        public async Task<List<RegistrationData>> GetAllAsync(Expression<Func<RegistrationData, bool>> expression = null, string includeProperties = null, int pageNumber = 1, int pageSize = 0)
+        public async Task<List<RegistrationData>> GetAllAsync(Expression<Func<RegistrationData, bool>> expression = null, string includeProperties = null/*, int pageNumber = 1, int pageSize = 0*/)
         {
             IQueryable<RegistrationData> entities = _userManager.Users;
             entities = expression != null ? entities.Where(expression) : entities;
 
-            if (pageSize > 0)
-            {
-                entities = entities.Skip(pageSize * (pageNumber - 1)).Take(pageSize);
-            }
+            //if (pageSize > 0)
+            //{
+            //    entities = entities.Skip(pageSize * (pageNumber - 1)).Take(pageSize);
+            //}
 
             if (includeProperties != null)
             {

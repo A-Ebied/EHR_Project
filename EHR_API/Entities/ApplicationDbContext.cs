@@ -54,9 +54,9 @@ namespace EHR_API.Entities
                .WithOne(r => r.RegistrationData)
                .HasForeignKey<MedicalTeam>(m => m.Id);
              
-            modelBuilder.Entity<HealthFacility>()
-           .HasAlternateKey(c => c.RegistrationDataId)
-           .HasName("AlternateKey_RegistrationDataId");
+           // modelBuilder.Entity<HealthFacility>()
+           //.HasAlternateKey(c => c.RegistrationDataId)
+           //.HasName("AlternateKey_RegistrationDataId");
         }
 
 
