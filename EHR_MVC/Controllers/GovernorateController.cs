@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EHR_MVC.DTOs.GovernorateDTOs;
+using EHR_MVC.Extensions;
 using EHR_MVC.Models;
 using EHR_MVC.Repositories.Contracts;
 using Microsoft.AspNetCore.Http;
@@ -25,7 +26,7 @@ namespace EHR_MVC.Controllers
         {
             List<GovernorateDTOForOthers> list = new();
 
-            var respnse = await _service.GetAllAsync<APIResponse>();
+            var respnse = await _service.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
             if (respnse != null && respnse.IsSuccess)
             {
                 list = JsonConvert.DeserializeObject<List<GovernorateDTOForOthers>>(
@@ -49,7 +50,7 @@ namespace EHR_MVC.Controllers
         public async Task<IActionResult> Details(int id)
         {
             GovernorateDTO entity = new();
-            var respnse = await _service.GetAsync<APIResponse>(id);
+            var respnse = await _service.GetAsync<APIResponse>(id, HttpContext.Session.GetString(SD.JWT));
             if (respnse != null && respnse.IsSuccess)
             {
                 entity = JsonConvert.DeserializeObject<GovernorateDTO>(
@@ -86,19 +87,23 @@ namespace EHR_MVC.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var respnse = await _service.CreateAsync<APIResponse>(entity);
+                    var respnse = await _service.CreateAsync<APIResponse>(entity, HttpContext.Session.GetString(SD.JWT));
                     if (respnse != null && respnse.IsSuccess)
                     {
                         return RedirectToAction(nameof(Index));
                     }
                     else
                     {
-                        if (respnse.Errors.Count > 0)
+                        if ( respnse != null && respnse.Errors != null )
                         {
                             for (int i = 0; i < respnse.Errors.Count; i++)
                             {
                                 ModelState.AddModelError("Error", respnse.Errors[i]);
                             }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("Error", "Unauthorized");
                         }
                     }
                 }
@@ -115,7 +120,7 @@ namespace EHR_MVC.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             GovernorateDTO entity = new();
-            var respnse = await _service.GetAsync<APIResponse>(id);
+            var respnse = await _service.GetAsync<APIResponse>(id, HttpContext.Session.GetString(SD.JWT));
             if (respnse != null && respnse.IsSuccess)
             {
                 entity = JsonConvert.DeserializeObject<GovernorateDTO>(
@@ -125,12 +130,16 @@ namespace EHR_MVC.Controllers
             }
             else
             {
-                if (respnse.Errors.Count > 0)
+                if (respnse != null && respnse.Errors != null)
                 {
                     for (int i = 0; i < respnse.Errors.Count; i++)
                     {
                         ModelState.AddModelError("Error", respnse.Errors[i]);
                     }
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "Unauthorized");
                 }
             }
 
@@ -146,19 +155,23 @@ namespace EHR_MVC.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var respnse = await _service.UpdateAsync<APIResponse>(entity);
+                    var respnse = await _service.UpdateAsync<APIResponse>(entity, HttpContext.Session.GetString(SD.JWT));
                     if (respnse != null && respnse.IsSuccess)
                     {
                         return RedirectToAction(nameof(Index));
                     }
                     else
                     {
-                        if (respnse.Errors.Count > 0)
+                        if (respnse != null && respnse.Errors != null)
                         {
                             for (int i = 0; i < respnse.Errors.Count; i++)
                             {
                                 ModelState.AddModelError("Error", respnse.Errors[i]);
                             }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("Error", "Unauthorized");
                         }
                     }
                 }
@@ -176,7 +189,7 @@ namespace EHR_MVC.Controllers
         {
             GovernorateDTO entity = new();
 
-            var respnse = await _service.GetAsync<APIResponse>(id);
+            var respnse = await _service.GetAsync<APIResponse>(id, HttpContext.Session.GetString(SD.JWT));
             if (respnse != null && respnse.IsSuccess)
             {
                 entity = JsonConvert.DeserializeObject<GovernorateDTO>(
@@ -186,12 +199,16 @@ namespace EHR_MVC.Controllers
             }
             else
             {
-                if (respnse.Errors.Count > 0)
+                if (respnse != null && respnse.Errors != null)
                 {
                     for (int i = 0; i < respnse.Errors.Count; i++)
                     {
                         ModelState.AddModelError("Error", respnse.Errors[i]);
                     }
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "Unauthorized");
                 }
             }
 
@@ -205,19 +222,23 @@ namespace EHR_MVC.Controllers
         {
             try
             {
-                var respnse = await _service.DeleteAsync<APIResponse>(entity.Id);
+                var respnse = await _service.DeleteAsync<APIResponse>(entity.Id, HttpContext.Session.GetString(SD.JWT));
                 if (respnse != null && respnse.IsSuccess)
                 {
                     return RedirectToAction(nameof(Index));
                 }
                 else
                 {
-                    if (respnse.Errors.Count > 0)
+                    if (respnse != null && respnse.Errors != null)
                     {
                         for (int i = 0; i < respnse.Errors.Count; i++)
                         {
                             ModelState.AddModelError("Error", respnse.Errors[i]);
                         }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Error", "Unauthorized");
                     }
                 }
 

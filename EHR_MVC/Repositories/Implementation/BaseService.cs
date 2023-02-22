@@ -2,8 +2,9 @@
 using EHR_MVC.Models;
 using EHR_MVC.Repositories.Contracts;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 using System.Text;
-using static EHR_MVC.Extensions.APIType;
+using static EHR_MVC.Extensions.SD;
 
 namespace EHR_MVC.Repositories.Implementation
 {
@@ -43,17 +44,25 @@ namespace EHR_MVC.Repositories.Implementation
                     _ => HttpMethod.Get,
                 };
 
+                if (!string.IsNullOrEmpty(apiRequest.Token))
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiRequest.Token);
+                }
+
                 HttpResponseMessage apiResponse = await client.SendAsync(message);
 
                 var apiContent = await apiResponse.Content.ReadAsStringAsync();
                 try
                 {
                     APIResponse response = JsonConvert.DeserializeObject<APIResponse>(apiContent);
-                    if (apiResponse.StatusCode != System.Net.HttpStatusCode.OK)
+                    if (response != null)
                     {
-                        response.StatusCode = apiResponse.StatusCode;
-                        response.IsSuccess = false;
-                        return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(response));
+                        if (apiResponse.StatusCode != System.Net.HttpStatusCode.OK && apiResponse.StatusCode != System.Net.HttpStatusCode.Created)
+                        {
+                            response.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                            response.IsSuccess = false;
+                            return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(response));
+                        }
                     }
                 }
                 catch (Exception)

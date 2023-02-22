@@ -2,6 +2,7 @@
 using EHR_MVC.DTOs.GovernorateDTOs;
 using EHR_MVC.DTOs.HealthFacilityDTOs;
 using EHR_MVC.DTOs.UserDataDTOs;
+using EHR_MVC.Extensions;
 using EHR_MVC.Models;
 using EHR_MVC.Repositories.Contracts;
 using EHR_MVC.VM.HealthFacility;
@@ -28,7 +29,7 @@ namespace EHR_MVC.Controllers
         {
             List<HealthFacilityDTOForOthers> list = new();
 
-            var respnse = await _service.GetAllAsync<APIResponse>();
+            var respnse = await _service.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
             if (respnse != null && respnse.IsSuccess)
             {
                 list = JsonConvert.DeserializeObject<List<HealthFacilityDTOForOthers>>(
@@ -53,7 +54,7 @@ namespace EHR_MVC.Controllers
         {
             HealthFacilityDTO entity = new();
 
-            var respnse = await _service.GetAsync<APIResponse>(id);
+            var respnse = await _service.GetAsync<APIResponse>(id, HttpContext.Session.GetString(SD.JWT));
             if (respnse != null && respnse.IsSuccess)
             {
                 entity = JsonConvert.DeserializeObject<HealthFacilityDTO>(
@@ -79,7 +80,7 @@ namespace EHR_MVC.Controllers
         public async Task<IActionResult> Create()
         {
             HealthFacilityCreateVM healthFacility = new();
-            var respnse1 = await _govService.GetAllAsync<APIResponse>();
+            var respnse1 = await _govService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
             if (respnse1 != null && respnse1.IsSuccess)
             {
                 healthFacility.GovernoratesList = JsonConvert.DeserializeObject<List<GovernorateDTOForOthers>>(
@@ -99,7 +100,7 @@ namespace EHR_MVC.Controllers
                     }
                 }
             }
-            /*var respnse2 = await _govService.GetAllAsync<APIResponse>();
+            /*var respnse2 = await _govService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
                 //if (respnse2 != null && respnse2.IsSuccess)
                 //{
                 //    healthFacility.ManagerList = JsonConvert.DeserializeObject<List<UserDTOForOthers>>(
@@ -133,7 +134,7 @@ namespace EHR_MVC.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var respnse = await _service.CreateAsync<APIResponse>(entity.HealthFacility);
+                    var respnse = await _service.CreateAsync<APIResponse>(entity.HealthFacility, HttpContext.Session.GetString(SD.JWT));
                     if (respnse != null && respnse.IsSuccess)
                     {
                         return RedirectToAction(nameof(Index));
@@ -150,7 +151,7 @@ namespace EHR_MVC.Controllers
                     }
                 }
                  
-                var respnse1 = await _govService.GetAllAsync<APIResponse>();
+                var respnse1 = await _govService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
                 if (respnse1 != null && respnse1.IsSuccess)
                 {
                     entity.GovernoratesList = JsonConvert.DeserializeObject<List<GovernorateDTOForOthers>>(
@@ -170,7 +171,7 @@ namespace EHR_MVC.Controllers
                         }
                     }
                 }
-                /*var respnse2 = await _govService.GetAllAsync<APIResponse>();
+                /*var respnse2 = await _govService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
                 //if (respnse2 != null && respnse2.IsSuccess)
                 //{
                 //    healthFacility.ManagerList = JsonConvert.DeserializeObject<List<UserDTOForOthers>>(
@@ -204,7 +205,7 @@ namespace EHR_MVC.Controllers
         {
             HealthFacilityDTO entity = new();
 
-            var respnse = await _service.GetAsync<APIResponse>(id);
+            var respnse = await _service.GetAsync<APIResponse>(id, HttpContext.Session.GetString(SD.JWT));
             if (respnse != null && respnse.IsSuccess)
             {
                 entity = JsonConvert.DeserializeObject<HealthFacilityDTO>(
@@ -231,7 +232,7 @@ namespace EHR_MVC.Controllers
                         }
                     }
                 }
-                /*var respnse2 = await _govService.GetAllAsync<APIResponse>();
+                /*var respnse2 = await _govService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
                 //if (respnse2 != null && respnse2.IsSuccess)
                 //{
                 //    healthFacility.ManagerList = JsonConvert.DeserializeObject<List<UserDTOForOthers>>(
@@ -279,7 +280,7 @@ namespace EHR_MVC.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var respnse = await _service.UpdateAsync<APIResponse>(entity.HealthFacility);
+                    var respnse = await _service.UpdateAsync<APIResponse>(entity.HealthFacility, HttpContext.Session.GetString(SD.JWT));
                     if (respnse != null && respnse.IsSuccess)
                     {
                         return RedirectToAction(nameof(Index));
@@ -296,7 +297,7 @@ namespace EHR_MVC.Controllers
                     }
                 }
 
-                var respnse1 = await _govService.GetAllAsync<APIResponse>();
+                var respnse1 = await _govService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
                 if (respnse1 != null && respnse1.IsSuccess)
                 {
                     entity.GovernoratesList = JsonConvert.DeserializeObject<List<GovernorateDTOForOthers>>(
@@ -316,7 +317,7 @@ namespace EHR_MVC.Controllers
                         }
                     }
                 }
-                /*var respnse2 = await _govService.GetAllAsync<APIResponse>();
+                /*var respnse2 = await _govService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
                 //if (respnse2 != null && respnse2.IsSuccess)
                 //{
                 //    healthFacility.ManagerList = JsonConvert.DeserializeObject<List<UserDTOForOthers>>(
@@ -350,7 +351,7 @@ namespace EHR_MVC.Controllers
         {
             HealthFacilityDTO entity = new();
 
-            var respnse = await _service.GetAsync<APIResponse>(id);
+            var respnse = await _service.GetAsync<APIResponse>(id, HttpContext.Session.GetString(SD.JWT));
             if (respnse != null && respnse.IsSuccess)
             {
                 entity = JsonConvert.DeserializeObject<HealthFacilityDTO>(
@@ -379,7 +380,7 @@ namespace EHR_MVC.Controllers
         {
             try
             {
-                var respnse = await _service.DeleteAsync<APIResponse>(entity.Id);
+                var respnse = await _service.DeleteAsync<APIResponse>(entity.Id, HttpContext.Session.GetString(SD.JWT));
                 if (respnse != null && respnse.IsSuccess)
                 {
                     return RedirectToAction(nameof(Index));

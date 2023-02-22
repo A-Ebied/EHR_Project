@@ -17,7 +17,9 @@ namespace EHR_API.Entities.ModelsConfiguration
                 Nationality = "مصري",
                 FullName = "أحمد محمد كمال",
                 UserName = "@Kamal123",
+                NormalizedUserName = "@KAMAL123",
                 Email = "k@gmail.com",
+                NormalizedEmail = "K@GMAIL.COM",
                 PhoneNumber = "01234567890",
             };
 
@@ -31,7 +33,9 @@ namespace EHR_API.Entities.ModelsConfiguration
                 Nationality = "مصري",
                 FullName = "أحمد محمد أحمد",
                 UserName = "@Ahmed123",
+                NormalizedUserName = "@AHMED123",
                 Email = "A@gmail.com",
+                NormalizedEmail = "A@GMAIL.COM",
                 PhoneNumber = "",
             };
 
@@ -45,7 +49,9 @@ namespace EHR_API.Entities.ModelsConfiguration
                 Nationality = "مصري",
                 FullName = "أحمد محمد محمد",
                 UserName = "@Muhammad123",
+                NormalizedUserName = "@MUHAMMAD123",
                 Email = "M@gmail.com",
+                NormalizedEmail = "M@GMAIL.COM",
                 PhoneNumber = "01234567899",
             };
 
@@ -59,7 +65,9 @@ namespace EHR_API.Entities.ModelsConfiguration
                 Nationality = "مصري",
                 FullName = "أحمد محمد علي",
                 UserName = "@Ali123",
+                NormalizedUserName = "@ALI123",
                 Email = "Al@gmail.com",
+                NormalizedEmail = "AL@GMAIL.COM",
                 PhoneNumber = "01234567890",
             };
 

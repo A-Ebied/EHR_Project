@@ -1,6 +1,6 @@
 ﻿namespace EHR_MVC.Extensions
 {
-    public static class APIType
+    public static class SD
     {
         public enum ApiType
         {
@@ -9,5 +9,7 @@
             PUT,
             DELETE
         }
+
+        public static string JWT = "JWTToken";
     }
 }

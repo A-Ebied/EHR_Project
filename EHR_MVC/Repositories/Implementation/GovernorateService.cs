@@ -1,6 +1,6 @@
 ﻿using EHR_MVC.DTOs.GovernorateDTOs;
 using EHR_MVC.Repositories.Contracts;
-using static EHR_MVC.Extensions.APIType;
+using static EHR_MVC.Extensions.SD;
 
 namespace EHR_MVC.Repositories.Implementation
 {
@@ -15,50 +15,55 @@ namespace EHR_MVC.Repositories.Implementation
             _url = configuration.GetValue<string>("URLs:EHRAPI");
         }
 
-        public Task<T> CreateAsync<T>(GovernorateCreateDTO entity)
+        public Task<T> CreateAsync<T>(GovernorateCreateDTO entity, string token = null)
         {
             return SendAsync<T>(new Models.APIRequest()
             {
                 ApiType = ApiType.POST,
                 Data = entity,
-                URL = $"{_url}/api/GovernorateAPI/CreateGovernorate"
+                URL = $"{_url}/api/GovernorateAPI/CreateGovernorate",
+                Token = token
             });
         }
 
-        public Task<T> DeleteAsync<T>(int id)
+        public Task<T> DeleteAsync<T>(int id, string token = null)
         {
             return SendAsync<T>(new Models.APIRequest()
             {
                 ApiType = ApiType.DELETE,
-                URL = $"{_url}/api/GovernorateAPI/{id}"
+                URL = $"{_url}/api/GovernorateAPI/{id}",
+                Token = token
             });
         }
 
-        public Task<T> GetAllAsync<T>()
+        public Task<T> GetAllAsync<T>(string token = null)
         {
             return SendAsync<T>(new Models.APIRequest()
             {
                 ApiType = ApiType.GET,
-                URL = $"{_url}/api/GovernorateAPI/GetGovernorates"
+                URL = $"{_url}/api/GovernorateAPI/GetGovernorates",
+                Token = token
             });
         }
 
-        public Task<T> GetAsync<T>(int id)
+        public Task<T> GetAsync<T>(int id, string token = null)
         {
             return SendAsync<T>(new Models.APIRequest()
             {
                 ApiType = ApiType.GET,
-                 URL = $"{_url}/api/GovernorateAPI/{id}"
+                 URL = $"{_url}/api/GovernorateAPI/{id}",
+                 Token = token
             });
         }
 
-        public Task<T> UpdateAsync<T>(GovernorateUpdateDTO entity)
+        public Task<T> UpdateAsync<T>(GovernorateUpdateDTO entity, string token = null)
         {
             return SendAsync<T>(new Models.APIRequest()
             {
                 ApiType = ApiType.PUT,
                 Data = entity,
-                URL = $"{_url}/api/GovernorateAPI/{entity.Id}"
+                URL = $"{_url}/api/GovernorateAPI/{entity.Id}",
+                Token = token
             });
         }
     }

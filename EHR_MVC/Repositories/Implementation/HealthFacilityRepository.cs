@@ -1,7 +1,7 @@
 ﻿using EHR_MVC.DTOs.GovernorateDTOs;
 using EHR_MVC.DTOs.HealthFacilityDTOs;
 using EHR_MVC.Repositories.Contracts;
-using static EHR_MVC.Extensions.APIType;
+using static EHR_MVC.Extensions.SD;
 
 namespace EHR_MVC.Repositories.Implementation
 {
@@ -16,50 +16,55 @@ namespace EHR_MVC.Repositories.Implementation
             _url = configuration.GetValue<string>("URLs:EHRAPI");
         }
 
-        public Task<T> CreateAsync<T>(HealthFacilityCreateDTO entity)
+        public Task<T> CreateAsync<T>(HealthFacilityCreateDTO entity, string token = null)
         {
             return SendAsync<T>(new Models.APIRequest()
             {
                 ApiType = ApiType.POST,
                 Data = entity,
-                URL = $"{_url}/api/HealthFacilityAPI/CreateHealthFacility"
+                URL = $"{_url}/api/HealthFacilityAPI/CreateHealthFacility",
+                Token = token
             });
         }
 
-        public Task<T> DeleteAsync<T>(int id)
+        public Task<T> DeleteAsync<T>(int id, string token = null)
         {
             return SendAsync<T>(new Models.APIRequest()
             {
                 ApiType = ApiType.DELETE,
-                URL = $"{_url}/api/HealthFacilityAPI/{id}"
+                URL = $"{_url}/api/HealthFacilityAPI/{id}",
+                Token = token
             });
         }
 
-        public Task<T> GetAllAsync<T>()
+        public Task<T> GetAllAsync<T>(string token = null)
         {
             return SendAsync<T>(new Models.APIRequest()
             {
                 ApiType = ApiType.GET,
-                URL = $"{_url}/api/HealthFacilityAPI/GetHealthFacilities"
+                URL = $"{_url}/api/HealthFacilityAPI/GetHealthFacilities",
+                Token = token
             });
         }
 
-        public Task<T> GetAsync<T>(int id)
+        public Task<T> GetAsync<T>(int id, string token = null)
         {
             return SendAsync<T>(new Models.APIRequest()
             {
                 ApiType = ApiType.GET,
-                 URL = $"{_url}/api/HealthFacilityAPI/{id}"
+                 URL = $"{_url}/api/HealthFacilityAPI/{id}",
+                 Token = token
             });
         }
 
-        public Task<T> UpdateAsync<T>(HealthFacilityUpdateDTO entity)
+        public Task<T> UpdateAsync<T>(HealthFacilityUpdateDTO entity, string token = null)
         {
             return SendAsync<T>(new Models.APIRequest()
             {
                 ApiType = ApiType.PUT,
                 Data = entity,
-                URL = $"{_url}/api/HealthFacilityAPI/{entity.Id}"
+                URL = $"{_url}/api/HealthFacilityAPI/{entity.Id}",
+                Token = token
             });
         }
     }

@@ -1,8 +1,6 @@
-﻿using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs;
-using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login;
+﻿using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
 using EHR_API.Entities.Models.UsersData;
-using EHR_API.Extensions;
 using Microsoft.AspNetCore.Identity;
 using System.Linq.Expressions;
 
