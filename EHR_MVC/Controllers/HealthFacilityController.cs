@@ -1,8 +1,12 @@
 ﻿using AutoMapper;
+using EHR_MVC.DTOs.GovernorateDTOs;
 using EHR_MVC.DTOs.HealthFacilityDTOs;
+using EHR_MVC.DTOs.UserDataDTOs;
 using EHR_MVC.Models;
 using EHR_MVC.Repositories.Contracts;
+using EHR_MVC.VM.HealthFacility;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 
 namespace EHR_MVC.Controllers
@@ -11,10 +15,12 @@ namespace EHR_MVC.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IHealthFacilityService _service;
-        public HealthFacilityController(IMapper mapper, IHealthFacilityService service)
+        private readonly IGovernorateService _govService;
+        public HealthFacilityController(IMapper mapper, IHealthFacilityService service, IGovernorateService govService)
         {
             _mapper = mapper;
             _service = service;
+            _govService = govService;
         }
 
         // GET: HealthFacilityController
@@ -27,6 +33,16 @@ namespace EHR_MVC.Controllers
             {
                 list = JsonConvert.DeserializeObject<List<HealthFacilityDTOForOthers>>(
                     Convert.ToString(respnse.Result));
+            }
+            else
+            {
+                if (respnse.Errors.Count > 0)
+                {
+                    for (int i = 0; i < respnse.Errors.Count; i++)
+                    {
+                        ModelState.AddModelError("Error", respnse.Errors[i]);
+                    }
+                }
             }
 
             return View(list);
@@ -45,6 +61,16 @@ namespace EHR_MVC.Controllers
 
                 return View(entity);
             }
+            else
+            {
+                if (respnse.Errors.Count > 0)
+                {
+                    for (int i = 0; i < respnse.Errors.Count; i++)
+                    {
+                        ModelState.AddModelError("Error", respnse.Errors[i]);
+                    }
+                }
+            }
 
             return NotFound(entity);
         }
@@ -52,30 +78,124 @@ namespace EHR_MVC.Controllers
         // GET: HealthFacilityController/Create
         public async Task<IActionResult> Create()
         {
-            return View();
+            HealthFacilityCreateVM healthFacility = new();
+            var respnse1 = await _govService.GetAllAsync<APIResponse>();
+            if (respnse1 != null && respnse1.IsSuccess)
+            {
+                healthFacility.GovernoratesList = JsonConvert.DeserializeObject<List<GovernorateDTOForOthers>>(
+                    Convert.ToString(respnse1.Result)).Select(i => new SelectListItem()
+                    {
+                        Text = i.Title,
+                        Value = i.Id.ToString()
+                    });
+            }
+            else
+            {
+                if (respnse1.Errors.Count > 0)
+                {
+                    for (int i = 0; i < respnse1.Errors.Count; i++)
+                    {
+                        ModelState.AddModelError("Error", respnse1.Errors[i]);
+                    }
+                }
+            }
+            /*var respnse2 = await _govService.GetAllAsync<APIResponse>();
+                //if (respnse2 != null && respnse2.IsSuccess)
+                //{
+                //    healthFacility.ManagerList = JsonConvert.DeserializeObject<List<UserDTOForOthers>>(
+                //        Convert.ToString(respnse2.Result)).Select(i => new SelectListItem()
+                //        {
+                //            Text = i.UserName,
+                //            Value = i.Id.ToString()
+                //        });
+                 }
+            else
+                    {
+                        if (respnse2.Errors.Count > 0)
+                        {
+                            for (int i = 0; i < respnse2.Errors.Count; i++)
+                            {
+                                ModelState.AddModelError("Error", respnse2.Errors[i]);
+                            }
+                        }
+                    }
+            */
+
+            return View(healthFacility);
         }
 
         // POST: HealthFacilityController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(HealthFacilityCreateDTO entity)
+        public async Task<IActionResult> Create(HealthFacilityCreateVM entity)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var respnse = await _service.CreateAsync<APIResponse>(entity);
+                    var respnse = await _service.CreateAsync<APIResponse>(entity.HealthFacility);
                     if (respnse != null && respnse.IsSuccess)
                     {
                         return RedirectToAction(nameof(Index));
                     }
+                    else
+                    {
+                        if (respnse.Errors.Count > 0)
+                        {
+                            for (int i = 0; i < respnse.Errors.Count; i++)
+                            {
+                                ModelState.AddModelError("Error", respnse.Errors[i]);
+                            }
+                        }
+                    }
                 }
-
+                 
+                var respnse1 = await _govService.GetAllAsync<APIResponse>();
+                if (respnse1 != null && respnse1.IsSuccess)
+                {
+                    entity.GovernoratesList = JsonConvert.DeserializeObject<List<GovernorateDTOForOthers>>(
+                        Convert.ToString(respnse1.Result)).Select(i => new SelectListItem()
+                        {
+                            Text = i.Title,
+                            Value = i.Id.ToString()
+                        });
+                }
+                else
+                {
+                    if (respnse1.Errors.Count > 0)
+                    {
+                        for (int i = 0; i < respnse1.Errors.Count; i++)
+                        {
+                            ModelState.AddModelError("Error", respnse1.Errors[i]);
+                        }
+                    }
+                }
+                /*var respnse2 = await _govService.GetAllAsync<APIResponse>();
+                //if (respnse2 != null && respnse2.IsSuccess)
+                //{
+                //    healthFacility.ManagerList = JsonConvert.DeserializeObject<List<UserDTOForOthers>>(
+                //        Convert.ToString(respnse2.Result)).Select(i => new SelectListItem()
+                //        {
+                //            Text = i.UserName,
+                //            Value = i.Id.ToString()
+                //        });
+                 }
+                else
+                    {
+                        if (respnse2.Errors.Count > 0)
+                        {
+                            for (int i = 0; i < respnse2.Errors.Count; i++)
+                            {
+                                ModelState.AddModelError("Error", respnse2.Errors[i]);
+                            }
+                        }
+                    }
+                 */
                 return View(entity);
             }
             catch
             {
-                return View();
+                return View(entity);
             }
         }
 
@@ -90,33 +210,138 @@ namespace EHR_MVC.Controllers
                 entity = JsonConvert.DeserializeObject<HealthFacilityDTO>(
                     Convert.ToString(respnse.Result));
 
-                return View(_mapper.Map<HealthFacilityUpdateDTO>(entity));
+                HealthFacilityUpdateVM healthFacility = new();
+                var respnse1 = await _govService.GetAllAsync<APIResponse>();
+                if (respnse1 != null && respnse1.IsSuccess)
+                {
+                    healthFacility.GovernoratesList = JsonConvert.DeserializeObject<List<GovernorateDTOForOthers>>(
+                        Convert.ToString(respnse1.Result)).Select(i => new SelectListItem()
+                        {
+                            Text = i.Title,
+                            Value = i.Id.ToString()
+                        });
+                }
+                else
+                {
+                    if (respnse.Errors.Count > 0)
+                    {
+                        for (int i = 0; i < respnse.Errors.Count; i++)
+                        {
+                            ModelState.AddModelError("Error", respnse.Errors[i]);
+                        }
+                    }
+                }
+                /*var respnse2 = await _govService.GetAllAsync<APIResponse>();
+                //if (respnse2 != null && respnse2.IsSuccess)
+                //{
+                //    healthFacility.ManagerList = JsonConvert.DeserializeObject<List<UserDTOForOthers>>(
+                //        Convert.ToString(respnse2.Result)).Select(i => new SelectListItem()
+                //        {
+                //            Text = i.UserName,
+                //            Value = i.Id.ToString()
+                //        });
+                 }
+                else
+                    {
+                        if (respnse2.Errors.Count > 0)
+                        {
+                            for (int i = 0; i < respnse2.Errors.Count; i++)
+                            {
+                                ModelState.AddModelError("Error", respnse2.Errors[i]);
+                            }
+                        }
+                    }
+                 */
+
+                healthFacility.HealthFacility = _mapper.Map<HealthFacilityUpdateDTO>(entity);
+                return View(healthFacility);
+            }
+            else
+            {
+                if (respnse.Errors.Count > 0)
+                {
+                    for (int i = 0; i < respnse.Errors.Count; i++)
+                    {
+                        ModelState.AddModelError("Error", respnse.Errors[i]);
+                    }
+                }
             }
 
-            return NotFound();
+            return NotFound(respnse);
         }
 
         // POST: HealthFacilityController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, HealthFacilityUpdateDTO entity)
+        public async Task<IActionResult> Edit(int id, HealthFacilityUpdateVM entity)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var respnse = await _service.UpdateAsync<APIResponse>(entity);
+                    var respnse = await _service.UpdateAsync<APIResponse>(entity.HealthFacility);
                     if (respnse != null && respnse.IsSuccess)
                     {
                         return RedirectToAction(nameof(Index));
                     }
+                    else
+                    {
+                        if (respnse.Errors.Count > 0)
+                        {
+                            for (int i = 0; i < respnse.Errors.Count; i++)
+                            {
+                                ModelState.AddModelError("Error", respnse.Errors[i]);
+                            }
+                        }
+                    }
                 }
 
+                var respnse1 = await _govService.GetAllAsync<APIResponse>();
+                if (respnse1 != null && respnse1.IsSuccess)
+                {
+                    entity.GovernoratesList = JsonConvert.DeserializeObject<List<GovernorateDTOForOthers>>(
+                        Convert.ToString(respnse1.Result)).Select(i => new SelectListItem()
+                        {
+                            Text = i.Title,
+                            Value = i.Id.ToString()
+                        });
+                }
+                else
+                {
+                    if (respnse1.Errors.Count > 0)
+                    {
+                        for (int i = 0; i < respnse1.Errors.Count; i++)
+                        {
+                            ModelState.AddModelError("Error", respnse1.Errors[i]);
+                        }
+                    }
+                }
+                /*var respnse2 = await _govService.GetAllAsync<APIResponse>();
+                //if (respnse2 != null && respnse2.IsSuccess)
+                //{
+                //    healthFacility.ManagerList = JsonConvert.DeserializeObject<List<UserDTOForOthers>>(
+                //        Convert.ToString(respnse2.Result)).Select(i => new SelectListItem()
+                //        {
+                //            Text = i.UserName,
+                //            Value = i.Id.ToString()
+                //        });
+                 }
+                else
+                    {
+                        if (respnse2.Errors.Count > 0)
+                        {
+                            for (int i = 0; i < respnse2.Errors.Count; i++)
+                            {
+                                ModelState.AddModelError("Error", respnse2.Errors[i]);
+                            }
+                        }
+                    }
+                 */
                 return View(entity);
             }
             catch
             {
-                return View();
+                return View(entity);
             }
         }
 
@@ -133,6 +358,16 @@ namespace EHR_MVC.Controllers
 
                 return View(_mapper.Map<HealthFacilityDTOForOthers>(entity));
             }
+            else
+            {
+                if (respnse.Errors.Count > 0)
+                {
+                    for (int i = 0; i < respnse.Errors.Count; i++)
+                    {
+                        ModelState.AddModelError("Error", respnse.Errors[i]);
+                    }
+                }
+            }
 
             return NotFound();
         }
@@ -148,6 +383,16 @@ namespace EHR_MVC.Controllers
                 if (respnse != null && respnse.IsSuccess)
                 {
                     return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    if (respnse.Errors.Count > 0)
+                    {
+                        for (int i = 0; i < respnse.Errors.Count; i++)
+                        {
+                            ModelState.AddModelError("Error", respnse.Errors[i]);
+                        }
+                    }
                 }
 
                 return View(entity);

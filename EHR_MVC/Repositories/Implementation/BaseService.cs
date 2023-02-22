@@ -46,8 +46,23 @@ namespace EHR_MVC.Repositories.Implementation
                 HttpResponseMessage apiResponse = await client.SendAsync(message);
 
                 var apiContent = await apiResponse.Content.ReadAsStringAsync();
-                var Response = JsonConvert.DeserializeObject<T>(apiContent);
+                try
+                {
+                    APIResponse response = JsonConvert.DeserializeObject<APIResponse>(apiContent);
+                    if (apiResponse.StatusCode != System.Net.HttpStatusCode.OK)
+                    {
+                        response.StatusCode = apiResponse.StatusCode;
+                        response.IsSuccess = false;
+                        return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(response));
+                    }
+                }
+                catch (Exception)
+                {
+                    var exception = JsonConvert.DeserializeObject<T>(apiContent);
+                    return exception;
+                }
 
+                var Response = JsonConvert.DeserializeObject<T>(apiContent);
                 return Response;
             }
             catch (Exception ex)

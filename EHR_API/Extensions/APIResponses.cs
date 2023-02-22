@@ -51,6 +51,7 @@ namespace EHR_API.Extensions
             UserDTOForOthers user = new();
             user.Id = registrationData.Id;
             user.Name = registrationData.FullName;
+            user.UserName = registrationData.UserName;
             if (registrationData.PersonalData != null)
             {
                 user.UserImageUrl = registrationData.PersonalData.UserImageUrl;

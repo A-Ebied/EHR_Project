@@ -28,8 +28,10 @@ namespace EHR_MVC.DTOs.HealthFacilityDTOs
         public string Description { get; set; }
 
         [Required]
+        [DisplayName("Governorate")]
         public int GovernorateId { get; set; }
         [Required]
+        [DisplayName("Manager")]
         public string RegistrationDataId { get; set; }
     }
 }

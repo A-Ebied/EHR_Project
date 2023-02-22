@@ -1,4 +1,4 @@
-﻿@model EHR_MVC.DTOs.HealthFacilityDTOs.HealthFacilityCreateDTO
+﻿@model EHR_MVC.VM.HealthFacility.HealthFacilityCreateVM
 
 @{
     ViewData["Title"] = "Create";
@@ -10,62 +10,69 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+                <label asp-for="HealthFacility.RegistrationDataId" class="control-label"></label>
+                <select asp-for="HealthFacility.RegistrationDataId" class="form-select" asp-items="@Model.ManagerList">
+                    <option disabled selected>Select Manager</option>
+                </select>
+                <span asp-validation-for="HealthFacility.RegistrationDataId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Type" class="control-label"></label>
-                <input asp-for="Type" class="form-control" />
-                <span asp-validation-for="Type" class="text-danger"></span>
+                <label asp-for="HealthFacility.Title" class="control-label"></label>
+                <input asp-for="HealthFacility.Title" class="form-control" />
+                <span asp-validation-for="HealthFacility.Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SubordinateTo" class="control-label"></label>
-                <input asp-for="SubordinateTo" class="form-control" />
-                <span asp-validation-for="SubordinateTo" class="text-danger"></span>
+                <label asp-for="HealthFacility.Type" class="control-label"></label>
+                <input asp-for="HealthFacility.Type" class="form-control" />
+                <span asp-validation-for="HealthFacility.Type" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Phone1" class="control-label"></label>
-                <input asp-for="Phone1" class="form-control" />
-                <span asp-validation-for="Phone1" class="text-danger"></span>
+                <label asp-for="HealthFacility.SubordinateTo" class="control-label"></label>
+                <input asp-for="HealthFacility.SubordinateTo" class="form-control" />
+                <span asp-validation-for="HealthFacility.SubordinateTo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Phone2" class="control-label"></label>
-                <input asp-for="Phone2" class="form-control" />
-                <span asp-validation-for="Phone2" class="text-danger"></span>
+                <label asp-for="HealthFacility.Phone1" class="control-label"></label>
+                <input asp-for="HealthFacility.Phone1" class="form-control" />
+                <span asp-validation-for="HealthFacility.Phone1" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Phone3" class="control-label"></label>
-                <input asp-for="Phone3" class="form-control" />
-                <span asp-validation-for="Phone3" class="text-danger"></span>
+                <label asp-for="HealthFacility.Phone2" class="control-label"></label>
+                <input asp-for="HealthFacility.Phone2" class="form-control" />
+                <span asp-validation-for="HealthFacility.Phone2" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+                <label asp-for="HealthFacility.Phone3" class="control-label"></label>
+                <input asp-for="HealthFacility.Phone3" class="form-control" />
+                <span asp-validation-for="HealthFacility.Phone3" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
+                <label asp-for="HealthFacility.Email" class="control-label"></label>
+                <input asp-for="HealthFacility.Email" class="form-control" />
+                <span asp-validation-for="HealthFacility.Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label asp-for="HealthFacility.GovernorateId" class="control-label"></label>
+                <select asp-for="HealthFacility.GovernorateId" class="form-select" asp-items="@Model.GovernoratesList">
+                    <option disabled selected>Select Governorate</option>
+                </select>
+                <span asp-validation-for="HealthFacility.GovernorateId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="GovernorateId" class="control-label"></label>
-                <input asp-for="GovernorateId" class="form-control" />
-                <span asp-validation-for="GovernorateId" class="text-danger"></span>
+                <label asp-for="HealthFacility.Address" class="control-label"></label>
+                <input asp-for="HealthFacility.Address" class="form-control" />
+                <span asp-validation-for="HealthFacility.Address" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="RegistrationDataId" class="control-label"></label>
-                <input asp-for="RegistrationDataId" class="form-control" />
-                <span asp-validation-for="RegistrationDataId" class="text-danger"></span>
+                <label asp-for="HealthFacility.Description" class="control-label"></label>
+                <input asp-for="HealthFacility.Description" class="form-control" />
+                <span asp-validation-for="HealthFacility.Description" class="text-danger"></span>
             </div>
+           
+            
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

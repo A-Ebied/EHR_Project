@@ -4,6 +4,7 @@ using EHR_MVC.Models;
 using EHR_MVC.Repositories.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
@@ -30,6 +31,16 @@ namespace EHR_MVC.Controllers
                 list = JsonConvert.DeserializeObject<List<GovernorateDTOForOthers>>(
                     Convert.ToString(respnse.Result));
             }
+            else
+            {
+                if (respnse.Errors.Count > 0)
+                {
+                    for (int i = 0; i < respnse.Errors.Count; i++)
+                    {
+                        ModelState.AddModelError("Error", respnse.Errors[i]);
+                    }
+                }
+            }
 
             return View(list);
         }
@@ -38,7 +49,6 @@ namespace EHR_MVC.Controllers
         public async Task<IActionResult> Details(int id)
         {
             GovernorateDTO entity = new();
-
             var respnse = await _service.GetAsync<APIResponse>(id);
             if (respnse != null && respnse.IsSuccess)
             {
@@ -46,6 +56,16 @@ namespace EHR_MVC.Controllers
                     Convert.ToString(respnse.Result));
 
                 return View(entity);
+            }
+            else
+            {
+                if (respnse.Errors.Count > 0)
+                {
+                    for (int i = 0; i < respnse.Errors.Count; i++)
+                    {
+                        ModelState.AddModelError("Error", respnse.Errors[i]);
+                    }
+                }
             }
 
             return NotFound(entity);
@@ -71,13 +91,23 @@ namespace EHR_MVC.Controllers
                     {
                         return RedirectToAction(nameof(Index));
                     }
+                    else
+                    {
+                        if (respnse.Errors.Count > 0)
+                        {
+                            for (int i = 0; i < respnse.Errors.Count; i++)
+                            {
+                                ModelState.AddModelError("Error", respnse.Errors[i]);
+                            }
+                        }
+                    }
                 }
 
                 return View(entity);
             }
             catch
             {
-                return View();
+                return View(entity);
             }
         }
 
@@ -85,7 +115,6 @@ namespace EHR_MVC.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             GovernorateDTO entity = new();
-
             var respnse = await _service.GetAsync<APIResponse>(id);
             if (respnse != null && respnse.IsSuccess)
             {
@@ -93,6 +122,16 @@ namespace EHR_MVC.Controllers
                     Convert.ToString(respnse.Result));
 
                 return View(_mapper.Map<GovernorateUpdateDTO>(entity));
+            }
+            else
+            {
+                if (respnse.Errors.Count > 0)
+                {
+                    for (int i = 0; i < respnse.Errors.Count; i++)
+                    {
+                        ModelState.AddModelError("Error", respnse.Errors[i]);
+                    }
+                }
             }
 
             return NotFound();
@@ -111,6 +150,16 @@ namespace EHR_MVC.Controllers
                     if (respnse != null && respnse.IsSuccess)
                     {
                         return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        if (respnse.Errors.Count > 0)
+                        {
+                            for (int i = 0; i < respnse.Errors.Count; i++)
+                            {
+                                ModelState.AddModelError("Error", respnse.Errors[i]);
+                            }
+                        }
                     }
                 }
 
@@ -135,8 +184,18 @@ namespace EHR_MVC.Controllers
 
                 return View(_mapper.Map<GovernorateDTOForOthers>(entity));
             }
+            else
+            {
+                if (respnse.Errors.Count > 0)
+                {
+                    for (int i = 0; i < respnse.Errors.Count; i++)
+                    {
+                        ModelState.AddModelError("Error", respnse.Errors[i]);
+                    }
+                }
+            }
 
-            return NotFound();
+            return NotFound(entity);
         }
 
         // POST: GovernorateController/Delete/5
@@ -151,12 +210,22 @@ namespace EHR_MVC.Controllers
                 {
                     return RedirectToAction(nameof(Index));
                 }
+                else
+                {
+                    if (respnse.Errors.Count > 0)
+                    {
+                        for (int i = 0; i < respnse.Errors.Count; i++)
+                        {
+                            ModelState.AddModelError("Error", respnse.Errors[i]);
+                        }
+                    }
+                }
 
                 return View(entity);
             }
             catch
             {
-                return View();
+                return View(entity);
             }
         }
     }
