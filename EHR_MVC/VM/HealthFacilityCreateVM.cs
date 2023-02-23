@@ -2,16 +2,16 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace EHR_MVC.VM.HealthFacility
+namespace EHR_MVC.VM
 {
-    public class HealthFacilityUpdateVM
+    public class HealthFacilityCreateVM
     {
-        public HealthFacilityUpdateVM()
+        public HealthFacilityCreateVM()
         {
             HealthFacility = new();
         }
 
-        public HealthFacilityUpdateDTO HealthFacility { get; set; }
+        public HealthFacilityCreateDTO HealthFacility { get; set; }
         [ValidateNever]
         public IEnumerable<SelectListItem> GovernoratesList { get; set; }
         [ValidateNever]

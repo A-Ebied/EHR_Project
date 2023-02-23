@@ -26,6 +26,16 @@ namespace EHR_MVC.Repositories.Implementation
             });
         }
 
+        public Task<T> GetRolesAsync<T>(string token = null)
+        {
+            return SendAsync<T>(new Models.APIRequest()
+            {
+                ApiType = ApiType.GET,
+                URL = $"{_url}/api/AuthenticationAPI/GetRoles",
+                Token = token
+            });
+        }
+
         public Task<T> LoginAsync<T>(LoginRequestDTO login)
         {
             return SendAsync<T>(new Models.APIRequest()

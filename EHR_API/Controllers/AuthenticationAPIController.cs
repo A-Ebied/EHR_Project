@@ -7,7 +7,6 @@ using EHR_API.Entities.DTOs.UserDataDTOs.UserRolesDTOs;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
@@ -424,7 +423,7 @@ namespace EHR_API.Controllers
                     return NotFound(APIResponses.NotFound("No data has been found"));
                 }
 
-                IdentityRole result = null;
+                IEnumerable<IdentityRole> result = null;
                 string headerRole = null;
 
                 if (jwtToken != null)
@@ -434,17 +433,17 @@ namespace EHR_API.Controllers
 
                     if (headerRole == SD.Physician || headerRole == SD.Nurse)
                     {
-                        result = entities.Where(r => r.Name == SD.Patient).SingleOrDefault();
+                        result = entities.Where(r => r.Name == SD.Patient);
                     }
 
                     if (headerRole == SD.SystemManager)
                     {
-                        result = entities.Where(r => r.Name == SD.HealthFacilitiesAdministrator).SingleOrDefault();
+                        result = entities.Where(r => r.Name == SD.HealthFacilitiesAdministrator);
                     }
 
                     if (headerRole == SD.HealthFacilitiesAdministrator)
                     {
-                        result = entities.Where(r => r.Name == SD.HealthFacilityManager).SingleOrDefault();
+                        result = entities.Where(r => r.Name == SD.HealthFacilityManager);
                     }
 
                     if (headerRole == SD.HealthFacilityManager)
@@ -455,12 +454,12 @@ namespace EHR_API.Controllers
 
                 if (headerRole == null)
                 {
-                    result = entities.Where(r => r.Name == SD.Patient).SingleOrDefault();
+                    result = entities.Where(/*r => r.Name == SD.Patient*/r => r.Name == SD.Physician || r.Name == SD.Nurse || r.Name == SD.Pharmacist);
                 }
 
                 if (result != null)
                 {
-                    _response.Result = _mapper.Map<RolesDTO>(result);
+                    _response.Result = _mapper.Map<List<RolesDTO>>(result);
                 }
                 else
                 {

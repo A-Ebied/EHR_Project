@@ -5,7 +5,7 @@ using EHR_MVC.DTOs.UserDataDTOs;
 using EHR_MVC.Extensions;
 using EHR_MVC.Models;
 using EHR_MVC.Repositories.Contracts;
-using EHR_MVC.VM.HealthFacility;
+using EHR_MVC.VM;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;

@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Login;
-using EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Registration;
+using EHR_MVC.DTOs.UserDataDTOs.RolesDTOs;
 using EHR_MVC.Extensions;
 using EHR_MVC.Models;
 using EHR_MVC.Repositories.Contracts;
+using EHR_MVC.VM;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System.Data;
 using System.Security.Claims;
@@ -22,13 +24,13 @@ namespace EHR_MVC.Controllers
             _mapper = mapper;
             _service = service;
         }
-       
+
         public async Task<IActionResult> Login()
         {
             LoginRequestDTO entity = new LoginRequestDTO();
             return View(entity);
         }
- 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginRequestDTO entity)
@@ -53,13 +55,13 @@ namespace EHR_MVC.Controllers
 
                         var principal = new ClaimsPrincipal(identity);
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-                        
+
                         HttpContext.Session.SetString(SD.JWT, response.Token);
                         return RedirectToAction(nameof(Index), "Home");
                     }
                     else
                     {
-                        if ( result != null && result.Errors != null )
+                        if (result != null && result.Errors != null)
                         {
                             for (int i = 0; i < result.Errors.Count; i++)
                             {
@@ -83,18 +85,46 @@ namespace EHR_MVC.Controllers
 
         public async Task<IActionResult> Register()
         {
-            return View();
+            RegisterVM register = new();
+            var respnse = await _service.GetRolesAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
+            if (respnse != null && respnse.IsSuccess)
+            {
+
+                register.Roles = JsonConvert.DeserializeObject<List<RolesDTO>>(
+                    Convert.ToString(respnse.Result)).Select(i => new SelectListItem()
+                    {
+                        Text = i.Name,
+                        Value = i.Name
+                    });
+            }
+            else
+            {
+                if (respnse != null && respnse.Errors != null)
+                {
+                    for (int i = 0; i < respnse.Errors.Count; i++)
+                    {
+                        ModelState.AddModelError("Error", respnse.Errors[i]);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "Unauthorized");
+                }
+            }
+
+            return View(register);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegistrationDataCreateDTO entity)
+        public async Task<IActionResult> Register(RegisterVM entity)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var respnse = await _service.RegisterAsync<APIResponse>(entity);
+                    
+                    var respnse = await _service.RegisterAsync<APIResponse>(entity.Register);
                     if (respnse != null && respnse.IsSuccess)
                     {
                         return RedirectToAction(nameof(Login));
@@ -115,12 +145,64 @@ namespace EHR_MVC.Controllers
                     }
                 }
 
+                var respnse1 = await _service.GetRolesAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
+                if (respnse1 != null && respnse1.IsSuccess)
+                {
+
+                    entity.Roles = JsonConvert.DeserializeObject<List<RolesDTO>>(
+                        Convert.ToString(respnse1.Result)).Select(i => new SelectListItem()
+                        {
+                            Text = i.Name,
+                            Value = i.Name
+                        });
+                }
+                else
+                {
+                    if (respnse1 != null && respnse1.Errors != null)
+                    {
+                        for (int i = 0; i < respnse1.Errors.Count; i++)
+                        {
+                            ModelState.AddModelError("Error", respnse1.Errors[i]);
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Error", "Unauthorized");
+                    }
+                }
+
                 return View(entity);
             }
             catch
             {
                 return View(entity);
             }
+        }
+
+        private async Task<List<RolesDTO>> PopulateRoles()
+        {
+            List<RolesDTO> items = new();
+            var respnse = await _service.GetRolesAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
+            if (respnse != null && respnse.IsSuccess)
+            {
+                items = JsonConvert.DeserializeObject<List<RolesDTO>>(
+                   Convert.ToString(respnse.Result));
+            }
+            else
+            {
+                if (respnse != null && respnse.Errors != null)
+                {
+                    for (int i = 0; i < respnse.Errors.Count; i++)
+                    {
+                        ModelState.AddModelError("Error", respnse.Errors[i]);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "Unauthorized");
+                }
+            }
+            return items;
         }
 
         public async Task<IActionResult> Logout()
