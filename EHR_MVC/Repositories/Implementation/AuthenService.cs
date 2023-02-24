@@ -1,8 +1,7 @@
 ﻿using EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Registration;
+using EHR_MVC.DTOs.UserDataDTOs.PersonalDataDTOs;
 using EHR_MVC.Repositories.Contracts;
-using NuGet.Common;
-using NuGet.Protocol.Plugins;
 using static EHR_MVC.Extensions.SD;
 
 namespace EHR_MVC.Repositories.Implementation
@@ -14,6 +13,27 @@ namespace EHR_MVC.Repositories.Implementation
         public AuthenService(IHttpClientFactory clientFactory, IConfiguration configuration) : base(clientFactory) 
         {
             _url = configuration.GetValue<string>("URLs:EHRAPI");
+        }
+
+        public Task<T> CreateUserPersonalDataAsync<T>(PersonalDataCreateDTO entity, string token = null)
+        {
+            return SendAsync<T>(new Models.APIRequest()
+            {
+                ApiType = ApiType.POST,
+                Data = entity,
+                URL = $"{_url}/api/PersonalDataAPI/CreateUserPersonalData",
+                Token = token
+            });
+        }
+
+        public Task<T> DeleteUserPersonalDataAsync<T>(string id, string token = null)
+        {
+            return SendAsync<T>(new Models.APIRequest()
+            {
+                ApiType = ApiType.DELETE,
+                URL = $"{_url}/api/PersonalDataAPI/{id}",
+                Token = token
+            });
         }
 
         public Task<T> GetHealthFacilityManagersAsync<T>(string token = null)
@@ -32,6 +52,16 @@ namespace EHR_MVC.Repositories.Implementation
             {
                 ApiType = ApiType.GET,
                 URL = $"{_url}/api/AuthenticationAPI/GetRoles",
+                Token = token
+            });
+        }
+
+        public Task<T> GetUserAsync<T>(string id, string token = null)
+        {
+            return SendAsync<T>(new Models.APIRequest()
+            {
+                ApiType = ApiType.GET,
+                URL = $"{_url}/api/AuthenticationAPI/{id}",
                 Token = token
             });
         }

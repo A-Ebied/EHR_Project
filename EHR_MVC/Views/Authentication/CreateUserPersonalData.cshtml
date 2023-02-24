@@ -1,0 +1,85 @@
+﻿@model EHR_MVC.DTOs.UserDataDTOs.PersonalDataDTOs.PersonalDataCreateDTO
+
+@{
+    ViewData["Title"] = "CreateUserPersonalData";
+}
+
+<h1>CreateUserPersonalData</h1>
+
+<h4>PersonalDataCreateDTO</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateUserPersonalData" enctype="multipart/form-data">
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            @* @{
+            var c = @User.Claims;
+            var s = @User.Claims;
+            }*@
+            <input hidden asp-for="Id" value="@User.Claims.ToList()[0].Value" />
+            <div class="form-group">
+                <label asp-for="Occupation" class="control-label"></label>
+                <input asp-for="Occupation" class="form-control" />
+                <span asp-validation-for="Occupation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumOfChildren" class="control-label"></label>
+                <input asp-for="NumOfChildren" class="form-control" />
+                <span asp-validation-for="NumOfChildren" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BirthDate" class="control-label"></label>
+                <input asp-for="BirthDate" class="form-control" />
+                <span asp-validation-for="BirthDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GovernorateId" class="control-label"></label>
+                <input asp-for="GovernorateId" class="form-control" />
+                <span asp-validation-for="GovernorateId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Phone1" class="control-label"></label>
+                <input asp-for="Phone1" class="form-control" />
+                <span asp-validation-for="Phone1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmergencyPhone1" class="control-label"></label>
+                <input asp-for="EmergencyPhone1" class="form-control" />
+                <span asp-validation-for="EmergencyPhone1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmergencyPhone2" class="control-label"></label>
+                <input asp-for="EmergencyPhone2" class="form-control" />
+                <span asp-validation-for="EmergencyPhone2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gender" class="control-label"></label>
+                <input asp-for="Gender" class="form-control" />
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group m-2">
+                Image:<input class="form-control" accept="image/*" type="file" name="image" id="upFile1" />
+            </div>
+             
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+ 
+    </div>
+</div>
+
+<div>
+    <a asp-action="UserData">Back to My Data</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

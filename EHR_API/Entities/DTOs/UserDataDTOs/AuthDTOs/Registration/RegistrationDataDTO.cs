@@ -18,10 +18,10 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration
         public DateTime UpdateddAt { get; set; }
 
         public IEnumerable<string> Roles { get; set; }  
-        public PersonalDataDTOForOthers PersonalData { get; set; }
-        public InsuranceDataDTOForOthers InsuranceData { get; set; }
-        public MedicalDataDTOForOthers MedicalData { get; set; }
-        public MedicalTeamDTOForOthers MedicalTeam { get; set; }
-        public PatientDTOForOthers Patient { get; set; }
+        public PersonalDataDTO PersonalData { get; set; }
+        public MedicalDataDTO MedicalData { get; set; }
+        public InsuranceDataDTO InsuranceData { get; set; }
+        public MedicalTeamDTO MedicalTeam { get; set; }
+        public PatientDTO Patient { get; set; }
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EHRAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230221231315_add")]
+    [Migration("20230223104453_add")]
     partial class add
     {
         /// <inheritdoc />
@@ -50,44 +50,44 @@ namespace EHRAPI.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(420),
                             Title = "القاهرة",
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            UpdateddAt = new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(453)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(461),
                             Title = "الجيزة",
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            UpdateddAt = new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(464)
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(469),
                             Title = "مطروح",
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            UpdateddAt = new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(472)
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(476),
                             Title = "شمال سيناء",
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            UpdateddAt = new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(478)
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(503),
                             Title = "الشرقية",
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            UpdateddAt = new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(506)
                         },
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(511),
                             Title = "الدقهلية",
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            UpdateddAt = new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(514)
                         });
                 });
 
@@ -124,7 +124,6 @@ namespace EHRAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RegistrationDataId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("SubordinateTo")
@@ -141,10 +140,9 @@ namespace EHRAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("RegistrationDataId")
-                        .HasName("AlternateKey_RegistrationDataId");
-
                     b.HasIndex("GovernorateId");
+
+                    b.HasIndex("RegistrationDataId");
 
                     b.ToTable("HealthFacilities");
 
@@ -153,7 +151,7 @@ namespace EHRAPI.Migrations
                         {
                             Id = 1,
                             Address = "Address1",
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 2, 23, 12, 44, 53, 86, DateTimeKind.Local).AddTicks(2706),
                             Description = "Description1",
                             Email = "m@gmail.com",
                             GovernorateId = 1,
@@ -164,13 +162,13 @@ namespace EHRAPI.Migrations
                             SubordinateTo = "المؤسسة العسكرية",
                             Title = "المستشفى العسكري بالشرقية",
                             Type = "مستشفى عسكري",
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            UpdateddAt = new DateTime(2023, 2, 23, 12, 44, 53, 86, DateTimeKind.Local).AddTicks(2724)
                         },
                         new
                         {
                             Id = 2,
                             Address = "Address2",
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 2, 23, 12, 44, 53, 86, DateTimeKind.Local).AddTicks(2729),
                             Description = "Description2",
                             Email = "a@gmail.com",
                             GovernorateId = 1,
@@ -181,13 +179,13 @@ namespace EHRAPI.Migrations
                             SubordinateTo = "وزارة الصحة",
                             Title = "المستشفى العام بالعريش",
                             Type = "مستشفى عام",
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            UpdateddAt = new DateTime(2023, 2, 23, 12, 44, 53, 86, DateTimeKind.Local).AddTicks(2731)
                         },
                         new
                         {
                             Id = 3,
                             Address = "Address3",
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 2, 23, 12, 44, 53, 86, DateTimeKind.Local).AddTicks(2734),
                             Description = "Description3",
                             Email = "j@gmail.com",
                             GovernorateId = 1,
@@ -198,7 +196,7 @@ namespace EHRAPI.Migrations
                             SubordinateTo = "مستشفيات الجامعة",
                             Title = "مستشفى الجامعة بالزقازيق",
                             Type = "مستشفى جامعي",
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            UpdateddAt = new DateTime(2023, 2, 23, 12, 44, 53, 86, DateTimeKind.Local).AddTicks(2736)
                         });
                 });
 
@@ -425,17 +423,19 @@ namespace EHRAPI.Migrations
                         {
                             Id = "12345678912345",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "943985e5-f274-4e8d-8366-2c212652d789",
+                            ConcurrencyStamp = "32f0eef8-9fcc-490f-a30a-9e29fd4be25e",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "k@gmail.com",
                             EmailConfirmed = false,
                             FullName = "أحمد محمد كمال",
                             LockoutEnabled = false,
                             Nationality = "مصري",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFa2nSomuLEWwBkVHYiyqYBEd45oUZmsBgD2GYb2vr5sY1kRh2CMGKkZw8CMkxk+/w==",
+                            NormalizedEmail = "K@GMAIL.COM",
+                            NormalizedUserName = "@KAMAL123",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGRDODo4tC0AXIvXvIo9pPKgoeA/SZfpsQOyOcSxh45cqwd9Z1tujFDaEuB8E4yWFw==",
                             PhoneNumber = "01234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "3ccac4c4-6511-44fb-9ecb-889d5abe4e0e",
+                            SecurityStamp = "a24c5725-7ff6-4c7a-ad0e-31faa5f20db9",
                             TwoFactorEnabled = false,
                             UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "@Kamal123"
@@ -444,17 +444,19 @@ namespace EHRAPI.Migrations
                         {
                             Id = "12345678902341",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d8659b5e-a35c-4eaf-ab49-e24fd11e3fe5",
+                            ConcurrencyStamp = "b7800ff5-b486-4e03-840d-bae84ba9216e",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "A@gmail.com",
                             EmailConfirmed = false,
                             FullName = "أحمد محمد أحمد",
                             LockoutEnabled = false,
                             Nationality = "مصري",
-                            PasswordHash = "AQAAAAIAAYagAAAAEG4l4bQE/3JM6+xJku0tVBOEK4/fyIWw8dpDeWZdR5e6BocyqBBudiOMx65UVcI/+g==",
+                            NormalizedEmail = "A@GMAIL.COM",
+                            NormalizedUserName = "@AHMED123",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEaF7eCZ1rTM+3Ld61A0l0jkbIP3AkCMzaTnrX/oQpQPhqEKRMX4TE7U9KAe0p+sIQ==",
                             PhoneNumber = "",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7f58dba5-c354-4855-9b6b-d373909be64e",
+                            SecurityStamp = "ccefc028-03b0-46fb-8292-50d9cd4d15b2",
                             TwoFactorEnabled = false,
                             UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "@Ahmed123"
@@ -463,17 +465,19 @@ namespace EHRAPI.Migrations
                         {
                             Id = "12345678921345",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f5288dea-6ce7-4574-95bc-7b9d60cccd16",
+                            ConcurrencyStamp = "4e89614d-3d34-4af7-92fc-5099b85f3f8c",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "M@gmail.com",
                             EmailConfirmed = false,
                             FullName = "أحمد محمد محمد",
                             LockoutEnabled = false,
                             Nationality = "مصري",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKIDLR4dCEVRi0ErgJis/KjLO20Yo42l9142vnLsRS6PCWW7ve2RPZ0+y+eReN4qtw==",
+                            NormalizedEmail = "M@GMAIL.COM",
+                            NormalizedUserName = "@MUHAMMAD123",
+                            PasswordHash = "AQAAAAIAAYagAAAAEASmkRNJGaZvyRSIFvxLoIrLJ4vuTANxyb03t23dNA4vm3jX3OaHUdZQp0nRE2AjVQ==",
                             PhoneNumber = "01234567899",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a6387aa3-96ac-4824-9ad5-258160da70ce",
+                            SecurityStamp = "72146f97-1ef2-484c-8a2f-a7c3b1c840b7",
                             TwoFactorEnabled = false,
                             UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "@Muhammad123"
@@ -482,17 +486,19 @@ namespace EHRAPI.Migrations
                         {
                             Id = "92345678912345",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8945ed1a-3189-4257-a948-c5094454d7bb",
+                            ConcurrencyStamp = "0d64d543-19ff-4bad-aadf-2c7658b01ebf",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "Al@gmail.com",
                             EmailConfirmed = false,
                             FullName = "أحمد محمد علي",
                             LockoutEnabled = false,
                             Nationality = "مصري",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIMPk0XV8pmm3L54bMXxqIhUKMSoWf8OgS8EAS2Uzs6YxhhG5cgd8ypAYGRxxUoTmg==",
+                            NormalizedEmail = "AL@GMAIL.COM",
+                            NormalizedUserName = "@ALI123",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFjdeFFq4USTgl/Z4LTonI4HzsuvXoxho8SfJZVEi4rkFl4BQppjXBAcgOxqNxCjfQ==",
                             PhoneNumber = "01234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "4ffe54d5-d488-4069-8407-77b13bea06f4",
+                            SecurityStamp = "8374da3b-f3b0-41b1-833c-e53dcb3eac31",
                             TwoFactorEnabled = false,
                             UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "@Ali123"
@@ -749,10 +755,8 @@ namespace EHRAPI.Migrations
                         .IsRequired();
 
                     b.HasOne("EHR_API.Entities.Models.UsersData.RegistrationData", "RegistrationData")
-                        .WithOne("HealthFacility")
-                        .HasForeignKey("EHR_API.Entities.Models.HealthFacility", "RegistrationDataId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("HealthFacilities")
+                        .HasForeignKey("RegistrationDataId");
 
                     b.Navigation("Governorate");
 
@@ -896,7 +900,7 @@ namespace EHRAPI.Migrations
 
             modelBuilder.Entity("EHR_API.Entities.Models.UsersData.RegistrationData", b =>
                 {
-                    b.Navigation("HealthFacility");
+                    b.Navigation("HealthFacilities");
 
                     b.Navigation("InsuranceData");
 

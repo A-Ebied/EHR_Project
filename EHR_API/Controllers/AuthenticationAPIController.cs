@@ -7,6 +7,7 @@ using EHR_API.Entities.DTOs.UserDataDTOs.UserRolesDTOs;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
@@ -348,31 +349,34 @@ namespace EHR_API.Controllers
         }
         */
 
-        /*
-        [Authorize]
-        [HttpGet("{id}", Name = "GetUser")]
+
+        //[Authorize]
+        [HttpGet("{id}")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> GetUser(string id, [FromHeader] string jwtToken = null)
+        public async Task<ActionResult<APIResponse>> GetUser(string id)
         {
             try
             {
                 if (id == null)
                 {
-                    return BadRequest(APIResponses.BadRequest("Id is null"));
+                    return BadRequest(APIResponses.BadRequest("userName is null"));
                 }
 
+                var jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
                 var entity = new RegistrationData();
                 string headerRole = null;
+                string headerId = null;
                 if (jwtToken != null)
                 {
                     var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
-                    headerRole = user.Claims.ToList()[3].Value;
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
 
-                    if (headerRole == SD.Physician || headerRole == SD.Nurse || headerRole == SD.HealthFacilityManager || headerRole == SD.Pharmacist || headerRole == SD.Technician)
+                    if (headerRole == SD.Physician || headerRole == SD.Nurse || headerRole == SD.HealthFacilityManager || headerRole == SD.Pharmacist || headerRole == SD.Technician || headerId == id)
                     {
                         entity = await _db._authentication.GetAsync(
                                  expression: g => g.Id == id,
@@ -407,7 +411,6 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
-        */
 
         [HttpGet("GetRoles")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]

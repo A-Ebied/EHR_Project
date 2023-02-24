@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Login;
+using EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Registration;
+using EHR_MVC.DTOs.UserDataDTOs.PersonalDataDTOs;
 using EHR_MVC.DTOs.UserDataDTOs.RolesDTOs;
 using EHR_MVC.Extensions;
 using EHR_MVC.Models;
@@ -11,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System.Data;
+using System.Reflection.Metadata;
 using System.Security.Claims;
 
 namespace EHR_MVC.Controllers
@@ -46,6 +49,7 @@ namespace EHR_MVC.Controllers
                     Convert.ToString(result.Result));
 
                         var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+                        identity.AddClaim(new Claim("User Id", response.User.Id));
                         identity.AddClaim(new Claim("UserName", response.User.UserName));
                         identity.AddClaim(new Claim("User Email", response.User.Email));
                         foreach (var role in response.Roles)
@@ -123,7 +127,7 @@ namespace EHR_MVC.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    
+
                     var respnse = await _service.RegisterAsync<APIResponse>(entity.Register);
                     if (respnse != null && respnse.IsSuccess)
                     {
@@ -179,14 +183,110 @@ namespace EHR_MVC.Controllers
             }
         }
 
-        private async Task<List<RolesDTO>> PopulateRoles()
+        public async Task<IActionResult> Logout()
         {
-            List<RolesDTO> items = new();
-            var respnse = await _service.GetRolesAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
+            await HttpContext.SignOutAsync();
+            HttpContext.Session.SetString(SD.JWT, "");
+            return RedirectToAction(nameof(Index), "Home");
+        }
+
+        public async Task<IActionResult> AccessDenied()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> UserData(string id)
+        {
+
+            RegistrationDataDTO userData = new();
+            var respnse = await _service.GetUserAsync<APIResponse>(id, HttpContext.Session.GetString(SD.JWT));
             if (respnse != null && respnse.IsSuccess)
             {
-                items = JsonConvert.DeserializeObject<List<RolesDTO>>(
-                   Convert.ToString(respnse.Result));
+
+                userData = JsonConvert.DeserializeObject<RegistrationDataDTO>(Convert.ToString(respnse.Result));
+            }
+            else
+            {
+                if (respnse != null && respnse.Errors != null)
+                {
+                    for (int i = 0; i < respnse.Errors.Count; i++)
+                    {
+                        ModelState.AddModelError("Error", respnse.Errors[i]);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "Error");
+                }
+            }
+
+            return View(userData);
+        }
+        public async Task<IActionResult> CreateUserPersonalData()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateUserPersonalData(PersonalDataCreateDTO entity, IFormFile image)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (image != null)
+                    {
+                        using (var ms = new MemoryStream())
+                        {
+                            image.CopyTo(ms);
+                            var fileBytes = ms.ToArray();
+                           
+                            entity.UserImage = fileBytes;
+                            entity.ImageName = image.FileName;
+                        }
+                    }
+
+                    var respnse = await _service.CreateUserPersonalDataAsync<APIResponse>(entity, HttpContext.Session.GetString(SD.JWT));
+                    if (respnse != null && respnse.IsSuccess)
+                    {
+                        return RedirectToAction(nameof(UserData), new { id = entity.Id });
+                    }
+                    else
+                    {
+                        if (respnse != null && respnse.Errors != null)
+                        {
+                            for (int i = 0; i < respnse.Errors.Count; i++)
+                            {
+                                ModelState.AddModelError("Error", respnse.Errors[i]);
+                            }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("Error", "The user has data");
+                        }
+                    }
+                }
+
+                return View(entity);
+            }
+            catch
+            {
+                return View(entity);
+            }
+        }
+
+        public async Task<IActionResult> DeletePersonalData(string id)
+        {
+            RegistrationDataDTO entity = new();
+
+            var respnse = await _service.GetUserAsync<APIResponse>(id, HttpContext.Session.GetString(SD.JWT));
+            if (respnse != null && respnse.IsSuccess)
+            {
+                entity = JsonConvert.DeserializeObject<RegistrationDataDTO>(
+                    Convert.ToString(respnse.Result));
+
+                return View(_mapper.Map<PersonalDataDTOForOthers>(entity.PersonalData));
             }
             else
             {
@@ -202,19 +302,43 @@ namespace EHR_MVC.Controllers
                     ModelState.AddModelError("Error", "Unauthorized");
                 }
             }
-            return items;
+
+            return NotFound(entity);
         }
 
-        public async Task<IActionResult> Logout()
-        {
-            await HttpContext.SignOutAsync();
-            HttpContext.Session.SetString(SD.JWT, "");
-            return RedirectToAction(nameof(Index), "Home");
-        }
 
-        public async Task<IActionResult> AccessDenied()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeletePersonalData(PersonalDataDTOForOthers entity)
         {
-            return View();
+            try
+            {
+                var respnse = await _service.DeleteUserPersonalDataAsync<APIResponse>(entity.Id, HttpContext.Session.GetString(SD.JWT));
+                if (respnse != null && respnse.IsSuccess)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    if (respnse != null && respnse.Errors != null)
+                    {
+                        for (int i = 0; i < respnse.Errors.Count; i++)
+                        {
+                            ModelState.AddModelError("Error", respnse.Errors[i]);
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Error", "Error");
+                    }
+                }
+
+                return View(entity);
+            }
+            catch
+            {
+                return View(entity);
+            }
         }
     }
 }

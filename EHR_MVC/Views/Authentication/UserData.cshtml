@@ -1,0 +1,209 @@
+﻿@model EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Registration.RegistrationDataDTO
+
+@{
+    ViewData["Title"] = "MyData";
+}
+
+
+<br />
+<hr />
+<h1 style="text-align:center">My Data</h1>
+<hr />
+<br />
+<div class="col-md-5 m-auto">
+
+    <h4> Registration Data </h4>
+    <dl class="row">
+        @if (User.Claims.ToList()[0].Value == Model.UserName)
+        {
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Id)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Id)
+            </dd>
+        }
+
+
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Nationality)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Nationality)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.FullName)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.FullName)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+
+         @if (User.Claims.ToList()[0].Value == Model.UserName)
+        {
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.CreatedAt)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.CreatedAt)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.UpdateddAt)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.UpdateddAt)
+        </dd>
+        }
+
+    </dl>
+</div>
+
+@if (Model.PersonalData != null)
+{
+    <div class="col-md-5 m-auto">
+
+        <h4> Personal Data </h4>
+        <tr>
+            <td>
+                <a asp-route-id="@User.Claims.ToList()[0].Value" asp-action="DeletePersonalData" class="btn btn-danger col-12"> Delete </a>
+            </td>
+        </tr>
+        <dl class="row">
+            @if (User.Claims.ToList()[0].Value == Model.UserName)
+            {
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Id)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Id)
+                </dd>
+            }
+
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.PersonalData.UserImageUrl)
+            </dt>
+            <dd class="col-sm-8">
+                <img src="@Model.PersonalData.UserImageUrl" class="card-img-top" alt="@Model.FullName" />
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.PersonalData.Occupation)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.PersonalData.Occupation)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.PersonalData.BirthDate)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.PersonalData.BirthDate)
+            </dd> 
+            <dt class="col-sm-4">
+                etc
+            </dt>
+            <dd class="col-sm-8">
+                -----------------
+            </dd>
+            @if (User.Claims.ToList()[0].Value == Model.UserName)
+            {
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.PersonalData.CreatedAt)
+                    </dt>
+                    <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.PersonalData.CreatedAt)
+                    </dd>
+                    <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.PersonalData.UpdateddAt)
+                    </dt>
+                    <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.PersonalData.UpdateddAt)
+                </dd>
+            }
+
+        </dl>
+    </div>
+}
+
+@if (Model.MedicalData != null)
+{
+    <div class="col-md-5 m-auto">
+
+        <h4> Medical Data </h4>
+        <dl class="row">
+            @if (User.Claims.ToList()[0].Value == Model.UserName)
+            {
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Id)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Id)
+                </dd>
+            }
+
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.MedicalData.BloodGroup)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.MedicalData.BloodGroup)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.MedicalData.MedicalHistory)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.MedicalData.MedicalHistory)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.MedicalData.FamilyHistory)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.MedicalData.FamilyHistory)
+            </dd>
+            
+            <dt class="col-sm-4">
+                etc
+            </dt>
+            <dd class="col-sm-8">
+                -----------------
+            </dd>
+            @if (User.Claims.ToList()[0].Value == Model.UserName)
+            {
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.MedicalData.CreatedAt)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.MedicalData.CreatedAt)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.MedicalData.UpdateddAt)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.MedicalData.UpdateddAt)
+                </dd>
+            }
+
+        </dl>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>

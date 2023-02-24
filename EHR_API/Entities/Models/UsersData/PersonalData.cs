@@ -9,7 +9,9 @@ namespace EHR_API.Entities.Models.UsersData
         public string Id { get; set; }
         public string UserImageUrl { get; set; }
         [NotMapped]
-        public IFormFile UserImage { get; set; }
+        public byte[] UserImage { get; set; }
+        [NotMapped]
+        public string ImageName { get; set; }
         public string Occupation { get; set; } // مهنة
         public int NumOfChildren { get; set; }
         public DateTime BirthDate { get; set; }

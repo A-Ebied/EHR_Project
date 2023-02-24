@@ -19,7 +19,9 @@ namespace EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Registration
         [MaxLength(11, ErrorMessage = "The maximum length is 11 characters")]
         public string PhoneNumber { get; set; }
 
+        //[Required]
+        //public ICollection<string> Roles { get; set; } 
         [Required]
-        public ICollection<string> Roles { get; set; } 
+        public string Role { get; set; }
     }
 }

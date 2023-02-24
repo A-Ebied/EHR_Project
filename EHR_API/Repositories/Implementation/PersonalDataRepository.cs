@@ -3,6 +3,7 @@ using EHR_API.Entities.Models;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using System.Collections;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace EHR_API.Repositories.Implementation
@@ -20,9 +21,11 @@ namespace EHR_API.Repositories.Implementation
 
         public override async Task CreateAsync(PersonalData entity)
         {
+            
+
             if (entity.UserImage != null)
             {
-                var path = CreateImage.CreateFiles(_webHost, entity.UserImage, "UserImage");
+                var path = CreateImage.CreateFiles(_webHost, entity.UserImage, entity.ImageName, "UserImage");
                 entity.UserImageUrl = path;
             }
 
@@ -43,8 +46,8 @@ namespace EHR_API.Repositories.Implementation
                     }
                 }
 
-                var path = CreateImage.CreateFiles(_webHost, entity.UserImage, "UserImage");
-                entity.UserImageUrl = path;
+                //var path = CreateImage.CreateFiles(_webHost, entity.UserImage, "UserImage");
+                //entity.UserImageUrl = path;
             }
 
             _dbSet.Update(entity);

@@ -39,7 +39,7 @@ namespace EHR_API.Repositories.Implementation
             
             if (result.Succeeded)
             {
-                await _userManager.AddToRolesAsync(user, registrationDataDTO.Roles); 
+                await _userManager.AddToRolesAsync(user, new List<string>() { registrationDataDTO.Role }); 
             }
 
             return result;
@@ -65,15 +65,7 @@ namespace EHR_API.Repositories.Implementation
             var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
 
             var tokenValue = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-            /*IdentityUserToken<string> userToken = new()
-            //{
-            //    Name = _user.UserName,
-            //    LoginProvider = "",
-            //    UserId= _user.Id,
-            //    Value = tokenValue
-            //};
-            await _userManager.SetAuthenticationTokenAsync(_user, "EHR", _user.UserName, tokenValue);
-           */
+           
             return tokenValue; 
         }
 
@@ -147,7 +139,7 @@ namespace EHR_API.Repositories.Implementation
 
         public async Task<RegistrationData> GetAsync(Expression<Func<RegistrationData, bool>> expression, string includeProperties = null)
         {
-            IQueryable<RegistrationData> entity = _userManager.Users;
+            var entity = _userManager.Users;
             entity = expression != null ? entity.Where(expression) : entity;
 
             if (includeProperties != null)

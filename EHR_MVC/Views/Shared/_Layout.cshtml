@@ -1,4 +1,5 @@
 ﻿@using EHR_MVC.Extensions;
+@using System.Security.Claims;
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor accessor
 <!DOCTYPE html>
 <html lang="en">
@@ -24,18 +25,32 @@
                         <li class="nav-item">
                             <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @if (accessor.HttpContext.Session.GetString(SD.JWT) != null && accessor.HttpContext.Session.GetString(SD.JWT).ToString().Length > 0)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">User Data</a>
+                                <div class="dropdown-menu">
+                                    @*@if (User.IsInRole(SD.SystemManager))
+                                    {
+                                        <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">All Users</a>
+                                    }*@
+                                    <a class="dropdown-item" asp-route-id="@User.Claims.ToList()[0].Value" asp-controller="Authentication" asp-action="UserData"> My Data</a>
+                                    <a class="dropdown-item"  asp-controller="Authentication" asp-action="CreateUserPersonalData"> Create Personal Data</a>
+                                </div>
+                            </li>
+                        }
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Governorate</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" asp-area="" asp-controller="Governorate" asp-action="Index">Governorates</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Governorate" asp-action="Create">Create Governorate</a>
+                                <a class="dropdown-item"  asp-controller="Governorate" asp-action="Index">Governorates</a>
+                                <a class="dropdown-item"  asp-controller="Governorate" asp-action="Create">Create Governorate</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Health Facility</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" asp-area="" asp-controller="HealthFacility" asp-action="Index">Health Facilities</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="HealthFacility" asp-action="Create">Create Health Facility</a>
+                                <a class="dropdown-item"  asp-controller="HealthFacility" asp-action="Index">Health Facilities</a>
+                                <a class="dropdown-item" asp-controller="HealthFacility" asp-action="Create">Create Health Facility</a>
                             </div>
                         </li>
                     </ul>
@@ -43,7 +58,7 @@
                     <input class="form-control me-sm-2" type="search" placeholder="Search">
                     <button class="btn btn-secondary my-2 my-sm-0" type="submit" fdprocessedid="aifn49">Search</button>
                     </form>*@
-                    
+
 
                     @if (accessor.HttpContext.Session.GetString(SD.JWT) != null && accessor.HttpContext.Session.GetString(SD.JWT).ToString().Length > 0)
                     {
