@@ -20,7 +20,7 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration
         public IEnumerable<string> Roles { get; set; }  
         public PersonalDataDTO PersonalData { get; set; }
         public MedicalDataDTO MedicalData { get; set; }
-        public InsuranceDataDTO InsuranceData { get; set; }
+        public UserInsuranceDTO UserInsurance { get; set; }
         public MedicalTeamDTO MedicalTeam { get; set; }
     }
 }

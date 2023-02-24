@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using EHR_MVC.DTOs.GovernorateDTOs;
 using EHR_MVC.DTOs.HealthFacilityDTOs;
-using EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Registration;
-using EHR_MVC.DTOs.UserDataDTOs.InsuranceDataDTOS;
 using EHR_MVC.DTOs.UserDataDTOs.MedicalDataDTOS;
 using EHR_MVC.DTOs.UserDataDTOs.MedicalTeamDTOs;
 using EHR_MVC.DTOs.UserDataDTOs.PersonalDataDTOs;
@@ -43,11 +41,7 @@ namespace EHR_MVC.Models
             CreateMap<MedicalDataDTO, MedicalDataCreateDTO>().ReverseMap();
             CreateMap<MedicalDataDTO, MedicalDataUpdateDTO>().ReverseMap();
             CreateMap<MedicalDataDTO, MedicalDataDTOForOthers>().ReverseMap();
-
-            CreateMap<InsuranceDataDTO, InsuranceDataCreateDTO>().ReverseMap();
-            CreateMap<InsuranceDataDTO, InsuranceDataUpdateDTO>().ReverseMap();
-            CreateMap<InsuranceDataDTO, InsuranceDataDTOForOthers>().ReverseMap();
-
+ 
             CreateMap<UserInsuranceDTO, UserInsuranceCreateDTO>().ReverseMap();
             CreateMap<UserInsuranceDTO, UserInsuranceUpdateDTO>().ReverseMap();
             CreateMap<UserInsuranceDTO, UserInsuranceDTOForOthers>().ReverseMap();

@@ -13,7 +13,7 @@ namespace EHR_API.Entities.Models.UsersData
         public DateTime CreatedAt { get; set; } 
         public DateTime UpdateddAt { get; set; }
 
-        public string InsuranceDataId { get; set; }
-        public InsuranceData InsuranceData { get; set; }
+        public string RegistrationDataId { get; set; }
+        public RegistrationData RegistrationData { get; set; }
     }
 }

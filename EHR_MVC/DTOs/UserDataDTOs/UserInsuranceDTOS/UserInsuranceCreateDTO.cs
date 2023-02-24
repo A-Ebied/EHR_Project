@@ -7,12 +7,12 @@ namespace EHR_MVC.DTOs.UserDataDTOs.UserInsuranceDTOS
         [Required]
         public string InsuranceNo { get; set; }
         [Required]
+        public string InsuranceType { get; set; }
+        [Required]
         public string InsuranceOrganizationName { get; set; }
         [Required]
         public string RelationshipWithOrganization { get; set; }
         [Required]
-        public string InsuranceType { get; set; }
-        [Required]
-        public string InsuranceDataId { get; set; }
+        public string RegistrationDataId { get; set; }
     }
 }

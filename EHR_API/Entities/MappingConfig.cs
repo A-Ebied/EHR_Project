@@ -2,7 +2,6 @@
 using EHR_API.Entities.DTOs.GovernorateDTOs;
 using EHR_API.Entities.DTOs.HealthFacilityDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs;
-using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
 using EHR_API.Entities.DTOs.UserDataDTOs.UserRolesDTOs;
@@ -49,12 +48,7 @@ namespace EHR_API.Entities
             CreateMap<MedicalData, MedicalDataUpdateDTO>().ReverseMap();
             CreateMap<MedicalData, MedicalDataDTO>().ReverseMap();
             CreateMap<MedicalData, MedicalDataDTOForOthers>().ReverseMap();
-
-            CreateMap<InsuranceData, InsuranceDataCreateDTO>().ReverseMap();
-            CreateMap<InsuranceData, InsuranceDataUpdateDTO>().ReverseMap();
-            CreateMap<InsuranceData, InsuranceDataDTO>().ReverseMap();
-            CreateMap<InsuranceData, InsuranceDataDTOForOthers>().ReverseMap();
-
+ 
             CreateMap<UserInsurance, UserInsuranceCreateDTO>().ReverseMap();
             CreateMap<UserInsurance, UserInsurancesCreateDTO>().ReverseMap();
             CreateMap<UserInsurance, UserInsuranceUpdateDTO>().ReverseMap();

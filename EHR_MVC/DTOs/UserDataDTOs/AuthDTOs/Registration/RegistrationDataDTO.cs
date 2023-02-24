@@ -1,10 +1,8 @@
-﻿using EHR_MVC.DTOs.UserDataDTOs.InsuranceDataDTOS;
-using EHR_MVC.DTOs.UserDataDTOs.MedicalDataDTOS;
+﻿using EHR_MVC.DTOs.UserDataDTOs.MedicalDataDTOS;
 using EHR_MVC.DTOs.UserDataDTOs.MedicalTeamDTOs;
 using EHR_MVC.DTOs.UserDataDTOs.PersonalDataDTOs;
-using EHR_MVC.DTOs.HealthFacilityDTOs;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+using EHR_MVC.DTOs.UserDataDTOs.UserInsuranceDTOS;
 
 namespace EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Registration
 {
@@ -23,7 +21,7 @@ namespace EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Registration
 
         public IEnumerable<string> Roles { get; set; }
         public PersonalDataDTO PersonalData { get; set; }
-        public InsuranceDataDTO InsuranceData { get; set; }
+        public UserInsuranceDTO UserInsurance { get; set; }
         public MedicalDataDTO MedicalData { get; set; }
         public MedicalTeamDTO MedicalTeam { get; set; }
     }
