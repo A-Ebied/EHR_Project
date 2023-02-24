@@ -6,9 +6,8 @@ namespace EHR_MVC.DTOs.UserDataDTOs.PersonalDataDTOs
     {
         [Required]
         public string Id { get; set; }
-        //public string UserImageUrl { get; set; }
-        //public string IdImageUrl { get; set; }
-        public IFormFile UserImage { get; set; }
+        public byte[] UserImage { get; set; }
+        public string ImageName { get; set; }
         public string Occupation { get; set; }
         public int NumOfChildren { get; set; }
         [Required]

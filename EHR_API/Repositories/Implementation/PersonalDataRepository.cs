@@ -40,14 +40,14 @@ namespace EHR_API.Repositories.Implementation
                 if (oldEntity.UserImageUrl != null)
                 {
                     var oldPath = Path.Combine(_webHost.WebRootPath, oldEntity.UserImageUrl.TrimStart('\\'));
-                    if (System.IO.File.Exists(oldPath))
+                    if (File.Exists(oldPath))
                     {
-                        System.IO.File.Delete(oldPath);
+                        File.Delete(oldPath);
                     }
                 }
 
-                //var path = CreateImage.CreateFiles(_webHost, entity.UserImage, "UserImage");
-                //entity.UserImageUrl = path;
+                var path = CreateImage.CreateFiles(_webHost, entity.UserImage, entity.ImageName, "UserImage");
+                entity.UserImageUrl = path;
             }
 
             _dbSet.Update(entity);

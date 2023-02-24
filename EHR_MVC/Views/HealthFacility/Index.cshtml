@@ -3,15 +3,19 @@
 @{
     ViewData["Title"] = "Index";
 }
+ 
+<br />
+<hr />
+<h1 style="text-align:center">Health Facilities</h1>
+<hr />
+<br />
 
-<h1>Health Facilities</h1>
+<div class="row m-2">
+    <a asp-action="Create" class="btn btn-primary col-12"> Create New </a>
+</div>
+<hr />
+<br />
 
-<p>
-    <a asp-action="Create">
-        <i class="bi bi-patch-plus-fill"></i>
-        Create New
-    </a>
-</p>
 <table class="table table-hover">
     <thead>
         <tr class="table-danger">

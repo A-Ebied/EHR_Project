@@ -13,6 +13,7 @@ namespace EHR_MVC.Repositories.Contracts
 
         Task<T> CreateUserPersonalDataAsync<T>(PersonalDataCreateDTO entity, string token = null);
         Task<T> DeleteUserPersonalDataAsync<T>(string id, string token = null);
+        Task<T> UpdateUserPersonalDataAsync<T>(string id, PersonalDataUpdateDTO entity, string token = null);
 
         Task<T> GetHealthFacilityManagersAsync<T>(string token = null);
         Task<T> GetRolesAsync<T>(string token = null);

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EHR_MVC.DTOs.GovernorateDTOs;
 using EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Registration;
 using EHR_MVC.DTOs.UserDataDTOs.PersonalDataDTOs;
@@ -13,7 +14,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System.Data;
-using System.Reflection.Metadata;
 using System.Security.Claims;
 
 namespace EHR_MVC.Controllers
@@ -22,10 +22,12 @@ namespace EHR_MVC.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IAuthenService _service;
-        public AuthenticationController(IMapper mapper, IAuthenService service)
+        private readonly IGovernorateService _govService;
+        public AuthenticationController(IMapper mapper, IAuthenService service, IGovernorateService govService)
         {
             _mapper = mapper;
             _service = service;
+            _govService = govService;
         }
 
         public async Task<IActionResult> Login()
@@ -224,12 +226,38 @@ namespace EHR_MVC.Controllers
         }
         public async Task<IActionResult> CreateUserPersonalData()
         {
-            return View();
+            PersonalDataVM personalData = new();
+            var respnse = await _govService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
+            if (respnse != null && respnse.IsSuccess)
+            {
+                personalData.GovernoratesList = JsonConvert.DeserializeObject<List<GovernorateDTOForOthers>>(
+                    Convert.ToString(respnse.Result)).Select(i => new SelectListItem()
+                    {
+                        Text = i.Title,
+                        Value = i.Id.ToString()
+                    });
+            }
+            else
+            {
+                if (respnse != null && respnse.Errors != null)
+                {
+                    for (int i = 0; i < respnse.Errors.Count; i++)
+                    {
+                        ModelState.AddModelError("Error", respnse.Errors[i]);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "Unauthorized");
+                }
+            }
+
+            return View(personalData);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateUserPersonalData(PersonalDataCreateDTO entity, IFormFile image)
+        public async Task<IActionResult> CreateUserPersonalData(PersonalDataVM entity, IFormFile image)
         {
             try
             {
@@ -242,15 +270,15 @@ namespace EHR_MVC.Controllers
                             image.CopyTo(ms);
                             var fileBytes = ms.ToArray();
                            
-                            entity.UserImage = fileBytes;
-                            entity.ImageName = image.FileName;
+                            entity.PersonalData.UserImage = fileBytes;
+                            entity.PersonalData.ImageName = image.FileName;
                         }
                     }
 
-                    var respnse = await _service.CreateUserPersonalDataAsync<APIResponse>(entity, HttpContext.Session.GetString(SD.JWT));
+                    var respnse = await _service.CreateUserPersonalDataAsync<APIResponse>(entity.PersonalData, HttpContext.Session.GetString(SD.JWT));
                     if (respnse != null && respnse.IsSuccess)
                     {
-                        return RedirectToAction(nameof(UserData), new { id = entity.Id });
+                        return RedirectToAction(nameof(UserData), new { id = entity.PersonalData.Id });
                     }
                     else
                     {
@@ -265,6 +293,32 @@ namespace EHR_MVC.Controllers
                         {
                             ModelState.AddModelError("Error", "The user has data");
                         }
+                    }
+                }
+
+                PersonalDataVM personalData = new();
+                var respnse1 = await _govService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
+                if (respnse1 != null && respnse1.IsSuccess)
+                {
+                    personalData.GovernoratesList = JsonConvert.DeserializeObject<List<GovernorateDTOForOthers>>(
+                        Convert.ToString(respnse1.Result)).Select(i => new SelectListItem()
+                        {
+                            Text = i.Title,
+                            Value = i.Id.ToString()
+                        });
+                }
+                else
+                {
+                    if (respnse1 != null && respnse1.Errors != null)
+                    {
+                        for (int i = 0; i < respnse1.Errors.Count; i++)
+                        {
+                            ModelState.AddModelError("Error", respnse1.Errors[i]);
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Error", "Unauthorized");
                     }
                 }
 
@@ -306,7 +360,6 @@ namespace EHR_MVC.Controllers
             return NotFound(entity);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeletePersonalData(PersonalDataDTOForOthers entity)
@@ -316,7 +369,7 @@ namespace EHR_MVC.Controllers
                 var respnse = await _service.DeleteUserPersonalDataAsync<APIResponse>(entity.Id, HttpContext.Session.GetString(SD.JWT));
                 if (respnse != null && respnse.IsSuccess)
                 {
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(UserData), new { id = entity.Id });
                 }
                 else
                 {
@@ -338,6 +391,84 @@ namespace EHR_MVC.Controllers
             catch
             {
                 return View(entity);
+            }
+        }
+
+        public async Task<IActionResult> UpdatePersonalData(string id)
+        {
+            RegistrationDataDTO entity = new();
+            var respnse = await _service.GetUserAsync<APIResponse>(id, HttpContext.Session.GetString(SD.JWT));
+            if (respnse != null && respnse.IsSuccess)
+            {
+                entity = JsonConvert.DeserializeObject<RegistrationDataDTO>(
+                    Convert.ToString(respnse.Result));
+
+                return View(_mapper.Map<PersonalDataUpdateDTO>(entity.PersonalData));
+            }
+            else
+            {
+                if (respnse != null && respnse.Errors != null)
+                {
+                    for (int i = 0; i < respnse.Errors.Count; i++)
+                    {
+                        ModelState.AddModelError("Error", respnse.Errors[i]);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "Unauthorized");
+                }
+            }
+
+            return NotFound();
+        }
+ 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdatePersonalData(string id, PersonalDataUpdateDTO entity, IFormFile image)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (image != null)
+                    {
+                        using (var ms = new MemoryStream())
+                        {
+                            image.CopyTo(ms);
+                            var fileBytes = ms.ToArray();
+
+                            entity.UserImage = fileBytes;
+                            entity.ImageName = image.FileName;
+                        }
+                    }
+
+                    var respnse = await _service.UpdateUserPersonalDataAsync<APIResponse>(id, entity, HttpContext.Session.GetString(SD.JWT));
+                    if (respnse != null && respnse.IsSuccess)
+                    {
+                        return RedirectToAction(nameof(UserData), new { id = entity.Id });
+                    }
+                    else
+                    {
+                        if (respnse != null && respnse.Errors != null)
+                        {
+                            for (int i = 0; i < respnse.Errors.Count; i++)
+                            {
+                                ModelState.AddModelError("Error", respnse.Errors[i]);
+                            }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("Error", "Error");
+                        }
+                    }
+                }
+
+                return View(entity);
+            }
+            catch
+            {
+                return View();
             }
         }
     }

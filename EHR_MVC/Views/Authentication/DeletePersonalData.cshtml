@@ -14,7 +14,7 @@
             @Html.DisplayNameFor(model => model.UserImageUrl)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserImageUrl)
+            <img src="@Model.UserImageUrl" class="card-img-top" alt="No Image" />
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Occupation)
@@ -39,6 +39,6 @@
     
     <form asp-action="DeletePersonalData">
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="UserData" asp-route-id="@Model.Id">Back to My Data</a>
     </form>
 </div>

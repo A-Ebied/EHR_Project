@@ -63,7 +63,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpDelete("{id}", Name = "DeletePersonalData")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -95,7 +95,7 @@ namespace EHR_API.Controllers
         }
 
 
-        [HttpPut("{id}", Name = "UpdateUserPersonalData")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]

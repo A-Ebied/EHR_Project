@@ -1,4 +1,4 @@
-﻿@model EHR_MVC.DTOs.UserDataDTOs.PersonalDataDTOs.PersonalDataCreateDTO
+﻿@model EHR_MVC.VM.PersonalDataVM
 
 @{
     ViewData["Title"] = "CreateUserPersonalData";
@@ -18,51 +18,53 @@
             var c = @User.Claims;
             var s = @User.Claims;
             }*@
-            <input hidden asp-for="Id" value="@User.Claims.ToList()[0].Value" />
+            <input hidden asp-for="PersonalData.Id" value="@User.Claims.ToList()[0].Value" />
             <div class="form-group">
-                <label asp-for="Occupation" class="control-label"></label>
-                <input asp-for="Occupation" class="form-control" />
-                <span asp-validation-for="Occupation" class="text-danger"></span>
+                <label asp-for="PersonalData.Occupation" class="control-label"></label>
+                <input asp-for="PersonalData.Occupation" class="form-control" />
+                <span asp-validation-for="PersonalData.Occupation" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="NumOfChildren" class="control-label"></label>
-                <input asp-for="NumOfChildren" class="form-control" />
-                <span asp-validation-for="NumOfChildren" class="text-danger"></span>
+                <label asp-for="PersonalData.NumOfChildren" class="control-label"></label>
+                <input asp-for="PersonalData.NumOfChildren" class="form-control" />
+                <span asp-validation-for="PersonalData.NumOfChildren" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="BirthDate" class="control-label"></label>
-                <input asp-for="BirthDate" class="form-control" />
-                <span asp-validation-for="BirthDate" class="text-danger"></span>
+                <label asp-for="PersonalData.BirthDate" class="control-label"></label>
+                <input asp-for="PersonalData.BirthDate" class="form-control" />
+                <span asp-validation-for="PersonalData.BirthDate" class="text-danger"></span>
+            </div>
+           <div class="form-group">
+                <label asp-for="PersonalData.GovernorateId" class="control-label"></label>
+                <select asp-for="PersonalData.GovernorateId" class="form-select" asp-items="@Model.GovernoratesList">
+                    <option disabled selected>Select Governorate</option>
+                </select>
+                <span asp-validation-for="PersonalData.GovernorateId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="GovernorateId" class="control-label"></label>
-                <input asp-for="GovernorateId" class="form-control" />
-                <span asp-validation-for="GovernorateId" class="text-danger"></span>
+                <label asp-for="PersonalData.Address" class="control-label"></label>
+                <input asp-for="PersonalData.Address" class="form-control" />
+                <span asp-validation-for="PersonalData.Address" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
+                <label asp-for="PersonalData.Phone1" class="control-label"></label>
+                <input asp-for="PersonalData.Phone1" class="form-control" />
+                <span asp-validation-for="PersonalData.Phone1" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Phone1" class="control-label"></label>
-                <input asp-for="Phone1" class="form-control" />
-                <span asp-validation-for="Phone1" class="text-danger"></span>
+                <label asp-for="PersonalData.EmergencyPhone1" class="control-label"></label>
+                <input asp-for="PersonalData.EmergencyPhone1" class="form-control" />
+                <span asp-validation-for="PersonalData.EmergencyPhone1" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EmergencyPhone1" class="control-label"></label>
-                <input asp-for="EmergencyPhone1" class="form-control" />
-                <span asp-validation-for="EmergencyPhone1" class="text-danger"></span>
+                <label asp-for="PersonalData.EmergencyPhone2" class="control-label"></label>
+                <input asp-for="PersonalData.EmergencyPhone2" class="form-control" />
+                <span asp-validation-for="PersonalData.EmergencyPhone2" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EmergencyPhone2" class="control-label"></label>
-                <input asp-for="EmergencyPhone2" class="form-control" />
-                <span asp-validation-for="EmergencyPhone2" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Gender" class="control-label"></label>
-                <input asp-for="Gender" class="form-control" />
-                <span asp-validation-for="Gender" class="text-danger"></span>
+                <label asp-for="PersonalData.Gender" class="control-label"></label>
+                <input asp-for="PersonalData.Gender" class="form-control" />
+                <span asp-validation-for="PersonalData.Gender" class="text-danger"></span>
             </div>
             <div class="form-group m-2">
                 Image:<input class="form-control" accept="image/*" type="file" name="image" id="upFile1" />

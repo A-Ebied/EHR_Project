@@ -83,6 +83,11 @@
         <tr>
             <td>
                 <a asp-route-id="@User.Claims.ToList()[0].Value" asp-action="DeletePersonalData" class="btn btn-danger col-12"> Delete </a>
+                <br/>
+                <br/>
+                <a asp-route-id="@User.Claims.ToList()[0].Value" asp-action="UpdatePersonalData" class="btn btn-outline-primary col-12"> Update </a>
+                <br />
+                <br />
             </td>
         </tr>
         <dl class="row">
@@ -203,7 +208,6 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
+<div class="col-md-5 m-auto">
+    <a asp-controller="Home" asp-action="Index">Home</a>
 </div>

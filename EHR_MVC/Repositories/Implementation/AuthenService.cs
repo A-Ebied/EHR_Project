@@ -25,6 +25,16 @@ namespace EHR_MVC.Repositories.Implementation
                 Token = token
             });
         }
+        public Task<T> UpdateUserPersonalDataAsync<T>(string id, PersonalDataUpdateDTO entity, string token = null)
+        {
+            return SendAsync<T>(new Models.APIRequest()
+            {
+                ApiType = ApiType.PUT,
+                Data = entity,
+                URL = $"{_url}/api/PersonalDataAPI/{id}",
+                Token = token
+            });
+        }
 
         public Task<T> DeleteUserPersonalDataAsync<T>(string id, string token = null)
         {
@@ -85,5 +95,7 @@ namespace EHR_MVC.Repositories.Implementation
                 URL = $"{_url}/api/AuthenticationAPI/RegisterUser"
             });
         }
+
+        
     }
 }

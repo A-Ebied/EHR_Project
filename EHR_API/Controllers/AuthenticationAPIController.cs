@@ -457,7 +457,7 @@ namespace EHR_API.Controllers
 
                 if (headerRole == null)
                 {
-                    result = entities.Where(/*r => r.Name == SD.Patient*/r => r.Name == SD.Physician || r.Name == SD.Nurse || r.Name == SD.Pharmacist);
+                    result = entities.Where(r => r.Name == SD.Patient);
                 }
 
                 if (result != null)
