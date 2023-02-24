@@ -1,0 +1,48 @@
+﻿@model EHR_MVC.DTOs.UserDataDTOs.UserInsuranceDTOS.UserInsuranceCreateDTO
+
+@{
+    ViewData["Title"] = "Create";
+}
+ 
+<br />
+<hr />
+<h1 style="text-align:center">Create User Insurance</h1>
+<hr />
+<br />
+<div class="row">
+    <div class="col-md-5 m-auto">
+        <form asp-action="Create">
+            
+            <input hidden value="@User.Claims.ToList()[0].Value" asp-for="RegistrationDataId" />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="InsuranceNo" class="control-label"></label>
+                <input asp-for="InsuranceNo" class="form-control" />
+                <span asp-validation-for="InsuranceNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InsuranceType" class="control-label"></label>
+                <input asp-for="InsuranceType" class="form-control" />
+                <span asp-validation-for="InsuranceType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InsuranceOrganizationName" class="control-label"></label>
+                <input asp-for="InsuranceOrganizationName" class="form-control" />
+                <span asp-validation-for="InsuranceOrganizationName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RelationshipWithOrganization" class="control-label"></label>
+                <input asp-for="RelationshipWithOrganization" class="form-control" />
+                <span asp-validation-for="RelationshipWithOrganization" class="text-danger"></span>
+            </div>
+            <div class="form-group m-3 p-3">
+                <input type="submit" value="Create" class="btn btn-primary" /> || <a asp-action="Index">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+ 
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -18,6 +18,9 @@ namespace EHR_API.Extensions
 
             services.AddHttpClient<IAuthenService, AuthenService>();
             services.AddScoped<IAuthenService, AuthenService>();
+
+            services.AddHttpClient<IUserInsuranceService, UserInsuranceService>();
+            services.AddScoped<IUserInsuranceService, UserInsuranceService>();
         }
 
     }

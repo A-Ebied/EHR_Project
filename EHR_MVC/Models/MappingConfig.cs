@@ -43,9 +43,9 @@ namespace EHR_MVC.Models
             CreateMap<MedicalDataDTO, MedicalDataDTOForOthers>().ReverseMap();
  
             CreateMap<UserInsuranceDTO, UserInsuranceCreateDTO>().ReverseMap();
+            CreateMap<UserInsuranceDTO, UserInsurancesCreateDTO>().ReverseMap();
             CreateMap<UserInsuranceDTO, UserInsuranceUpdateDTO>().ReverseMap();
-            CreateMap<UserInsuranceDTO, UserInsuranceDTOForOthers>().ReverseMap();
-
+            
             CreateMap<IdentityRole, RolesDTO>().ReverseMap();
         }
     }

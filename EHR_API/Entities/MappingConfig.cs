@@ -53,8 +53,7 @@ namespace EHR_API.Entities
             CreateMap<UserInsurance, UserInsurancesCreateDTO>().ReverseMap();
             CreateMap<UserInsurance, UserInsuranceUpdateDTO>().ReverseMap();
             CreateMap<UserInsurance, UserInsuranceDTO>().ReverseMap();
-            CreateMap<UserInsurance, UserInsuranceDTOForOthers>().ReverseMap();
-
+            
             CreateMap<IdentityRole, RolesDTO>().ReverseMap();
         }
     }
