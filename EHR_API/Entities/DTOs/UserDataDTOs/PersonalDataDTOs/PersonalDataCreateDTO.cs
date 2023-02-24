@@ -24,5 +24,6 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs
         public string EmergencyPhone2 { get; set; }
         [Required]
         public string Gender { get; set; }
+        public string AgeGroup { get; set; }
     }
 }

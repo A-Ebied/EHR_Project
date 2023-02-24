@@ -43,12 +43,7 @@ namespace EHR_API.Entities
                .HasOne(a => a.InsuranceData)
                .WithOne(r => r.RegistrationData)
                .HasForeignKey<InsuranceData>(i => i.Id);
-            
-            modelBuilder.Entity<RegistrationData>()
-               .HasOne(a => a.Patient)
-               .WithOne(r => r.RegistrationData)
-               .HasForeignKey<Patient>(p => p.Id);
-             
+ 
             modelBuilder.Entity<RegistrationData>()
                .HasOne(m => m.MedicalTeam)
                .WithOne(r => r.RegistrationData)

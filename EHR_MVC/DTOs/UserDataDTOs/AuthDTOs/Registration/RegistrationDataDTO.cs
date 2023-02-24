@@ -1,7 +1,6 @@
 ﻿using EHR_MVC.DTOs.UserDataDTOs.InsuranceDataDTOS;
 using EHR_MVC.DTOs.UserDataDTOs.MedicalDataDTOS;
 using EHR_MVC.DTOs.UserDataDTOs.MedicalTeamDTOs;
-using EHR_MVC.DTOs.UserDataDTOs.PatientDTOs;
 using EHR_MVC.DTOs.UserDataDTOs.PersonalDataDTOs;
 using EHR_MVC.DTOs.HealthFacilityDTOs;
 using System.ComponentModel;
@@ -27,6 +26,5 @@ namespace EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Registration
         public InsuranceDataDTO InsuranceData { get; set; }
         public MedicalDataDTO MedicalData { get; set; }
         public MedicalTeamDTO MedicalTeam { get; set; }
-        public PatientDTO Patient { get; set; }
     }
 }

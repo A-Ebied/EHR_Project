@@ -51,6 +51,8 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = _mapper.Map<PersonalData>(entityCreateDTO);
+                entity.CreatedAt= DateTime.Now;
+                entity.UpdateddAt= DateTime.Now;
                 await _db._personal.CreateAsync(entity);
 
                 _response.Result = _mapper.Map<PersonalDataDTO>(entity);

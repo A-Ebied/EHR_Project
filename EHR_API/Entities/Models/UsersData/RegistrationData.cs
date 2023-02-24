@@ -22,7 +22,6 @@ namespace EHR_API.Entities.Models.UsersData
         public PersonalData PersonalData { get; set; }
         public MedicalData MedicalData { get; set; }
         public InsuranceData InsuranceData { get; set; }
-        public Patient Patient { get; set; }
         public MedicalTeam MedicalTeam { get; set; }
         public ICollection<HealthFacility> HealthFacilities { get; set; }
 

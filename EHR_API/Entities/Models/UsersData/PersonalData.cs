@@ -21,6 +21,7 @@ namespace EHR_API.Entities.Models.UsersData
         public string EmergencyPhone1 { get; set; }
         public string EmergencyPhone2 { get; set; }
         public string Gender { get; set; }
+        public string AgeGroup { get; set; }
         public DateTime CreatedAt { get; set; }  
         public DateTime UpdateddAt { get; set; } 
 

@@ -6,7 +6,6 @@ using EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Registration;
 using EHR_MVC.DTOs.UserDataDTOs.InsuranceDataDTOS;
 using EHR_MVC.DTOs.UserDataDTOs.MedicalDataDTOS;
 using EHR_MVC.DTOs.UserDataDTOs.MedicalTeamDTOs;
-using EHR_MVC.DTOs.UserDataDTOs.PatientDTOs;
 using EHR_MVC.DTOs.UserDataDTOs.PersonalDataDTOs;
 using EHR_MVC.DTOs.UserDataDTOs.RolesDTOs;
 using EHR_MVC.DTOs.UserDataDTOs.UserInsuranceDTOS;
@@ -36,10 +35,6 @@ namespace EHR_MVC.Models
             CreateMap<PersonalDataDTO, PersonalDataCreateDTO>().ReverseMap();
             CreateMap<PersonalDataDTO, PersonalDataUpdateDTO>().ReverseMap();
             CreateMap<PersonalDataDTO, PersonalDataDTOForOthers>().ReverseMap();
-
-            CreateMap<PatientDTO, PatientCreateDTO>().ReverseMap();
-            CreateMap<PatientDTO, PatientUpdateDTO>().ReverseMap();
-            CreateMap<PatientDTO, PatientDTOForOthers>().ReverseMap();
 
             CreateMap<MedicalTeamDTO, MedicalTeamCreateDTO>().ReverseMap();
             CreateMap<MedicalTeamDTO, MedicalTeamUpdateDTO>().ReverseMap();

@@ -18,6 +18,7 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs
         [DisplayName("Emergency Phone_2")]
         public string EmergencyPhone2 { get; set; }
         public string Gender { get; set; }
+        public string AgeGroup { get; set; }
         [DisplayName("Created at")]
         public DateTime CreatedAt { get; set; }
         [DisplayName("Updated at")]

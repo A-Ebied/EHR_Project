@@ -59,11 +59,9 @@ namespace EHR_API.Extensions
             if (registrationData.MedicalTeam != null)
             {
                 user.Specialization = registrationData.MedicalTeam.MedicalSpecialization;
+                user.AgeGroup = registrationData.PersonalData.AgeGroup;
             }
-            if (registrationData.Patient != null)
-            {
-                user.AgeGroup = registrationData.Patient.AgeGroup;
-            }
+             
 
             return user;
         }   

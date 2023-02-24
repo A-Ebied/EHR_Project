@@ -22,6 +22,5 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration
         public MedicalDataDTO MedicalData { get; set; }
         public InsuranceDataDTO InsuranceData { get; set; }
         public MedicalTeamDTO MedicalTeam { get; set; }
-        public PatientDTO Patient { get; set; }
     }
 }

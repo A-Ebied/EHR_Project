@@ -252,54 +252,54 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize(Roles = SD.HealthFacilitiesAdministrator + "," + SD.HealthFacilityManager)]
-        [HttpGet("GetPatientUsers")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<APIResponse>> GetPatientUsers([FromQuery(Name = "AgeGroup")] string ageGroup = null, int pageNumber = 1, int pageSize = 0)
-        {
-            try
-            {
-                IEnumerable<Patient> patients = new List<Patient>();
-                var entities = new List<RegistrationData>();
+        //[HttpGet("GetPatientUsers")]
+        //[ResponseCache(CacheProfileName = SD.ProfileName)]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        //public async Task<ActionResult<APIResponse>> GetPatientUsers([FromQuery(Name = "AgeGroup")] string ageGroup = null, int pageNumber = 1, int pageSize = 0)
+        //{
+        //    try
+        //    {
+        //        IEnumerable<Patient> patients = new List<Patient>();
+        //        var entities = new List<RegistrationData>();
 
-                patients = await _db._patient.GetAllAsync(
-                    expression: ageGroup == null ? null : m => m.AgeGroup.Contains(ageGroup),
-                    pageNumber: pageNumber,
-                    pageSize: pageSize);
+        //        patients = await _db._patient.GetAllAsync(
+        //            expression: ageGroup == null ? null : m => m.AgeGroup.Contains(ageGroup),
+        //            pageNumber: pageNumber,
+        //            pageSize: pageSize);
 
-                if (patients.ToList().Count == 0)
-                {
-                    return NotFound(APIResponses.NotFound("No data has been found"));
-                }
+        //        if (patients.ToList().Count == 0)
+        //        {
+        //            return NotFound(APIResponses.NotFound("No data has been found"));
+        //        }
 
-                foreach (var entity in patients)
-                {
-                    entities.Add(await _db._authentication.GetAsync(
-                        includeProperties: "PersonalData",
-                        expression: e => e.Id == entity.Id));
-                }
+        //        foreach (var entity in patients)
+        //        {
+        //            entities.Add(await _db._authentication.GetAsync(
+        //                includeProperties: "PersonalData",
+        //                expression: e => e.Id == entity.Id));
+        //        }
 
-                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
-                Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
+        //        Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
+        //        Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
 
-                List<UserDTOForOthers> patientsUsers = new();
-                foreach (var item in entities)
-                {
-                    patientsUsers.Add(APIResponses.User(_mapper.Map<RegistrationData>(item)));
-                }
+        //        List<UserDTOForOthers> patientsUsers = new();
+        //        foreach (var item in entities)
+        //        {
+        //            patientsUsers.Add(APIResponses.User(_mapper.Map<RegistrationData>(item)));
+        //        }
 
-                _response.Result = patientsUsers;
-                _response.StatusCode = HttpStatusCode.OK;
-                return Ok(_response);
+        //        _response.Result = patientsUsers;
+        //        _response.StatusCode = HttpStatusCode.OK;
+        //        return Ok(_response);
 
-            }
-            catch (Exception ex)
-            {
-                return APIResponses.InternalServerError(ex);
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return APIResponses.InternalServerError(ex);
+        //    }
+        //}
 
         /*
         [Authorize(Roles = SD.SystemManager)]
@@ -351,6 +351,7 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
+        
         [HttpGet("{id}")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -380,13 +381,13 @@ namespace EHR_API.Controllers
                     {
                         entity = await _db._authentication.GetAsync(
                                  expression: g => g.Id == id,
-                                 includeProperties: "PersonalData,InsuranceData,MedicalData,MedicalTeam,Patient");
+                                 includeProperties: "PersonalData,InsuranceData,MedicalData,MedicalTeam");
                     }
                     else
                     {
                         entity = await _db._authentication.GetAsync(
                                  expression: g => g.Id == id,
-                                 includeProperties: "PersonalData,MedicalTeam,Patient");
+                                 includeProperties: "PersonalData,MedicalTeam");
                     }
                 }
                 else
