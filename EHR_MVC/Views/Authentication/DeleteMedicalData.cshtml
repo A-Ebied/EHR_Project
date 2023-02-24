@@ -1,0 +1,50 @@
+﻿@model EHR_MVC.DTOs.UserDataDTOs.MedicalDataDTOS.MedicalDataDTOForOthers
+
+@{
+    ViewData["Title"] = "Delete Medical Data";
+}
+ 
+
+<br />
+<hr />
+<h2 style="text-align:center">Are you sure you want to delete this Medical Data?</h2>
+<hr />
+<br />
+<div class="col-md-5 m-auto">
+    <dl class="row">
+         
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.BloodGroup)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.BloodGroup)
+             
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.MedicalHistory)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.MedicalHistory)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.FamilyHistory)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.FamilyHistory)
+        </dd>
+        
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.DNAImageResultUrl)
+        </dt>
+        <dd class = "col-sm-8">
+            <img src="@Model.DNAImageResultUrl" class="card-img-top" alt="No Image" />
+        </dd>
+    </dl>
+    
+    <form asp-action="DeleteMedicalData">
+          <div class="form-group m-3 p-3">
+            <input type="submit" value="Delete" class="btn btn-danger" /> ||
+            <a asp-action="UserData" asp-route-id="@Model.Id">Back to My Data</a>
+        </div>
+    </form>
+</div>

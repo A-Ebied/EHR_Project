@@ -3,13 +3,14 @@
 @{
     ViewData["Title"] = "CreateUserPersonalData";
 }
-
-<h1>CreateUserPersonalData</h1>
-
-<h4>PersonalDataCreateDTO</h4>
+  
+<br />
 <hr />
+<h1 style="text-align:center">Create Personal Data</h1>
+<hr />
+<br />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-5 m-auto">
         <form asp-action="CreateUserPersonalData" enctype="multipart/form-data">
 
             <div asp-validation-summary="All" class="text-danger"></div>
@@ -70,17 +71,14 @@
                 Image:<input class="form-control" accept="image/*" type="file" name="image" id="upFile1" />
             </div>
              
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="form-group m-3 p-3">
+                <input type="submit" value="Create" class="btn btn-primary" /> 
             </div>
         </form>
  
     </div>
 </div>
 
-<div>
-    <a asp-action="UserData">Back to My Data</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

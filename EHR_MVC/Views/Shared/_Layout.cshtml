@@ -35,7 +35,10 @@
                                         <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">All Users</a>
                                     }*@
                                     <a class="dropdown-item" asp-route-id="@User.Claims.ToList()[0].Value" asp-controller="Authentication" asp-action="UserData"> My Data</a>
+
                                     <a class="dropdown-item"  asp-controller="Authentication" asp-action="CreateUserPersonalData"> Create Personal Data</a>
+
+                                    <a class="dropdown-item" asp-controller="Authentication" asp-action="CreateUserMedicalData"> Create Medical Data</a>
                                 </div>
                             </li>
                         }
@@ -50,6 +53,7 @@
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Health Facility</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item"  asp-controller="HealthFacility" asp-action="Index">Health Facilities</a>
+
                                 <a class="dropdown-item" asp-controller="HealthFacility" asp-action="Create">Create Health Facility</a>
                             </div>
                         </li>

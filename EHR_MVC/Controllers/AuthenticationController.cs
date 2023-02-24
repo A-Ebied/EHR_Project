@@ -2,6 +2,8 @@
 using EHR_MVC.DTOs.GovernorateDTOs;
 using EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Registration;
+using EHR_MVC.DTOs.UserDataDTOs.MedicalDataDTOS;
+using EHR_MVC.DTOs.UserDataDTOs.MedicalTeamDTOs;
 using EHR_MVC.DTOs.UserDataDTOs.PersonalDataDTOs;
 using EHR_MVC.DTOs.UserDataDTOs.RolesDTOs;
 using EHR_MVC.Extensions;
@@ -224,6 +226,7 @@ namespace EHR_MVC.Controllers
 
             return View(userData);
         }
+        
         public async Task<IActionResult> CreateUserPersonalData()
         {
             PersonalDataVM personalData = new();
@@ -444,6 +447,203 @@ namespace EHR_MVC.Controllers
                     }
 
                     var respnse = await _service.UpdateUserPersonalDataAsync<APIResponse>(id, entity, HttpContext.Session.GetString(SD.JWT));
+                    if (respnse != null && respnse.IsSuccess)
+                    {
+                        return RedirectToAction(nameof(UserData), new { id = entity.Id });
+                    }
+                    else
+                    {
+                        if (respnse != null && respnse.Errors != null)
+                        {
+                            for (int i = 0; i < respnse.Errors.Count; i++)
+                            {
+                                ModelState.AddModelError("Error", respnse.Errors[i]);
+                            }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("Error", "Error");
+                        }
+                    }
+                }
+
+                return View(entity);
+            }
+            catch
+            {
+                return View();
+            }
+        } 
+        
+        public async Task<IActionResult> CreateUserMedicalData()
+        {
+             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateUserMedicalData(MedicalDataCreateDTO entity, IFormFile image)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (image != null)
+                    {
+                        using (var ms = new MemoryStream())
+                        {
+                            image.CopyTo(ms);
+                            var fileBytes = ms.ToArray();
+                           
+                            entity.DNAImageResult = fileBytes;
+                            entity.ImageName = image.FileName;
+                        }
+                    }
+
+                    var respnse = await _service.CreateUserMedicalDataAsync<APIResponse>(entity, HttpContext.Session.GetString(SD.JWT));
+
+                    if (respnse != null && respnse.IsSuccess)
+                    {
+                        return RedirectToAction(nameof(UserData), new { id = entity.Id });
+                    }
+                    else
+                    {
+                        if (respnse != null && respnse.Errors != null)
+                        {
+                            for (int i = 0; i < respnse.Errors.Count; i++)
+                            {
+                                ModelState.AddModelError("Error", respnse.Errors[i]);
+                            }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("Error", "The user has data");
+                        }
+                    }
+                }
+
+                return View(entity);
+            }
+            catch
+            {
+                return View(entity);
+            }
+        }
+
+        public async Task<IActionResult> DeleteMedicalData(string id)
+        {
+            RegistrationDataDTO entity = new();
+
+            var respnse = await _service.GetUserAsync<APIResponse>(id, HttpContext.Session.GetString(SD.JWT));
+            if (respnse != null && respnse.IsSuccess)
+            {
+                entity = JsonConvert.DeserializeObject<RegistrationDataDTO>(
+                    Convert.ToString(respnse.Result));
+
+                return View(_mapper.Map<MedicalDataDTOForOthers>(entity.MedicalData));
+            }
+            else
+            {
+                if (respnse != null && respnse.Errors != null)
+                {
+                    for (int i = 0; i < respnse.Errors.Count; i++)
+                    {
+                        ModelState.AddModelError("Error", respnse.Errors[i]);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "Error");
+                }
+            }
+
+            return NotFound(entity);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteMedicalData(MedicalDataDTOForOthers entity)
+        {
+            try
+            {
+                var respnse = await _service.DeleteUserMedicalDataAsync<APIResponse>(entity.Id, HttpContext.Session.GetString(SD.JWT));
+                if (respnse != null && respnse.IsSuccess)
+                {
+                    return RedirectToAction(nameof(UserData), new { id = entity.Id });
+                }
+                else
+                {
+                    if (respnse != null && respnse.Errors != null)
+                    {
+                        for (int i = 0; i < respnse.Errors.Count; i++)
+                        {
+                            ModelState.AddModelError("Error", respnse.Errors[i]);
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Error", "Error");
+                    }
+                }
+
+                return View(entity);
+            }
+            catch
+            {
+                return View(entity);
+            }
+        }
+
+        public async Task<IActionResult> UpdateMedicalData(string id)
+        {
+            RegistrationDataDTO entity = new();
+            var respnse = await _service.GetUserAsync<APIResponse>(id, HttpContext.Session.GetString(SD.JWT));
+            if (respnse != null && respnse.IsSuccess)
+            {
+                entity = JsonConvert.DeserializeObject<RegistrationDataDTO>(
+                    Convert.ToString(respnse.Result));
+
+                return View(_mapper.Map<MedicalDataUpdateDTO>(entity.MedicalData));
+            }
+            else
+            {
+                if (respnse != null && respnse.Errors != null)
+                {
+                    for (int i = 0; i < respnse.Errors.Count; i++)
+                    {
+                        ModelState.AddModelError("Error", respnse.Errors[i]);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "Unauthorized");
+                }
+            }
+
+            return NotFound();
+        }
+ 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateMedicalData(string id, MedicalDataUpdateDTO entity, IFormFile image)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (image != null)
+                    {
+                        using (var ms = new MemoryStream())
+                        {
+                            image.CopyTo(ms);
+                            var fileBytes = ms.ToArray();
+
+                            entity.DNAImageResult = fileBytes;
+                            entity.ImageName = image.FileName;
+                        }
+                    }
+
+                    var respnse = await _service.UpdateUserMedicalDataAsync<APIResponse>(id, entity, HttpContext.Session.GetString(SD.JWT));
                     if (respnse != null && respnse.IsSuccess)
                     {
                         return RedirectToAction(nameof(UserData), new { id = entity.Id });

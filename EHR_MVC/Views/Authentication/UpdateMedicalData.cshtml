@@ -1,0 +1,46 @@
+﻿@model EHR_MVC.DTOs.UserDataDTOs.MedicalDataDTOS.MedicalDataUpdateDTO
+
+@{
+    ViewData["Title"] = "Update Medical Data";
+}
+ 
+<br />
+<hr />
+<h1 style="text-align:center">Update Medical Data</h1>
+<hr />
+<br />
+<div class="row">
+    <div class="col-md-5 m-auto">
+        <form asp-action="UpdateMedicalData" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            
+            <input hidden asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="BloodGroup" class="control-label"></label>
+                <input asp-for="BloodGroup" class="form-control" />
+                <span asp-validation-for="BloodGroup" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FamilyHistory" class="control-label"></label>
+                <input asp-for="FamilyHistory" class="form-control" />
+                <span asp-validation-for="FamilyHistory" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MedicalHistory" class="control-label"></label>
+                <input asp-for="MedicalHistory" class="form-control" />
+                <span asp-validation-for="MedicalHistory" class="text-danger"></span>
+            </div>
+            <div class="form-group m-2">
+                Image:<input class="form-control" accept="image/*" type="file" name="image" id="upFile1" />
+            </div>
+
+            <div class="form-group m-3 p-3">
+                <input type="submit" value="Save" class="btn btn-primary" /> ||  <a asp-action="UserData" asp-route-id="@Model.Id">Back to My Data</a>
+            </div>
+        </form>
+    </div>
+</div>
+ 
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

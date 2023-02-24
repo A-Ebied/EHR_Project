@@ -1,5 +1,6 @@
 ﻿using EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Registration;
+using EHR_MVC.DTOs.UserDataDTOs.MedicalDataDTOS;
 using EHR_MVC.DTOs.UserDataDTOs.PersonalDataDTOs;
 using EHR_MVC.Repositories.Contracts;
 using static EHR_MVC.Extensions.SD;
@@ -42,6 +43,38 @@ namespace EHR_MVC.Repositories.Implementation
             {
                 ApiType = ApiType.DELETE,
                 URL = $"{_url}/api/PersonalDataAPI/{id}",
+                Token = token
+            });
+        } 
+        
+        public Task<T> CreateUserMedicalDataAsync<T>(MedicalDataCreateDTO entity, string token = null)
+        {
+            return SendAsync<T>(new Models.APIRequest()
+            {
+                ApiType = ApiType.POST,
+                Data = entity,
+                URL = $"{_url}/api/MedicalDataAPI/CreateUserMedicalData",
+                Token = token
+            });
+        }
+       
+        public Task<T> UpdateUserMedicalDataAsync<T>(string id, MedicalDataUpdateDTO entity, string token = null)
+        {
+            return SendAsync<T>(new Models.APIRequest()
+            {
+                ApiType = ApiType.PUT,
+                Data = entity,
+                URL = $"{_url}/api/MedicalDataAPI/{id}",
+                Token = token
+            });
+        }
+        
+        public Task<T> DeleteUserMedicalDataAsync<T>(string id, string token = null)
+        {
+            return SendAsync<T>(new Models.APIRequest()
+            {
+                ApiType = ApiType.DELETE,
+                URL = $"{_url}/api/MedicalDataAPI/{id}",
                 Token = token
             });
         }

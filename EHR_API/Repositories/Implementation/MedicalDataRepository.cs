@@ -18,14 +18,14 @@ namespace EHR_API.Repositories.Implementation
 
         public override async Task CreateAsync(MedicalData entity)
         {
-            //if (entity.DNAImageResult != null)
-            //{
-            //    var path = CreateImage.CreateFiles(_webHost, entity.DNAImageResult, "DNAImageResult");
-            //    entity.DNAImageResultUrl = path;
-            //}
-   
-            //await _dbSet.AddAsync(entity);
-            //await _db.SaveChangesAsync();
+            if (entity.DNAImageResult != null)
+            {
+                var path = CreateImage.CreateFiles(_webHost, entity.DNAImageResult, entity.ImageName, "DNAImageResult");
+                entity.DNAImageResultUrl = path;
+            }
+
+            await _dbSet.AddAsync(entity);
+            await _db.SaveChangesAsync();
         }
 
         public override async Task<MedicalData> UpdateAsync(MedicalData entity, MedicalData oldEntity = null)
@@ -35,14 +35,14 @@ namespace EHR_API.Repositories.Implementation
                 if (oldEntity.DNAImageResultUrl != null)
                 {
                     var oldPath = Path.Combine(_webHost.WebRootPath, oldEntity.DNAImageResultUrl.TrimStart('\\'));
-                    if (System.IO.File.Exists(oldPath))
+                    if (File.Exists(oldPath))
                     {
-                        System.IO.File.Delete(oldPath);
+                        File.Delete(oldPath);
                     }
                 }
 
-                //var path = CreateImage.CreateFiles(_webHost, entity.DNAImageResult, "DNAImageResult");
-                //entity.DNAImageResultUrl = path;
+                var path = CreateImage.CreateFiles(_webHost, entity.DNAImageResult, entity.ImageName, "DNAImageResult");
+                entity.DNAImageResultUrl = path;
             }
              
             _dbSet.Update(entity);

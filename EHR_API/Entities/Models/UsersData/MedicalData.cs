@@ -12,7 +12,9 @@ namespace EHR_API.Entities.Models.UsersData
         public string MedicalHistory { get; set; }
         public string DNAImageResultUrl { get; set; }
         [NotMapped]
-        public IFormFile DNAImageResult { get; set; }
+        public byte[] DNAImageResult { get; set; }
+        [NotMapped]
+        public string ImageName { get; set; }
         public DateTime CreatedAt { get; set; }  
         public DateTime UpdateddAt { get; set; }  
 

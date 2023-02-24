@@ -26,7 +26,8 @@ namespace EHR_API.Controllers
             _response = new();
         }
          
-        [Authorize(Roles = SD.Physician + SD.Nurse + "," + SD.Technician + "," + SD.HealthFacilityManager)]
+        //[Authorize(Roles = SD.Physician + SD.Nurse + "," + SD.Technician + "," + SD.HealthFacilityManager)]
+        [Authorize]
         [HttpPost("CreateUserMedicalData")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -45,11 +46,13 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = _mapper.Map<MedicalData>(entityCreateDTO);
+                entity.CreatedAt = DateTime.Now;
+                entity.UpdateddAt = DateTime.Now;
                 await _db._medicalData.CreateAsync(entity);
 
                 _response.Result = _mapper.Map<MedicalDataDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;
-                return CreatedAtRoute("GetUserMedicalData", new { id = entity.Id }, _response);
+                return Ok(_response);
             }
             catch (Exception ex)
             {
@@ -57,8 +60,9 @@ namespace EHR_API.Controllers
             }
         }
 
-        [Authorize(Roles = SD.Physician + "," + SD.Nurse + "," + SD.Technician + "," + SD.HealthFacilityManager)]
-        [HttpDelete("{id}", Name = "DeleteUserMedicalData")]
+        //[Authorize(Roles = SD.Physician + "," + SD.Nurse + "," + SD.Technician + "," + SD.HealthFacilityManager)]
+        [Authorize]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -89,7 +93,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        [Authorize(Roles = SD.Pharmacist + "," + SD.Nurse + "," + SD.Technician + "," + SD.HealthFacilityManager)]
+        //[Authorize(Roles = SD.Pharmacist + "," + SD.Nurse + "," + SD.Technician + "," + SD.HealthFacilityManager)]
+        [Authorize]
         [HttpPut("{id}", Name = "UpdateMedicalDataUser")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -108,14 +113,15 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
-                if (await _db._medicalData.GetAsync(expression: g => g.Id == id) == null)
+                var oldOne = await _db._medicalData.GetAsync(expression: g => g.Id == id);
+                if (oldOne == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
                 }
 
                 var entity = _mapper.Map<MedicalData>(entityUpdateDTO);
                 entity.UpdateddAt = DateTime.Now;
-                await _db._medicalData.UpdateAsync(entity);
+                await _db._medicalData.UpdateAsync(entity, oldOne);
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = _mapper.Map<MedicalDataDTO>(entity);

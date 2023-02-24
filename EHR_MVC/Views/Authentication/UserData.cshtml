@@ -151,6 +151,16 @@
     <div class="col-md-5 m-auto">
 
         <h4> Medical Data </h4>
+        <tr>
+            <td>
+                <a asp-route-id="@User.Claims.ToList()[0].Value" asp-action="DeleteMedicalData" class="btn btn-danger col-12"> Delete </a>
+                <br />
+                <br />
+                <a asp-route-id="@User.Claims.ToList()[0].Value" asp-action="UpdateMedicalData" class="btn btn-outline-primary col-12"> Update </a>
+                <br />
+                <br />
+            </td>
+        </tr>
         <dl class="row">
             @if (User.Claims.ToList()[0].Value == Model.UserName)
             {
