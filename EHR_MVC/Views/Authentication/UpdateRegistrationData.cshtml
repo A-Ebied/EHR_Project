@@ -1,0 +1,69 @@
+﻿@model EHR_MVC.VM.RegistrationUpdateVM
+
+@{
+    ViewData["Title"] = "UpdateRegistrationData";
+}
+ 
+<br />
+<hr />
+<h1 style="text-align:center">Update Registration Data</h1>
+<hr />
+<br />
+
+<div class="row m-auto col-md-12">
+    <div class="col-md-5 m-auto">
+        <form asp-action="UpdateRegistrationData">
+            <div asp-validation-summary="All" class="text-danger"></div>
+           
+            <input hidden asp-for="Register.Id" />
+            <div class="form-group">
+                <label asp-for="Register.Nationality" class="control-label"></label>
+                <input asp-for="Register.Nationality" class="form-control" />
+                <span asp-validation-for="Register.Nationality" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Register.FullName" class="control-label"></label>
+                <input asp-for="Register.FullName" class="form-control" />
+                <span asp-validation-for="Register.FullName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Register.UserName" class="control-label"></label>
+                <input asp-for="Register.UserName" class="form-control" />
+                <span asp-validation-for="Register.UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Register.Password" class="control-label"></label>
+                <input asp-for="Register.Password" class="form-control" />
+                <span asp-validation-for="Register.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Register.Email" class="control-label"></label>
+                <input asp-for="Register.Email" class="form-control" />
+                <span asp-validation-for="Register.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Register.PhoneNumber" class="control-label"></label>
+                <input asp-for="Register.PhoneNumber" class="form-control" />
+                <span asp-validation-for="Register.PhoneNumber" class="text-danger"></span>
+            </div> 
+            <div class="form-group">
+                <label asp-for="Register.Role" class="control-label"></label>
+                <select asp-for="Register.Role" class="form-select" asp-items="@Model.Roles">
+                    <option disabled selected>Select Role</option>
+                </select>
+                <span asp-validation-for="Register.Role" class="text-danger"></span>
+            </div>
+            
+
+            <div class="form-group m-3 p-3">
+                <input type="submit" value="Create" class="btn btn-primary" /> || <a asp-controller="Home" asp-action="Index">Back to Home</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

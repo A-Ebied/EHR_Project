@@ -364,7 +364,7 @@ namespace EHR_API.Controllers
             {
                 if (id == null)
                 {
-                    return BadRequest(APIResponses.BadRequest("userName is null"));
+                    return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
                 var jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
@@ -539,9 +539,9 @@ namespace EHR_API.Controllers
             }
         }
 
-        /*
+     
         [Authorize]
-        [HttpPut("{id}", Name = "UpdateRegistrationData")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -575,6 +575,5 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
-        */
     }
 }

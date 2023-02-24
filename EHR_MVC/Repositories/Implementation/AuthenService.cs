@@ -129,6 +129,15 @@ namespace EHR_MVC.Repositories.Implementation
             });
         }
 
-        
+        public Task<T> UpdateRegisterDataAsync<T>(string id, RegistrationDataUpdateDTO registration, string token = null)
+        {
+            return SendAsync<T>(new Models.APIRequest()
+            {
+                ApiType = ApiType.PUT,
+                Data = registration,
+                URL = $"{_url}/api/AuthenticationAPI/{id}",
+                Token = token
+            });
+        }
     }
 }

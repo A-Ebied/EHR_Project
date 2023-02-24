@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using System.Data;
 using System.Security.Claims;
@@ -187,16 +188,132 @@ namespace EHR_MVC.Controllers
             }
         }
 
+        public async Task<IActionResult> UpdateRegistrationData(string id)
+        {
+            RegistrationUpdateVM register = new();
+            var respnse = await _service.GetRolesAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
+            if (respnse != null && respnse.IsSuccess)
+            {
+
+                register.Roles = JsonConvert.DeserializeObject<List<RolesDTO>>(
+                    Convert.ToString(respnse.Result)).Select(i => new SelectListItem()
+                    {
+                        Text = i.Name,
+                        Value = i.Name
+                    });
+            }
+            else
+            {
+                if (respnse != null && respnse.Errors != null)
+                {
+                    for (int i = 0; i < respnse.Errors.Count; i++)
+                    {
+                        ModelState.AddModelError("Error", respnse.Errors[i]);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "Unauthorized");
+                }
+            }
+
+            //RegistrationDataDTO userData = new();
+            var respnse2 = await _service.GetUserAsync<APIResponse>(id, HttpContext.Session.GetString(SD.JWT));
+
+            if (respnse2 != null && respnse2.IsSuccess)
+            {
+               var userData = JsonConvert.DeserializeObject<RegistrationDataDTO>(Convert.ToString(respnse2.Result));
+
+                register.Register = _mapper.Map<RegistrationDataUpdateDTO>(userData);
+
+                return View(register);
+            }
+            else
+            {
+                if (respnse != null && respnse.Errors != null)
+                {
+                    for (int i = 0; i < respnse.Errors.Count; i++)
+                    {
+                        ModelState.AddModelError("Error", respnse.Errors[i]);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "Error");
+                }
+            }
+
+            return NotFound(register.Register);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateRegistrationData(string id, RegistrationUpdateVM entity)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var respnse = await _service.UpdateRegisterDataAsync<APIResponse>(id, entity.Register, HttpContext.Session.GetString(SD.JWT));
+                    if (respnse != null && respnse.IsSuccess)
+                    {
+                        return RedirectToAction(nameof(UserData), new { id = entity.Register.Id });
+                    }
+                    else
+                    {
+                        if (respnse != null && respnse.Errors != null)
+                        {
+                            for (int i = 0; i < respnse.Errors.Count; i++)
+                            {
+                                ModelState.AddModelError("Error", respnse.Errors[i]);
+                            }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("Error", "Error");
+                        }
+                    }
+                }
+
+                var respnse2 = await _service.GetRolesAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
+                if (respnse2 != null && respnse2.IsSuccess)
+                {
+
+                    entity.Roles = JsonConvert.DeserializeObject<List<RolesDTO>>(
+                        Convert.ToString(respnse2.Result)).Select(i => new SelectListItem()
+                        {
+                            Text = i.Name,
+                            Value = i.Name
+                        });
+                }
+                else
+                {
+                    if (respnse2 != null && respnse2.Errors != null)
+                    {
+                        for (int i = 0; i < respnse2.Errors.Count; i++)
+                        {
+                            ModelState.AddModelError("Error", respnse2.Errors[i]);
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Error", "Unauthorized");
+                    }
+                }
+
+                return View(entity);
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
             HttpContext.Session.SetString(SD.JWT, "");
             return RedirectToAction(nameof(Index), "Home");
-        }
-
-        public async Task<IActionResult> AccessDenied()
-        {
-            return View();
         }
 
         public async Task<IActionResult> UserData(string id)
@@ -226,7 +343,7 @@ namespace EHR_MVC.Controllers
 
             return View(userData);
         }
-        
+
         public async Task<IActionResult> CreateUserPersonalData()
         {
             PersonalDataVM personalData = new();
@@ -272,7 +389,7 @@ namespace EHR_MVC.Controllers
                         {
                             image.CopyTo(ms);
                             var fileBytes = ms.ToArray();
-                           
+
                             entity.PersonalData.UserImage = fileBytes;
                             entity.PersonalData.ImageName = image.FileName;
                         }
@@ -425,7 +542,7 @@ namespace EHR_MVC.Controllers
 
             return NotFound();
         }
- 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdatePersonalData(string id, PersonalDataUpdateDTO entity, IFormFile image)
@@ -473,11 +590,11 @@ namespace EHR_MVC.Controllers
             {
                 return View();
             }
-        } 
-        
+        }
+
         public async Task<IActionResult> CreateUserMedicalData()
         {
-             return View();
+            return View();
         }
 
         [HttpPost]
@@ -494,7 +611,7 @@ namespace EHR_MVC.Controllers
                         {
                             image.CopyTo(ms);
                             var fileBytes = ms.ToArray();
-                           
+
                             entity.DNAImageResult = fileBytes;
                             entity.ImageName = image.FileName;
                         }
@@ -622,7 +739,7 @@ namespace EHR_MVC.Controllers
 
             return NotFound();
         }
- 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateMedicalData(string id, MedicalDataUpdateDTO entity, IFormFile image)

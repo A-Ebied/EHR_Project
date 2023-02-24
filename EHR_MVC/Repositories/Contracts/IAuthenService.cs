@@ -11,6 +11,7 @@ namespace EHR_MVC.Repositories.Contracts
     {
         Task<T> LoginAsync<T>(LoginRequestDTO login);
         Task<T> RegisterAsync<T>(RegistrationDataCreateDTO registration);
+        Task<T> UpdateRegisterDataAsync<T>(string id, RegistrationDataUpdateDTO registration, string token = null);
 
         Task<T> CreateUserPersonalDataAsync<T>(PersonalDataCreateDTO entity, string token = null);
         Task<T> DeleteUserPersonalDataAsync<T>(string id, string token = null);

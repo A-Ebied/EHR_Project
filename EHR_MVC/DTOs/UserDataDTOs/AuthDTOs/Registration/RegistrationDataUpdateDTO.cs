@@ -18,7 +18,9 @@ namespace EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Registration
         public string Email { get; init; }
         public string PhoneNumber { get; init; }
 
+        //[Required]
+        //public ICollection<string> Roles { get; init; }
         [Required]
-        public ICollection<string> Roles { get; init; }
+        public string Role { get; set; }
     }
 }

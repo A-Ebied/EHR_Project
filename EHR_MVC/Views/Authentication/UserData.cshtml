@@ -13,6 +13,14 @@
 <div class="col-md-5 m-auto">
 
     <h4> Registration Data </h4>
+    <tr>
+        <td>
+            <br />
+            <a asp-route-id="@User.Claims.ToList()[0].Value" asp-action="UpdateRegistrationData" class="btn btn-outline-primary col-12"> Update </a>
+            <br />
+            <br />
+        </td>
+    </tr>
     <dl class="row">
         @if (User.Claims.ToList()[0].Value == Model.UserName)
         {
