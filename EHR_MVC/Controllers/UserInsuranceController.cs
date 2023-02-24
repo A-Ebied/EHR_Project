@@ -19,29 +19,29 @@ namespace EHR_MVC.Controllers
             _service = service;
         }
  
-        public async Task<IActionResult> Index()
-        {
-            List<UserInsuranceDTO> list = new();
+        //public async Task<IActionResult> Index()
+        //{
+        //    List<UserInsuranceDTO> list = new();
 
-            var respnse = await _service.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
-            if (respnse != null && respnse.IsSuccess)
-            {
-                list = JsonConvert.DeserializeObject<List<UserInsuranceDTO>>(
-                    Convert.ToString(respnse.Result));
-            }
-            else
-            {
-                if (respnse.Errors.Count > 0)
-                {
-                    for (int i = 0; i < respnse.Errors.Count; i++)
-                    {
-                        ModelState.AddModelError("Error", respnse.Errors[i]);
-                    }
-                }
-            }
+        //    var respnse = await _service.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
+        //    if (respnse != null && respnse.IsSuccess)
+        //    {
+        //        list = JsonConvert.DeserializeObject<List<UserInsuranceDTO>>(
+        //            Convert.ToString(respnse.Result));
+        //    }
+        //    else
+        //    {
+        //        if (respnse.Errors.Count > 0)
+        //        {
+        //            for (int i = 0; i < respnse.Errors.Count; i++)
+        //            {
+        //                ModelState.AddModelError("Error", respnse.Errors[i]);
+        //            }
+        //        }
+        //    }
 
-            return View(list);
-        }
+        //    return View(list);
+        //}
  
         public async Task<IActionResult> MyInsurances(string id)
         {
@@ -56,7 +56,7 @@ namespace EHR_MVC.Controllers
             }
             else
             {
-                if (respnse.Errors.Count > 0)
+                if (respnse != null && respnse.Errors != null)
                 {
                     for (int i = 0; i < respnse.Errors.Count; i++)
                     {
@@ -150,7 +150,7 @@ namespace EHR_MVC.Controllers
                     var respnse = await _service.UpdateAsync<APIResponse>(entity, HttpContext.Session.GetString(SD.JWT));
                     if (respnse != null && respnse.IsSuccess)
                     {
-                        return RedirectToAction(nameof(Index));
+                        return RedirectToAction(nameof(Index), "Home");
                     }
                     else
                     {
@@ -215,7 +215,7 @@ namespace EHR_MVC.Controllers
                 var respnse = await _service.DeleteAsync<APIResponse>(entity.Id, HttpContext.Session.GetString(SD.JWT));
                 if (respnse != null && respnse.IsSuccess)
                 {
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index), "Home");
                 }
                 else
                 {

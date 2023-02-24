@@ -1,0 +1,59 @@
+﻿@model IEnumerable<EHR_MVC.DTOs.UserDataDTOs.UserInsuranceDTOS.UserInsuranceDTO>
+
+@{
+    ViewData["Title"] = "Insurances";
+}
+ 
+<br />
+<hr />
+<h1 style="text-align:center">My Insurances</h1>
+<hr />
+<br />
+
+<div class="row m-2">
+    <a asp-action="Create" class="btn btn-primary col-12"> Create New </a>
+</div>
+<hr />
+<br />
+<table class="table table-hover">
+    <thead>
+        <tr class="table-danger">
+            <th>
+                @Html.DisplayNameFor(model => model.InsuranceNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InsuranceType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InsuranceOrganizationName)
+            </th> 
+            <th>
+                @Html.DisplayNameFor(model => model.RelationshipWithOrganization)
+            </th>
+            <th>Operations</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InsuranceNo)
+                </td>
+                 <td>
+                    @Html.DisplayFor(modelItem => item.InsuranceType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InsuranceOrganizationName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RelationshipWithOrganization)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new {  id=item.Id  }) |
+                    @Html.ActionLink("Delete", "Delete", new {  id=item.Id  })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

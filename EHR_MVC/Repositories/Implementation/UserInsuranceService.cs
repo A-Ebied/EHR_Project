@@ -37,15 +37,15 @@ namespace EHR_MVC.Repositories.Implementation
             });
         }
 
-        public Task<T> GetAllAsync<T>(string token = null)
-        {
-            return SendAsync<T>(new Models.APIRequest()
-            {
-                ApiType = ApiType.GET,
-                URL = $"{_url}/api/UserInsuranceAPI/GetUsersInsurances",
-                Token = token
-            });
-        }
+        //public Task<T> GetAllAsync<T>(string token = null)
+        //{
+        //    return SendAsync<T>(new Models.APIRequest()
+        //    {
+        //        ApiType = ApiType.GET,
+        //        URL = $"{_url}/api/UserInsuranceAPI/GetUsersInsurances",
+        //        Token = token
+        //    });
+        //}
 
         public Task<T> GetUserInsurancesAsync<T>(string id, string token = null)
         {

@@ -36,12 +36,16 @@
                                     }*@
                                     <a class="dropdown-item" asp-route-id="@User.Claims.ToList()[0].Value" asp-controller="Authentication" asp-action="UserData"> My Data</a>
 
+                                    <a class="dropdown-item" asp-route-id="@User.Claims.ToList()[0].Value" asp-controller="UserInsurance" asp-action="MyInsurances"> My Insurances</a>
+                                </div>
+
                                     <a class="dropdown-item"  asp-controller="Authentication" asp-action="CreateUserPersonalData"> Create Personal Data</a>
 
                                     <a class="dropdown-item" asp-controller="Authentication" asp-action="CreateUserMedicalData"> Create Medical Data</a>
-
-                                    <a class="dropdown-item" asp-controller="UserInsurance" asp-action="Create"> Create Insurance</a>
-                                </div>
+@*
+                                    <a class="dropdown-item" asp-controller="UserInsurance" asp-action="Create"> Create Insurance</a> 
+                                    *@
+                                  
                             </li>
                         }
                         <li class="nav-item dropdown">

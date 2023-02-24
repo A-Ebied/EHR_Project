@@ -27,38 +27,40 @@ namespace EHR_API.Controllers
             _response = new();
         }
 
-        [HttpGet("GetUsersInsurances")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [Authorize]
-        //[Authorize(Roles = SD.SystemManager)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetUsersInsurances([FromQuery(Name = "InsuranceOrganizationName")] string name = null, int pageNumber = 1, int pageSize = 0)
-        {
-            try
-            {
-                var entities = await _db._userInsurance.GetAllAsync(
-                    expression: name == null ? null : g => g.InsuranceOrganizationName.ToLower().Contains(name.ToLower()),
-                    pageNumber: pageNumber,
-                    pageSize: pageSize);
+        /*
+         * [HttpGet("GetUsersInsurances")]
+        //[ResponseCache(CacheProfileName = SD.ProfileName)]
+        //[Authorize]
+        ////[Authorize(Roles = SD.SystemManager)]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //public async Task<ActionResult<APIResponse>> GetUsersInsurances([FromQuery(Name = "InsuranceOrganizationName")] string name = null, int pageNumber = 1, int pageSize = 0)
+        //{
+        //    try
+        //    {
+        //        var entities = await _db._userInsurance.GetAllAsync(
+        //            expression: name == null ? null : g => g.InsuranceOrganizationName.ToLower().Contains(name.ToLower()),
+        //            pageNumber: pageNumber,
+        //            pageSize: pageSize);
 
-                if (entities.Count == 0)
-                {
-                    return NotFound(APIResponses.NotFound("No data has been found"));
-                }
+        //        if (entities.Count == 0)
+        //        {
+        //            return NotFound(APIResponses.NotFound("No data has been found"));
+        //        }
 
-                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
-                Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
+        //        Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
+        //        Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
 
-                _response.Result = _mapper.Map<List<UserInsurance>>(entities);
-                _response.StatusCode = HttpStatusCode.OK;
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                return APIResponses.InternalServerError(ex);
-            }
-        }
+        //        _response.Result = _mapper.Map<List<UserInsurance>>(entities);
+        //        _response.StatusCode = HttpStatusCode.OK;
+        //        return Ok(_response);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return APIResponses.InternalServerError(ex);
+        //    }
+        /}
+        */
 
         [HttpGet("{id}")]
         [Authorize]
@@ -75,7 +77,7 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
-                var entities = await _db._userInsurance.GetAsync(expression: g => g.RegistrationDataId == id);
+                var entities = await _db._userInsurance.GetAllAsync(expression: g => g.RegistrationDataId == id);
                 if (entities == null)
                 {
                     return BadRequest(APIResponses.BadRequest($"No objects with Id = {id} "));

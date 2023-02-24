@@ -1,4 +1,4 @@
-﻿@*@model EHR_MVC.DTOs.GovernorateDTOs.GovernorateUpdateDTO
+﻿@model EHR_MVC.DTOs.UserDataDTOs.UserInsuranceDTOS.UserInsuranceUpdateDTO
 
 @{
     ViewData["Title"] = "Edit";
@@ -6,25 +6,37 @@
  
 <br />
 <hr />
-<h1 style="text-align:center">Update Governorate</h1>
+<h1 style="text-align:center">Update Insurance</h1>
 <hr />
 <br />
 <div class="row">
     <div class="col-md-5 m-auto">
         <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="All" class="text-danger"></div>
             
-            <input hidden asp-for="Id"/>
+            <input hidden asp-for="RegistrationDataId" value="@User.Claims.ToList()[0].Value"/>
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+                <label asp-for="InsuranceNo" class="control-label"></label>
+                <input asp-for="InsuranceNo" class="form-control" />
+                <span asp-validation-for="InsuranceNo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                
+                <label asp-for="InsuranceType" class="control-label"></label>
+                <input asp-for="InsuranceType" class="form-control" />
+                <span asp-validation-for="InsuranceType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InsuranceOrganizationName" class="control-label"></label>
+                <input asp-for="InsuranceOrganizationName" class="form-control" />
+                <span asp-validation-for="InsuranceOrganizationName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RelationshipWithOrganization" class="control-label"></label>
+                <input asp-for="RelationshipWithOrganization" class="form-control" />
+                <span asp-validation-for="RelationshipWithOrganization" class="text-danger"></span>
             </div>
             <div class="form-group m-3 p-3">
-                <input type="submit" value="Save" class="btn btn-primary" /> ||  <a asp-action="Index">Back to List</a>
+                <input type="submit" value="Save" class="btn btn-primary" /> @*||  <a asp-action="Index">Back to List</a>*@
             </div>
         </form>
     </div>
@@ -34,4 +46,3 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-*@
