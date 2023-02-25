@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EHR_MVC.DTOs.GovernorateDTOs;
+using EHR_MVC.DTOs.UserDataDTOs;
 using EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Registration;
 using EHR_MVC.DTOs.UserDataDTOs.MedicalDataDTOS;
@@ -342,6 +343,77 @@ namespace EHR_MVC.Controllers
             }
 
             return View(userData);
+        }
+
+        public async Task<IActionResult> GetMedicalUsers()
+        {
+
+            List<RegistrationDataDTO> userData = new();
+            var respnse = await _service.GetMedicalUsersAsync<APIResponse>(HttpContext.Session.GetString(SD.JWT));
+            if (respnse != null && respnse.IsSuccess)
+            {
+
+                userData = JsonConvert.DeserializeObject<List<RegistrationDataDTO>>(Convert.ToString(respnse.Result));
+            }
+            else
+            {
+                if (respnse != null && respnse.Errors != null)
+                {
+                    for (int i = 0; i < respnse.Errors.Count; i++)
+                    {
+                        ModelState.AddModelError("Error", respnse.Errors[i]);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", "Error");
+                }
+            }
+
+            return View(_mapper.Map<List<UserDTOForOthers>>(userData));
+        }
+
+        public async Task<IActionResult> CreateMedicalTeam()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateMedicalTeam(MedicalTeamCreateDTO entity)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {                 
+                    var respnse = await _service.CreateMedicalTeamUserAsync<APIResponse>(entity, HttpContext.Session.GetString(SD.JWT));
+
+                    if (respnse != null && respnse.IsSuccess)
+                    {
+                        return RedirectToAction(nameof(UserData), new { id = entity.Id });
+                    }
+                    else
+                    {
+                        if (respnse != null && respnse.Errors != null)
+                        {
+                            for (int i = 0; i < respnse.Errors.Count; i++)
+                            {
+                                ModelState.AddModelError("Error", respnse.Errors[i]);
+                            }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("Error", "The user has data");
+                        }
+                    }
+                }
+
+                return View(entity);
+            }
+            catch
+            {
+                return View(entity);
+            }
         }
 
         public async Task<IActionResult> CreateUserPersonalData()

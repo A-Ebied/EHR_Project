@@ -31,34 +31,35 @@
                                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">User Data</a>
                                 <div class="dropdown-menu">
                                     @*@if (User.IsInRole(SD.SystemManager))
-                                    {
-                                        <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">All Users</a>
-                                    }*@
+                                {
+                                <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">All Users</a>
+                                }*@
                                     <a class="dropdown-item" asp-route-id="@User.Claims.ToList()[0].Value" asp-controller="Authentication" asp-action="UserData"> My Data</a>
 
                                     <a class="dropdown-item" asp-route-id="@User.Claims.ToList()[0].Value" asp-controller="UserInsurance" asp-action="MyInsurances"> My Insurances</a>
-                                </div>
 
-                                    <a class="dropdown-item"  asp-controller="Authentication" asp-action="CreateUserPersonalData"> Create Personal Data</a>
+                                    <a class="dropdown-item" asp-controller="Authentication" asp-action="CreateUserPersonalData"> Create Personal Data</a>
 
                                     <a class="dropdown-item" asp-controller="Authentication" asp-action="CreateUserMedicalData"> Create Medical Data</a>
-@*
-                                    <a class="dropdown-item" asp-controller="UserInsurance" asp-action="Create"> Create Insurance</a> 
-                                    *@
-                                  
+
+                                    <a class="dropdown-item" asp-controller="Authentication" asp-action="CreateMedicalTeam"> Create Medical Team</a>
+                                </div>
+
+                                @* <a class="dropdown-item" asp-controller="UserInsurance" asp-action="Create"> Create Insurance</a>  *@
                             </li>
+
                         }
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Governorate</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item"  asp-controller="Governorate" asp-action="Index">Governorates</a>
-                                <a class="dropdown-item"  asp-controller="Governorate" asp-action="Create">Create Governorate</a>
+                                <a class="dropdown-item" asp-controller="Governorate" asp-action="Index">Governorates</a>
+                                <a class="dropdown-item" asp-controller="Governorate" asp-action="Create">Create Governorate</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Health Facility</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item"  asp-controller="HealthFacility" asp-action="Index">Health Facilities</a>
+                                <a class="dropdown-item" asp-controller="HealthFacility" asp-action="Index">Health Facilities</a>
 
                                 <a class="dropdown-item" asp-controller="HealthFacility" asp-action="Create">Create Health Facility</a>
                             </div>

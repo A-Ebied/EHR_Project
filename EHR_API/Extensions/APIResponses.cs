@@ -55,14 +55,13 @@ namespace EHR_API.Extensions
             if (registrationData.PersonalData != null)
             {
                 user.UserImageUrl = registrationData.PersonalData.UserImageUrl;
+                user.AgeGroup = registrationData.PersonalData.AgeGroup;
             }
             if (registrationData.MedicalTeam != null)
             {
                 user.Specialization = registrationData.MedicalTeam.MedicalSpecialization;
-                user.AgeGroup = registrationData.PersonalData.AgeGroup;
             }
-             
-
+              
             return user;
         }   
     }

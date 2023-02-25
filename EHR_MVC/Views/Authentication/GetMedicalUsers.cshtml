@@ -1,0 +1,56 @@
+﻿@model IEnumerable<EHR_MVC.DTOs.UserDataDTOs.UserDTOForOthers>
+
+@{
+    ViewData["Title"] = "Medical Users";
+}
+
+
+<br />
+<hr />
+<h1 style="text-align:center">Medical Users</h1>
+<hr />
+<br />
+
+<div class="row m-2">
+    <a asp-action="Create" class="btn btn-primary col-12"> Create New </a>
+</div>
+<hr />
+<br />
+<table class="table table-hover">
+    <thead>
+        <tr class="table-danger">
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Specialization)
+            </th>
+            @* <th>Operations</th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Specialization)
+                </td>
+                @*<td>
+            @Html.ActionLink("Edit", "Edit", new {  id=item.Id  }) |
+            @Html.ActionLink("Details", "Details", new {  id=item.Id}) |
+            @Html.ActionLink("Delete", "Delete", new {  id=item.Id  })
+            </td>*@
+            </tr>
+        }
+    </tbody>
+</table>
+

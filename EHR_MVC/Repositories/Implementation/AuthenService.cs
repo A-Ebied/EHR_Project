@@ -1,8 +1,10 @@
 ﻿using EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Registration;
 using EHR_MVC.DTOs.UserDataDTOs.MedicalDataDTOS;
+using EHR_MVC.DTOs.UserDataDTOs.MedicalTeamDTOs;
 using EHR_MVC.DTOs.UserDataDTOs.PersonalDataDTOs;
 using EHR_MVC.Repositories.Contracts;
+using NuGet.Protocol.Plugins;
 using static EHR_MVC.Extensions.SD;
 
 namespace EHR_MVC.Repositories.Implementation
@@ -136,6 +138,27 @@ namespace EHR_MVC.Repositories.Implementation
                 ApiType = ApiType.PUT,
                 Data = registration,
                 URL = $"{_url}/api/AuthenticationAPI/{id}",
+                Token = token
+            });
+        }
+
+        public Task<T> GetMedicalUsersAsync<T>(string token = null)
+        {
+            return SendAsync<T>(new Models.APIRequest()
+            {
+                ApiType = ApiType.GET,
+                URL = $"{_url}/api/AuthenticationAPI/GetMedicalUsers",
+                Token = token
+            });
+        }
+
+        public Task<T> CreateMedicalTeamUserAsync<T>(MedicalTeamCreateDTO entity, string token = null)
+        {
+            return SendAsync<T>(new Models.APIRequest()
+            {
+                ApiType = ApiType.POST,
+                Data = entity,
+                URL = $"{_url}/api/MedicalTeamAPI/CreateMedicalTeamUser",
                 Token = token
             });
         }

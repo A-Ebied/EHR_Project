@@ -1,9 +1,16 @@
-﻿@model EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Registration.RegistrationDataDTO
+﻿@using EHR_MVC.Extensions;
+@model EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Registration.RegistrationDataDTO
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor accessor
 
 @{
     ViewData["Title"] = "MyData";
+    var temp = false;
 }
 
+@if (accessor.HttpContext.Session.GetString(SD.JWT) != null && accessor.HttpContext.Session.GetString(SD.JWT).ToString().Length > 0)
+{
+    temp = true;
+}
 
 <br />
 <hr />
@@ -16,13 +23,18 @@
     <tr>
         <td>
             <br />
-            <a asp-route-id="@User.Claims.ToList()[0].Value" asp-action="UpdateRegistrationData" class="btn btn-outline-primary col-12"> Update </a>
+           @if (temp)
+            {
+                <a asp-route-id="@User.Claims.ToList()[0].Value" asp-action="UpdateRegistrationData" class="btn btn-outline-primary col-12"> Update </a>
+            }
             <br />
             <br />
         </td>
     </tr>
     <dl class="row">
-        @if (User.Claims.ToList()[0].Value == Model.UserName)
+
+
+        @if (temp && User.Claims.ToList()[0].Value == Model.UserName)
         {
             <dt class="col-sm-4">
                 @Html.DisplayNameFor(model => model.Id)
@@ -64,7 +76,7 @@
             @Html.DisplayFor(model => model.PhoneNumber)
         </dd>
 
-         @if (User.Claims.ToList()[0].Value == Model.UserName)
+        @if (temp && User.Claims.ToList()[0].Value == Model.UserName)
         {
             <dt class="col-sm-4">
                 @Html.DisplayNameFor(model => model.CreatedAt)
@@ -77,7 +89,7 @@
             </dt>
             <dd class="col-sm-8">
                 @Html.DisplayFor(model => model.UpdateddAt)
-        </dd>
+            </dd>
         }
 
     </dl>
@@ -90,16 +102,20 @@
         <h4> Personal Data </h4>
         <tr>
             <td>
-                <a asp-route-id="@User.Claims.ToList()[0].Value" asp-action="DeletePersonalData" class="btn btn-danger col-12"> Delete </a>
-                <br/>
-                <br/>
-                <a asp-route-id="@User.Claims.ToList()[0].Value" asp-action="UpdatePersonalData" class="btn btn-outline-primary col-12"> Update </a>
+                @if (temp)
+                {
+                    <a asp-route-id="@User.Claims.ToList()[0].Value" asp-action="DeletePersonalData" class="btn btn-danger col-12"> Delete </a>
+                    <br />
+                    <br />
+                    <a asp-route-id="@User.Claims.ToList()[0].Value" asp-action="UpdatePersonalData" class="btn btn-outline-primary col-12"> Update </a>
+                }
+
                 <br />
                 <br />
             </td>
         </tr>
         <dl class="row">
-            @if (User.Claims.ToList()[0].Value == Model.UserName)
+            @if (temp && User.Claims.ToList()[0].Value == Model.UserName)
             {
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Id)
@@ -127,25 +143,25 @@
             </dt>
             <dd class="col-sm-8">
                 @Html.DisplayFor(model => model.PersonalData.BirthDate)
-            </dd> 
+            </dd>
             <dt class="col-sm-4">
                 etc
             </dt>
             <dd class="col-sm-8">
                 -----------------
             </dd>
-            @if (User.Claims.ToList()[0].Value == Model.UserName)
+            @if (temp && User.Claims.ToList()[0].Value == Model.UserName)
             {
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.PersonalData.CreatedAt)
-                    </dt>
-                    <dd class="col-sm-8">
+                </dt>
+                <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.PersonalData.CreatedAt)
-                    </dd>
-                    <dt class="col-sm-4">
+                </dd>
+                <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.PersonalData.UpdateddAt)
-                    </dt>
-                    <dd class="col-sm-8">
+                </dt>
+                <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.PersonalData.UpdateddAt)
                 </dd>
             }
@@ -161,16 +177,20 @@
         <h4> Medical Data </h4>
         <tr>
             <td>
-                <a asp-route-id="@User.Claims.ToList()[0].Value" asp-action="DeleteMedicalData" class="btn btn-danger col-12"> Delete </a>
-                <br />
-                <br />
-                <a asp-route-id="@User.Claims.ToList()[0].Value" asp-action="UpdateMedicalData" class="btn btn-outline-primary col-12"> Update </a>
+                @if (temp)
+                {
+                    <a asp-route-id="@User.Claims.ToList()[0].Value" asp-action="DeleteMedicalData" class="btn btn-danger col-12"> Delete </a>
+                    <br />
+                    <br />
+                    <a asp-route-id="@User.Claims.ToList()[0].Value" asp-action="UpdateMedicalData" class="btn btn-outline-primary col-12"> Update </a>
+                }
+
                 <br />
                 <br />
             </td>
         </tr>
         <dl class="row">
-            @if (User.Claims.ToList()[0].Value == Model.UserName)
+            @if (temp && User.Claims.ToList()[0].Value == Model.UserName)
             {
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Id)
@@ -199,14 +219,78 @@
             <dd class="col-sm-8">
                 @Html.DisplayFor(model => model.MedicalData.FamilyHistory)
             </dd>
-            
+
             <dt class="col-sm-4">
                 etc
             </dt>
             <dd class="col-sm-8">
                 -----------------
             </dd>
-            @if (User.Claims.ToList()[0].Value == Model.UserName)
+            @if (temp && User.Claims.ToList()[0].Value == Model.UserName)
+            {
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.MedicalData.CreatedAt)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.MedicalData.CreatedAt)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.MedicalData.UpdateddAt)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.MedicalData.UpdateddAt)
+                </dd>
+            }
+
+        </dl>
+    </div>
+}
+
+@if (Model.MedicalTeam != null)
+{
+    <div class="col-md-5 m-auto">
+
+        <h4> Medical Data </h4>
+        <tr>
+            <td>
+                @if (temp)
+                {
+                    <a asp-route-id="@User.Claims.ToList()[0].Value" asp-action="DeleteMedicalTeam" class="btn btn-danger col-12"> Delete </a>
+                    <br />
+                    <br />
+                    <a asp-route-id="@User.Claims.ToList()[0].Value" asp-action="UpdateMedicalTeam" class="btn btn-outline-primary col-12"> Update </a>
+                }
+
+                <br />
+                <br />
+            </td>
+        </tr>
+        <dl class="row">
+            @if (temp && User.Claims.ToList()[0].Value == Model.UserName)
+            {
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Id)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Id)
+                </dd>
+            }
+
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.MedicalTeam.MedicalSpecialization)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.MedicalTeam.MedicalSpecialization)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.MedicalTeam.Degree)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.MedicalTeam.Degree)
+            </dd>
+
+            @if (temp && User.Claims.ToList()[0].Value == Model.UserName)
             {
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.MedicalData.CreatedAt)

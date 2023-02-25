@@ -367,7 +367,12 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
-                var jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
                 var entity = new RegistrationData();
                 string headerRole = null;
                 string headerId = null;
@@ -381,19 +386,20 @@ namespace EHR_API.Controllers
                     {
                         entity = await _db._authentication.GetAsync(
                                  expression: g => g.Id == id,
-                                 includeProperties: "PersonalData,InsuranceData,MedicalData,MedicalTeam");
+                                 includeProperties: "PersonalData,MedicalData,MedicalTeam");
                     }
-                    else
-                    {
-                        entity = await _db._authentication.GetAsync(
-                                 expression: g => g.Id == id,
-                                 includeProperties: "PersonalData,MedicalTeam");
-                    }
+                    
                 }
                 else
                 {
-                    return BadRequest(APIResponses.BadRequest("jwtToken is empty"));
+                    entity = await _db._authentication.GetAsync(
+                             expression: g => g.Id == id,
+                             includeProperties: "PersonalData,MedicalTeam");
                 }
+                //else
+                //{
+                //    return BadRequest(APIResponses.BadRequest("jwtToken is empty"));
+                //}
 
                 if (entity == null)
                 {

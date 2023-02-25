@@ -2,6 +2,7 @@
 using EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_MVC.DTOs.UserDataDTOs.AuthDTOs.Registration;
 using EHR_MVC.DTOs.UserDataDTOs.MedicalDataDTOS;
+using EHR_MVC.DTOs.UserDataDTOs.MedicalTeamDTOs;
 using EHR_MVC.DTOs.UserDataDTOs.PersonalDataDTOs;
 using System.Linq.Expressions;
 
@@ -24,5 +25,8 @@ namespace EHR_MVC.Repositories.Contracts
         Task<T> GetHealthFacilityManagersAsync<T>(string token = null);
         Task<T> GetRolesAsync<T>(string token = null);
         Task<T> GetUserAsync<T>(string id, string token = null);
+
+        Task<T> GetMedicalUsersAsync<T>(string token = null);
+        Task<T> CreateMedicalTeamUserAsync<T>(MedicalTeamCreateDTO entity, string token = null);
     }
 }
