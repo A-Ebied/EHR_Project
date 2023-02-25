@@ -1,5 +1,6 @@
 ﻿@model EHR_MVC.DTOs.GovernorateDTOs.GovernorateDTO
-
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor accessor
+@using EHR_MVC.Extensions;
 @{
     ViewData["Title"] = "Details";
 }
@@ -39,7 +40,16 @@
     </dl>
 
     <div class="form-group m-3 p-3">
-         <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> ||
+
+        @if (accessor.HttpContext.Session.GetString(SD.JWT) != null && accessor.HttpContext.Session.GetString(SD.JWT).ToString().Length > 0)
+        {
+            @if (User.IsInRole(SD.SystemManager))
+            {
+                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> <span> ||</span>
+
+            }
+        }
+         
    <a asp-action="Index">Back to List</a>
     </div>
 </div>

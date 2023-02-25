@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EHRAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class add : Migration
+    public partial class add1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -178,27 +178,6 @@ namespace EHRAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "InsuranceData",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    HasGovernmentInsurance = table.Column<bool>(type: "bit", nullable: false),
-                    HasAnotherInsurance = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdateddAt = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InsuranceData", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_InsuranceData_AspNetUsers_Id",
-                        column: x => x.Id,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "MedicalData",
                 columns: table => new
                 {
@@ -243,24 +222,27 @@ namespace EHRAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Patient",
+                name: "UserInsurance",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    AgeGroup = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsSane = table.Column<bool>(type: "bit", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    InsuranceNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InsuranceType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InsuranceOrganizationName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RelationshipWithOrganization = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdateddAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    UpdateddAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RegistrationDataId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Patient", x => x.Id);
+                    table.PrimaryKey("PK_UserInsurance", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Patient_AspNetUsers_Id",
-                        column: x => x.Id,
+                        name: "FK_UserInsurance_AspNetUsers_RegistrationDataId",
+                        column: x => x.RegistrationDataId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -280,17 +262,19 @@ namespace EHRAPI.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateddAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    RegistrationDataId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    RegistrationDataId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     GovernorateId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_HealthFacilities", x => x.Id);
+                    table.UniqueConstraint("AlternateKey_RegistrationDataId", x => x.RegistrationDataId);
                     table.ForeignKey(
                         name: "FK_HealthFacilities_AspNetUsers_RegistrationDataId",
                         column: x => x.RegistrationDataId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_HealthFacilities_Governorates_GovernorateId",
                         column: x => x.GovernorateId,
@@ -314,6 +298,7 @@ namespace EHRAPI.Migrations
                     EmergencyPhone1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EmergencyPhone2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AgeGroup = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateddAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -334,43 +319,18 @@ namespace EHRAPI.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "UserInsurance",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    InsuranceNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    InsuranceType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    InsuranceOrganizationName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RelationshipWithOrganization = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdateddAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    InsuranceDataId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserInsurance", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserInsurance_InsuranceData_InsuranceDataId",
-                        column: x => x.InsuranceDataId,
-                        principalTable: "InsuranceData",
-                        principalColumn: "Id");
-                });
-
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
                     { "1", null, "SystemManager", "SYSTEMMANAGER" },
-                    { "2", null, "HealthFacilitiesAdministrator", "HEALTHFACILITIESADMINISTRATOR" },
-                    { "3", null, "HealthFacilityManager", "HEALTHFACILITYAMANAGER" },
-                    { "4", null, "Physician", "PHYSICIAN" },
-                    { "5", null, "Nurse", "NURSE" },
-                    { "6", null, "Pharmacist", "PHARMACIST" },
-                    { "7", null, "Patient", "PATIENT" },
-                    { "8", null, "Technician", "TECHNICIAN" }
+                    { "2", null, "HealthFacilityManager", "HEALTHFACILITYAMANAGER" },
+                    { "3", null, "Physician", "PHYSICIAN" },
+                    { "4", null, "Nurse", "NURSE" },
+                    { "5", null, "Pharmacist", "PHARMACIST" },
+                    { "6", null, "Patient", "PATIENT" },
+                    { "7", null, "Technician", "TECHNICIAN" }
                 });
 
             migrationBuilder.InsertData(
@@ -378,10 +338,16 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedAt", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "Nationality", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UpdateddAt", "UserName" },
                 values: new object[,]
                 {
-                    { "12345678902341", 0, "b7800ff5-b486-4e03-840d-bae84ba9216e", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "A@gmail.com", false, "أحمد محمد أحمد", false, null, "مصري", "A@GMAIL.COM", "@AHMED123", "AQAAAAIAAYagAAAAEEaF7eCZ1rTM+3Ld61A0l0jkbIP3AkCMzaTnrX/oQpQPhqEKRMX4TE7U9KAe0p+sIQ==", "", false, "ccefc028-03b0-46fb-8292-50d9cd4d15b2", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Ahmed123" },
-                    { "12345678912345", 0, "32f0eef8-9fcc-490f-a30a-9e29fd4be25e", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "k@gmail.com", false, "أحمد محمد كمال", false, null, "مصري", "K@GMAIL.COM", "@KAMAL123", "AQAAAAIAAYagAAAAEGRDODo4tC0AXIvXvIo9pPKgoeA/SZfpsQOyOcSxh45cqwd9Z1tujFDaEuB8E4yWFw==", "01234567890", false, "a24c5725-7ff6-4c7a-ad0e-31faa5f20db9", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Kamal123" },
-                    { "12345678921345", 0, "4e89614d-3d34-4af7-92fc-5099b85f3f8c", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "M@gmail.com", false, "أحمد محمد محمد", false, null, "مصري", "M@GMAIL.COM", "@MUHAMMAD123", "AQAAAAIAAYagAAAAEASmkRNJGaZvyRSIFvxLoIrLJ4vuTANxyb03t23dNA4vm3jX3OaHUdZQp0nRE2AjVQ==", "01234567899", false, "72146f97-1ef2-484c-8a2f-a7c3b1c840b7", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Muhammad123" },
-                    { "92345678912345", 0, "0d64d543-19ff-4bad-aadf-2c7658b01ebf", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Al@gmail.com", false, "أحمد محمد علي", false, null, "مصري", "AL@GMAIL.COM", "@ALI123", "AQAAAAIAAYagAAAAEFjdeFFq4USTgl/Z4LTonI4HzsuvXoxho8SfJZVEi4rkFl4BQppjXBAcgOxqNxCjfQ==", "01234567890", false, "8374da3b-f3b0-41b1-833c-e53dcb3eac31", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Ali123" }
+                    { "12345678912341", 0, "498e9488-9c06-4fe4-858a-c431c7d33daf", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "k@gmail.com", false, "أحمد محمد كمال", false, null, "مصري", "K@GMAIL.COM", "@KAMAL123", "AQAAAAIAAYagAAAAEDG3Vaf6J141woK8ny1VdD/+dHoC5pKIbD8O4UOBQ/ob0ZamWa9rqLpXaPASXod0fQ==", "01234567890", false, "43d3ab07-f4a4-47e1-84c1-e1b1265d67b7", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Kamal123" },
+                    { "12345678912342", 0, "e6a7e4e8-a301-4179-ab4d-7d41e6a9b12b", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "A@gmail.com", false, "أحمد محمد أحمد", false, null, "مصري", "A@GMAIL.COM", "@AHMED123", "AQAAAAIAAYagAAAAEDk7xbJi7cKMgOdh3MRAWmUtw4xQH/XRhcdiPYjVTG7jfTGQlXZNADo3tRzgtMCmmQ==", "", false, "488cf835-323a-475a-9bb6-04d03378c023", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Ahmed123" },
+                    { "12345678912343", 0, "21694970-5bf5-473e-82e1-c5441e459921", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "M@gmail.com", false, "أحمد محمد محمد", false, null, "مصري", "M@GMAIL.COM", "@MUHAMMAD123", "AQAAAAIAAYagAAAAECDlaOtihH04d6EbHcqMlxsuG2Q6GDLXeg+GWMCRh29ZUWHcDVEcOUFFPSkyNFJv6g==", "01234567899", false, "11d4bdc1-cdba-451f-9341-3ee4b6885138", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Muhammad123" },
+                    { "12345678912344", 0, "be7c42bd-28d6-4f53-8bee-d9f8f5359c8d", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Al@gmail.com", false, "أحمد محمد علي", false, null, "مصري", "AL@GMAIL.COM", "@ALI123", "AQAAAAIAAYagAAAAEEtc3jUJz7XtYp1b0w9ZkWl1uO1uxka+alHZBKqOCSdksQTxHrZ1lXC+cGXzqOAhOg==", "01234567890", false, "0928e7f1-2640-47b1-9dc5-c0c49a945536", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Ali123" },
+                    { "12345678912345", 0, "b6711ca2-388c-4095-b33e-2712b6ead875", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Fa@gmail.com", false, "أحمد فوزي محمد", false, null, "مصري", "FA@GMAIL.COM", "@FAWZY123", "AQAAAAIAAYagAAAAEPnpTVYckEVv7ui19NYn6Zhx6qwOxvH3uksYvgDm0oYDhEMaH4J17Tus+ZDAj2LOrg==", "", false, "a7eab8fd-4592-4fff-becb-b75ab3273244", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Fawzy123" },
+                    { "12345678912346", 0, "24c02749-dca4-41f9-8477-dd78d50a5486", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ka@gmail.com", false, "أحمد خاطر علي", false, null, "مصري", "KA@GMAIL.COM", "@KHATER123", "AQAAAAIAAYagAAAAEAzKHtIAeLIczwhDd5mrjgcUL/XUEhyY657nh1wD8E727Q42mhvYJeYk+9lRTlp7Qw==", "", false, "c994f89c-f826-47d0-845e-9725108ecd49", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Khater123" },
+                    { "12345678912347", 0, "3c87fce7-0231-47ac-9812-addb9986b79b", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ma@gmail.com", false, "منال خاطر علي", false, null, "مصري", "MA@GMAIL.COM", "@MANAL123", "AQAAAAIAAYagAAAAEFcpw/nDFQJMKWItOWFnC2MALWOMywKZi5GzoFZg6DFJ5Z3gFl+1KTOvQwCokq3CzA==", "", false, "6f25d438-cc62-45c9-87b5-f55445e88e27", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Manal123" },
+                    { "12345678912348", 0, "f7a52ff8-8d51-44cc-81a3-fbe78b25034b", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ma2@gmail.com", false, "منال خاطر أحمد", false, null, "مصري", "MA2@GMAIL.COM", "@MANAL2123", "AQAAAAIAAYagAAAAEOBFkSIbK4+e9thxHu24J4cRBQJxqb9Fjfmt/waZ6UdyW7cmCZM5TCQvMvcBxsieBQ==", "", false, "78fffd46-2ca4-4247-ac57-fb9737a23961", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Manal2123" },
+                    { "12345678912349", 0, "5d08b2a0-e91d-4d97-9874-905bf3f04902", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ka2@gmail.com", false, "خاطر أحمد", false, null, "مصري", "KA2@GMAIL.COM", "@KHATER2123", "AQAAAAIAAYagAAAAEOMwpkeE78x9eIyXSnr5AjfzrjE02VfcUQbDujcurMRPkz5/UA4Uy4ILWLKlJ9pwRQ==", "", false, "a9a2ed33-003f-4aa8-8652-817a5ca2aa94", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Khater2123" },
+                    { "12345678912350", 0, "5d53bcbd-bb59-44bf-922f-5f4d874b0cf6", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "TE@gmail.com", false, "test", false, null, "مصري", "TE@GMAIL.COM", "@TEST2123", "AQAAAAIAAYagAAAAECbIqQPM4FFf4O0DXvJpZ/e4aKPMhWCNKekkZnUsTZ6y11VwEDjA0B40IzdKkoncgg==", "", false, "7c9c6e53-a194-46c8-a41b-94e1e03058e7", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Test2123" }
                 });
 
             migrationBuilder.InsertData(
@@ -389,12 +355,12 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "CreatedAt", "Title", "UpdateddAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(420), "القاهرة", new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(453) },
-                    { 2, new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(461), "الجيزة", new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(464) },
-                    { 3, new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(469), "مطروح", new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(472) },
-                    { 4, new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(476), "شمال سيناء", new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(478) },
-                    { 5, new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(503), "الشرقية", new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(506) },
-                    { 6, new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(511), "الدقهلية", new DateTime(2023, 2, 23, 12, 44, 52, 148, DateTimeKind.Local).AddTicks(514) }
+                    { 1, new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9089), "القاهرة", new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9103) },
+                    { 2, new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9105), "الجيزة", new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9106) },
+                    { 3, new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9107), "مطروح", new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9107) },
+                    { 4, new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9108), "شمال سيناء", new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9109) },
+                    { 5, new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9110), "الشرقية", new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9110) },
+                    { 6, new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9111), "الدقهلية", new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9112) }
                 });
 
             migrationBuilder.InsertData(
@@ -402,10 +368,16 @@ namespace EHRAPI.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "3", "12345678902341" },
-                    { "3", "12345678912345" },
-                    { "3", "12345678921345" },
-                    { "1", "92345678912345" }
+                    { "1", "12345678912341" },
+                    { "2", "12345678912342" },
+                    { "3", "12345678912343" },
+                    { "5", "12345678912344" },
+                    { "6", "12345678912345" },
+                    { "7", "12345678912346" },
+                    { "4", "12345678912347" },
+                    { "2", "12345678912348" },
+                    { "2", "12345678912349" },
+                    { "2", "12345678912350" }
                 });
 
             migrationBuilder.InsertData(
@@ -413,9 +385,9 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "Address", "CreatedAt", "Description", "Email", "GovernorateId", "Phone1", "Phone2", "Phone3", "RegistrationDataId", "SubordinateTo", "Title", "Type", "UpdateddAt" },
                 values: new object[,]
                 {
-                    { 1, "Address1", new DateTime(2023, 2, 23, 12, 44, 53, 86, DateTimeKind.Local).AddTicks(2706), "Description1", "m@gmail.com", 1, "01123456878", "", "", "12345678912345", "المؤسسة العسكرية", "المستشفى العسكري بالشرقية", "مستشفى عسكري", new DateTime(2023, 2, 23, 12, 44, 53, 86, DateTimeKind.Local).AddTicks(2724) },
-                    { 2, "Address2", new DateTime(2023, 2, 23, 12, 44, 53, 86, DateTimeKind.Local).AddTicks(2729), "Description2", "a@gmail.com", 1, "01122456878", "", "", "12345678902341", "وزارة الصحة", "المستشفى العام بالعريش", "مستشفى عام", new DateTime(2023, 2, 23, 12, 44, 53, 86, DateTimeKind.Local).AddTicks(2731) },
-                    { 3, "Address3", new DateTime(2023, 2, 23, 12, 44, 53, 86, DateTimeKind.Local).AddTicks(2734), "Description3", "j@gmail.com", 1, "01123416878", "", "", "12345678921345", "مستشفيات الجامعة", "مستشفى الجامعة بالزقازيق", "مستشفى جامعي", new DateTime(2023, 2, 23, 12, 44, 53, 86, DateTimeKind.Local).AddTicks(2736) }
+                    { 1, "Address1", new DateTime(2023, 2, 25, 4, 23, 54, 617, DateTimeKind.Local).AddTicks(6617), "Description1", "m@gmail.com", 1, "01123456878", "", "", "12345678912342", "المؤسسة العسكرية", "المستشفى العسكري بالشرقية", "مستشفى عسكري", new DateTime(2023, 2, 25, 4, 23, 54, 617, DateTimeKind.Local).AddTicks(6633) },
+                    { 2, "Address2", new DateTime(2023, 2, 25, 4, 23, 54, 617, DateTimeKind.Local).AddTicks(6636), "Description2", "a@gmail.com", 1, "01122456878", "", "", "12345678912348", "وزارة الصحة", "المستشفى العام بالعريش", "مستشفى عام", new DateTime(2023, 2, 25, 4, 23, 54, 617, DateTimeKind.Local).AddTicks(6637) },
+                    { 3, "Address3", new DateTime(2023, 2, 25, 4, 23, 54, 617, DateTimeKind.Local).AddTicks(6639), "Description3", "j@gmail.com", 1, "01123416878", "", "", "12345678912349", "مستشفيات الجامعة", "مستشفى الجامعة بالزقازيق", "مستشفى جامعي", new DateTime(2023, 2, 25, 4, 23, 54, 617, DateTimeKind.Local).AddTicks(6639) }
                 });
 
             migrationBuilder.CreateIndex(
@@ -463,19 +435,14 @@ namespace EHRAPI.Migrations
                 column: "GovernorateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HealthFacilities_RegistrationDataId",
-                table: "HealthFacilities",
-                column: "RegistrationDataId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_PersonalData_GovernorateId",
                 table: "PersonalData",
                 column: "GovernorateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserInsurance_InsuranceDataId",
+                name: "IX_UserInsurance_RegistrationDataId",
                 table: "UserInsurance",
-                column: "InsuranceDataId");
+                column: "RegistrationDataId");
         }
 
         /// <inheritdoc />
@@ -506,9 +473,6 @@ namespace EHRAPI.Migrations
                 name: "MedicalTeam");
 
             migrationBuilder.DropTable(
-                name: "Patient");
-
-            migrationBuilder.DropTable(
                 name: "PersonalData");
 
             migrationBuilder.DropTable(
@@ -519,9 +483,6 @@ namespace EHRAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Governorates");
-
-            migrationBuilder.DropTable(
-                name: "InsuranceData");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

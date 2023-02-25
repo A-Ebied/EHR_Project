@@ -94,7 +94,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        [Authorize(Roles = SD.HealthFacilitiesAdministrator + "," + SD.HealthFacilityManager)]
+        [Authorize(Roles = SD.HealthFacilityManager)]
         [HttpPut("{id}", Name = "UpdateMedicalTeamUser")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

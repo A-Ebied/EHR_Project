@@ -1,5 +1,6 @@
 ﻿@model EHR_MVC.DTOs.UserDataDTOs.MedicalTeamDTOs.MedicalTeamCreateDTO
-
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor accessor
+@using EHR_MVC.Extensions;
 @{
     ViewData["Title"] = "Create Medical Team";
 }

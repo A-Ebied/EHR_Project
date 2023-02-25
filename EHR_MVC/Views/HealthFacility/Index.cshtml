@@ -1,18 +1,25 @@
-﻿@model IEnumerable<EHR_MVC.DTOs.HealthFacilityDTOs.HealthFacilityDTOForOthers>
+﻿@using EHR_MVC.Extensions;
+@model IEnumerable<EHR_MVC.DTOs.HealthFacilityDTOs.HealthFacilityDTOForOthers>
 
 @{
     ViewData["Title"] = "Index";
 }
- 
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor accessor
 <br />
 <hr />
 <h1 style="text-align:center">Health Facilities</h1>
 <hr />
 <br />
+@if (accessor.HttpContext.Session.GetString(SD.JWT) != null && accessor.HttpContext.Session.GetString(SD.JWT).ToString().Length > 0)
+{
+    @if (User.IsInRole(SD.SystemManager))
+    {
+        <div class="row m-2">
+            <a asp-action="Create" class="btn btn-primary col-12"> Create New </a>
+        </div>
+    }
+}
 
-<div class="row m-2">
-    <a asp-action="Create" class="btn btn-primary col-12"> Create New </a>
-</div>
 <hr />
 <br />
 
@@ -28,7 +35,13 @@
             <th>
                 @Html.DisplayNameFor(model => model.SubordinateTo)
             </th>
-            <th>Operations</th>
+            @if (accessor.HttpContext.Session.GetString(SD.JWT) != null && accessor.HttpContext.Session.GetString(SD.JWT).ToString().Length > 0)
+            {
+                @if (User.IsInRole(SD.SystemManager))
+                {
+                    <th>Operations</th>
+                }
+            }
         </tr>
     </thead>
     <tbody>
@@ -43,11 +56,17 @@
             <td>
                 @Html.DisplayFor(modelItem => item.SubordinateTo)
             </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new {  id=item.Id  }) |
-                    @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-            </td>
+                @if (accessor.HttpContext.Session.GetString(SD.JWT) != null && accessor.HttpContext.Session.GetString(SD.JWT).ToString().Length > 0)
+                {
+                    @if (User.IsInRole(SD.SystemManager))
+                    {
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new {  id=item.Id  }) |
+                            @Html.ActionLink("Details", "Details", new {  id=item.Id}) |
+                            @Html.ActionLink("Delete", "Delete", new {  id=item.Id  })
+                        </td>
+                    }
+                }
         </tr>
 }
     </tbody>

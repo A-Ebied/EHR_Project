@@ -211,6 +211,62 @@ namespace EHR_API.Controllers
         {
             try
             {
+                IEnumerable<RegistrationData> entities = new List<RegistrationData>();
+                entities = await _db._authentication.GetAllAsync(
+                    includeProperties: "PersonalData,MedicalTeam");
+
+                var medicalUsers = new List<RegistrationData>();
+                IEnumerable<string> roles = new List<string>();
+                foreach (var entity in entities)
+                {
+                    roles = await _userManager.GetRolesAsync(entity);
+                    if (roles.Contains("Physician") == true || roles.Contains("Nurse") == true || roles.Contains("Technician") == true || roles.Contains("Pharmacist") == true)
+                    {
+                        medicalUsers.Add(entity);
+                    }
+                }
+
+                if (medicalUsers.ToList().Count == 0)
+                {
+                    return NotFound(APIResponses.NotFound("No data has been found"));
+                }
+
+                if (medicalSpecialization != null)
+                {
+                    var temp = medicalUsers;
+                    medicalUsers = null;
+                    foreach (var item in temp)
+                    {
+                        if (item.MedicalTeam != null && item.MedicalTeam.MedicalSpecialization.Contains(medicalSpecialization))
+                        {
+                            medicalUsers.Add(item);
+                        }
+                    }
+                }
+
+                if (medicalUsers.ToList().Count == 0)
+                {
+                    return NotFound(APIResponses.NotFound("No data has been found"));
+                }
+
+                if (pageSize > 0)
+                {
+                    medicalUsers = (medicalUsers.Skip(pageSize * (pageNumber - 1)).Take(pageSize)).ToList();
+                }
+
+                List<UserDTOForOthers> medicalTeam = new();
+                foreach (var item in medicalUsers)
+                {
+                    medicalTeam.Add(APIResponses.User(_mapper.Map<RegistrationData>(item)));
+                }
+
+                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
+                Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
+
+                _response.Result = medicalTeam;
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+/*
                 IEnumerable<MedicalTeam> medicalTeam = new List<MedicalTeam>();
                 var entities = new List<RegistrationData>();
 
@@ -243,7 +299,7 @@ namespace EHR_API.Controllers
                 _response.Result = medicalUsers;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
-
+*/
             }
             catch (Exception ex)
             {
@@ -446,15 +502,15 @@ namespace EHR_API.Controllers
                         result = entities.Where(r => r.Name == SD.Patient);
                     }
 
-                    if (headerRole == SD.SystemManager)
-                    {
-                        result = entities.Where(r => r.Name == SD.HealthFacilitiesAdministrator);
-                    }
+                    //if (headerRole == SD.SystemManager)
+                    //{
+                    //    result = entities.Where(r => r.Name == SD.HealthFacilitiesAdministrator);
+                    //}
 
-                    if (headerRole == SD.HealthFacilitiesAdministrator)
-                    {
-                        result = entities.Where(r => r.Name == SD.HealthFacilityManager);
-                    }
+                    //if (headerRole == SD.HealthFacilitiesAdministrator)
+                    //{
+                    //    result = entities.Where(r => r.Name == SD.HealthFacilityManager);
+                    //}
 
                     if (headerRole == SD.HealthFacilityManager)
                     {

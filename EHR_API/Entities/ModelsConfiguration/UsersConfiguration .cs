@@ -13,7 +13,7 @@ namespace EHR_API.Entities.ModelsConfiguration
             List<RegistrationData> registrations = new();
             var user = new RegistrationData
             {
-                Id = "12345678912345",
+                Id = "12345678912341",
                 Nationality = "مصري",
                 FullName = "أحمد محمد كمال",
                 UserName = "@Kamal123",
@@ -29,7 +29,7 @@ namespace EHR_API.Entities.ModelsConfiguration
 
             user = new RegistrationData
             {
-                Id = "12345678902341",
+                Id = "12345678912342",
                 Nationality = "مصري",
                 FullName = "أحمد محمد أحمد",
                 UserName = "@Ahmed123",
@@ -45,7 +45,7 @@ namespace EHR_API.Entities.ModelsConfiguration
             
             user = new RegistrationData
             {
-                Id = "12345678921345",
+                Id = "12345678912343",
                 Nationality = "مصري",
                 FullName = "أحمد محمد محمد",
                 UserName = "@Muhammad123",
@@ -61,7 +61,7 @@ namespace EHR_API.Entities.ModelsConfiguration
              
             user = new RegistrationData
             {
-                Id = "92345678912345",
+                Id = "12345678912344",
                 Nationality = "مصري",
                 FullName = "أحمد محمد علي",
                 UserName = "@Ali123",
@@ -69,6 +69,102 @@ namespace EHR_API.Entities.ModelsConfiguration
                 Email = "Al@gmail.com",
                 NormalizedEmail = "AL@GMAIL.COM",
                 PhoneNumber = "01234567890",
+            };
+
+            pw = new PasswordHasher<string>();
+            user.PasswordHash = pw.HashPassword(user.UserName, "123@Tt");
+            registrations.Add(user);
+
+            user = new RegistrationData
+            {
+                Id = "12345678912345",
+                Nationality = "مصري",
+                FullName = "أحمد فوزي محمد",
+                UserName = "@Fawzy123",
+                NormalizedUserName = "@FAWZY123",
+                Email = "Fa@gmail.com",
+                NormalizedEmail = "FA@GMAIL.COM",
+                PhoneNumber = "",
+            };
+
+            pw = new PasswordHasher<string>();
+            user.PasswordHash = pw.HashPassword(user.UserName, "123@Tt");
+            registrations.Add(user);
+
+            user = new RegistrationData
+            {
+                Id = "12345678912346",
+                Nationality = "مصري",
+                FullName = "أحمد خاطر علي",
+                UserName = "@Khater123",
+                NormalizedUserName = "@KHATER123",
+                Email = "Ka@gmail.com",
+                NormalizedEmail = "KA@GMAIL.COM",
+                PhoneNumber = "",
+            };
+
+            pw = new PasswordHasher<string>();
+            user.PasswordHash = pw.HashPassword(user.UserName, "123@Tt");
+            registrations.Add(user);
+
+            user = new RegistrationData
+            {
+                Id = "12345678912347",
+                Nationality = "مصري",
+                FullName = "منال خاطر علي",
+                UserName = "@Manal123",
+                NormalizedUserName = "@MANAL123",
+                Email = "Ma@gmail.com",
+                NormalizedEmail = "MA@GMAIL.COM",
+                PhoneNumber = "",
+            };
+
+            pw = new PasswordHasher<string>();
+            user.PasswordHash = pw.HashPassword(user.UserName, "123@Tt");
+            registrations.Add(user);
+
+            user = new RegistrationData
+            {
+                Id = "12345678912348",
+                Nationality = "مصري",
+                FullName = "منال خاطر أحمد",
+                UserName = "@Manal2123",
+                NormalizedUserName = "@MANAL2123",
+                Email = "Ma2@gmail.com",
+                NormalizedEmail = "MA2@GMAIL.COM",
+                PhoneNumber = "",
+            };
+
+            pw = new PasswordHasher<string>();
+            user.PasswordHash = pw.HashPassword(user.UserName, "123@Tt");
+            registrations.Add(user);
+
+            user = new RegistrationData
+            {
+                Id = "12345678912349",
+                Nationality = "مصري",
+                FullName = "خاطر أحمد",
+                UserName = "@Khater2123",
+                NormalizedUserName = "@KHATER2123",
+                Email = "Ka2@gmail.com",
+                NormalizedEmail = "KA2@GMAIL.COM",
+                PhoneNumber = "",
+            };
+
+            pw = new PasswordHasher<string>();
+            user.PasswordHash = pw.HashPassword(user.UserName, "123@Tt");
+            registrations.Add(user);
+
+            user = new RegistrationData
+            {
+                Id = "12345678912350",
+                Nationality = "مصري",
+                FullName = "test",
+                UserName = "@Test2123",
+                NormalizedUserName = "@TEST2123",
+                Email = "TE@gmail.com",
+                NormalizedEmail = "TE@GMAIL.COM",
+                PhoneNumber = "",
             };
 
             pw = new PasswordHasher<string>();

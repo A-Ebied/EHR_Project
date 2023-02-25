@@ -42,9 +42,12 @@
 
                                     <a class="dropdown-item" asp-controller="Authentication" asp-action="CreateUserMedicalData"> Create Medical Data</a>
 
-                                    <a class="dropdown-item" asp-controller="Authentication" asp-action="CreateMedicalTeam"> Create Medical Team</a>
-                                </div>
+                                    @if (User.IsInRole(SD.Pharmacist) || User.IsInRole(SD.Physician) || User.IsInRole(SD.Nurse) || User.IsInRole(SD.Technician))
+                                                    {
+                                        <a class="dropdown-item" asp-controller="Authentication" asp-action="CreateMedicalTeam"> Create Medical Team</a>
 
+                                    }
+                                </div>
                                 @* <a class="dropdown-item" asp-controller="UserInsurance" asp-action="Create"> Create Insurance</a>  *@
                             </li>
 
@@ -53,15 +56,27 @@
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Governorate</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" asp-controller="Governorate" asp-action="Index">Governorates</a>
-                                <a class="dropdown-item" asp-controller="Governorate" asp-action="Create">Create Governorate</a>
+                                @if (accessor.HttpContext.Session.GetString(SD.JWT) != null && accessor.HttpContext.Session.GetString(SD.JWT).ToString().Length > 0)
+                                {
+                                    @if (User.IsInRole(SD.SystemManager))
+                                    {
+                                        <a class="dropdown-item" asp-controller="Governorate" asp-action="Create">Create Governorate</a>
+                                    }
+                                }
                             </div>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Health Facility</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" asp-controller="HealthFacility" asp-action="Index">Health Facilities</a>
+                                @if (accessor.HttpContext.Session.GetString(SD.JWT) != null && accessor.HttpContext.Session.GetString(SD.JWT).ToString().Length > 0)
+                                {
+                                    @if (User.IsInRole(SD.SystemManager) || User.IsInRole(SD.HealthFacilityManager))
+                                    {
+                                        <a class="dropdown-item" asp-controller="HealthFacility" asp-action="Create">Create Health Facility</a>
+                                    }
+                                }
 
-                                <a class="dropdown-item" asp-controller="HealthFacility" asp-action="Create">Create Health Facility</a>
                             </div>
                         </li>
                     </ul>

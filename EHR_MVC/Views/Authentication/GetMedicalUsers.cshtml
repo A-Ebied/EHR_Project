@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<EHR_MVC.DTOs.UserDataDTOs.UserDTOForOthers>
-
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor accessor
+@using EHR_MVC.Extensions;
 @{
     ViewData["Title"] = "Medical Users";
 }
@@ -10,10 +11,16 @@
 <h1 style="text-align:center">Medical Users</h1>
 <hr />
 <br />
-
-<div class="row m-2">
-    <a asp-action="Create" class="btn btn-primary col-12"> Create New </a>
-</div>
+@if (accessor.HttpContext.Session.GetString(SD.JWT) != null && accessor.HttpContext.Session.GetString(SD.JWT).ToString().Length > 0)
+{
+    @if (User.IsInRole(SD.SystemManager))
+    {
+        <div class="row m-2">
+            <a asp-action="Create" class="btn btn-primary col-12"> Create New </a>
+        </div>
+    }
+}
+ 
 <hr />
 <br />
 <table class="table table-hover">
