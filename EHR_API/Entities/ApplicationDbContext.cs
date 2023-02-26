@@ -16,6 +16,29 @@ namespace EHR_API.Entities
 
         public DbSet<Governorate> Governorates { get; set; }
         public DbSet<HealthFacility> HealthFacilities { get; set; }
+        public DbSet<ICD> ICDs { get; set; }
+        public DbSet<Medication> Medications { get; set; }
+        public DbSet<Allergy> Allergies { get; set; }
+        public DbSet<AllergyDrug> AllergyDrugs { get; set; }
+        public DbSet<UserInsurance> UserInsurances { get; set; }
+        public DbSet<ChronicDisease> ChronicDiseases { get; set; }
+        public DbSet<ChronicDiseaseDrug> ChronicDiseaseDrugs { get; set; }
+        public DbSet<Vaccination> Vaccinations { get; set; }
+        public DbSet<UserVaccination> UserVaccinations { get; set; }
+        public DbSet<BadHabit> BadHabits { get; set; }
+        public DbSet<MedicalFacilityTeam> MedicalFacilityTeams { get; set; }
+        public DbSet<Contraindication> Contraindications { get; set; }
+        public DbSet<Visit> Visits { get; set; }
+        public DbSet<VisitVitalSign> VisitVitalSigns { get; set; }
+        public DbSet<VisitMedication> VisitMedications { get; set; }
+        public DbSet<RadLabResultImage> RadLabResultImages { get; set; }
+        public DbSet<VisitRadLabTest> VisitRadLabTests { get; set; }
+        public DbSet<Admit> Admits { get; set; }
+        public DbSet<Surgery> Surgeries { get; set; }
+        public DbSet<SurgeryProgressNote> SurgeryProgressNotes { get; set; }
+        public DbSet<BloodDonation> BloodDonations { get; set; }
+        public DbSet<ReceiveBlood> ReceiveBloods { get; set; }
+        public DbSet<ReceiveBloodData> Receives { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -47,6 +70,37 @@ namespace EHR_API.Entities
             modelBuilder.Entity<HealthFacility>()
            .HasAlternateKey(c => c.RegistrationDataId)
            .HasName("AlternateKey_RegistrationDataId");
+
+            modelBuilder.Entity<Visit>()
+             .HasOne(a => a.Admit)
+             .WithOne(i => i.Visit)
+             .HasForeignKey<Admit>(i => i.VisitId);
+
+            // composite key
+            modelBuilder.Entity<AllergyDrug>()
+                .HasKey(a => new { a.AllergyId, a.MedicationId });
+
+            modelBuilder.Entity<ChronicDisease>()
+             .HasKey(a => new { a.RegistrationDataId, a.ICDId });
+
+            modelBuilder.Entity<ChronicDiseaseDrug>()
+               .HasKey(a => new { a.RegistrationDataId, a.ICDId, a.MedicationId });
+
+            modelBuilder.Entity<Contraindication>()
+               .HasKey(a => new { a.MedicationId, a.RegistrationDataId });
+
+            modelBuilder.Entity<MedicalFacilityTeam>()
+             .HasKey(a => new { a.HealthFacilityId, a.MedicalTeamId });
+
+            modelBuilder.Entity<VisitMedication>()
+             .HasKey(a => new { a.MedicationId, a.VisitId });
+
+
+            // pk
+            modelBuilder.Entity<Admit>()
+               .HasKey(i => i.VisitId);
+
+
         }
 
 

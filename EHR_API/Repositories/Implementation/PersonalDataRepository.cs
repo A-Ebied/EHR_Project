@@ -1,10 +1,7 @@
 ﻿using EHR_API.Entities;
-using EHR_API.Entities.Models;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
-using System.Collections;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace EHR_API.Repositories.Implementation
 {

@@ -20,6 +20,7 @@
             var c = @User.Claims;
             var s = @User.Claims;
             }*@
+
             <input hidden asp-for="Id" value="@User.Claims.ToList()[0].Value" />
             <div class="form-group">
                 <label asp-for="BloodGroup" class="control-label"></label>
