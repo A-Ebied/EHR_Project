@@ -23,7 +23,7 @@ namespace EHR_API.Repositories.Implementation
         {
             
 
-            if (entity.UserImage != null)
+            if (entity.UserImage.Length > 0)
             {
                 var path = CreateImage.CreateFiles(_webHost, entity.UserImage, entity.ImageName, "UserImage");
                 entity.UserImageUrl = path;
@@ -35,7 +35,7 @@ namespace EHR_API.Repositories.Implementation
 
         public override async Task<PersonalData> UpdateAsync(PersonalData entity, PersonalData oldEntity)
         {
-            if (entity.UserImage != null)
+            if (entity.UserImage != null && entity.UserImage.Length > 0)
             {
                 if (oldEntity.UserImageUrl != null)
                 {
@@ -57,7 +57,7 @@ namespace EHR_API.Repositories.Implementation
 
         public override async Task DeleteAsync(PersonalData entity)
         {
-            if (entity.UserImageUrl != null)
+            if (entity.UserImage != null && entity.UserImageUrl.Length > 0)
             {
                 var oldPath = Path.Combine(_webHost.WebRootPath, entity.UserImageUrl.TrimStart('\\'));
                 if (System.IO.File.Exists(oldPath))

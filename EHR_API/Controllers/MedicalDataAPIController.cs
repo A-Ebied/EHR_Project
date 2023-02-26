@@ -25,7 +25,7 @@ namespace EHR_API.Controllers
             _mapper = mapper;
             _response = new();
         }
-         
+
         //[Authorize(Roles = SD.Physician + SD.Nurse + "," + SD.Technician + "," + SD.HealthFacilityManager)]
         [Authorize]
         [HttpPost("CreateUserMedicalData")]

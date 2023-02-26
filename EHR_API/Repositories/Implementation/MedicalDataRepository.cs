@@ -18,7 +18,7 @@ namespace EHR_API.Repositories.Implementation
 
         public override async Task CreateAsync(MedicalData entity)
         {
-            if (entity.DNAImageResult != null)
+            if (entity.DNAImageResult.Length > 0)
             {
                 var path = CreateImage.CreateFiles(_webHost, entity.DNAImageResult, entity.ImageName, "DNAImageResult");
                 entity.DNAImageResultUrl = path;
@@ -30,7 +30,7 @@ namespace EHR_API.Repositories.Implementation
 
         public override async Task<MedicalData> UpdateAsync(MedicalData entity, MedicalData oldEntity = null)
         {
-            if (entity.DNAImageResult != null)
+            if (entity.DNAImageResultUrl != null && entity.DNAImageResult.Length > 0)
             {
                 if (oldEntity.DNAImageResultUrl != null)
                 {
@@ -52,12 +52,12 @@ namespace EHR_API.Repositories.Implementation
 
         public override async Task DeleteAsync(MedicalData entity)
         {
-            if (entity.DNAImageResultUrl != null)
+            if (entity.DNAImageResultUrl != null && entity.DNAImageResultUrl.Length > 0)
             {
                 var oldPath = Path.Combine(_webHost.WebRootPath, entity.DNAImageResultUrl.TrimStart('\\'));
-                if (System.IO.File.Exists(oldPath))
+                if (File.Exists(oldPath))
                 {
-                    System.IO.File.Delete(oldPath);
+                    File.Delete(oldPath);
                 }
             }
             

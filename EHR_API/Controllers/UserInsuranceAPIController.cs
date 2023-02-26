@@ -61,8 +61,8 @@ namespace EHR_API.Controllers
         /}
         */
 
-        [HttpGet("{id}")]
         [Authorize]
+        [HttpGet("{id}")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -92,8 +92,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpGet("GetInsurance")]
         [Authorize]
+        [HttpGet("GetInsurance")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -163,6 +163,7 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
+
         [Authorize]
         [HttpPost("CreateUserInsurances")]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -192,11 +193,11 @@ namespace EHR_API.Controllers
                     }
                 }
 
-                var entities = _mapper.Map<List<UserInsurance>>(entityCreateDTOList);
+                var entities = _mapper.Map<List<UserInsurance>>(entityCreateDTOList._userInsurances);
                 foreach (var item in entities)
                 {
-                    item.CreatedAt= DateTime.Now;
-                    item.UpdateddAt= DateTime.Now;
+                    item.CreatedAt = DateTime.Now;
+                    item.UpdateddAt = DateTime.Now;
                 }
                 await _db._userInsurance.CreateRangeAsync(entities);
 
@@ -210,7 +211,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpDelete("{id:int}", Name = "DeleteUserInsurance")]
+        [Authorize]
+        [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -241,7 +243,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpPut("{id:int}", Name = "UpdateUserInsurance")]
+        [Authorize]
+        [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]

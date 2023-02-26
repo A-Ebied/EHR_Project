@@ -27,7 +27,7 @@ namespace EHR_API.Controllers
             _response = new();
         }
 
-        //[Authorize(Roles = SD.HealthFacilitiesAdministrator)]
+        [Authorize(Roles = SD.SystemManager + "," + SD.HealthFacilityManager)]
         [HttpPost("CreateHealthFacility")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -57,7 +57,7 @@ namespace EHR_API.Controllers
 
                 _response.Result = _mapper.Map<HealthFacilityDTOForOthers>(entity);
                 _response.StatusCode = HttpStatusCode.Created;
-                return CreatedAtRoute("GetHealthFacility", new { id = entity.Id }, _response);
+                return Ok(_response);
             }
             catch (Exception ex)
             {
@@ -106,7 +106,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpGet("{id}", Name = "GetHealthFacility")]
+        [HttpGet("{id:int}")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -150,7 +150,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize(Roles = SD.HealthFacilitiesAdministrator)]
+        [Authorize(Roles = SD.SystemManager + "," + SD.HealthFacilityManager)]
         [HttpPut("{id}", Name = "UpdateHealthFacility")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -180,6 +180,12 @@ namespace EHR_API.Controllers
                     return NotFound(APIResponses.NotFound($"No Governorate with Id = {entityUpdateDTO.GovernorateId}"));
                 }
 
+                var manager = await _db._healthFacility.GetAsync(expression: e => e.RegistrationDataId == entityUpdateDTO.RegistrationDataId);
+                if (manager != null && manager.Id != oldOne.Id)
+                {
+                    return BadRequest(APIResponses.BadRequest("The user is a manager of other"));
+                }
+
                 var entity = _mapper.Map<HealthFacility>(entityUpdateDTO);
                 entity.UpdateddAt = DateTime.Now;
                 entity.CreatedAt = oldOne.CreatedAt;
@@ -195,7 +201,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize(Roles = SD.HealthFacilitiesAdministrator)]
+        [Authorize(Roles = SD.SystemManager + "," + SD.HealthFacilityManager)]
         [HttpDelete("{id}", Name = "DeleteHealthFacility")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

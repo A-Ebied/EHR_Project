@@ -27,7 +27,7 @@ namespace EHR_API.Controllers
             _response = new();
         }
 
-        //[Authorize(Roles = SD.HealthFacilitiesAdministrator + "," + SD.HealthFacilityManager)]
+        //[Authorize(Roles = SD.HealthFacilityManager)]
         [Authorize]
         [HttpPost("CreateMedicalTeamUser")]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -47,8 +47,8 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = _mapper.Map<MedicalTeam>(entityCreateDTO);
-                entity.CreatedAt= DateTime.Now;
-                entity.UpdateddAt= DateTime.Now;
+                entity.CreatedAt = DateTime.Now;
+                entity.UpdateddAt = DateTime.Now;
                 await _db._medicalTeam.CreateAsync(entity);
 
                 _response.Result = _mapper.Map<MedicalTeamDTO>(entity);
@@ -61,7 +61,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize(Roles = SD.HealthFacilitiesAdministrator + "," + SD.HealthFacilityManager)]
+        //[Authorize(Roles = SD.HealthFacilityManager)]
         [Authorize]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -94,7 +94,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        [Authorize(Roles = SD.HealthFacilityManager)]
+        //[Authorize(Roles = SD.HealthFacilityManager)]
+        [Authorize]
         [HttpPut("{id}", Name = "UpdateMedicalTeamUser")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

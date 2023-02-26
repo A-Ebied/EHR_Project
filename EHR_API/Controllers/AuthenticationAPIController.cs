@@ -165,12 +165,12 @@ namespace EHR_API.Controllers
                 foreach (var entity in entities)
                 {
                     roles = await _userManager.GetRolesAsync(entity);
-                    if (roles.Contains("HealthFacilityManager") == true ) 
+                    if (roles.Contains("HealthFacilityManager") == true)
                     {
                         managers.Add(entity);
                     }
                 }
-                 
+
                 if (managers.ToList().Count == 0)
                 {
                     return NotFound(APIResponses.NotFound("No data has been found"));
@@ -266,40 +266,40 @@ namespace EHR_API.Controllers
                 _response.Result = medicalTeam;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
-/*
-                IEnumerable<MedicalTeam> medicalTeam = new List<MedicalTeam>();
-                var entities = new List<RegistrationData>();
+                /*
+                                IEnumerable<MedicalTeam> medicalTeam = new List<MedicalTeam>();
+                                var entities = new List<RegistrationData>();
 
-                medicalTeam = await _db._medicalTeam.GetAllAsync(
-                    expression: medicalSpecialization == null ? null : m => m.MedicalSpecialization.Contains(medicalSpecialization),
-                    pageNumber: pageNumber,
-                    pageSize: pageSize);
+                                medicalTeam = await _db._medicalTeam.GetAllAsync(
+                                    expression: medicalSpecialization == null ? null : m => m.MedicalSpecialization.Contains(medicalSpecialization),
+                                    pageNumber: pageNumber,
+                                    pageSize: pageSize);
 
-                if (medicalTeam.ToList().Count == 0)
-                {
-                    return NotFound(APIResponses.NotFound("No data has been found"));
-                }
+                                if (medicalTeam.ToList().Count == 0)
+                                {
+                                    return NotFound(APIResponses.NotFound("No data has been found"));
+                                }
 
-                foreach (var entity in medicalTeam)
-                {
-                    entities.Add(await _db._authentication.GetAsync(
-                        includeProperties: "PersonalData,MedicalTeam",
-                        expression: e => e.Id == entity.Id));
-                }
-                 
-                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
-                Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
+                                foreach (var entity in medicalTeam)
+                                {
+                                    entities.Add(await _db._authentication.GetAsync(
+                                        includeProperties: "PersonalData,MedicalTeam",
+                                        expression: e => e.Id == entity.Id));
+                                }
 
-                List<UserDTOForOthers> medicalUsers = new();
-                foreach (var item in entities)
-                {
-                    medicalUsers.Add(APIResponses.User(_mapper.Map<RegistrationData>(item)));
-                }
+                                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
+                                Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
 
-                _response.Result = medicalUsers;
-                _response.StatusCode = HttpStatusCode.OK;
-                return Ok(_response);
-*/
+                                List<UserDTOForOthers> medicalUsers = new();
+                                foreach (var item in entities)
+                                {
+                                    medicalUsers.Add(APIResponses.User(_mapper.Map<RegistrationData>(item)));
+                                }
+
+                                _response.Result = medicalUsers;
+                                _response.StatusCode = HttpStatusCode.OK;
+                                return Ok(_response);
+                */
             }
             catch (Exception ex)
             {
@@ -407,7 +407,7 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        
+
         [HttpGet("{id}")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -444,7 +444,7 @@ namespace EHR_API.Controllers
                                  expression: g => g.Id == id,
                                  includeProperties: "PersonalData,MedicalData,MedicalTeam");
                     }
-                    
+
                 }
                 else
                 {
@@ -479,7 +479,7 @@ namespace EHR_API.Controllers
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetRoles([FromHeader] string jwtToken = null)
+        public async Task<ActionResult<APIResponse>> GetRoles()
         {
             try
             {
@@ -487,6 +487,12 @@ namespace EHR_API.Controllers
                 if (entities.ToList().Count == 0)
                 {
                     return NotFound(APIResponses.NotFound("No data has been found"));
+                }
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
                 }
 
                 IEnumerable<IdentityRole> result = null;
@@ -601,8 +607,8 @@ namespace EHR_API.Controllers
             }
         }
 
-     
-        [Authorize]
+
+        //[Authorize]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

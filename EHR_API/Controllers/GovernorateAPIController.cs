@@ -29,15 +29,15 @@ namespace EHR_API.Controllers
             _response = new();
         }
 
-        //[Authorize(Roles = SD.SystemManager)]
-        [Authorize]
+        [Authorize(Roles = SD.SystemManager)]
+        //[Authorize]
         [HttpPost("CreateGovernorate")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> CreateGovernorate([FromBody] GovernorateCreateDTO entityCreateDTO)
         {
             try
-            { 
+            {
                 if (entityCreateDTO == null)
                 {
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
@@ -55,8 +55,8 @@ namespace EHR_API.Controllers
 
                 _response.Result = _mapper.Map<GovernorateDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;
-                // للعنصر الذي تم انشاءه response في url بيدي 
-                return CreatedAtRoute("GetGovernorate", new { id = entity.Id }, _response);
+                 
+                return Ok(_response);
             }
             catch (Exception ex)
             {
@@ -64,7 +64,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize(Roles = SD.SystemManager)]
+        [Authorize(Roles = SD.SystemManager)]
         [HttpPut("{id:int}", Name = "UpdateGovernorate")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -136,7 +136,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpGet("{id:int}", Name = "GetGovernorate")]
+        [HttpGet("{id:int}")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -190,7 +190,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize(Roles = SD.SystemManager)]
+        [Authorize(Roles = SD.SystemManager)]
         [HttpDelete("{id:int}", Name = "DeleteGovernorate")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
