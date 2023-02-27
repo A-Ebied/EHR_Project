@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using EHR_API.Entities.DTOs.AllergyDrugDTOs;
+using EHR_API.Entities.DTOs.AllergyDTOs;
 using EHR_API.Entities.DTOs.GovernorateDTOs;
 using EHR_API.Entities.DTOs.HealthFacilityDTOs;
+using EHR_API.Entities.DTOs.MedicationDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
@@ -55,6 +58,21 @@ namespace EHR_API.Entities
             CreateMap<UserInsurance, UserInsuranceDTO>().ReverseMap();
             
             CreateMap<IdentityRole, RolesDTO>().ReverseMap();
+
+            CreateMap<Allergy, AllergyCreateDTO>().ReverseMap();
+            CreateMap<Allergy, AllergyDTOForOthers>().ReverseMap();
+            CreateMap<Allergy, AllergyUpdateDTO>().ReverseMap();
+            CreateMap<Allergy, AllergyDTO>().ReverseMap();
+
+            CreateMap<AllergyDrug, AllergyDrugCreateDTO>().ReverseMap();
+            CreateMap<AllergyDrug, AllergyDrugUpdateDTO>().ReverseMap();
+            CreateMap<AllergyDrug, AllergyDrugDTO>().ReverseMap(); 
+            CreateMap<AllergyDrug, AllergyDrugDTOForOthers>().ReverseMap(); 
+            
+            CreateMap<Medication, MedicationCreateDTO>().ReverseMap();
+            CreateMap<Medication, MedicationDTOForOthers>().ReverseMap();
+            CreateMap<Medication, MedicationUpdateDTO>().ReverseMap();
+            CreateMap<Medication, MedicationDTO>().ReverseMap();
         }
     }
 }

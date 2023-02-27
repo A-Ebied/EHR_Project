@@ -18,6 +18,9 @@ namespace EHR_API.Repositories.Implementation
             _medicalData = new MedicalDataRepository(db, webHost);
              _userInsurance = new UserInsuranceRepository(db);
             _role = new RoleRepository(db);
+            _allergy = new AllergyRepository(db);
+            _allergyDrug = new AllergyDrugRepository(db);
+            _medication = new MedicationRepository(db);
         }
 
         public IGovernorateRepository _governorate { get; private set; }
@@ -28,5 +31,8 @@ namespace EHR_API.Repositories.Implementation
         public IMedicalDataRepository _medicalData { get; private set; }
          public IUserInsuranceRepository _userInsurance { get; private set; }
         public IRoleRepository _role { get; private set; }
+        public IAllergyRepository _allergy { get; private set; }
+        public IAllergyDrugRepository _allergyDrug { get; private set; }
+        public IMedicationRepository _medication { get; private set; }
     }
 }

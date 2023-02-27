@@ -10,5 +10,8 @@
         IMedicalDataRepository _medicalData { get; }
         IUserInsuranceRepository _userInsurance { get; }
         IRoleRepository _role { get; }
+        IAllergyRepository _allergy { get; }
+        IAllergyDrugRepository _allergyDrug { get; }
+        IMedicationRepository _medication { get; }
     }
 }
