@@ -122,7 +122,8 @@ namespace EHR_API.Controllers
 
                 if (entityCreateDTO.AllergyDrugs != null)
                 {
-                    // addRange
+                    await _db._allergyDrug.CreateRangeAsync(
+                        _mapper.Map<List<AllergyDrug>>(entityCreateDTO.AllergyDrugs.ToList()));
                 }
 
                 _response.Result = _mapper.Map<AllergyDTO>(entity);
