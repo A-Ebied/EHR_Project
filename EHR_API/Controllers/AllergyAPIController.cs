@@ -29,7 +29,7 @@ namespace EHR_API.Controllers
             _response = new();
         }
 
-        
+
         //[Authorize]
         [HttpGet("{id}")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
@@ -98,166 +98,117 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        //[HttpPost("CreateUserInsurance")]
-        //[ProducesResponseType(StatusCodes.Status201Created)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //public async Task<ActionResult<APIResponse>> CreateUserInsurance([FromBody] UserInsuranceCreateDTO entityCreateDTO)
-        //{
-        //    try
-        //    {
-        //        if (entityCreateDTO == null)
-        //        {
-        //            return BadRequest(APIResponses.BadRequest("No data has been sent"));
-        //        }
+        [HttpPost("CreateAllergy")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<APIResponse>> CreateAllergy([FromBody] AllergyCreateDTO entityCreateDTO)
+        {
+            try
+            {
+                if (entityCreateDTO == null)
+                {
+                    return BadRequest(APIResponses.BadRequest("No data has been sent"));
+                }
 
-        //        if (await _db._authentication.GetAsync(expression: e => e.Id == entityCreateDTO.RegistrationDataId) == null)
-        //        {
-        //            return BadRequest(APIResponses.BadRequest("User is not exists"));
-        //        }
+                if (await _db._authentication.GetAsync(expression: e => e.Id == entityCreateDTO.RegistrationDataId) == null)
+                {
+                    return BadRequest(APIResponses.BadRequest("User is not exists"));
+                }
 
-        //        if (await _db._userInsurance.GetAsync(expression: g => g.InsuranceNo.ToLower() == entityCreateDTO.InsuranceNo.ToLower()) != null)
-        //        {
-        //            if (await _db._userInsurance.GetAsync(expression: g => g.InsuranceOrganizationName.ToLower() == entityCreateDTO.InsuranceOrganizationName.ToLower()) != null)
-        //            {
-        //                return BadRequest(APIResponses.BadRequest("The object is already exists"));
-        //            }
-        //        }
+                var entity = _mapper.Map<Allergy>(entityCreateDTO);
+                entity.CreatedAt = DateTime.Now;
+                entity.UpdatedAt = DateTime.Now;
+                await _db._allergy.CreateAsync(entity);
 
-        //        var entity = _mapper.Map<UserInsurance>(entityCreateDTO);
-        //        entity.CreatedAt = DateTime.Now;
-        //        entity.UpdateddAt = DateTime.Now;
-        //        await _db._userInsurance.CreateAsync(entity);
+                if (entityCreateDTO.AllergyDrugs != null)
+                {
+                    // addRange
+                }
 
-        //        _response.Result = _mapper.Map<UserInsuranceDTO>(entity);
-        //        _response.StatusCode = HttpStatusCode.Created;
-        //        return Ok(_response);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return APIResponses.InternalServerError(ex);
-        //    }
-        //}
+                _response.Result = _mapper.Map<AllergyDTO>(entity);
+                _response.StatusCode = HttpStatusCode.Created;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                return APIResponses.InternalServerError(ex);
+            }
+        }
+
 
         //[Authorize]
-        //[HttpPost("CreateUserInsurances")]
-        //[ProducesResponseType(StatusCodes.Status201Created)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //public async Task<ActionResult<APIResponse>> CreateUserInsurances([FromBody] UserInsurancesCreateDTO entityCreateDTOList)
-        //{
-        //    try
-        //    {
-        //        if (entityCreateDTOList == null)
-        //        {
-        //            return BadRequest(APIResponses.BadRequest("No data has been sent"));
-        //        }
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<APIResponse>> DeleteAllergy(int id)
+        {
+            try
+            {
+                if (id < 1)
+                {
+                    return BadRequest(APIResponses.BadRequest("Id less than 1"));
+                }
 
-        //        foreach (var item in entityCreateDTOList._userInsurances)
-        //        {
-        //            if (await _db._authentication.GetAsync(expression: e => e.Id == item.RegistrationDataId) == null)
-        //            {
-        //                return BadRequest(APIResponses.BadRequest("User is not exists"));
-        //            }
+                var removedEntity = await _db._allergy.GetAsync(expression: g => g.Id == id);
+                if (removedEntity == null)
+                {
+                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+                }
 
-        //            if (await _db._userInsurance.GetAsync(expression: g => g.InsuranceNo.ToLower() == item.InsuranceNo.ToLower()) != null)
-        //            {
-        //                if (await _db._userInsurance.GetAsync(expression: g => g.InsuranceOrganizationName.ToLower() == item.InsuranceOrganizationName.ToLower()) != null)
-        //                {
-        //                    return BadRequest(APIResponses.BadRequest("The object is already exists"));
-        //                }
-        //            }
-        //        }
+                await _db._allergy.DeleteAsync(removedEntity);
 
-        //        var entities = _mapper.Map<List<UserInsurance>>(entityCreateDTOList._userInsurances);
-        //        foreach (var item in entities)
-        //        {
-        //            item.CreatedAt = DateTime.Now;
-        //            item.UpdateddAt = DateTime.Now;
-        //        }
-        //        await _db._userInsurance.CreateRangeAsync(entities);
-
-        //        _response.Result = _mapper.Map<List<UserInsuranceDTO>>(entities);
-        //        _response.StatusCode = HttpStatusCode.Created;
-        //        return Ok(_response);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return APIResponses.InternalServerError(ex);
-        //    }
-        //}
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.Result = "The object has been deleted";
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                return APIResponses.InternalServerError(ex);
+            }
+        }
 
         //[Authorize]
-        //[HttpDelete("{id:int}")]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //public async Task<ActionResult<APIResponse>> DeleteUserInsurance(int id)
-        //{
-        //    try
-        //    {
-        //        if (id < 1)
-        //        {
-        //            return BadRequest(APIResponses.BadRequest("Id less than 1"));
-        //        }
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<APIResponse>> UpdateAllergy(int id, [FromBody] AllergyUpdateDTO entityUpdateDTO)
+        {
+            try
+            {
+                if (entityUpdateDTO == null)
+                {
+                    return BadRequest(APIResponses.BadRequest("No data has been sent"));
+                }
 
-        //        var removedEntity = await _db._userInsurance.GetAsync(expression: g => g.Id == id);
-        //        if (removedEntity == null)
-        //        {
-        //            return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
-        //        }
+                if (id != entityUpdateDTO.Id)
+                {
+                    return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
+                }
 
-        //        await _db._userInsurance.DeleteAsync(removedEntity);
+                if (await _db._allergy.GetAsync(expression: g => g.Id == id) == null)
+                {
+                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+                }
 
-        //        _response.StatusCode = HttpStatusCode.OK;
-        //        _response.Result = "The object has been deleted";
-        //        return Ok(_response);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return APIResponses.InternalServerError(ex);
-        //    }
-        //}
+                if (await _db._allergy.GetAsync(expression: e => e.RegistrationDataId == entityUpdateDTO.RegistrationDataId) == null)
+                {
+                    return BadRequest(APIResponses.BadRequest("User is not exists"));
+                }
 
-        //[Authorize]
-        //[HttpPut("{id:int}")]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //public async Task<ActionResult<APIResponse>> UpdateUserInsurance(int id, [FromBody] UserInsuranceUpdateDTO entityUpdateDTO)
-        //{
-        //    try
-        //    {
-        //        if (entityUpdateDTO == null)
-        //        {
-        //            return BadRequest(APIResponses.BadRequest("No data has been sent"));
-        //        }
+                var entity = _mapper.Map<Allergy>(entityUpdateDTO);
+                entity.UpdatedAt = DateTime.Now;
+                await _db._allergy.UpdateAsync(entity);
 
-        //        if (id != entityUpdateDTO.Id)
-        //        {
-        //            return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
-        //        }
-
-        //        if (await _db._userInsurance.GetAsync(expression: g => g.Id == id) == null)
-        //        {
-        //            return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
-        //        }
-
-        //        if (await _db._authentication.GetAsync(expression: e => e.Id == entityUpdateDTO.RegistrationDataId) == null)
-        //        {
-        //            return BadRequest(APIResponses.BadRequest("User is not exists"));
-        //        }
-
-        //        var entity = _mapper.Map<UserInsurance>(entityUpdateDTO);
-        //        entity.UpdateddAt = DateTime.Now;
-        //        await _db._userInsurance.UpdateAsync(entity);
-
-        //        _response.StatusCode = HttpStatusCode.OK;
-        //        _response.Result = _mapper.Map<UserInsuranceDTO>(entity);
-        //        return Ok(_response);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return APIResponses.InternalServerError(ex);
-        //    }
-        //}
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.Result = _mapper.Map<AllergyDTO>(entity);
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                return APIResponses.InternalServerError(ex);
+            }
+        }
     }
 }

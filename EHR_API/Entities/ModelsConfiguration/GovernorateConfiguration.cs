@@ -16,7 +16,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                     Id = 1,
                     Title = "القاهرة",
                     CreatedAt = DateTime.Now,
-                    UpdateddAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
 
                 },
                 new Governorate
@@ -24,7 +24,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                     Id = 2,
                     Title = "الجيزة",
                     CreatedAt = DateTime.Now,
-                    UpdateddAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
 
                 },
                 new Governorate
@@ -32,7 +32,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                     Id = 3,
                     Title = "مطروح",
                     CreatedAt = DateTime.Now,
-                    UpdateddAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
 
                 },
                 new Governorate
@@ -40,7 +40,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                     Id = 4,
                     Title = "شمال سيناء",
                     CreatedAt = DateTime.Now,
-                    UpdateddAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
 
                 },
                 new Governorate
@@ -48,7 +48,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                     Id = 5,
                     Title = "الشرقية",
                     CreatedAt = DateTime.Now,
-                    UpdateddAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
 
                 }, 
                 new Governorate
@@ -56,7 +56,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                     Id = 6,
                     Title = "الدقهلية",
                     CreatedAt = DateTime.Now,
-                    UpdateddAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
 
                 });
         }

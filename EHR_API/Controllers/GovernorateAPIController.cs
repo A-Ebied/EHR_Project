@@ -50,7 +50,7 @@ namespace EHR_API.Controllers
 
                 var entity = _mapper.Map<Governorate>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
-                entity.UpdateddAt = DateTime.Now;
+                entity.UpdatedAt = DateTime.Now;
                 await _db._governorate.CreateAsync(entity);
 
                 _response.Result = _mapper.Map<GovernorateDTO>(entity);
@@ -90,7 +90,7 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = _mapper.Map<Governorate>(entityUpdateDTO);
-                entity.UpdateddAt = DateTime.Now;
+                entity.UpdatedAt = DateTime.Now;
                 entity.CreatedAt = oldOne.CreatedAt;
                 await _db._governorate.UpdateAsync(entity);
 
