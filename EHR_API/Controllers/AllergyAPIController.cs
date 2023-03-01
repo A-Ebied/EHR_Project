@@ -46,7 +46,6 @@ namespace EHR_API.Controllers
                 }
 
                 var entities = await _db._allergy.GetAllAsync(
-                    includeProperties: "AllergyDrugs",
                     expression: g => g.RegistrationDataId == id);
                 if (entities == null)
                 {
@@ -79,7 +78,6 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = await _db._allergy.GetAsync(
-                     includeProperties: "AllergyDrugs",
                     expression: g => g.Id == id);
 
                 if (entity == null)

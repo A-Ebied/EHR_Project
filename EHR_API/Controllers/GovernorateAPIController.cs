@@ -128,7 +128,7 @@ namespace EHR_API.Controllers
 
                 _response.Result = _mapper.Map<List<GovernorateDTOForOthers>>(entities);
                 _response.StatusCode = HttpStatusCode.OK;
-                return Ok(_response);
+                return Ok(_mapper.Map<List<GovernorateDTOForOthers>>(entities));
             }
             catch (Exception ex)
             {
