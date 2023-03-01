@@ -1,39 +1,36 @@
 ﻿using AutoMapper;
 using EHR_API.Entities;
-using EHR_API.Entities.DTOs.GovernorateDTOs;
-using EHR_API.Entities.DTOs.UserDataDTOs;
+using EHR_API.Entities.DTOs.MedicationDTOs;
 using EHR_API.Entities.Models;
-using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text.Json;
 
 namespace EHR_API.Controllers
 {
-    [Route("api/GovernorateAPI")]
+    [Route("api/MedicationAPI")]
     [ApiController]
-    public class GovernorateAPIController : ControllerBase
+    public class MedicationAPIController : ControllerBase
     {
         protected APIResponse _response;
         private readonly IMapper _mapper;
         private readonly IMainRepository _db;
 
-        public GovernorateAPIController(IMainRepository db, IMapper mapper)
+        public MedicationAPIController(IMainRepository db, IMapper mapper)
         {
             _db = db;
             _mapper = mapper;
             _response = new();
         }
 
-        [Authorize(Roles = SD.SystemManager)]
+        //[Authorize(Roles = SD.SystemManager)]
         //[Authorize]
-        [HttpPost("CreateGovernorate")]
+        [HttpPost("CreateMedication")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> CreateGovernorate([FromBody] GovernorateCreateDTO entityCreateDTO)
+        public async Task<ActionResult<APIResponse>> CreateMedication([FromBody] MedicationCreateDTO entityCreateDTO)
         {
             try
             {
@@ -42,17 +39,17 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
 
-                if (await _db._governorate.GetAsync(expression: g => g.Title!.ToLower() == entityCreateDTO.Title!.ToLower()) != null)
+                if (await _db._medication.GetAsync(expression: g => g.Name.ToLower() == entityCreateDTO.Name.ToLower()) != null)
                 {
                     return BadRequest(APIResponses.BadRequest("The object is already exists"));
                 }
 
-                var entity = _mapper.Map<Governorate>(entityCreateDTO);
+                var entity = _mapper.Map<Medication>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
                 entity.UpdatedAt = DateTime.Now;
-                await _db._governorate.CreateAsync(entity);
+                await _db._medication.CreateAsync(entity);
 
-                _response.Result = _mapper.Map<GovernorateDTO>(entity);
+                _response.Result = _mapper.Map<MedicationDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;
                  
                 return Ok(_response);
@@ -68,7 +65,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> UpdateGovernorate(int id, [FromBody] GovernorateUpdateDTO entityUpdateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateMedication(int id, [FromBody] MedicationUpdateDTO entityUpdateDTO)
         {
             try
             {
@@ -82,19 +79,19 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
-                var oldOne = await _db._governorate.GetAsync(expression: g => g.Id == id);
+                var oldOne = await _db._medication.GetAsync(expression: g => g.Id == id);
                 if (oldOne == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
                 }
 
-                var entity = _mapper.Map<Governorate>(entityUpdateDTO);
+                var entity = _mapper.Map<Medication>(entityUpdateDTO);
                 entity.UpdatedAt = DateTime.Now;
                 entity.CreatedAt = oldOne.CreatedAt;
-                await _db._governorate.UpdateAsync(entity);
+                await _db._medication.UpdateAsync(entity);
 
                 _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = _mapper.Map<GovernorateDTO>(entity);
+                _response.Result = _mapper.Map<MedicationDTO>(entity);
                 return Ok(_response);
             }
             catch (Exception ex)
@@ -103,17 +100,17 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[HttpGet("GetGovernorates")]
+        [HttpGet("GetMedications")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetGovernorates([FromQuery(Name = "searchTitle")] string title = null, int pageNumber = 1, int pageSize = 0)
+        public async Task<ActionResult<APIResponse>> GetMedications([FromQuery(Name = "searchName")] string name = null, int pageNumber = 1, int pageSize = 0)
         {
             try
             {
-                IEnumerable<Governorate> entities = new List<Governorate>();
-                entities = await _db._governorate.GetAllAsync(
-                    expression: title == null ? null : g => g.Title.ToLower().Contains(title.ToLower()),
+                IEnumerable<Medication> entities = new List<Medication>();
+                entities = await _db._medication.GetAllAsync(
+                    expression: name == null ? null : g => g.Name.ToLower().Contains(name.ToLower()),
                     pageNumber: pageNumber,
                     pageSize: pageSize);
 
@@ -125,7 +122,7 @@ namespace EHR_API.Controllers
                 Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
                 Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
 
-                _response.Result = _mapper.Map<List<GovernorateDTOForOthers>>(entities);
+                _response.Result = _mapper.Map<List<MedicationDTOForOthers>>(entities);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -140,7 +137,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetGovernorate(int id)
+        public async Task<ActionResult<APIResponse>> GetMedication(int id)
         {
             try
             {
@@ -149,37 +146,16 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id less than 1"));
                 }
 
-                var entity = new Governorate();
-                entity = await _db._governorate.GetAsync(
-                   expression: g => g.Id == id,
-                   includeProperties: "HealthFacilitys,PersonalData");
+                var entity = new Medication();
+                entity = await _db._medication.GetAsync(
+                   expression: g => g.Id == id);
 
                 if (entity == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
                 }
-
-                var temp = await _db._medicalTeam.GetAllAsync();
-                var medicalTeam = new RegistrationData();
-                var users = new List<UserDTOForOthers>();
-
-                foreach (var item in entity.PersonalData)
-                {
-                    if (temp.FirstOrDefault(t => t.Id == item.Id) != null)
-                    {
-                        medicalTeam = await _db._authentication.GetAsync(
-                            includeProperties: "MedicalTeam",
-                            expression: r => r.Id == item.Id);
-
-                        medicalTeam.PersonalData = item;
-
-                        users.Add(APIResponses.User(medicalTeam));
-                    }
-                }
-
-                var result = _mapper.Map<GovernorateDTO>(entity);
-                result.Users = users;
-                _response.Result = result;
+ 
+                _response.Result =  _mapper.Map<MedicationDTO>(entity);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -194,7 +170,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> DeleteGovernorate(int id)
+        public async Task<ActionResult<APIResponse>> DeleteMedication(int id)
         {
             try
             {
@@ -203,13 +179,13 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id less than 1"));
                 }
 
-                var removedEntity = await _db._governorate.GetAsync(expression: g => g.Id == id);
+                var removedEntity = await _db._medication.GetAsync(expression: g => g.Id == id);
                 if (removedEntity == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
                 }
 
-                await _db._governorate.DeleteAsync(removedEntity);
+                await _db._medication.DeleteAsync(removedEntity);
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = "The object has been deleted";
