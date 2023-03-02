@@ -17,9 +17,6 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration
         [Required]
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-
-        //[Required]
-        //public ICollection<string> Roles { get; init; }
         [Required]
         public string Role { get; set; }
     }

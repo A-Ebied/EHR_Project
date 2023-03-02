@@ -16,11 +16,7 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration
         public string Password { get; set; }
         [Required]
         public string Email { get; set; }
-        [MaxLength(11, ErrorMessage = "The maximum length is 11 characters")]
         public string PhoneNumber { get; set; }
-
-        //[Required]
-        //public ICollection<string> Roles { get; set; }
         [Required]
         public string Role { get; set; }
     }

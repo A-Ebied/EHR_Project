@@ -103,7 +103,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[HttpGet("GetGovernorates")]
+        [HttpGet("GetGovernorates")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

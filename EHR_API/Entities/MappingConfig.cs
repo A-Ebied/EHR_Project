@@ -73,6 +73,10 @@ namespace EHR_API.Entities
             CreateMap<Medication, MedicationDTOForOthers>().ReverseMap();
             CreateMap<Medication, MedicationUpdateDTO>().ReverseMap();
             CreateMap<Medication, MedicationDTO>().ReverseMap();
+
+            CreateMap<ICD, ICDCreateDTO>().ReverseMap();
+            CreateMap<ICD, ICDUpdateDTO>().ReverseMap();
+            CreateMap<ICD, ICDDTO>().ReverseMap();
         }
     }
 }
