@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EHR_API.Entities.DTOs.AllergyDTOs
+namespace EHR_API.Entities.DTOs.ICDDTOs
 {
     public class ICDUpdateDTO
     {

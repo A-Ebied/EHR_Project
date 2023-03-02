@@ -22,6 +22,7 @@ namespace EHR_API.Repositories.Implementation
             _allergyDrug = new AllergyDrugRepository(db);
             _medication = new MedicationRepository(db);
             _icd = new ICDRepository(db);
+            _badHabit = new BadHabitRepository(db);
         }
 
         public IGovernorateRepository _governorate { get; private set; }
@@ -36,5 +37,6 @@ namespace EHR_API.Repositories.Implementation
         public IAllergyDrugRepository _allergyDrug { get; private set; }
         public IMedicationRepository _medication { get; private set; }
         public IICDRepository _icd { get; private set; }
+        public IBadHabitRepository _badHabit { get; private set; }
     }
 }

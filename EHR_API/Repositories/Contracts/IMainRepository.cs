@@ -14,5 +14,6 @@
         IAllergyDrugRepository _allergyDrug { get; }
         IMedicationRepository _medication { get; }
         IICDRepository _icd { get; }
+        IBadHabitRepository _badHabit { get; }
     }
 }
