@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using EHR_API.Entities.DTOs.AllergyDrugDTOs;
 using EHR_API.Entities.DTOs.AllergyDTOs;
+using EHR_API.Entities.DTOs.BloodDonationDTOs;
 using EHR_API.Entities.DTOs.GovernorateDTOs;
 using EHR_API.Entities.DTOs.HealthFacilityDTOs;
+using EHR_API.Entities.DTOs.ICDDTOs;
 using EHR_API.Entities.DTOs.MedicationDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login;
@@ -77,6 +79,12 @@ namespace EHR_API.Entities
             CreateMap<ICD, ICDCreateDTO>().ReverseMap();
             CreateMap<ICD, ICDUpdateDTO>().ReverseMap();
             CreateMap<ICD, ICDDTO>().ReverseMap();
+            CreateMap<ICD, ICDDTOForOthers>().ReverseMap();
+
+            CreateMap<BloodDonation, BloodDonationCreateDTO>().ReverseMap();
+            CreateMap<BloodDonation, BloodDonationUpdateDTO>().ReverseMap();
+            CreateMap<BloodDonation, BloodDonationDTO>().ReverseMap();
+            CreateMap<BloodDonation, BloodDonationDTOForOthers>().ReverseMap();
         }
     }
 }

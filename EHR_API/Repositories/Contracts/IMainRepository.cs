@@ -15,5 +15,6 @@
         IMedicationRepository _medication { get; }
         IICDRepository _icd { get; }
         IBadHabitRepository _badHabit { get; }
+        IBloodDonationRepository _bloodDonation { get; }
     }
 }
