@@ -14,10 +14,9 @@ namespace EHR_API.Entities.Models
         public string ICDId { get; set; }
         public string InstructionDescription { get; set; }
         public string Note { get; set; }
-
         public string ReportImageUrl { get; set; }
         [NotMapped]
-        public byte[] UserImage { get; set; }
+        public byte[] ReportImage { get; set; }
         [NotMapped]
         public string ImageName { get; set; }
 
