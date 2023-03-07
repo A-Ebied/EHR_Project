@@ -36,7 +36,7 @@ namespace EHR_API.Entities.Models
         public ICollection<VisitMedication> VisitMedications { get; set; }
         public ICollection<VisitRadLabTest> VisitRadLabTests { get; set; }
         public ICollection<PhysicalTherapy> PhysicalTherapies { get; set; }
-        public ICollection<UserVaccination> userVaccinations { get; set; }
+        public ICollection<UserVaccination> UserVaccinations { get; set; }
 
     }
 }
