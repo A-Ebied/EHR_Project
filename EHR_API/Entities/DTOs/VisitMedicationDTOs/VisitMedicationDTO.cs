@@ -1,6 +1,11 @@
-﻿namespace EHR_API.Entities.Models
+﻿using EHR_API.Entities.DTOs.AllergyDrugDTOs;
+using EHR_API.Entities.DTOs.MedicationDTOs;
+using EHR_API.Entities.DTOs.UserDataDTOs;
+using System.ComponentModel.DataAnnotations;
+
+namespace EHR_API.Entities.DTOs.VisitMedicationDTOs
 {
-    public class VisitMedication
+    public class VisitMedicationDTO
     {
         public int VisitId { get; set; }
         public int MedicationId { get; set; }
@@ -12,10 +17,6 @@
         public string FoodRelation { get; set; }
         public string Instruction { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-
-        public Visit Visit { get; set; }
-        public Medication Medication { get; set; }
-
+        public DateTime UpdateddAt { get; set; }
     }
 }

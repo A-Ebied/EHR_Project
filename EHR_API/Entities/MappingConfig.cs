@@ -10,6 +10,8 @@ using EHR_API.Entities.DTOs.UserDataDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
 using EHR_API.Entities.DTOs.UserDataDTOs.UserRolesDTOs;
+using EHR_API.Entities.DTOs.VisitMedicationDTOs;
+using EHR_API.Entities.DTOs.VisitVitalSignDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Entities.Models.UsersData;
 using Microsoft.AspNetCore.Identity;
@@ -85,6 +87,16 @@ namespace EHR_API.Entities
             CreateMap<BloodDonation, BloodDonationUpdateDTO>().ReverseMap();
             CreateMap<BloodDonation, BloodDonationDTO>().ReverseMap();
             CreateMap<BloodDonation, BloodDonationDTOForOthers>().ReverseMap();
+
+            CreateMap<VisitVitalSign, VisitVitalSignCreateDTO>().ReverseMap();
+            CreateMap<VisitVitalSign, VisitVitalSignUpdateDTO>().ReverseMap();
+            CreateMap<VisitVitalSign, VisitVitalSignDTO>().ReverseMap();
+            CreateMap<VisitVitalSign, VisitVitalSignDTOForOthers>().ReverseMap();
+
+            CreateMap<VisitMedication, VisitMedicationCreateDTO>().ReverseMap();
+            CreateMap<VisitMedication, VisitMedicationUpdateDTO>().ReverseMap();
+            CreateMap<VisitMedication, VisitMedicationDTO>().ReverseMap();
+            CreateMap<VisitMedication, VisitMedicationDTOForOthers>().ReverseMap();
         }
     }
 }

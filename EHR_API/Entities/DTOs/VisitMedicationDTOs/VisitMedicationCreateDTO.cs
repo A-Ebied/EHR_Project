@@ -1,21 +1,25 @@
-﻿namespace EHR_API.Entities.Models
+﻿using System.ComponentModel.DataAnnotations;
+using EHR_API.Entities.DTOs.AllergyDrugDTOs;
+using EHR_API.Entities.Models;
+
+namespace EHR_API.Entities.DTOs.VisitMedicationDTOs
 {
-    public class VisitMedication
+    public class VisitMedicationCreateDTO
     {
+        [Required]
         public int VisitId { get; set; }
+        [Required]
         public int MedicationId { get; set; }
+        [Required]
         public string Dosage { get; set; }
         public string DosageNote { get; set; }
+        [Required]
         public string NoOfDays { get; set; }
         public string Route { get; set; }
+        [Required]
         public string Frequency { get; set; }
+        [Required]
         public string FoodRelation { get; set; }
         public string Instruction { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-
-        public Visit Visit { get; set; }
-        public Medication Medication { get; set; }
-
     }
 }

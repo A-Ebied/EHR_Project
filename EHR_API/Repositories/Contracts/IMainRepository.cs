@@ -16,5 +16,7 @@
         IICDRepository _icd { get; }
         IBadHabitRepository _badHabit { get; }
         IBloodDonationRepository _bloodDonation { get; }
+        IVisitVitalSignRepository _visitVital { get; }
+        IVisitMedicationRepository _visitMedication { get; }
     }
 }
