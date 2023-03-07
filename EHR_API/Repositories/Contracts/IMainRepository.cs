@@ -18,5 +18,6 @@
         IBloodDonationRepository _bloodDonation { get; }
         IVisitVitalSignRepository _visitVital { get; }
         IVisitMedicationRepository _visitMedication { get; }
+        IPhysicalTherapyRepository _physicalTherapy { get; }
     }
 }

@@ -6,6 +6,7 @@ using EHR_API.Entities.DTOs.GovernorateDTOs;
 using EHR_API.Entities.DTOs.HealthFacilityDTOs;
 using EHR_API.Entities.DTOs.ICDDTOs;
 using EHR_API.Entities.DTOs.MedicationDTOs;
+using EHR_API.Entities.DTOs.PhysicalTherapyDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
@@ -103,6 +104,11 @@ namespace EHR_API.Entities
             CreateMap<VisitRadLabTest, VisitRadLabTestUpdateDTO>().ReverseMap();
             CreateMap<VisitRadLabTest, VisitRadLabTestDTO>().ReverseMap();
             CreateMap<VisitRadLabTest, VisitRadLabTestDTOForOthers>().ReverseMap();
+
+            CreateMap<PhysicalTherapy, PhysicalTherapyCreateDTO>().ReverseMap();
+            CreateMap<PhysicalTherapy, PhysicalTherapyUpdateDTO>().ReverseMap();
+            CreateMap<PhysicalTherapy, PhysicalTherapyDTO>().ReverseMap();
+            CreateMap<PhysicalTherapy, PhysicalTherapyDTOForOthers>().ReverseMap();
         }
     }
 }

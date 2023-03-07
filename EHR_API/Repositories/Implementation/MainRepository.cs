@@ -27,6 +27,7 @@ namespace EHR_API.Repositories.Implementation
             _visitVital = new VisitVitalSignRepository(db);
             _visitMedication = new VisitMedicationRepository(db);
             _visitRadLabTest = new VisitRadLabTestRepository(db);
+            _physicalTherapy = new PhysicalTherapyRepository(db);
         }
 
         public IGovernorateRepository _governorate { get; private set; }
@@ -46,5 +47,6 @@ namespace EHR_API.Repositories.Implementation
         public IVisitVitalSignRepository _visitVital { get; private set; }
         public IVisitMedicationRepository _visitMedication { get; private set; }
         public IVisitRadLabTestRepository _visitRadLabTest { get; private set; }
+        public IPhysicalTherapyRepository _physicalTherapy { get; private set; }
     }
 }
