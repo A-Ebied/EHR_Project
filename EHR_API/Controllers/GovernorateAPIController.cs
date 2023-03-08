@@ -28,7 +28,7 @@ namespace EHR_API.Controllers
             _response = new();
         }
 
-        [Authorize(Roles = SD.SystemManager)]
+        //[Authorize(Roles = SD.SystemManager)]
         //[Authorize]
         [HttpPost("CreateGovernorate")]
         [ProducesResponseType(StatusCodes.Status201Created)]

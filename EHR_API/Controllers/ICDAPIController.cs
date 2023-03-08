@@ -70,9 +70,9 @@ namespace EHR_API.Controllers
         {
             try
             {
-                if (code != null)
+                if (code == null)
                 {
-                    return BadRequest(APIResponses.BadRequest("Id is null"));
+                    return BadRequest(APIResponses.BadRequest("Code is null"));
                 }
 
                 var entity = await _db._icd.GetAsync(
@@ -123,7 +123,7 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpDelete("{id}")]
+        [HttpDelete]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -131,9 +131,9 @@ namespace EHR_API.Controllers
         {
             try
             {
-                if (code != null)
+                if (code == null)
                 {
-                    return BadRequest(APIResponses.BadRequest("Id is null"));
+                    return BadRequest(APIResponses.BadRequest("Code is null"));
                 }
 
                 var removedEntity = await _db._icd.GetAsync(expression: g => g.Code == code);
@@ -155,7 +155,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpPut("{id}")]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
