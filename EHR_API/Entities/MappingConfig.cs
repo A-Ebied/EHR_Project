@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EHR_API.Entities.DTOs.AllergyDrugDTOs;
 using EHR_API.Entities.DTOs.AllergyDTOs;
+using EHR_API.Entities.DTOs.BadHabitDTOs;
 using EHR_API.Entities.DTOs.BloodDonationDTOs;
 using EHR_API.Entities.DTOs.GovernorateDTOs;
 using EHR_API.Entities.DTOs.HealthFacilityDTOs;
@@ -109,6 +110,11 @@ namespace EHR_API.Entities
             CreateMap<PhysicalTherapy, PhysicalTherapyUpdateDTO>().ReverseMap();
             CreateMap<PhysicalTherapy, PhysicalTherapyDTO>().ReverseMap();
             CreateMap<PhysicalTherapy, PhysicalTherapyDTOForOthers>().ReverseMap();
+
+            CreateMap<BadHabit, BadHabitCreateDTO>().ReverseMap();
+            CreateMap<BadHabit, BadHabitUpdateDTO>().ReverseMap();
+            CreateMap<BadHabit, BadHabitDTO>().ReverseMap();
+            CreateMap<BadHabit, BadHabitDTOForOthers>().ReverseMap();
         }
     }
 }
