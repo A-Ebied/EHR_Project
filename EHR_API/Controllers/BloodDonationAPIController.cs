@@ -27,25 +27,25 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpGet("{id}")]
+        [HttpGet("GetUserBloodDonations")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetUserBloodDonations(string id)
+        public async Task<ActionResult<APIResponse>> GetUserBloodDonations(string userId)
         {
             try
             {
-                if (id == null)
+                if (userId == null)
                 {
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
                 var entities = await _db._bloodDonation.GetAllAsync(
-                    expression: g => g.RegistrationDataId == id);
+                    expression: g => g.RegistrationDataId == userId);
                 if (entities == null)
                 {
-                    return BadRequest(APIResponses.BadRequest($"No objects with Id = {id} "));
+                    return BadRequest(APIResponses.BadRequest($"No objects with Id = {userId} "));
                 }
 
                 _response.Result = _mapper.Map<List<BloodDonationDTOForOthers>>(entities);
@@ -74,6 +74,7 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = await _db._bloodDonation.GetAsync(
+                    includeProperties: "MedicalTeam",
                     expression: g => g.Id == id);
 
                 if (entity == null)
@@ -81,7 +82,11 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id} "));
                 }
 
-                _response.Result = _mapper.Map<BloodDonationDTO>(entity);
+                var temp = _mapper.Map<BloodDonationDTO>(entity);
+                temp.MedTeam = APIResponses.User(await _db._authentication.GetAsync(
+                    expression: i => i.Id == entity.MedicalTeamId));
+
+                _response.Result = temp;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }

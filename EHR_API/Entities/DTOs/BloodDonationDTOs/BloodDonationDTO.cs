@@ -1,7 +1,4 @@
-﻿using EHR_API.Entities.DTOs.AllergyDrugDTOs;
-using EHR_API.Entities.DTOs.MedicationDTOs;
-using EHR_API.Entities.DTOs.UserDataDTOs;
-using EHR_API.Entities.Models.UsersData;
+﻿using EHR_API.Entities.DTOs.UserDataDTOs;
 
 namespace EHR_API.Entities.DTOs.BloodDonationDTOs
 {
@@ -12,6 +9,6 @@ namespace EHR_API.Entities.DTOs.BloodDonationDTOs
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public UserDTOForOthers User { get; set; }
-        public UserDTOForOthers MedicalTeam { get; set; }
+        public UserDTOForOthers MedTeam { get; set; }
     }
 }
