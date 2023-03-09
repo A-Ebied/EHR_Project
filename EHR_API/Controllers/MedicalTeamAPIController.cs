@@ -27,7 +27,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize(Roles = SD.HealthFacilityManager)]
-        [Authorize]
+        //[Authorize]
         [HttpPost("CreateMedicalTeamUser")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -61,7 +61,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize(Roles = SD.HealthFacilityManager)]
-        [Authorize]
+        //[Authorize]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -94,7 +94,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize(Roles = SD.HealthFacilityManager)]
-        [Authorize]
+        //[Authorize]
         [HttpPut("{id}", Name = "UpdateMedicalTeamUser")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -11,7 +11,7 @@ using System.Net;
 
 namespace EHR_API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/PersonalDataAPI")]
     [ApiController]
     public class PersonalDataAPIController : ControllerBase
