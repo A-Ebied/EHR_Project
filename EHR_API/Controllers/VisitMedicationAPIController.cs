@@ -42,13 +42,17 @@ namespace EHR_API.Controllers
                 {
                     return BadRequest(APIResponses.BadRequest("Visit is not exists"));
                 }
+                if (await _db._medication.GetAsync(expression: e => e.Id == entityCreateDTO.MedicationId) == null)
+                {
+                    return BadRequest(APIResponses.BadRequest("Medication is not exists"));
+                }
 
-                var entity = _mapper.Map<VisitVitalSign>(entityCreateDTO);
+                var entity = _mapper.Map<VisitMedication>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
                 entity.UpdatedAt = DateTime.Now;
-                await _db._visitVital.CreateAsync(entity);
+                await _db._visitMedication.CreateAsync(entity);
 
-                _response.Result = _mapper.Map<VisitVitalSignDTOForOthers>(entity);
+                _response.Result = _mapper.Map<VisitMedicationDTOForOthers>(entity);
                 _response.StatusCode = HttpStatusCode.Created;
                 return Ok(_response);
             }
@@ -58,23 +62,23 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpGet("GetVisitVisitVitalSigns")]
+        [HttpGet("GetVisitMedications")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetVisitVisitVitalSigns(int visitId)
+        public async Task<ActionResult<APIResponse>> GetVisitMedications(int medicationId)
         {
             try
             {
-                var entities = await _db._visitVital.GetAllAsync(
-                    expression: visitId == 0 ? null : g => g.VisitId == visitId);
+                var entities = await _db._visitMedication.GetAllAsync(
+                    expression: medicationId == 0 ? null : g => g.MedicationId == medicationId);
 
                 if (entities.Count == 0)
                 {
                     return NotFound(APIResponses.NotFound("No data has been found"));
                 }
 
-                _response.Result = _mapper.Map<List<VisitVitalSignDTOForOthers>>(entities);
+                _response.Result = _mapper.Map<List<VisitMedicationDTOForOthers>>(entities);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -84,29 +88,29 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpGet("GetVisitVitalSign")]
+        [HttpGet("GetVisitMedication")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetVisitVitalSign(int id)
+        public async Task<ActionResult<APIResponse>> GetVisitMedication(int visitId, int medicationId)
         {
             try
             {
-                if (id < 1)
+                if (visitId < 1 || medicationId < 1)
                 {
                     return BadRequest(APIResponses.BadRequest("Id less than 1"));
                 }
 
-                var entity = await _db._visitVital.GetAsync(
-                    expression: g => g.Id == id);
+                var entity = await _db._visitMedication.GetAsync(
+                    expression: g => g.MedicationId == medicationId && g.VisitId == visitId);
 
                 if (entity == null)
                 {
-                    return BadRequest(APIResponses.BadRequest($"No object with Id = {id} "));
+                    return BadRequest(APIResponses.BadRequest($"No object with Id = {visitId} & {medicationId} "));
                 }
 
-                _response.Result = _mapper.Map<VisitVitalSignDTO>(entity);
+                _response.Result = _mapper.Map<VisitMedicationDTO>(entity);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -117,11 +121,11 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize(Roles = SD.SystemManager + "," + SD.HealthFacilityManager)]
-        [HttpPut("UpdateVisitVitalSign")]
+        [HttpPut("UpdateVisitMedication")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> UpdateVisitVitalSign(int id, [FromBody] VisitVitalSignUpdateDTO entityUpdateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateVisitMedication(int visitId, int medicationId, [FromBody] VisitMedicationUpdateDTO entityUpdateDTO)
         {
             try
             {
@@ -130,29 +134,35 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
 
-                if (id != entityUpdateDTO.Id)
+                if (visitId != entityUpdateDTO.VisitId || medicationId != entityUpdateDTO.MedicationId)
                 {
-                    return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
+                    return BadRequest(APIResponses.BadRequest("Ids is not equal to the Ids of the object"));
                 }
 
-                var oldOne = await _db._visitVital.GetAsync(expression: g => g.Id == id);
+                var oldOne = await _db._visitMedication.GetAsync(
+                    expression: g => g.VisitId == visitId && g.MedicationId == medicationId);
                 if (oldOne == null)
                 {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+                    return NotFound(APIResponses.NotFound($"No object with Id = {visitId} & {medicationId} "));
                 }
 
                 if (await _db._visit.GetAsync(expression: e => e.Id == entityUpdateDTO.VisitId) == null)
                 {
                     return NotFound(APIResponses.NotFound($"No Visit with Id = {entityUpdateDTO.VisitId}"));
                 }
+                
+                if (await _db._medication.GetAsync(expression: e => e.Id == entityUpdateDTO.MedicationId) == null)
+                {
+                    return NotFound(APIResponses.NotFound($"No Medication with Id = {entityUpdateDTO.MedicationId}"));
+                }
 
-                var entity = _mapper.Map<VisitVitalSign>(entityUpdateDTO);
+                var entity = _mapper.Map<VisitMedication>(entityUpdateDTO);
                 entity.UpdatedAt = DateTime.Now;
                 entity.CreatedAt = oldOne.CreatedAt;
-                await _db._visitVital.UpdateAsync(entity);
+                await _db._visitMedication.UpdateAsync(entity);
 
                 _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = _mapper.Map<VisitVitalSignDTO>(entity);
+                _response.Result = _mapper.Map<VisitMedicationDTO>(entity);
                 return Ok(_response);
             }
             catch (Exception ex)
@@ -162,26 +172,26 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize(Roles = SD.SystemManager + "," + SD.HealthFacilityManager)]
-        [HttpDelete("DeleteVisitVitalSign")]
+        [HttpDelete("DeleteVisitMedication")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> DeleteVisitVitalSign(int id)
+        public async Task<ActionResult<APIResponse>> DeleteVisitMedication(int visitId, int medicationId)
         {
             try
             {
-                if (id < 1)
+                if (visitId < 1 || medicationId < 1)
                 {
-                    return BadRequest(APIResponses.BadRequest("Id less than 1"));
+                    return BadRequest(APIResponses.BadRequest("Ids less than 1"));
                 }
 
-                var removedEntity = await _db._visitVital.GetAsync(expression: g => g.Id == id);
+                var removedEntity = await _db._visitMedication.GetAsync(expression: g => g.VisitId == visitId && g.MedicationId == medicationId);
                 if (removedEntity == null)
                 {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+                    return NotFound(APIResponses.NotFound($"No object with Id = {visitId} & {medicationId} "));
                 }
 
-                await _db._visitVital.DeleteAsync(removedEntity);
+                await _db._visitMedication.DeleteAsync(removedEntity);
 
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);

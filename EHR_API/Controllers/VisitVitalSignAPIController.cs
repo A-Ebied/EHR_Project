@@ -57,11 +57,11 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpGet("GetVisitVisitVitalSigns")]
+        [HttpGet("GetVisitVitalSigns")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetVisitVisitVitalSigns(int visitId)
+        public async Task<ActionResult<APIResponse>> GetVisitVitalSigns(int visitId)
         {
             try
             {
