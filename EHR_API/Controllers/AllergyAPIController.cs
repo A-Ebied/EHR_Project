@@ -63,7 +63,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetAllergy([FromQuery(Name = "id")] int id)
+        public async Task<ActionResult<APIResponse>> GetAllergy(int id)
         {
             try
             {
@@ -131,7 +131,7 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpDelete("{id:int}")]
+        [HttpDelete("DeleteAllergy")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -163,7 +163,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpPut("{id:int}")]
+        [HttpPut("UpdateAllergy")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]

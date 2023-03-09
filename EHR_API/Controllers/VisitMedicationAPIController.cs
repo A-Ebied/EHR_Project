@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EHR_API.Entities;
+using EHR_API.Entities.DTOs.VisitMedicationDTOs;
 using EHR_API.Entities.DTOs.VisitVitalSignDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
@@ -9,15 +10,15 @@ using System.Net;
 
 namespace EHR_API.Controllers
 {
-    [Route("api/VisitVitalSignAPI")]
+    [Route("api/VisitMedicationAPI")]
     [ApiController]
-    public class VisitVitalSignAPIController : ControllerBase
+    public class VisitMedicationAPIController : ControllerBase
     {
         protected APIResponse _response;
         private readonly IMapper _mapper;
         private readonly IMainRepository _db;
 
-        public VisitVitalSignAPIController(IMainRepository db, IMapper mapper)
+        public VisitMedicationAPIController(IMainRepository db, IMapper mapper)
         {
             _db = db;
             _mapper = mapper;
@@ -25,10 +26,10 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize(Roles = SD.SystemManager + "," + SD.HealthFacilityManager)]
-        [HttpPost("CreateVisitVitalSign")]
+        [HttpPost("CreateVisitMedication")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> CreateVisitVitalSign([FromBody] VisitVitalSignCreateDTO entityCreateDTO)
+        public async Task<ActionResult<APIResponse>> CreateVisitMedication([FromBody] VisitMedicationCreateDTO entityCreateDTO)
         {
             try
             {
@@ -36,7 +37,7 @@ namespace EHR_API.Controllers
                 {
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
-                 
+
                 if (await _db._visit.GetAsync(expression: e => e.Id == entityCreateDTO.VisitId) == null)
                 {
                     return BadRequest(APIResponses.BadRequest("Visit is not exists"));
@@ -66,7 +67,7 @@ namespace EHR_API.Controllers
             try
             {
                 var entities = await _db._visitVital.GetAllAsync(
-                    expression: visitId == 0? null : g => g.VisitId == visitId);
+                    expression: visitId == 0 ? null : g => g.VisitId == visitId);
 
                 if (entities.Count == 0)
                 {
@@ -104,7 +105,7 @@ namespace EHR_API.Controllers
                 {
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id} "));
                 }
- 
+
                 _response.Result = _mapper.Map<VisitVitalSignDTO>(entity);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -144,7 +145,7 @@ namespace EHR_API.Controllers
                 {
                     return NotFound(APIResponses.NotFound($"No Visit with Id = {entityUpdateDTO.VisitId}"));
                 }
-                 
+
                 var entity = _mapper.Map<VisitVitalSign>(entityUpdateDTO);
                 entity.UpdatedAt = DateTime.Now;
                 entity.CreatedAt = oldOne.CreatedAt;
