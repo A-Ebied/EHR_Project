@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using EHR_API.Entities.DTOs.AllergyDrugDTOs;
-using EHR_API.Entities.DTOs.AllergyDTOs;
-using EHR_API.Entities.DTOs.BadHabitDTOs;
 using EHR_API.Entities.DTOs.BloodDonationDTOs;
 using EHR_API.Entities.DTOs.GovernorateDTOs;
 using EHR_API.Entities.DTOs.HealthFacilityDTOs;
@@ -12,14 +10,13 @@ using EHR_API.Entities.DTOs.UserDataDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
 using EHR_API.Entities.DTOs.UserDataDTOs.UserRolesDTOs;
-using EHR_API.Entities.DTOs.UserVaccinationDTOs;
-using EHR_API.Entities.DTOs.VisitDTOs;
 using EHR_API.Entities.DTOs.VisitMedicationDTOs;
 using EHR_API.Entities.DTOs.VisitRadLabTestDTOS;
 using EHR_API.Entities.DTOs.VisitVitalSignDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Entities.Models.UsersData;
 using Microsoft.AspNetCore.Identity;
+using EHR_API.Entities.DTOs.AllergyDTOs;
 
 namespace EHR_API.Entities
 {
@@ -112,21 +109,6 @@ namespace EHR_API.Entities
             CreateMap<PhysicalTherapy, PhysicalTherapyUpdateDTO>().ReverseMap();
             CreateMap<PhysicalTherapy, PhysicalTherapyDTO>().ReverseMap();
             CreateMap<PhysicalTherapy, PhysicalTherapyDTOForOthers>().ReverseMap();
-
-            CreateMap<BadHabit, BadHabitCreateDTO>().ReverseMap();
-            CreateMap<BadHabit, BadHabitUpdateDTO>().ReverseMap();
-            CreateMap<BadHabit, BadHabitDTO>().ReverseMap();
-            CreateMap<BadHabit, BadHabitDTOForOthers>().ReverseMap();
-
-            CreateMap<UserVaccination, UserVaccinationCreateDTO>().ReverseMap();
-            CreateMap<UserVaccination, UserVaccinationUpdateDTO>().ReverseMap();
-            CreateMap<UserVaccination, UserVaccinationDTO>().ReverseMap();
-            CreateMap<UserVaccination, UserVaccinationDTOForOthers>().ReverseMap();
-
-            CreateMap<Visit, VisitCreateDTO>().ReverseMap();
-            CreateMap<Visit, VisitUpdateDTO>().ReverseMap();
-            CreateMap<Visit, VisitDTO>().ReverseMap();
-            CreateMap<Visit, VisitDTOForOthers>().ReverseMap();
         }
     }
 }

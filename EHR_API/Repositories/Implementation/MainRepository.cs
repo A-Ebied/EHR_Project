@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EHR_API.Entities;
+using EHR_API.Entities.Models;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Repositories.Contracts;
 using Microsoft.AspNetCore.Identity;
@@ -28,8 +29,10 @@ namespace EHR_API.Repositories.Implementation
             _visitMedication = new VisitMedicationRepository(db);
             _visitRadLabTest = new VisitRadLabTestRepository(db);
             _physicalTherapy = new PhysicalTherapyRepository(db);
-            _userVaccination = new UserVaccinationRepository(db);
             _visit = new VisitRepository(db);
+            _userVaccination = new UserVaccinationRepository(db);
+
+
         }
 
         public IGovernorateRepository _governorate { get; private set; }
@@ -50,7 +53,7 @@ namespace EHR_API.Repositories.Implementation
         public IVisitMedicationRepository _visitMedication { get; private set; }
         public IVisitRadLabTestRepository _visitRadLabTest { get; private set; }
         public IPhysicalTherapyRepository _physicalTherapy { get; private set; }
-        public IUserVaccinationRepository _userVaccination { get; private set; }
         public IVisitRepository _visit { get; private set; }
+        public IUserVaccinationRepository _userVaccination { get; private set; }
     }
 }

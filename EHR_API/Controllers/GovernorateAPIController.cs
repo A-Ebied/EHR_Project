@@ -64,7 +64,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize(Roles = SD.SystemManager)]
-        [HttpPut("UpdateGovernorate")]
+        [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -135,7 +135,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpGet("GetGovernorate")]
+        [HttpGet("{id:int}")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -190,7 +190,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize(Roles = SD.SystemManager)]
-        [HttpDelete("DeleteGovernorate")]
+        [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]

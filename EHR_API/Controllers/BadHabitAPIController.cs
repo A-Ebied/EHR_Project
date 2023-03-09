@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using EHR_API.Entities;
-using EHR_API.Entities.DTOs.AllergyDTOs;
+using EHR_API.Entities.DTOs.AllergyDrugDTOs;
 using EHR_API.Entities.DTOs.BadHabitDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
@@ -27,25 +27,25 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpGet("GetUserBadHabits")]
+        [HttpGet("{id}")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetUserBadHabits(string userId)
+        public async Task<ActionResult<APIResponse>> GetUserBadHabits(string id)
         {
             try
             {
-                if (userId == null)
+                if (id == null)
                 {
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
                 var entities = await _db._badHabit.GetAllAsync(
-                    expression: g => g.RegistrationDataId == userId);
+                    expression: g => g.RegistrationDataId == id);
                 if (entities == null)
                 {
-                    return BadRequest(APIResponses.BadRequest($"No objects with Id = {userId} "));
+                    return BadRequest(APIResponses.BadRequest($"No objects with Id = {id} "));
                 }
 
                 _response.Result = _mapper.Map<List<BadHabitDTO>>(entities);

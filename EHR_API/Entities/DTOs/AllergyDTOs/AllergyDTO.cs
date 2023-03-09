@@ -1,6 +1,4 @@
 ﻿using EHR_API.Entities.DTOs.AllergyDrugDTOs;
-using EHR_API.Entities.DTOs.MedicationDTOs;
-using EHR_API.Entities.DTOs.UserDataDTOs;
 
 namespace EHR_API.Entities.DTOs.AllergyDTOs
 {

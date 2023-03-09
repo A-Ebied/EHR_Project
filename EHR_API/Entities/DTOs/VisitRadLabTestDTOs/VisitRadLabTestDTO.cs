@@ -1,9 +1,4 @@
-﻿using EHR_API.Entities.DTOs.AllergyDrugDTOs;
-using EHR_API.Entities.DTOs.MedicationDTOs;
-using EHR_API.Entities.DTOs.UserDataDTOs;
-using EHR_API.Entities.Models;
-using System.ComponentModel.DataAnnotations;
-
+﻿
 namespace EHR_API.Entities.DTOs.VisitRadLabTestDTOS
 {
     public class VisitRadLabTestDTO

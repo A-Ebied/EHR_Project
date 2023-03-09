@@ -26,25 +26,25 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpGet("GetUserAllergies")]
+        [HttpGet("{id}")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetUserAllergies(string userId)
+        public async Task<ActionResult<APIResponse>> GetUserAllergies(string id)
         {
             try
             {
-                if (userId == null)
+                if (id == null)
                 {
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
                 var entities = await _db._allergy.GetAllAsync(
-                    expression: g => g.RegistrationDataId == userId);
+                    expression: g => g.RegistrationDataId == id);
                 if (entities == null)
                 {
-                    return BadRequest(APIResponses.BadRequest($"No objects with Id = {userId} "));
+                    return BadRequest(APIResponses.BadRequest($"No objects with Id = {id} "));
                 }
 
                 _response.Result = _mapper.Map<List<AllergyDTOForOthers>>(entities);
@@ -63,7 +63,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetAllergy(int id)
+        public async Task<ActionResult<APIResponse>> GetAllergy([FromQuery(Name = "id")] int id)
         {
             try
             {
@@ -131,7 +131,7 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpDelete("DeleteAllergy")]
+        [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -163,7 +163,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpPut("UpdateAllergy")]
+        [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]

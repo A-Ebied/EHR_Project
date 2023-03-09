@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using EHR_API.Entities.DTOs.AllergyDrugDTOs;
-using EHR_API.Entities.Models;
 
 namespace EHR_API.Entities.DTOs.VisitMedicationDTOs
 {

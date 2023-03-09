@@ -15,7 +15,7 @@ namespace EHR_API.Entities.Models
         public string Address { get; set; }
         public string Description { get; set; }
         public DateTime CreatedAt { get; set; } 
-        public DateTime UpdatedAt { get; set; }
+        public DateTime UpdateddAt { get; set; }
 
         public string RegistrationDataId { get; set; }
         public int GovernorateId { get; set; }

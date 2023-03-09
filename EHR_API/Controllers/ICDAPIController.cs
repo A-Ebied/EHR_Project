@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using EHR_API.Entities;
-using EHR_API.Entities.DTOs.AllergyDTOs;
+using EHR_API.Entities.DTOs.AllergyDrugDTOs;
 using EHR_API.Entities.DTOs.ICDDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
@@ -70,9 +70,9 @@ namespace EHR_API.Controllers
         {
             try
             {
-                if (code == null)
+                if (code != null)
                 {
-                    return BadRequest(APIResponses.BadRequest("Code is null"));
+                    return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
                 var entity = await _db._icd.GetAsync(
@@ -123,7 +123,7 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -131,9 +131,9 @@ namespace EHR_API.Controllers
         {
             try
             {
-                if (code == null)
+                if (code != null)
                 {
-                    return BadRequest(APIResponses.BadRequest("Code is null"));
+                    return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
                 var removedEntity = await _db._icd.GetAsync(expression: g => g.Code == code);
@@ -155,7 +155,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpPut]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]

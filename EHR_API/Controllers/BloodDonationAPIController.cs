@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EHR_API.Entities;
+using EHR_API.Entities.DTOs.AllergyDrugDTOs;
 using EHR_API.Entities.DTOs.BloodDonationDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
@@ -26,25 +27,25 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpGet("GetUserBloodDonations")]
+        [HttpGet("{id}")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetUserBloodDonations(string userId)
+        public async Task<ActionResult<APIResponse>> GetUserBloodDonations(string id)
         {
             try
             {
-                if (userId == null)
+                if (id == null)
                 {
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
                 var entities = await _db._bloodDonation.GetAllAsync(
-                    expression: g => g.RegistrationDataId == userId);
+                    expression: g => g.RegistrationDataId == id);
                 if (entities == null)
                 {
-                    return BadRequest(APIResponses.BadRequest($"No objects with Id = {userId} "));
+                    return BadRequest(APIResponses.BadRequest($"No objects with Id = {id} "));
                 }
 
                 _response.Result = _mapper.Map<List<BloodDonationDTOForOthers>>(entities);
@@ -73,7 +74,6 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = await _db._bloodDonation.GetAsync(
-                    includeProperties: "MedicalTeam",
                     expression: g => g.Id == id);
 
                 if (entity == null)
@@ -81,11 +81,7 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id} "));
                 }
 
-                var temp = _mapper.Map<BloodDonationDTO>(entity);
-                temp.MedTeam = APIResponses.User(await _db._authentication.GetAsync(
-                    expression: i => i.Id == entity.MedicalTeamId));
-
-                _response.Result = temp;
+                _response.Result = _mapper.Map<BloodDonationDTO>(entity);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }

@@ -1,5 +1,4 @@
-﻿using EHR_API.Entities.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace EHR_API.Entities.DTOs.VisitRadLabTestDTOS
 {

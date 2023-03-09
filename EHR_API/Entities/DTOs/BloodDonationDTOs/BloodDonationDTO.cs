@@ -9,6 +9,6 @@ namespace EHR_API.Entities.DTOs.BloodDonationDTOs
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public UserDTOForOthers User { get; set; }
-        public UserDTOForOthers MedTeam { get; set; }
+        public UserDTOForOthers MedicalTeam { get; set; }
     }
 }

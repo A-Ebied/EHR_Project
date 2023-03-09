@@ -1,8 +1,5 @@
-﻿using EHR_API.Entities.DTOs.GovernorateDTOs;
-using EHR_API.Entities.DTOs.UserDataDTOs;
+﻿using EHR_API.Entities.DTOs.UserDataDTOs;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace EHR_API.Entities.DTOs.HealthFacilityDTOs
 {
