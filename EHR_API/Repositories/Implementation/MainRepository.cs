@@ -29,6 +29,7 @@ namespace EHR_API.Repositories.Implementation
             _visitRadLabTest = new VisitRadLabTestRepository(db);
             _physicalTherapy = new PhysicalTherapyRepository(db);
             _userVaccination = new UserVaccinationRepository(db);
+            _visit = new VisitRepository(db);
         }
 
         public IGovernorateRepository _governorate { get; private set; }
@@ -50,5 +51,6 @@ namespace EHR_API.Repositories.Implementation
         public IVisitRadLabTestRepository _visitRadLabTest { get; private set; }
         public IPhysicalTherapyRepository _physicalTherapy { get; private set; }
         public IUserVaccinationRepository _userVaccination { get; private set; }
+        public IVisitRepository _visit { get; private set; }
     }
 }

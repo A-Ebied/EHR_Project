@@ -13,6 +13,7 @@ using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
 using EHR_API.Entities.DTOs.UserDataDTOs.UserRolesDTOs;
 using EHR_API.Entities.DTOs.UserVaccinationDTOs;
+using EHR_API.Entities.DTOs.VisitDTOs;
 using EHR_API.Entities.DTOs.VisitMedicationDTOs;
 using EHR_API.Entities.DTOs.VisitRadLabTestDTOS;
 using EHR_API.Entities.DTOs.VisitVitalSignDTOs;
@@ -121,6 +122,11 @@ namespace EHR_API.Entities
             CreateMap<UserVaccination, UserVaccinationUpdateDTO>().ReverseMap();
             CreateMap<UserVaccination, UserVaccinationDTO>().ReverseMap();
             CreateMap<UserVaccination, UserVaccinationDTOForOthers>().ReverseMap();
+
+            CreateMap<Visit, VisitCreateDTO>().ReverseMap();
+            CreateMap<Visit, VisitUpdateDTO>().ReverseMap();
+            CreateMap<Visit, VisitDTO>().ReverseMap();
+            CreateMap<Visit, VisitDTOForOthers>().ReverseMap();
         }
     }
 }
