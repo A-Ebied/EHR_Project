@@ -88,61 +88,61 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize(Roles = SD.SystemManager)]
-        [HttpGet("GetHealthFacilitiesAdministrators")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<APIResponse>> GetHealthFacilitiesAdministrators([FromQuery(Name = "UserName")] string userName = null, int pageNumber = 1, int pageSize = 0)
-        {
-            try
-            {
-                IEnumerable<RegistrationData> entities = new List<RegistrationData>();
-                entities = await _db._authentication.GetAllAsync(
-                    expression: userName == null ? null : e => e.UserName.ToLower().Contains(userName),
-                    includeProperties: "PersonalData");
+        ////[Authorize(Roles = SD.SystemManager)]
+        //[HttpGet("GetHealthFacilitiesAdministrators")]
+        //[ResponseCache(CacheProfileName = SD.ProfileName)]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        //public async Task<ActionResult<APIResponse>> GetHealthFacilitiesAdministrators([FromQuery(Name = "UserName")] string userName = null, int pageNumber = 1, int pageSize = 0)
+        //{
+        //    try
+        //    {
+        //        IEnumerable<RegistrationData> entities = new List<RegistrationData>();
+        //        entities = await _db._authentication.GetAllAsync(
+        //            expression: userName == null ? null : e => e.UserName.ToLower().Contains(userName),
+        //            includeProperties: "PersonalData");
 
-                var hFAdministrators = new List<RegistrationData>();
-                IEnumerable<string> roles = new List<string>();
-                foreach (var entity in entities)
-                {
-                    roles = await _userManager.GetRolesAsync(entity);
-                    if (roles.Contains("HealthFacilitiesAdministrator") == true)
-                    {
-                        hFAdministrators.Add(entity);
-                    }
-                }
+        //        var hFAdministrators = new List<RegistrationData>();
+        //        IEnumerable<string> roles = new List<string>();
+        //        foreach (var entity in entities)
+        //        {
+        //            roles = await _userManager.GetRolesAsync(entity);
+        //            if (roles.Contains("HealthFacilitiesAdministrator") == true)
+        //            {
+        //                hFAdministrators.Add(entity);
+        //            }
+        //        }
 
-                if (hFAdministrators.ToList().Count == 0)
-                {
-                    return NotFound(APIResponses.NotFound("No data has been found"));
-                }
+        //        if (hFAdministrators.ToList().Count == 0)
+        //        {
+        //            return NotFound(APIResponses.NotFound("No data has been found"));
+        //        }
 
-                if (pageSize > 0)
-                {
-                    hFAdministrators = (hFAdministrators.Skip(pageSize * (pageNumber - 1)).Take(pageSize)).ToList();
-                }
+        //        if (pageSize > 0)
+        //        {
+        //            hFAdministrators = (hFAdministrators.Skip(pageSize * (pageNumber - 1)).Take(pageSize)).ToList();
+        //        }
 
-                List<UserDTOForOthers> administrators = new();
-                foreach (var item in hFAdministrators)
-                {
-                    administrators.Add(APIResponses.User(_mapper.Map<RegistrationData>(item)));
-                }
+        //        List<UserDTOForOthers> administrators = new();
+        //        foreach (var item in hFAdministrators)
+        //        {
+        //            administrators.Add(APIResponses.User(_mapper.Map<RegistrationData>(item)));
+        //        }
 
-                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
-                Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
+        //        Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
+        //        Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
 
-                _response.Result = administrators;
-                _response.StatusCode = HttpStatusCode.OK;
-                return Ok(_response);
+        //        _response.Result = administrators;
+        //        _response.StatusCode = HttpStatusCode.OK;
+        //        return Ok(_response);
 
-            }
-            catch (Exception ex)
-            {
-                return APIResponses.InternalServerError(ex);
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return APIResponses.InternalServerError(ex);
+        //    }
+        //}
 
         //[Authorize(Roles = SD.HealthFacilitiesAdministrator)]
         [HttpGet("GetHealthFacilityManagers")]
@@ -407,17 +407,17 @@ namespace EHR_API.Controllers
 
         //[Authorize]
 
-        [HttpGet("{id}")]
+        [HttpGet("GetUser")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> GetUser(string id)
+        public async Task<ActionResult<APIResponse>> GetUser(string userId)
         {
             try
             {
-                if (id == null)
+                if (userId == null)
                 {
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
@@ -437,10 +437,10 @@ namespace EHR_API.Controllers
                     headerRole = user.Claims.ToList()[4].Value;
                     headerId = user.Claims.ToList()[0].Value;
 
-                    if (headerRole == SD.Physician || headerRole == SD.Nurse || headerRole == SD.HealthFacilityManager || headerRole == SD.Pharmacist || headerRole == SD.Technician || headerId == id)
+                    if (headerRole == SD.Physician || headerRole == SD.Nurse || headerRole == SD.HealthFacilityManager || headerRole == SD.Pharmacist || headerRole == SD.Technician || headerId == userId)
                     {
                         entity = await _db._authentication.GetAsync(
-                                 expression: g => g.Id == id,
+                                 expression: g => g.Id == userId,
                                  includeProperties: "PersonalData,MedicalData,MedicalTeam");
                     }
 
@@ -448,7 +448,7 @@ namespace EHR_API.Controllers
                 else
                 {
                     entity = await _db._authentication.GetAsync(
-                             expression: g => g.Id == id,
+                             expression: g => g.Id == userId,
                              includeProperties: "PersonalData,MedicalTeam");
                 }
                 //else
@@ -458,7 +458,7 @@ namespace EHR_API.Controllers
 
                 if (entity == null)
                 {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+                    return NotFound(APIResponses.NotFound($"No object with Id = {userId} "));
                 }
 
                 var newEntity = _mapper.Map<RegistrationDataDTO>(entity);
@@ -608,11 +608,11 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpPut("{id}")]
+        [HttpPut("UpdateRegistrationData")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> UpdateRegistrationData(string id, [FromBody] RegistrationDataUpdateDTO entityUpdateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateRegistrationData(string userId, [FromBody] RegistrationDataUpdateDTO entityUpdateDTO)
         {
             try
             {
@@ -621,14 +621,14 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
 
-                if (id != entityUpdateDTO.Id)
+                if (userId != entityUpdateDTO.Id)
                 {
                     return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
-                if (await _db._authentication.GetAsync(expression: g => g.Id == id) == null)
+                if (await _db._authentication.GetAsync(expression: g => g.Id == userId) == null)
                 {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+                    return NotFound(APIResponses.NotFound($"No object with Id = {userId} "));
                 }
 
                 await _db._authentication.UpdateAsync(entityUpdateDTO);
