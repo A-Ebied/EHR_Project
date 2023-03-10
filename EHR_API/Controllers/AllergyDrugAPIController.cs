@@ -137,8 +137,7 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
-
-
+ 
         ////[Authorize]
         [HttpDelete("DeleteAllergyDrug")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
