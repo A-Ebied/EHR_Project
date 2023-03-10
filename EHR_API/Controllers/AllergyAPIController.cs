@@ -26,25 +26,25 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpGet("{id}")]
+        [HttpGet("GetUserAllergies")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetUserAllergies(string id)
+        public async Task<ActionResult<APIResponse>> GetUserAllergies(string userId)
         {
             try
             {
-                if (id == null)
+                if (userId == null)
                 {
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
                 var entities = await _db._allergy.GetAllAsync(
-                    expression: g => g.RegistrationDataId == id);
+                    expression: g => g.RegistrationDataId == userId);
                 if (entities == null)
                 {
-                    return BadRequest(APIResponses.BadRequest($"No objects with Id = {id} "));
+                    return BadRequest(APIResponses.BadRequest($"No objects with Id = {userId} "));
                 }
 
                 _response.Result = _mapper.Map<List<AllergyDTOForOthers>>(entities);
@@ -63,21 +63,21 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetAllergy([FromQuery(Name = "id")] int id)
+        public async Task<ActionResult<APIResponse>> GetAllergy(int allergyId)
         {
             try
             {
-                if (id < 0)
+                if (allergyId < 0)
                 {
                     return BadRequest(APIResponses.BadRequest("Id is less than 1"));
                 }
 
                 var entity = await _db._allergy.GetAsync(
-                    expression: g => g.Id == id);
+                    expression: g => g.Id == allergyId);
 
                 if (entity == null)
                 {
-                    return BadRequest(APIResponses.BadRequest($"No object with Id = {id} "));
+                    return BadRequest(APIResponses.BadRequest($"No object with Id = {allergyId} "));
                 }
 
                 _response.Result = _mapper.Map<AllergyDTO>(entity);
@@ -131,23 +131,23 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpDelete("{id:int}")]
+        [HttpDelete("DeleteAllergy")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> DeleteAllergy(int id)
+        public async Task<ActionResult<APIResponse>> DeleteAllergy(int allergyId)
         {
             try
             {
-                if (id < 1)
+                if (allergyId < 1)
                 {
                     return BadRequest(APIResponses.BadRequest("Id less than 1"));
                 }
 
-                var removedEntity = await _db._allergy.GetAsync(expression: g => g.Id == id);
+                var removedEntity = await _db._allergy.GetAsync(expression: g => g.Id == allergyId);
                 if (removedEntity == null)
                 {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+                    return NotFound(APIResponses.NotFound($"No object with Id = {allergyId} "));
                 }
 
                 await _db._allergy.DeleteAsync(removedEntity);
@@ -163,11 +163,11 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpPut("{id:int}")]
+        [HttpPut("UpdateAllergy")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> UpdateAllergy(int id, [FromBody] AllergyUpdateDTO entityUpdateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateAllergy(int allergyId, [FromBody] AllergyUpdateDTO entityUpdateDTO)
         {
             try
             {
@@ -176,17 +176,17 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
 
-                if (id != entityUpdateDTO.Id)
+                if (allergyId != entityUpdateDTO.Id)
                 {
                     return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
-                if (await _db._allergy.GetAsync(expression: g => g.Id == id) == null)
+                if (await _db._allergy.GetAsync(expression: g => g.Id == allergyId) == null)
                 {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+                    return NotFound(APIResponses.NotFound($"No object with Id = {allergyId} "));
                 }
 
-                if (await _db._allergy.GetAsync(expression: e => e.RegistrationDataId == entityUpdateDTO.RegistrationDataId) == null)
+                if (await _db._authentication.GetAsync(expression: e => e.Id == entityUpdateDTO.RegistrationDataId) == null)
                 {
                     return BadRequest(APIResponses.BadRequest("User is not exists"));
                 }
