@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EHR_API.Entities.Models
 {
+    // International Classification of Diseases
     public class ICD
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

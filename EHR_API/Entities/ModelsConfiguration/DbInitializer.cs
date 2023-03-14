@@ -25,40 +25,7 @@ namespace EHR_API.Entities.ModelsConfiguration
             }
             catch (Exception) { throw; }
 
-
-
-            //            //var icds = new ICD[]
-            //            //{
-            //            //    new ICD
-            //            //    {
-            //            //        Code = "A00.0",
-            //            //        DiagnosisName = "Cholera due to Vibrio cholerae 01, biovar cholerae",
-            //            //    },
-
-            //            //    new ICD
-            //            //    {
-            //            //        Code = "A00.1",
-            //            //        DiagnosisName = "Cholera due to Vibrio cholerae 01, biovar eltor",
-            //            //    },
-
-            //            //    new ICD
-            //            //    {
-            //            //        Code = "A00.9",
-            //            //        DiagnosisName = "Cholera, unspecified",
-            //            //    },
-
-            //            //    new ICD
-            //            //    {
-            //            //        Code = "A01.00",
-            //            //        DiagnosisName = "Typhoid fever, unspecified",
-            //            //    },
-            //            //};
-            //            //foreach (ICD i in icds)
-            //            //{
-            //            //    _context.ICDs.Add(i);
-            //            //}
-            //            //_context.SaveChanges();
-
+             
 
             //            //var badHbits = new BadHabit[]
             //            //{

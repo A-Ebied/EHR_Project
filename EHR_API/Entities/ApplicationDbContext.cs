@@ -50,6 +50,7 @@ namespace EHR_API.Entities
             modelBuilder.ApplyConfiguration(new UsersConfiguration());
             modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
             modelBuilder.ApplyConfiguration(new HealthFacilityConfiguration());
+            modelBuilder.ApplyConfiguration(new ICDConfiguration());
 
             //one-to-one
             modelBuilder.Entity<RegistrationData>()
