@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration
+namespace EHR_API.Entities.DTOs.UserDataDTOs.MedicalTeamDTOs
 {
     public class MedicalTeamUpdateDTO
     {

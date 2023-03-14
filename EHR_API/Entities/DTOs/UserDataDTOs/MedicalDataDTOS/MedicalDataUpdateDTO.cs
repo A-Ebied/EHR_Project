@@ -1,7 +1,7 @@
 ﻿using EHR_API.Entities.Models.UsersData;
 using System.ComponentModel.DataAnnotations;
 
-namespace EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration
+namespace EHR_API.Entities.DTOs.UserDataDTOs.MedicalDataDTOs
 {
     public class MedicalDataUpdateDTO
     {

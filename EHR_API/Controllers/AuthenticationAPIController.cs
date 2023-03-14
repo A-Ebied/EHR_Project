@@ -3,7 +3,7 @@ using EHR_API.Entities;
 using EHR_API.Entities.DTOs.UserDataDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
-using EHR_API.Entities.DTOs.UserDataDTOs.UserRolesDTOs;
+using EHR_API.Entities.DTOs.UserDataDTOs.RolesDTOs;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;

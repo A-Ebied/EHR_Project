@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EHR_API.Entities.DTOs.UserDataDTOs
+namespace EHR_API.Entities.DTOs.UserDataDTOs.PersonalDataDTOs
 {
     public class PersonalDataCreateDTO
     {

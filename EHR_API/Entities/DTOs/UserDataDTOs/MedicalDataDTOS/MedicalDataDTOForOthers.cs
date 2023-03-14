@@ -1,6 +1,5 @@
-﻿using System.ComponentModel;
-
-namespace EHR_API.Entities.DTOs.UserDataDTOs
+﻿ 
+namespace EHR_API.Entities.DTOs.UserDataDTOs.MedicalDataDTOs
 {
     public class MedicalDataDTOForOthers
     {

@@ -1,6 +1,4 @@
 ﻿using EHR_API.Entities;
-using EHR_API.Entities.DTOs.UserDataDTOs.UserRolesDTOs;
-using EHR_API.Entities.Models.UsersData;
 using EHR_API.Repositories.Contracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

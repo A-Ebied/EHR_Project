@@ -4,7 +4,7 @@ using System.ComponentModel;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Entities.Models;
 
-namespace EHR_API.Entities.DTOs.UserDataDTOs
+namespace EHR_API.Entities.DTOs.UserDataDTOs.MedicalTeamDTOs
 {
     public class MedicalTeamDTO
     {

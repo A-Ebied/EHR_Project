@@ -1,6 +1,8 @@
-﻿using EHR_API.Entities.DTOs.HealthFacilityDTOs;
+﻿using EHR_API.Entities.DTOs.UserDataDTOs.MedicalDataDTOs;
+using EHR_API.Entities.DTOs.UserDataDTOs.MedicalTeamDTOs;
+using EHR_API.Entities.DTOs.UserDataDTOs.PersonalDataDTOs;
+using EHR_API.Entities.DTOs.UserDataDTOs.UserInsuranceDTOs;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 
 namespace EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration
 {
@@ -12,15 +14,13 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration
         public string UserName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        [DisplayName("Created at")]
         public DateTime CreatedAt { get; set; }
-        [DisplayName("Updated at")]
         public DateTime UpdateddAt { get; set; }
 
         public IEnumerable<string> Roles { get; set; }  
-        public PersonalDataDTO PersonalData { get; set; }
-        public MedicalDataDTO MedicalData { get; set; }
-        public UserInsuranceDTO UserInsurance { get; set; }
-        public MedicalTeamDTO MedicalTeam { get; set; }
+        public PersonalDataDTOForOthers PersonalData { get; set; }
+        public MedicalDataDTOForOthers MedicalData { get; set; }
+        public UserInsuranceDTOForOthers UserInsurance { get; set; }
+        public MedicalTeamDTOForOthers MedicalTeam { get; set; }
     }
 }

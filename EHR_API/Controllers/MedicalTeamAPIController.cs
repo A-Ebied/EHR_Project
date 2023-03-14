@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using EHR_API.Entities;
-using EHR_API.Entities.DTOs.UserDataDTOs;
-using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
+using EHR_API.Entities.DTOs.UserDataDTOs.MedicalTeamDTOs;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 

@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using EHR_API.Entities;
-using EHR_API.Entities.DTOs.UserDataDTOs;
-using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
+using EHR_API.Entities.DTOs.UserDataDTOs.UserInsuranceDTOs;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -82,7 +80,7 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest($"No objects with Id = {id} "));
                 }
 
-                _response.Result = _mapper.Map<List<UserInsuranceDTO>>(entities);
+                _response.Result = _mapper.Map<List<UserInsuranceDTOForOthers>>(entities);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -151,7 +149,7 @@ namespace EHR_API.Controllers
 
                 var entity = _mapper.Map<UserInsurance>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
-                entity.UpdateddAt = DateTime.Now;
+                entity.UpdatedAt = DateTime.Now;
                 await _db._userInsurance.CreateAsync(entity);
 
                 _response.Result = _mapper.Map<UserInsuranceDTO>(entity);
@@ -197,7 +195,7 @@ namespace EHR_API.Controllers
                 foreach (var item in entities)
                 {
                     item.CreatedAt = DateTime.Now;
-                    item.UpdateddAt = DateTime.Now;
+                    item.UpdatedAt = DateTime.Now;
                 }
                 await _db._userInsurance.CreateRangeAsync(entities);
 
@@ -273,7 +271,7 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = _mapper.Map<UserInsurance>(entityUpdateDTO);
-                entity.UpdateddAt = DateTime.Now;
+                entity.UpdatedAt = DateTime.Now;
                 await _db._userInsurance.UpdateAsync(entity);
 
                 _response.StatusCode = HttpStatusCode.OK;
