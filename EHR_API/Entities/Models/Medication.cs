@@ -10,7 +10,6 @@ namespace EHR_API.Entities.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public string Contraindication { get; set; }
-        public string SideEffects { get; set; }
         public string ImageUrl { get; set; }
         [NotMapped]
         public byte[] MedicationImage { get; set; }

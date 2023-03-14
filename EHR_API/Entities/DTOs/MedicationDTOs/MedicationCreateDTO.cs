@@ -12,6 +12,5 @@ namespace EHR_API.Entities.DTOs.MedicationDTOs
         public string Name { get; set; }
         public string Description { get; set; }
         public string Contraindication { get; set; }
-        public string SideEffects { get; set; }
     }
 }

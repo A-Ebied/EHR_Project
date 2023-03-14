@@ -7,7 +7,6 @@
         public string Name { get; set; }
         public string Description { get; set; }
         public string Contraindication { get; set; }
-        public string SideEffects { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdateddAt { get; set; }
     }
