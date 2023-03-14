@@ -51,6 +51,15 @@ namespace EHR_API.Entities
             modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
             modelBuilder.ApplyConfiguration(new HealthFacilityConfiguration());
             modelBuilder.ApplyConfiguration(new ICDConfiguration());
+            modelBuilder.ApplyConfiguration(new UserInsuranceConfiguration());
+            modelBuilder.ApplyConfiguration(new PersonalDataConfiguration());
+            modelBuilder.ApplyConfiguration(new MedicalDataConfiguration());
+            modelBuilder.ApplyConfiguration(new MedicalTeamConfiguration());
+            modelBuilder.ApplyConfiguration(new MedicationConfiguration());
+            modelBuilder.ApplyConfiguration(new BloodDonationConfiguration());
+            modelBuilder.ApplyConfiguration(new BadHabitConfiguration());
+            modelBuilder.ApplyConfiguration(new AllergyConfiguration());
+            modelBuilder.ApplyConfiguration(new AllergyDrugConfiguration());
 
             //one-to-one
             modelBuilder.Entity<RegistrationData>()

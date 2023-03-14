@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using EHR_API.Entities.Models;
 using EHR_API.Entities.Models.UsersData;
 
 namespace EHR_API.Entities.ModelsConfiguration
