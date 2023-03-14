@@ -62,23 +62,23 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpDelete("DeletePersonalData")]
+        [HttpDelete("{userId}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> DeletePersonalData(string id)
+        public async Task<ActionResult<APIResponse>> DeletePersonalData(string userId)
         {
             try
             {
-                if (id == null)
+                if (userId == null)
                 {
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
-                var removedEntity = await _db._personal.GetAsync(expression: g => g.Id == id);
+                var removedEntity = await _db._personal.GetAsync(expression: g => g.Id == userId);
                 if (removedEntity == null)
                 {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+                    return NotFound(APIResponses.NotFound($"No object with Id = {userId} "));
                 }
 
                 await _db._personal.DeleteAsync(removedEntity);
@@ -94,11 +94,11 @@ namespace EHR_API.Controllers
         }
 
 
-        [HttpPut("UpdateUserPersonalData")]
+        [HttpPut("{userId}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> UpdateUserPersonalData(string id, [FromBody] PersonalDataUpdateDTO entityUpdateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateUserPersonalData(string userId, [FromBody] PersonalDataUpdateDTO entityUpdateDTO)
         {
             try
             {
@@ -107,15 +107,15 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
 
-                if (id != entityUpdateDTO.Id)
+                if (userId != entityUpdateDTO.Id)
                 {
                     return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
-                var oldEntity = await _db._personal.GetAsync(expression: g => g.Id == id);
+                var oldEntity = await _db._personal.GetAsync(expression: g => g.Id == userId);
                 if (oldEntity == null)
                 {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+                    return NotFound(APIResponses.NotFound($"No object with Id = {userId} "));
                 }
 
                 var entity = _mapper.Map<PersonalData>(entityUpdateDTO);

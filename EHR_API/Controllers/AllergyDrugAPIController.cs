@@ -66,7 +66,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetAllergyDrugs([FromQuery(Name = "allergyId")] int allergyId)
+        public async Task<ActionResult<APIResponse>> GetAllergyDrugs(int allergyId)
         {
             try
             {
@@ -143,7 +143,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> DeleteAllergyDrug([FromQuery(Name = "allergyId")] int allergyId, [FromQuery(Name = "medicationId")] int medicationId)
+        public async Task<ActionResult<APIResponse>> DeleteAllergyDrug(int allergyId, int medicationId)
         {
             try
             {

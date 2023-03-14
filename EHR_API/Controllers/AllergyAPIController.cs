@@ -58,7 +58,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpGet("GetAllergy")]
+        [HttpGet("{allergyId}")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -131,7 +131,7 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpDelete("DeleteAllergy")]
+        [HttpDelete("{allergyId}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -163,7 +163,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpPut("UpdateAllergy")]
+        [HttpPut("{allergyId}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]

@@ -60,23 +60,23 @@ namespace EHR_API.Controllers
 
         //[Authorize(Roles = SD.HealthFacilityManager)]
         //[Authorize]
-        [HttpDelete("DeleteMedicalTeamUser")]
+        [HttpDelete("{userId}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> DeleteMedicalTeamUser(string id)
+        public async Task<ActionResult<APIResponse>> DeleteMedicalTeamUser(string userId)
         {
             try
             {
-                if (id == null)
+                if (userId == null)
                 {
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
-                var removedEntity = await _db._medicalTeam.GetAsync(expression: g => g.Id == id);
+                var removedEntity = await _db._medicalTeam.GetAsync(expression: g => g.Id == userId);
                 if (removedEntity == null)
                 {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+                    return NotFound(APIResponses.NotFound($"No object with Id = {userId} "));
                 }
 
                 await _db._medicalTeam.DeleteAsync(removedEntity);
@@ -93,11 +93,11 @@ namespace EHR_API.Controllers
 
         //[Authorize(Roles = SD.HealthFacilityManager)]
         //[Authorize]
-        [HttpPut("UpdateMedicalTeamUser")]
+        [HttpPut("{userId}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> UpdateMedicalTeamUser(string id, [FromBody] MedicalTeamUpdateDTO entityUpdateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateMedicalTeamUser(string userId, [FromBody] MedicalTeamUpdateDTO entityUpdateDTO)
         {
             try
             {
@@ -106,14 +106,14 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
 
-                if (id != entityUpdateDTO.Id)
+                if (userId != entityUpdateDTO.Id)
                 {
                     return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
-                if (await _db._medicalTeam.GetAsync(expression: g => g.Id == id) == null)
+                if (await _db._medicalTeam.GetAsync(expression: g => g.Id == userId) == null)
                 {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+                    return NotFound(APIResponses.NotFound($"No object with Id = {userId} "));
                 }
 
                 var entity = _mapper.Map<MedicalTeam>(entityUpdateDTO);

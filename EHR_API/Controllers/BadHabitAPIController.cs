@@ -31,20 +31,20 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetUserBadHabits(string id)
+        public async Task<ActionResult<APIResponse>> GetUserBadHabits(string UserId)
         {
             try
             {
-                if (id == null)
+                if (UserId == null)
                 {
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
                 var entities = await _db._badHabit.GetAllAsync(
-                    expression: g => g.RegistrationDataId == id);
+                    expression: g => g.RegistrationDataId == UserId);
                 if (entities == null)
                 {
-                    return BadRequest(APIResponses.BadRequest($"No objects with Id = {id} "));
+                    return BadRequest(APIResponses.BadRequest($"No objects with Id = {UserId} "));
                 }
 
                 _response.Result = _mapper.Map<List<BadHabitDTO>>(entities);
@@ -58,7 +58,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpGet("GetBadHabit")]
+        [HttpGet("{id}")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -125,7 +125,7 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpDelete("DeleteBadHabit")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -157,7 +157,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpPut("UpdateBadHabit")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]

@@ -65,19 +65,19 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetUserInsurances(string id)
+        public async Task<ActionResult<APIResponse>> GetUserInsurances(string userId)
         {
             try
             {
-                if (id == null)
+                if (userId == null)
                 {
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
-                var entities = await _db._userInsurance.GetAllAsync(expression: g => g.RegistrationDataId == id);
+                var entities = await _db._userInsurance.GetAllAsync(expression: g => g.RegistrationDataId == userId);
                 if (entities == null)
                 {
-                    return BadRequest(APIResponses.BadRequest($"No objects with Id = {id} "));
+                    return BadRequest(APIResponses.BadRequest($"No objects with Id = {userId} "));
                 }
 
                 _response.Result = _mapper.Map<List<UserInsuranceDTOForOthers>>(entities);
@@ -91,12 +91,12 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpGet("GetInsurance")]
+        [HttpGet("{id}")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetInsurance([FromQuery(Name = "id")] int id)
+        public async Task<ActionResult<APIResponse>> GetInsurance(int id)
         {
             try
             {
@@ -210,7 +210,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpDelete("DeleteUserInsurance")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -242,7 +242,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpPut("UpdateUserInsurance")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
