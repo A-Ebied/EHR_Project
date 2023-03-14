@@ -6,7 +6,7 @@
         public string MedicalSpecialization { get; set; }
         public string Degree { get; set; }
         public DateTime CreatedAt { get; set; } 
-        public DateTime UpdateddAt { get; set; } 
+        public DateTime UpdatedAt { get; set; } 
 
         public RegistrationData RegistrationData { get; set; }
         //public ICollection<MedicalFacilityTeam> MedicalFacilityTeams { get; set; }

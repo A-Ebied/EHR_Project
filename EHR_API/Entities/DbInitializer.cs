@@ -102,26 +102,13 @@ namespace EHR_API.Entities
             //            //        Title="طب الذكورة",
             //            //        MedicalDepartmentId = 2
             //            //    },
-            //            //   new MedicalSpecialization
-            //            //   {
-            //            //       Title="أورام المسالك البولية",
-            //            //       MedicalDepartmentId = 2
-            //            //   },
+            //            //   
             //            //   new MedicalSpecialization
             //            //   {
             //            //       Title="جراحة عظام الأطفال",
             //            //       MedicalDepartmentId = 3
             //            //   },
-            //            //   new MedicalSpecialization
-            //            //   {
-            //            //       Title="جراحة العمود الفقري",
-            //            //       MedicalDepartmentId = 3
-            //            //   },
-            //            //   new MedicalSpecialization
-            //            //   {
-            //            //       Title="أورام العظام",
-            //            //       MedicalDepartmentId = 3
-            //            //   },
+            //            //    
             //            //};
             //            //foreach (var i in medicalSpecializations)
             //            //{
