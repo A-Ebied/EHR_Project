@@ -335,7 +335,7 @@ namespace EHRAPI.Migrations
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedAt", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "Nationality", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UpdateddAt", "UserName" },
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedAt", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "Nationality", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UpdatedAt", "UserName" },
                 values: new object[,]
                 {
                     { "12345678912341", 0, "498e9488-9c06-4fe4-858a-c431c7d33daf", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "k@gmail.com", false, "أحمد محمد كمال", false, null, "مصري", "K@GMAIL.COM", "@KAMAL123", "AQAAAAIAAYagAAAAEDG3Vaf6J141woK8ny1VdD/+dHoC5pKIbD8O4UOBQ/ob0ZamWa9rqLpXaPASXod0fQ==", "01234567890", false, "43d3ab07-f4a4-47e1-84c1-e1b1265d67b7", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Kamal123" },
@@ -352,7 +352,7 @@ namespace EHRAPI.Migrations
 
             migrationBuilder.InsertData(
                 table: "Governorates",
-                columns: new[] { "Id", "CreatedAt", "Title", "UpdateddAt" },
+                columns: new[] { "Id", "CreatedAt", "Title", "UpdatedAt" },
                 values: new object[,]
                 {
                     { 1, new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9089), "القاهرة", new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9103) },
@@ -382,7 +382,7 @@ namespace EHRAPI.Migrations
 
             migrationBuilder.InsertData(
                 table: "HealthFacilities",
-                columns: new[] { "Id", "Address", "CreatedAt", "Description", "Email", "GovernorateId", "Phone1", "Phone2", "Phone3", "RegistrationDataId", "SubordinateTo", "Title", "Type", "UpdateddAt" },
+                columns: new[] { "Id", "Address", "CreatedAt", "Description", "Email", "GovernorateId", "Phone1", "Phone2", "Phone3", "RegistrationDataId", "SubordinateTo", "Title", "Type", "UpdatedAt" },
                 values: new object[,]
                 {
                     { 1, "Address1", new DateTime(2023, 2, 25, 4, 23, 54, 617, DateTimeKind.Local).AddTicks(6617), "Description1", "m@gmail.com", 1, "01123456878", "", "", "12345678912342", "المؤسسة العسكرية", "المستشفى العسكري بالشرقية", "مستشفى عسكري", new DateTime(2023, 2, 25, 4, 23, 54, 617, DateTimeKind.Local).AddTicks(6633) },

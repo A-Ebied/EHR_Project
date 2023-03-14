@@ -745,63 +745,63 @@ namespace EHRAPI.Migrations
                 table: "Governorates",
                 keyColumn: "Id",
                 keyValue: 1,
-                columns: new[] { "CreatedAt", "UpdateddAt" },
+                columns: new[] { "CreatedAt", "UpdatedAt" },
                 values: new object[] { new DateTime(2023, 2, 26, 20, 12, 25, 584, DateTimeKind.Local).AddTicks(1297), new DateTime(2023, 2, 26, 20, 12, 25, 584, DateTimeKind.Local).AddTicks(1307) });
 
             migrationBuilder.UpdateData(
                 table: "Governorates",
                 keyColumn: "Id",
                 keyValue: 2,
-                columns: new[] { "CreatedAt", "UpdateddAt" },
+                columns: new[] { "CreatedAt", "UpdatedAt" },
                 values: new object[] { new DateTime(2023, 2, 26, 20, 12, 25, 584, DateTimeKind.Local).AddTicks(1309), new DateTime(2023, 2, 26, 20, 12, 25, 584, DateTimeKind.Local).AddTicks(1310) });
 
             migrationBuilder.UpdateData(
                 table: "Governorates",
                 keyColumn: "Id",
                 keyValue: 3,
-                columns: new[] { "CreatedAt", "UpdateddAt" },
+                columns: new[] { "CreatedAt", "UpdatedAt" },
                 values: new object[] { new DateTime(2023, 2, 26, 20, 12, 25, 584, DateTimeKind.Local).AddTicks(1311), new DateTime(2023, 2, 26, 20, 12, 25, 584, DateTimeKind.Local).AddTicks(1311) });
 
             migrationBuilder.UpdateData(
                 table: "Governorates",
                 keyColumn: "Id",
                 keyValue: 4,
-                columns: new[] { "CreatedAt", "UpdateddAt" },
+                columns: new[] { "CreatedAt", "UpdatedAt" },
                 values: new object[] { new DateTime(2023, 2, 26, 20, 12, 25, 584, DateTimeKind.Local).AddTicks(1312), new DateTime(2023, 2, 26, 20, 12, 25, 584, DateTimeKind.Local).AddTicks(1313) });
 
             migrationBuilder.UpdateData(
                 table: "Governorates",
                 keyColumn: "Id",
                 keyValue: 5,
-                columns: new[] { "CreatedAt", "UpdateddAt" },
+                columns: new[] { "CreatedAt", "UpdatedAt" },
                 values: new object[] { new DateTime(2023, 2, 26, 20, 12, 25, 584, DateTimeKind.Local).AddTicks(1314), new DateTime(2023, 2, 26, 20, 12, 25, 584, DateTimeKind.Local).AddTicks(1314) });
 
             migrationBuilder.UpdateData(
                 table: "Governorates",
                 keyColumn: "Id",
                 keyValue: 6,
-                columns: new[] { "CreatedAt", "UpdateddAt" },
+                columns: new[] { "CreatedAt", "UpdatedAt" },
                 values: new object[] { new DateTime(2023, 2, 26, 20, 12, 25, 584, DateTimeKind.Local).AddTicks(1315), new DateTime(2023, 2, 26, 20, 12, 25, 584, DateTimeKind.Local).AddTicks(1316) });
 
             migrationBuilder.UpdateData(
                 table: "HealthFacilities",
                 keyColumn: "Id",
                 keyValue: 1,
-                columns: new[] { "CreatedAt", "UpdateddAt" },
+                columns: new[] { "CreatedAt", "UpdatedAt" },
                 values: new object[] { new DateTime(2023, 2, 26, 20, 12, 26, 222, DateTimeKind.Local).AddTicks(449), new DateTime(2023, 2, 26, 20, 12, 26, 222, DateTimeKind.Local).AddTicks(465) });
 
             migrationBuilder.UpdateData(
                 table: "HealthFacilities",
                 keyColumn: "Id",
                 keyValue: 2,
-                columns: new[] { "CreatedAt", "UpdateddAt" },
+                columns: new[] { "CreatedAt", "UpdatedAt" },
                 values: new object[] { new DateTime(2023, 2, 26, 20, 12, 26, 222, DateTimeKind.Local).AddTicks(467), new DateTime(2023, 2, 26, 20, 12, 26, 222, DateTimeKind.Local).AddTicks(468) });
 
             migrationBuilder.UpdateData(
                 table: "HealthFacilities",
                 keyColumn: "Id",
                 keyValue: 3,
-                columns: new[] { "CreatedAt", "UpdateddAt" },
+                columns: new[] { "CreatedAt", "UpdatedAt" },
                 values: new object[] { new DateTime(2023, 2, 26, 20, 12, 26, 222, DateTimeKind.Local).AddTicks(470), new DateTime(2023, 2, 26, 20, 12, 26, 222, DateTimeKind.Local).AddTicks(470) });
 
             migrationBuilder.CreateIndex(
@@ -1143,63 +1143,63 @@ namespace EHRAPI.Migrations
                 table: "Governorates",
                 keyColumn: "Id",
                 keyValue: 1,
-                columns: new[] { "CreatedAt", "UpdateddAt" },
+                columns: new[] { "CreatedAt", "UpdatedAt" },
                 values: new object[] { new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9089), new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9103) });
 
             migrationBuilder.UpdateData(
                 table: "Governorates",
                 keyColumn: "Id",
                 keyValue: 2,
-                columns: new[] { "CreatedAt", "UpdateddAt" },
+                columns: new[] { "CreatedAt", "UpdatedAt" },
                 values: new object[] { new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9105), new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9106) });
 
             migrationBuilder.UpdateData(
                 table: "Governorates",
                 keyColumn: "Id",
                 keyValue: 3,
-                columns: new[] { "CreatedAt", "UpdateddAt" },
+                columns: new[] { "CreatedAt", "UpdatedAt" },
                 values: new object[] { new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9107), new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9107) });
 
             migrationBuilder.UpdateData(
                 table: "Governorates",
                 keyColumn: "Id",
                 keyValue: 4,
-                columns: new[] { "CreatedAt", "UpdateddAt" },
+                columns: new[] { "CreatedAt", "UpdatedAt" },
                 values: new object[] { new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9108), new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9109) });
 
             migrationBuilder.UpdateData(
                 table: "Governorates",
                 keyColumn: "Id",
                 keyValue: 5,
-                columns: new[] { "CreatedAt", "UpdateddAt" },
+                columns: new[] { "CreatedAt", "UpdatedAt" },
                 values: new object[] { new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9110), new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9110) });
 
             migrationBuilder.UpdateData(
                 table: "Governorates",
                 keyColumn: "Id",
                 keyValue: 6,
-                columns: new[] { "CreatedAt", "UpdateddAt" },
+                columns: new[] { "CreatedAt", "UpdatedAt" },
                 values: new object[] { new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9111), new DateTime(2023, 2, 25, 4, 23, 53, 736, DateTimeKind.Local).AddTicks(9112) });
 
             migrationBuilder.UpdateData(
                 table: "HealthFacilities",
                 keyColumn: "Id",
                 keyValue: 1,
-                columns: new[] { "CreatedAt", "UpdateddAt" },
+                columns: new[] { "CreatedAt", "UpdatedAt" },
                 values: new object[] { new DateTime(2023, 2, 25, 4, 23, 54, 617, DateTimeKind.Local).AddTicks(6617), new DateTime(2023, 2, 25, 4, 23, 54, 617, DateTimeKind.Local).AddTicks(6633) });
 
             migrationBuilder.UpdateData(
                 table: "HealthFacilities",
                 keyColumn: "Id",
                 keyValue: 2,
-                columns: new[] { "CreatedAt", "UpdateddAt" },
+                columns: new[] { "CreatedAt", "UpdatedAt" },
                 values: new object[] { new DateTime(2023, 2, 25, 4, 23, 54, 617, DateTimeKind.Local).AddTicks(6636), new DateTime(2023, 2, 25, 4, 23, 54, 617, DateTimeKind.Local).AddTicks(6637) });
 
             migrationBuilder.UpdateData(
                 table: "HealthFacilities",
                 keyColumn: "Id",
                 keyValue: 3,
-                columns: new[] { "CreatedAt", "UpdateddAt" },
+                columns: new[] { "CreatedAt", "UpdatedAt" },
                 values: new object[] { new DateTime(2023, 2, 25, 4, 23, 54, 617, DateTimeKind.Local).AddTicks(6639), new DateTime(2023, 2, 25, 4, 23, 54, 617, DateTimeKind.Local).AddTicks(6639) });
 
             migrationBuilder.AddForeignKey(

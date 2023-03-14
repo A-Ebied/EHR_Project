@@ -16,6 +16,6 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs
         [DisplayName("Created at")]
         public DateTime CreatedAt { get; set; }
         [DisplayName("Updated at")]
-        public DateTime UpdateddAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }

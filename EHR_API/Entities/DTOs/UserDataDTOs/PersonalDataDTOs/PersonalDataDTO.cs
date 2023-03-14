@@ -17,6 +17,6 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs
         public string Gender { get; set; }
         public string AgeGroup { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime UpdateddAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }

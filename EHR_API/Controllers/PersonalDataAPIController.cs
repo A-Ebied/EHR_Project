@@ -51,7 +51,7 @@ namespace EHR_API.Controllers
 
                 var entity = _mapper.Map<PersonalData>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
-                entity.UpdateddAt = DateTime.Now;
+                entity.UpdatedAt = DateTime.Now;
                 await _db._personal.CreateAsync(entity);
 
                 _response.Result = _mapper.Map<PersonalDataDTO>(entity);
@@ -121,7 +121,7 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = _mapper.Map<PersonalData>(entityUpdateDTO);
-                entity.UpdateddAt = DateTime.Now;
+                entity.UpdatedAt = DateTime.Now;
                 await _db._personal.UpdateAsync(entity, oldEntity);
 
                 _response.StatusCode = HttpStatusCode.OK;

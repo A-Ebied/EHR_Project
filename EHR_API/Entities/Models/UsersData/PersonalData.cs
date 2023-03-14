@@ -23,7 +23,7 @@ namespace EHR_API.Entities.Models.UsersData
         public string Gender { get; set; }
         public string AgeGroup { get; set; }
         public DateTime CreatedAt { get; set; }  
-        public DateTime UpdateddAt { get; set; } 
+        public DateTime UpdatedAt { get; set; } 
 
         public RegistrationData RegistrationData { get; set; }
         public Governorate Governorate { get; set; }
