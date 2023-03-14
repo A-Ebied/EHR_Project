@@ -60,7 +60,7 @@ namespace EHR_API.Controllers
 
         //[Authorize(Roles = SD.HealthFacilityManager)]
         //[Authorize]
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteMedicalTeamUser")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -93,7 +93,7 @@ namespace EHR_API.Controllers
 
         //[Authorize(Roles = SD.HealthFacilityManager)]
         //[Authorize]
-        [HttpPut("{id}", Name = "UpdateMedicalTeamUser")]
+        [HttpPut("UpdateMedicalTeamUser")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]

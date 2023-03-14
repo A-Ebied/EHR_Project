@@ -422,40 +422,40 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
+                /*
                 string jwtToken = null;
-                if (HttpContext.Request.Headers.Authorization.Count > 0)
-                {
-                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
-                }
+                //if (HttpContext.Request.Headers.Authorization.Count > 0)
+                //{
+                //    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                //}
+                //var entity = new RegistrationData();
+                //string headerRole = null;
+                //string headerId = null;
+                //if (jwtToken != null)
+                //{
+                //    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                //    headerRole = user.Claims.ToList()[4].Value;
+                //    headerId = user.Claims.ToList()[0].Value;
 
-                var entity = new RegistrationData();
-                string headerRole = null;
-                string headerId = null;
-                if (jwtToken != null)
-                {
-                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
-                    headerRole = user.Claims.ToList()[4].Value;
-                    headerId = user.Claims.ToList()[0].Value;
+                //    if (headerRole == SD.Physician || headerRole == SD.Nurse || headerRole == SD.HealthFacilityManager || headerRole == SD.Pharmacist || headerRole == SD.Technician || headerId == userId)
+                //    {
+                //        entity = await _db._authentication.GetAsync(
+                //                 expression: g => g.Id == userId,
+                //                 includeProperties: "PersonalData,MedicalData,MedicalTeam");
+                //    }
 
-                    if (headerRole == SD.Physician || headerRole == SD.Nurse || headerRole == SD.HealthFacilityManager || headerRole == SD.Pharmacist || headerRole == SD.Technician || headerId == userId)
-                    {
-                        entity = await _db._authentication.GetAsync(
-                                 expression: g => g.Id == userId,
-                                 includeProperties: "PersonalData,MedicalData,MedicalTeam");
-                    }
-
-                }
-                else
-                {
-                    entity = await _db._authentication.GetAsync(
-                             expression: g => g.Id == userId,
-                             includeProperties: "PersonalData,MedicalTeam");
-                }
+                //}
                 //else
                 //{
-                //    return BadRequest(APIResponses.BadRequest("jwtToken is empty"));
-                //}
+                //    entity = await _db._authentication.GetAsync(
+                //             expression: g => g.Id == userId,
+                //             includeProperties: "PersonalData,MedicalTeam");
+                }
+                */
 
+                var entity = await _db._authentication.GetAsync(
+                            expression: g => g.Id == userId,
+                            includeProperties: "PersonalData,MedicalTeam,MedicalData,UserInsurances");
                 if (entity == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {userId} "));

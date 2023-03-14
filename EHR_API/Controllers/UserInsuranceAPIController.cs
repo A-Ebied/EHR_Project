@@ -60,7 +60,7 @@ namespace EHR_API.Controllers
         */
 
         //[Authorize]
-        [HttpGet("{id}")]
+        [HttpGet("GetUserInsurances")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -210,7 +210,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpDelete("{id:int}")]
+        [HttpDelete("DeleteUserInsurance")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -242,7 +242,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpPut("{id:int}")]
+        [HttpPut("UpdateUserInsurance")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]

@@ -60,7 +60,7 @@ namespace EHR_API.Controllers
 
         //[Authorize(Roles = SD.Physician + "," + SD.Nurse + "," + SD.Technician + "," + SD.HealthFacilityManager)]
         //[Authorize]
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteUserMedicalData")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -93,7 +93,7 @@ namespace EHR_API.Controllers
 
         //[Authorize(Roles = SD.Pharmacist + "," + SD.Nurse + "," + SD.Technician + "," + SD.HealthFacilityManager)]
         //[Authorize]
-        [HttpPut("{id}", Name = "UpdateMedicalDataUser")]
+        [HttpPut("UpdateMedicalDataUser")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]

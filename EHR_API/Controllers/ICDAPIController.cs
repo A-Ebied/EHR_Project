@@ -123,11 +123,11 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteICD")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> DeleteAllergy(string code)
+        public async Task<ActionResult<APIResponse>> DeleteICD(string code)
         {
             try
             {
@@ -155,11 +155,11 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpPut("{id}")]
+        [HttpPut("UpdateICD")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> UpdateAllergy(string code, [FromBody] ICDUpdateDTO entityUpdateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateICD(string code, [FromBody] ICDUpdateDTO entityUpdateDTO)
         {
             try
             {

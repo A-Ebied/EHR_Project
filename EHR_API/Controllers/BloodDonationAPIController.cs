@@ -26,7 +26,7 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpGet("{id}")]
+        [HttpGet("GetUserBloodDonations")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -63,7 +63,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetBloodDonation([FromQuery(Name = "id")] int id)
+        public async Task<ActionResult<APIResponse>> GetBloodDonation(int id)
         {
             try
             {
@@ -130,7 +130,7 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpDelete("{id:int}")]
+        [HttpDelete("DeleteBloodDonation")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -164,7 +164,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpPut("{id:int}")]
+        [HttpPut("UpdateBloodDonation")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]

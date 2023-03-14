@@ -106,7 +106,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("GetHealthFacility")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -151,7 +151,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize(Roles = SD.SystemManager + "," + SD.HealthFacilityManager)]
-        [HttpPut("{id}", Name = "UpdateHealthFacility")]
+        [HttpPut("UpdateHealthFacility")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -202,7 +202,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize(Roles = SD.SystemManager + "," + SD.HealthFacilityManager)]
-        [HttpDelete("{id}", Name = "DeleteHealthFacility")]
+        [HttpDelete("DeleteHealthFacility")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]

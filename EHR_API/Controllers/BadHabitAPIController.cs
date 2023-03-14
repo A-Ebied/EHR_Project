@@ -26,7 +26,7 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpGet("{id}")]
+        [HttpGet("GetUserBadHabits")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -63,7 +63,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetBadHabit([FromQuery(Name = "id")] int id)
+        public async Task<ActionResult<APIResponse>> GetBadHabit(int id)
         {
             try
             {
@@ -125,7 +125,7 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpDelete("{id:int}")]
+        [HttpDelete("DeleteBadHabit")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -157,7 +157,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpPut("{id:int}")]
+        [HttpPut("UpdateBadHabit")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
