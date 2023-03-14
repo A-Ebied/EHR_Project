@@ -17,7 +17,6 @@ namespace EHR_API.Entities.ModelsConfiguration
                     DiagnosisName = "Cholera due to Vibrio cholerae 01, biovar cholerae",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
-
                 },
                 new ICD
                 {
@@ -25,7 +24,6 @@ namespace EHR_API.Entities.ModelsConfiguration
                     DiagnosisName = "Cholera due to Vibrio cholerae 01, biovar eltor",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
-
                 },
                 new ICD
                 {
@@ -33,7 +31,6 @@ namespace EHR_API.Entities.ModelsConfiguration
                     DiagnosisName = "Cholera, unspecified",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
-
                 },
                 new ICD
                 {
@@ -41,7 +38,6 @@ namespace EHR_API.Entities.ModelsConfiguration
                     DiagnosisName = "Typhoid fever, unspecified",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
-
                 }
                 //,
                 //new ICD

@@ -1,10 +1,6 @@
-﻿using EHR_API.Entities.Models;
-using EHR_API.Entities.Models.UsersData;
-using EHR_API.Extensions;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace EHR_API.Entities.ModelsConfiguration
+namespace EHR_API.Entities
 {
     public class DbInitializer
     {
@@ -25,7 +21,7 @@ namespace EHR_API.Entities.ModelsConfiguration
             }
             catch (Exception) { throw; }
 
-             
+
 
             //            //var badHbits = new BadHabit[]
             //            //{

@@ -15,25 +15,22 @@ namespace EHR_API.Entities.ModelsConfiguration
                     UserId = "12345678912341",
                     RoleId = "1"
                 },
-                //HealthFacilityManager
+                //HealthFacilityManagers
                 new IdentityUserRole<string>()
                 {
                     UserId = "12345678912342",
                     RoleId = "2"
                 },
-                //HealthFacilityManager
                 new IdentityUserRole<string>()
                 {
                     UserId = "12345678912348",
                     RoleId = "2"
                 },
-                //HealthFacilityManager
                 new IdentityUserRole<string>()
                 {
                     UserId = "12345678912349",
                     RoleId = "2"
                 },
-                //HealthFacilityManager
                 new IdentityUserRole<string>()
                 {
                     UserId = "12345678912350",
@@ -51,10 +48,20 @@ namespace EHR_API.Entities.ModelsConfiguration
                     UserId = "12345678912344",
                     RoleId = "5"
                 },
-                //Patient
+                //Patients
                 new IdentityUserRole<string>()
                 {
-                    UserId = "12345678912345",
+                    UserId = "12345678912351",
+                    RoleId = "6"
+                },
+                new IdentityUserRole<string>()
+                {
+                    UserId = "12345678912352",
+                    RoleId = "6"
+                },
+                new IdentityUserRole<string>()
+                {
+                    UserId = "12345678912353",
                     RoleId = "6"
                 },
                 //Technician
