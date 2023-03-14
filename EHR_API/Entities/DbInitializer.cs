@@ -22,24 +22,6 @@ namespace EHR_API.Entities
             catch (Exception) { throw; }
 
 
-
-            //            //var badHbits = new BadHabit[]
-            //            //{
-            //            //    new BadHabit
-            //            //    {
-            //            //        Habit = "التدخين",
-            //            //    },
-            //            //    new BadHabit
-            //            //    {
-            //            //        Habit = "شرب الخمور",
-            //            //    },
-            //            //};
-            //            //foreach (var i in badHbits)
-            //            //{
-            //            //    _context.BadHabits.Add(i);
-            //            //}
-            //            //_db.SaveChanges();
-
             //            // var vaccinations = new Vaccination[]
             //            //{
             //            //     new Vaccination
