@@ -65,13 +65,13 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetAllergy([FromQuery(Name = "code")] string code)
+        public async Task<ActionResult<APIResponse>> GetICD(string code)
         {
             try
             {
-                if (code != null)
+                if (code == null)
                 {
-                    return BadRequest(APIResponses.BadRequest("Id is null"));
+                    return BadRequest(APIResponses.BadRequest("code is null"));
                 }
 
                 var entity = await _db._icd.GetAsync(
@@ -130,9 +130,9 @@ namespace EHR_API.Controllers
         {
             try
             {
-                if (code != null)
+                if (code == null)
                 {
-                    return BadRequest(APIResponses.BadRequest("Id is null"));
+                    return BadRequest(APIResponses.BadRequest("code is null"));
                 }
 
                 var removedEntity = await _db._icd.GetAsync(expression: g => g.Code == code);
