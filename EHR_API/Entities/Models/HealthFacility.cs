@@ -22,7 +22,7 @@ namespace EHR_API.Entities.Models
 
         public Governorate Governorate { get; set; }
         public RegistrationData RegistrationData { get; set; }
-        //public ICollection<MedicalFacilityTeam> MedicalFacilityTeams { get; set; }
-        //public ICollection<Visit> Visits { get; set; }
+        public ICollection<MedicalFacilityTeam> MedicalFacilityTeams { get; set; }
+        public ICollection<Visit> Visits { get; set; }
     }
 }
