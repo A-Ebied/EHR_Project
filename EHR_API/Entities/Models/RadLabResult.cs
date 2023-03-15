@@ -10,9 +10,7 @@
         public int HealthFacilityId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-
-
-       
+         
         public VisitRadLabTest VisitRadLabTest { get; set; }
         public HealthFacility HealthFacility { get; set; }
         public ICollection<RadLabResultImage> RadiologyResultImages { get; set; }

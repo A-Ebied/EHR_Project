@@ -4,11 +4,11 @@ namespace EHR_API.Extensions
 {
     public static class CreateImage 
     {
-        public static string CreateFiles(IWebHostEnvironment _webHost, byte[] userImage, string imageName ,string folderName) 
+        public static string CreateFiles(IWebHostEnvironment _webHost, byte[] image, string imageName ,string folderName) 
         {
             var extension = Path.GetExtension(imageName);
 
-            var stream = new MemoryStream(userImage);
+            var stream = new MemoryStream(image);
             IFormFile file = new FormFile(stream, 0, stream.Length, imageName, extension);
 
             string fileName = Guid.NewGuid().ToString();

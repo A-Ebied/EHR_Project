@@ -14,6 +14,6 @@ namespace EHR_API.Entities.Models
         public DateTime UpdatedAt { get; set; }
 
         public Visit Visit { get; set; }
-        public ICollection<RadLabResult> VisitRadiologyResults { get; set; }
+        public ICollection<RadLabResult> VisitRadLabResults { get; set; }
     }
 }

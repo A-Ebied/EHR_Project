@@ -6,12 +6,12 @@ namespace EHR_API.Entities.DTOs.BloodDonationDTOs
     public class BloodDonationUpdateDTO
     {
         [Required]
-        public int Id { get; set; }
+        public int Id { get; set; }  // hidden input
         [Required]
         public DateTime DonationDateTime { get; set; }
         [Required]
-        public string RegistrationDataId { get; set; }
+        public string RegistrationDataId { get; set; }  // dropdownlist
         [Required]
-        public string MedicalTeamId { get; set; }
+        public string MedicalTeamId { get; set; }  // hidden input
     }
 }
