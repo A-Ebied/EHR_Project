@@ -6,6 +6,16 @@ namespace EHR_API.Repositories.Implementation
 {
     public class VisitMedicationRepository : RepositoryBase<VisitMedication>, IVisitMedicationRepository
     {
-        public VisitMedicationRepository(ApplicationDbContext db) : base(db) { }
+        private readonly ApplicationDbContext _db;
+        public VisitMedicationRepository(ApplicationDbContext db) : base(db)
+        {
+            _db = db;
+        }
+
+        public async Task CreateRangeAsync(List<VisitMedication> entities)
+        {
+            await _dbSet.AddRangeAsync(entities);
+            await _db.SaveChangesAsync();
+        } 
     }
 }

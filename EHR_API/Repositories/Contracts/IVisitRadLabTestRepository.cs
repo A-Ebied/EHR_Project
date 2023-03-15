@@ -2,5 +2,8 @@
 
 namespace EHR_API.Repositories.Contracts
 {
-    public interface IVisitRadLabTestRepository : IRepositoryBase<VisitRadLabTest> { }
+    public interface IVisitRadLabTestRepository : IRepositoryBase<VisitRadLabTest> 
+    { 
+        Task CreateRangeAsync(List<VisitRadLabTest> entities);
+    }
 }

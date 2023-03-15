@@ -2,5 +2,9 @@
 
 namespace EHR_API.Repositories.Contracts
 {
-    public interface IVisitMedicationRepository : IRepositoryBase<VisitMedication> { }
+    public interface IVisitMedicationRepository : IRepositoryBase<VisitMedication> 
+    {
+        Task CreateRangeAsync(List<VisitMedication> entities);
+    }
 }
+

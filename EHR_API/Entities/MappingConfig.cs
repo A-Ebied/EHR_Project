@@ -11,7 +11,7 @@ using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
 using EHR_API.Entities.DTOs.UserDataDTOs.RolesDTOs;
 using EHR_API.Entities.DTOs.VisitMedicationDTOs;
-using EHR_API.Entities.DTOs.VisitRadLabTestDTOS;
+using EHR_API.Entities.DTOs.VisitRadLabTestDTOs;
 using EHR_API.Entities.DTOs.VisitVitalSignDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Entities.Models.UsersData;

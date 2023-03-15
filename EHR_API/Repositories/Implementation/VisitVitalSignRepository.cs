@@ -6,6 +6,16 @@ namespace EHR_API.Repositories.Implementation
 {
     public class VisitVitalSignRepository : RepositoryBase<VisitVitalSign>, IVisitVitalSignRepository
     {
-        public VisitVitalSignRepository(ApplicationDbContext db) : base(db) { }
+        private readonly ApplicationDbContext _db;
+        public VisitVitalSignRepository(ApplicationDbContext db) : base(db)
+        {
+            _db = db;
+        }
+
+        public async Task CreateRangeAsync(List<VisitVitalSign> entities)
+        {
+            await _dbSet.AddRangeAsync(entities);
+            await _db.SaveChangesAsync();
+        }
     }
 }

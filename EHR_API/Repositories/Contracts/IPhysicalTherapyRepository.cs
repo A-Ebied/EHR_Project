@@ -2,5 +2,8 @@
 
 namespace EHR_API.Repositories.Contracts
 {
-    public interface IPhysicalTherapyRepository : IRepositoryBase<PhysicalTherapy> { }
+    public interface IPhysicalTherapyRepository : IRepositoryBase<PhysicalTherapy> 
+    {
+        Task CreateRangeAsync(List<PhysicalTherapy> entities);
+    }
 }

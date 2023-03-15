@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EHR_API.Entities.DTOs.VisitRadLabTestDTOS
+namespace EHR_API.Entities.DTOs.VisitRadLabTestDTOs
 {
     public class VisitRadLabTestCreateDTO
     {

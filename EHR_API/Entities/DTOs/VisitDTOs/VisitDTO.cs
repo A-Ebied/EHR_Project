@@ -1,7 +1,7 @@
 ﻿using EHR_API.Entities.DTOs.PhysicalTherapyDTOs;
 using EHR_API.Entities.DTOs.UserVaccinationDTOs;
 using EHR_API.Entities.DTOs.VisitMedicationDTOs;
-using EHR_API.Entities.DTOs.VisitRadLabTestDTOS;
+using EHR_API.Entities.DTOs.VisitRadLabTestDTOs;
 using EHR_API.Entities.DTOs.VisitVitalSignDTOs;
 
 namespace EHR_API.Entities.DTOs.VisitDTOs

@@ -2,5 +2,8 @@
 
 namespace EHR_API.Repositories.Contracts
 {
-    public interface IVisitVitalSignRepository : IRepositoryBase<VisitVitalSign> { }
+    public interface IVisitVitalSignRepository : IRepositoryBase<VisitVitalSign> 
+    {
+        Task CreateRangeAsync(List<VisitVitalSign> entities);
+    }
 }

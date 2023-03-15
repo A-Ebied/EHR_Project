@@ -6,6 +6,16 @@ namespace EHR_API.Repositories.Implementation
 {
     public class PhysicalTherapyRepository : RepositoryBase<PhysicalTherapy>, IPhysicalTherapyRepository
     {
-        public PhysicalTherapyRepository(ApplicationDbContext db) : base(db) { }
+        private readonly ApplicationDbContext _db;
+        public PhysicalTherapyRepository(ApplicationDbContext db) : base(db)
+        {
+            _db = db;
+        }
+
+        public async Task CreateRangeAsync(List<PhysicalTherapy> entities)
+        {
+            await _dbSet.AddRangeAsync(entities);
+            await _db.SaveChangesAsync();
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace EHR_API.Entities.DTOs.VisitRadLabTestDTOS
+﻿namespace EHR_API.Entities.DTOs.VisitRadLabTestDTOs
 {
     public class VisitRadLabTestDTOForOthers
     {

@@ -6,6 +6,16 @@ namespace EHR_API.Repositories.Implementation
 {
     public class UserVaccinationRepository : RepositoryBase<UserVaccination>, IUserVaccinationRepository
     {
-        public UserVaccinationRepository(ApplicationDbContext db) : base(db) { }
+        private readonly ApplicationDbContext _db;
+        public UserVaccinationRepository(ApplicationDbContext db) : base(db)
+        {
+            _db = db;
+        }
+
+        public async Task CreateRangeAsync(List<UserVaccination> entities)
+        {
+            await _dbSet.AddRangeAsync(entities);
+            await _db.SaveChangesAsync();
+        } 
     }
 }

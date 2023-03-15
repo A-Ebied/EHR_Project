@@ -2,5 +2,8 @@
 
 namespace EHR_API.Repositories.Contracts
 {
-    public interface IUserVaccinationRepository : IRepositoryBase<UserVaccination> { }
+    public interface IUserVaccinationRepository : IRepositoryBase<UserVaccination> 
+    { 
+        Task CreateRangeAsync(List<UserVaccination> entities);
+    }
 }
