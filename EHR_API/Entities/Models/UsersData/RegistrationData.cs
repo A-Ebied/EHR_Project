@@ -22,11 +22,10 @@ namespace EHR_API.Entities.Models.UsersData
         public PersonalData PersonalData { get; set; }
         public MedicalData MedicalData { get; set; }
         public MedicalTeam MedicalTeam { get; set; }
-        public HealthFacility HealthFacility { get; set; }
+        public ICollection<HealthFacility> HealthFacilities { get; set; }
         public ICollection<UserInsurance> UserInsurances { get; set; }
 
 
-        //public ICollection<UserInsurance> PatientInsurances { get; set; }
         //public ICollection<UserBadHabit> BadHabits { get; set; }
         //public ICollection<Contraindication> Contraindications { get; set; }
         //public ICollection<Allergy> Allergies { get; set; }
