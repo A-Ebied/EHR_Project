@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using EHR_API.Entities;
-using EHR_API.Entities.DTOs.AllergyDrugDTOs;
 using EHR_API.Entities.DTOs.ICDDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;

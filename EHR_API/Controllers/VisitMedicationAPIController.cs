@@ -65,12 +65,12 @@ namespace EHR_API.Controllers
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetVisitMedications(int medicationId)
+        public async Task<ActionResult<APIResponse>> GetVisitMedications(int visitId)
         {
             try
             {
                 var entities = await _db._visitMedication.GetAllAsync(
-                    expression: medicationId == 0 ? null : g => g.MedicationId == medicationId);
+                    expression: visitId == 0 ? null : g => g.VisitId == visitId);
 
                 if (entities.Count == 0)
                 {

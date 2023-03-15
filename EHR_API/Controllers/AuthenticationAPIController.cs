@@ -407,7 +407,7 @@ namespace EHR_API.Controllers
 
         //[Authorize]
 
-        [HttpGet("GetUser")]
+        [HttpGet("{userId}")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -608,7 +608,7 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpPut("UpdateRegistrationData")]
+        [HttpPut("{userId}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
