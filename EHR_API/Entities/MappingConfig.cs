@@ -26,6 +26,7 @@ using EHR_API.Entities.DTOs.ReceiveBloodDataDTOs;
 using EHR_API.Entities.DTOs.ReceiveBloodDTOs;
 using EHR_API.Entities.DTOs.SurgeryDTOs;
 using EHR_API.Entities.DTOs.SurgeryProgressNoteDTOs;
+using EHR_API.Entities.DTOs.VisitDTOs;
 
 namespace EHR_API.Entities
 {
@@ -109,6 +110,11 @@ namespace EHR_API.Entities
             CreateMap<VisitMedication, VisitMedicationUpdateDTO>().ReverseMap();
             CreateMap<VisitMedication, VisitMedicationDTO>().ReverseMap();
             CreateMap<VisitMedication, VisitMedicationDTOForOthers>().ReverseMap();
+            
+            CreateMap<Visit, VisitCreateDTO>().ReverseMap();
+            CreateMap<Visit, VisitUpdateDTO>().ReverseMap();
+            CreateMap<Visit, VisitDTO>().ReverseMap();
+            CreateMap<Visit, VisitDTOForOthers>().ReverseMap();
 
             CreateMap<VisitRadLabTest, VisitRadLabTestCreateDTO>().ReverseMap();
             CreateMap<VisitRadLabTest, VisitRadLabTestUpdateDTO>().ReverseMap();
