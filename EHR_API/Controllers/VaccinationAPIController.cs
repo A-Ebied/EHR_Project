@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using EHR_API.Entities;
-using EHR_API.Entities.DTOs.ICDDTOs;
+using EHR_API.Entities.DTOs.VaccinationDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
@@ -10,15 +10,15 @@ using System.Text.Json;
 
 namespace EHR_API.Controllers
 {
-    [Route("api/ICDAPI")]
+    [Route("api/VaccinationPI")]
     [ApiController]
-    public class ICDAPIController : ControllerBase
+    public class VaccinationAPIController : ControllerBase
     {
         protected APIResponse _response;
         private readonly IMapper _mapper;
         private readonly IMainRepository _db;
 
-        public ICDAPIController(IMainRepository db, IMapper mapper)
+        public VaccinationAPIController(IMainRepository db, IMapper mapper)
         {
             _db = db;
             _mapper = mapper;
@@ -27,17 +27,17 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpGet("GetICDs")]
+        [HttpGet("GetVaccinations")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetICDs(string diagnosisName = null, int pageNumber = 1, int pageSize = 0)
+        public async Task<ActionResult<APIResponse>> GetICDs(string type = null, int pageNumber = 1, int pageSize = 0)
         {
             try
             {
-                IEnumerable<ICD> entities = new List<ICD>();
-                entities = await _db._icd.GetAllAsync(
-                    expression: diagnosisName == null ? null : g => g.DiagnosisName.ToLower().Contains(diagnosisName.ToLower()),
+                IEnumerable<Vaccination> entities = new List<Vaccination>();
+                entities = await _db._vaccination.GetAllAsync(
+                    expression: type == null ? null : g => g.Type.ToLower().Contains(type.ToLower()),
                     pageNumber: pageNumber,
                     pageSize: pageSize);
 
@@ -49,7 +49,7 @@ namespace EHR_API.Controllers
                 Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
                 Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
 
-                _response.Result = _mapper.Map<List<ICDDTOForOthers>>(entities);
+                _response.Result = _mapper.Map<List<VaccinationDTOForOthers>>(entities);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -60,12 +60,12 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpGet("GetICD")]
+        [HttpGet("GetVaccination")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetICD(string code)
+        public async Task<ActionResult<APIResponse>> GetVaccination(string code)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("code is null"));
                 }
 
-                var entity = await _db._icd.GetAsync(
+                var entity = await _db._vaccination.GetAsync(
                     expression: g => g.Code == code);
 
                 if (entity == null)
@@ -82,7 +82,7 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest($"No object with code = {code} "));
                 }
 
-                _response.Result = _mapper.Map<ICDDTO>(entity);
+                _response.Result = _mapper.Map<VaccinationDTO>(entity);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -93,10 +93,10 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpPost("CreateICD")]
+        [HttpPost("CreateVaccination")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> CreateICD([FromBody] ICDCreateDTO entityCreateDTO)
+        public async Task<ActionResult<APIResponse>> CreateICD([FromBody] VaccinationCreateDTO entityCreateDTO)
         {
             try
             {
@@ -105,12 +105,12 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
                  
-                var entity = _mapper.Map<ICD>(entityCreateDTO);
+                var entity = _mapper.Map<Vaccination>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
                 entity.UpdatedAt = DateTime.Now;
-                await _db._icd.CreateAsync(entity);
+                await _db._vaccination.CreateAsync(entity);
                  
-                _response.Result = _mapper.Map<ICDDTO>(entity);
+                _response.Result = _mapper.Map<VaccinationDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;
                 return Ok(_response);
             }
@@ -126,7 +126,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> DeleteICD(string code)
+        public async Task<ActionResult<APIResponse>> DeleteVaccination(string code)
         {
             try
             {
@@ -135,13 +135,13 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("code is null"));
                 }
 
-                var removedEntity = await _db._icd.GetAsync(expression: g => g.Code == code);
+                var removedEntity = await _db._vaccination.GetAsync(expression: g => g.Code == code);
                 if (removedEntity == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with code = {code} "));
                 }
 
-                await _db._icd.DeleteAsync(removedEntity);
+                await _db._vaccination.DeleteAsync(removedEntity);
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = "The object has been deleted";
@@ -158,7 +158,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> UpdateICD(string code, [FromBody] ICDUpdateDTO entityUpdateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateICD(string code, [FromBody] VaccinationUpdateDTO entityUpdateDTO)
         {
             try
             {
@@ -172,17 +172,17 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Code is not equal to the Code of the object"));
                 }
 
-                if (await _db._icd.GetAsync(expression: g => g.Code == code) == null)
+                if (await _db._vaccination.GetAsync(expression: g => g.Code == code) == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {code} "));
                 }
                  
-                var entity = _mapper.Map<ICD>(entityUpdateDTO);
+                var entity = _mapper.Map<Vaccination>(entityUpdateDTO);
                 entity.UpdatedAt = DateTime.Now;
-                await _db._icd.UpdateAsync(entity);
+                await _db._vaccination.UpdateAsync(entity);
 
                 _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = _mapper.Map<ICDDTO>(entity);
+                _response.Result = _mapper.Map<VaccinationDTO>(entity);
                 return Ok(_response);
             }
             catch (Exception ex)

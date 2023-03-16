@@ -22,5 +22,6 @@
         IVisitRepository _visit { get; }
         IUserVaccinationRepository _userVaccination { get; }
         IVisitRadLabTestRepository _visitRadLabTest { get; }
+        IVaccinationRepository _vaccination { get; }
     }
 }

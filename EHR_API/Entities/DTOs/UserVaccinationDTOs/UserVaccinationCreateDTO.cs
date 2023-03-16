@@ -11,8 +11,6 @@ namespace EHR_API.Entities.DTOs.UserVaccinationDTOs
         [Required]
         public string Instruction { get; set; }
         [Required]
-        public string RegistrationDataId { get; set; }
-        [Required]
         public int VisitId { get; set; }
         [Required]
         public string VaccinationId { get; set; }

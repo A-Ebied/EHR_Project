@@ -109,8 +109,6 @@ namespace EHR_API.Entities
             // pk
             modelBuilder.Entity<Admit>()
                .HasKey(i => i.VisitId);
-
-
         }
 
 
