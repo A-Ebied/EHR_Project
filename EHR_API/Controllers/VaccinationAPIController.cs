@@ -60,7 +60,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpGet("GetVaccination")]
+        [HttpGet("{code}")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

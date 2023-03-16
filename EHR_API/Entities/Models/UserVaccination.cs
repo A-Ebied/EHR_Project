@@ -1,6 +1,4 @@
-﻿using EHR_API.Entities.Models.UsersData;
-using Microsoft.AspNetCore.Identity;
-
+﻿
 namespace EHR_API.Entities.Models
 {
     public class UserVaccination

@@ -83,26 +83,26 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpGet("GetVisitRadLabTest")]
+        [HttpGet("{id}")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetVisitRadLabTest(int visitRadLabTestId)
+        public async Task<ActionResult<APIResponse>> GetVisitRadLabTest(int id)
         {
             try
             {
-                if (visitRadLabTestId < 1)
+                if (id < 1)
                 {
                     return BadRequest(APIResponses.BadRequest("Id less than 1"));
                 }
 
                 var entity = await _db._visitRadLabTest.GetAsync(
-                    expression: g => g.Id == visitRadLabTestId);
+                    expression: g => g.Id == id);
 
                 if (entity == null)
                 {
-                    return BadRequest(APIResponses.BadRequest($"No object with Id = {visitRadLabTestId}"));
+                    return BadRequest(APIResponses.BadRequest($"No object with Id = {id}"));
                 }
 
                 _response.Result = _mapper.Map<VisitRadLabTestDTO>(entity);
@@ -116,11 +116,11 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize(Roles = SD.SystemManager + "," + SD.HealthFacilityManager)]
-        [HttpPut("UpdateVisitRadLabTest")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> UpdateVisitRadLabTest(int visitRadLabTestId, [FromBody] VisitRadLabTestUpdateDTO entityUpdateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateVisitRadLabTest(int id, [FromBody] VisitRadLabTestUpdateDTO entityUpdateDTO)
         {
             try
             {
@@ -129,16 +129,16 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
 
-                if (visitRadLabTestId != entityUpdateDTO.Id)
+                if (id != entityUpdateDTO.Id)
                 {
                     return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
                 var oldOne = await _db._visitRadLabTest.GetAsync(
-                    expression: g => g.Id == visitRadLabTestId);
+                    expression: g => g.Id == id);
                 if (oldOne == null)
                 {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {visitRadLabTestId}"));
+                    return NotFound(APIResponses.NotFound($"No object with Id = {id}"));
                 }
 
                 if (await _db._visit.GetAsync(expression: e => e.Id == entityUpdateDTO.VisitId) == null)
@@ -162,24 +162,24 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize(Roles = SD.SystemManager + "," + SD.HealthFacilityManager)]
-        [HttpDelete("DeleteVisitRadLabTest")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> DeleteVisitRadLabTest(int visitRadLabTestId)
+        public async Task<ActionResult<APIResponse>> DeleteVisitRadLabTest(int id)
         {
             try
             {
-                if (visitRadLabTestId < 1)
+                if (id < 1)
                 {
                     return BadRequest(APIResponses.BadRequest("Ids less than 1"));
                 }
 
                 var removedEntity = await _db._visitRadLabTest.GetAsync(
-                    expression: g => g.Id == visitRadLabTestId);
+                    expression: g => g.Id == id);
                 if (removedEntity == null)
                 {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {visitRadLabTestId}"));
+                    return NotFound(APIResponses.NotFound($"No object with Id = {id}"));
                 }
 
                 await _db._visitRadLabTest.DeleteAsync(removedEntity);

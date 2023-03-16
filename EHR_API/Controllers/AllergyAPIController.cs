@@ -58,26 +58,26 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpGet("{allergyId}")]
+        [HttpGet("{id}")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetAllergy(int allergyId)
+        public async Task<ActionResult<APIResponse>> GetAllergy(int id)
         {
             try
             {
-                if (allergyId < 0)
+                if (id < 0)
                 {
                     return BadRequest(APIResponses.BadRequest("Id is less than 1"));
                 }
 
                 var entity = await _db._allergy.GetAsync(
-                    expression: g => g.Id == allergyId);
+                    expression: g => g.Id == id);
 
                 if (entity == null)
                 {
-                    return BadRequest(APIResponses.BadRequest($"No object with Id = {allergyId} "));
+                    return BadRequest(APIResponses.BadRequest($"No object with Id = {id} "));
                 }
 
                 _response.Result = _mapper.Map<AllergyDTO>(entity);
@@ -131,23 +131,23 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpDelete("{allergyId}")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> DeleteAllergy(int allergyId)
+        public async Task<ActionResult<APIResponse>> DeleteAllergy(int id)
         {
             try
             {
-                if (allergyId < 1)
+                if (id < 1)
                 {
                     return BadRequest(APIResponses.BadRequest("Id less than 1"));
                 }
 
-                var removedEntity = await _db._allergy.GetAsync(expression: g => g.Id == allergyId);
+                var removedEntity = await _db._allergy.GetAsync(expression: g => g.Id == id);
                 if (removedEntity == null)
                 {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {allergyId} "));
+                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
                 }
 
                 await _db._allergy.DeleteAsync(removedEntity);
@@ -163,11 +163,11 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpPut("{allergyId}")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> UpdateAllergy(int allergyId, [FromBody] AllergyUpdateDTO entityUpdateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateAllergy(int id, [FromBody] AllergyUpdateDTO entityUpdateDTO)
         {
             try
             {
@@ -176,14 +176,14 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
 
-                if (allergyId != entityUpdateDTO.Id)
+                if (id != entityUpdateDTO.Id)
                 {
                     return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
-                if (await _db._allergy.GetAsync(expression: g => g.Id == allergyId) == null)
+                if (await _db._allergy.GetAsync(expression: g => g.Id == id) == null)
                 {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {allergyId} "));
+                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
                 }
 
                 if (await _db._authentication.GetAsync(expression: e => e.Id == entityUpdateDTO.RegistrationDataId) == null)
