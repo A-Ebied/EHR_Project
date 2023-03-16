@@ -20,6 +20,12 @@ using EHR_API.Entities.DTOs.AllergyDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs.UserInsuranceDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs.MedicalDataDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs.MedicalTeamDTOs;
+using EHR_API.Entities.DTOs.ChronicDiseaseDrugDTOs;
+using EHR_API.Entities.DTOs.ChronicDiseaseDTOs;
+using EHR_API.Entities.DTOs.ReceiveBloodDataDTOs;
+using EHR_API.Entities.DTOs.ReceiveBloodDTOs;
+using EHR_API.Entities.DTOs.SurgeryDTOs;
+using EHR_API.Entities.DTOs.SurgeryProgressNoteDTOs;
 
 namespace EHR_API.Entities
 {
@@ -113,6 +119,36 @@ namespace EHR_API.Entities
             CreateMap<PhysicalTherapy, PhysicalTherapyUpdateDTO>().ReverseMap();
             CreateMap<PhysicalTherapy, PhysicalTherapyDTO>().ReverseMap();
             CreateMap<PhysicalTherapy, PhysicalTherapyDTOForOthers>().ReverseMap();
+
+            CreateMap<ChronicDisease, ChronicDiseaseCreateDTO>().ReverseMap();
+            CreateMap<ChronicDisease, ChronicDiseaseUpdateDTO>().ReverseMap();
+            CreateMap<ChronicDisease, ChronicDiseaseDTO>().ReverseMap();
+            CreateMap<ChronicDisease, ChronicDiseaseDTOForOthers>().ReverseMap();
+
+            CreateMap<ChronicDiseaseDrug, ChronicDiseaseDrugCreateDTO>().ReverseMap();
+            CreateMap<ChronicDiseaseDrug, ChronicDiseaseDrugUpdateDTO>().ReverseMap();
+            CreateMap<ChronicDiseaseDrug, ChronicDiseaseDrugDTO>().ReverseMap();
+            CreateMap<ChronicDiseaseDrug, ChronicDiseaseDrugDTOForOthers>().ReverseMap();
+
+            CreateMap<ReceiveBlood, ReceiveBloodCreateDTO>().ReverseMap();
+            CreateMap<ReceiveBlood, ReceiveBloodUpdateDTO>().ReverseMap();
+            CreateMap<ReceiveBlood, ReceiveBloodDTO>().ReverseMap();
+            CreateMap<ReceiveBlood, ReceiveBloodDTOForOthers>().ReverseMap();
+
+            CreateMap<ReceiveBloodData, ReceiveBloodDataCreateDTO>().ReverseMap();
+            CreateMap<ReceiveBloodData, ReceiveBloodDataUpdateDTO>().ReverseMap();
+            CreateMap<ReceiveBloodData, ReceiveBloodDataDTO>().ReverseMap();
+            CreateMap<ReceiveBloodData, ReceiveBloodDataDTOForOthers>().ReverseMap();
+
+            CreateMap<Surgery, SurgeryCreateDTO>().ReverseMap();
+            CreateMap<Surgery, SurgeryUpdateDTO>().ReverseMap();
+            CreateMap<Surgery, SurgeryDTO>().ReverseMap();
+            CreateMap<Surgery, SurgeryDTOForOthers>().ReverseMap();
+
+            CreateMap<SurgeryProgressNote, SurgeryProgressNoteCreateDTO>().ReverseMap();
+            CreateMap<SurgeryProgressNote, SurgeryProgressNoteUpdateDTO>().ReverseMap();
+            CreateMap<SurgeryProgressNote, SurgeryProgressNoteDTO>().ReverseMap();
+            CreateMap<SurgeryProgressNote, SurgeryProgressNoteDTOForOthers>().ReverseMap();
         }
     }
 }
