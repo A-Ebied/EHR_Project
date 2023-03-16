@@ -11,7 +11,9 @@ namespace EHR_API.Entities.Models
         public int HealthFacilityId { get; set; }
         public string VisitType { get; set; }
         public string PatientCondition { get; set; }
+
         public string ICDId { get; set; }
+
         public string InstructionDescription { get; set; }
         public string Note { get; set; }
         public string ReportImageUrl { get; set; }

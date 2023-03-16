@@ -118,26 +118,26 @@ namespace EHR_API.Controllers
                 entity.AllergyDrugs = null;
 
                 await _db._allergy.CreateAsync(entity);
-                
-                var allergyDrugs = new List<AllergyDrug>();
+
                 if (entityCreateDTO.AllergyDrugs != null)
-                {                   
+                {
+                    var allergyDrugs = new List<AllergyDrug>();
                     var temp = new AllergyDrug();
-                     
+
                     foreach (var item in entityCreateDTO.AllergyDrugs)
                     {
                         temp = _mapper.Map<AllergyDrug>(item);
                         temp.AllergyId = entity.Id;
                         temp.CreatedAt = DateTime.Now;
                         temp.UpdatedAt = DateTime.Now;
-                         
+
                         allergyDrugs.Add(temp);
                     }
 
                     await _db._allergyDrug.CreateRangeAsync(allergyDrugs);
+                    entity.AllergyDrugs = allergyDrugs;
                 }
 
-                entity.AllergyDrugs = allergyDrugs;
                 _response.Result = _mapper.Map<AllergyDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;
                 return Ok(_response);
