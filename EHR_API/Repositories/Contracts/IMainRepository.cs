@@ -21,5 +21,6 @@
         IPhysicalTherapyRepository _physicalTherapy { get; }
         IVisitRepository _visit { get; }
         IUserVaccinationRepository _userVaccination { get; }
+        IVisitRadLabTestRepository _visitRadLabTest { get; }
     }
 }

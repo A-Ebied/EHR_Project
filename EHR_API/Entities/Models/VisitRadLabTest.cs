@@ -6,7 +6,6 @@ namespace EHR_API.Entities.Models
     {
         [Key]
         public int Id { get; set; }
-        public string Type { get; set; }
         public string TestType { get; set; }
         public string Description { get; set; }
         public int VisitId { get; set; }
