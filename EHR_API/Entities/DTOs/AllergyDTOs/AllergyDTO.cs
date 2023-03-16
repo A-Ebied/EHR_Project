@@ -11,7 +11,7 @@ namespace EHR_API.Entities.DTOs.AllergyDTOs
         public string Instruction { get; set; }
         public bool IsChronic { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime UpdateddAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         public IEnumerable<AllergyDrugDTOForOthers> AllergyDrugs { get; set; }
     }

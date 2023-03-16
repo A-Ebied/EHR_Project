@@ -10,7 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 /*-------------------*/
 builder.Services.ConfigureCors();
 builder.Services.AddDbContext<ApplicationDbContext>(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
+    options =>
+    {
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection"));
+        options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+    });
 builder.Services.ConfigureInterfaces();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 builder.Services.AddAuthentication();

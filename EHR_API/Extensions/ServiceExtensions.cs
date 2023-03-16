@@ -69,8 +69,8 @@ namespace EHR_API.Extensions
         public static void ConfigureInterfaces(this IServiceCollection services)
         {
             //services.AddScoped<IGovernorateRepository, GovernorateRepository>();
-            //services.AddScoped<IHealthFacilityRepository, HealthFacilityRepository>();
-            //services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
+            services.AddScoped<IAllergyRepository, AllergyRepository>();
+            services.AddScoped<IAllergyDrugRepository, AllergyDrugRepository>();
             services.AddScoped<IMainRepository, MainRepository>();
         }
 

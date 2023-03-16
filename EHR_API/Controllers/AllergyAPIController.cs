@@ -16,12 +16,16 @@ namespace EHR_API.Controllers
         protected APIResponse _response;
         private readonly IMapper _mapper;
         private readonly IMainRepository _db;
+        private readonly IAllergyRepository _allergy;
+        private readonly IAllergyDrugRepository _allergyDrug;
 
-        public AllergyAPIController(IMainRepository db, IMapper mapper)
+        public AllergyAPIController(IMainRepository db, IMapper mapper, IAllergyRepository allergy, IAllergyDrugRepository allergyDrug)
         {
             _db = db;
             _mapper = mapper;
             _response = new();
+            _allergy = allergy;
+            _allergyDrug = allergyDrug;
         }
 
 
@@ -111,14 +115,29 @@ namespace EHR_API.Controllers
                 var entity = _mapper.Map<Allergy>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
                 entity.UpdatedAt = DateTime.Now;
-                await _db._allergy.CreateAsync(entity);
+                entity.AllergyDrugs = null;
 
+                await _db._allergy.CreateAsync(entity);
+                
+                var allergyDrugs = new List<AllergyDrug>();
                 if (entityCreateDTO.AllergyDrugs != null)
-                {
-                    await _db._allergyDrug.CreateRangeAsync(
-                        _mapper.Map<List<AllergyDrug>>(entityCreateDTO.AllergyDrugs.ToList()));
+                {                   
+                    var temp = new AllergyDrug();
+                     
+                    foreach (var item in entityCreateDTO.AllergyDrugs)
+                    {
+                        temp = _mapper.Map<AllergyDrug>(item);
+                        temp.AllergyId = entity.Id;
+                        temp.CreatedAt = DateTime.Now;
+                        temp.UpdatedAt = DateTime.Now;
+                         
+                        allergyDrugs.Add(temp);
+                    }
+
+                    await _db._allergyDrug.CreateRangeAsync(allergyDrugs);
                 }
 
+                entity.AllergyDrugs = allergyDrugs;
                 _response.Result = _mapper.Map<AllergyDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;
                 return Ok(_response);
