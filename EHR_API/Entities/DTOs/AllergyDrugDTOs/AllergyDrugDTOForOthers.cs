@@ -6,7 +6,7 @@ namespace EHR_API.Entities.DTOs.AllergyDrugDTOs
     {
         public int Id { get; set; }
         public int AllergyId { get; set; }
-        public int MedicationId { get; set; }
+        //public int MedicationId { get; set; }
         public MedicationDTOForOthers Medication { get; set; }
     }
 }

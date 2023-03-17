@@ -24,7 +24,6 @@ namespace EHR_API.Controllers
             _response = new();
         }
 
-
         //[Authorize]
         [HttpGet("GetUserChronicDiseases")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
@@ -41,7 +40,9 @@ namespace EHR_API.Controllers
                 }
 
                 var entities = await _db._chronicDisease.GetAllAsync(
-                    expression: g => g.RegistrationDataId == userId );
+                    includeProperties: "ICD",
+                    expression: g => g.RegistrationDataId == userId);
+
                 if (entities.Count == 0)
                 {
                     return BadRequest(APIResponses.BadRequest($"No objects with Id = {userId} "));
@@ -63,21 +64,22 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetChronicDisease(string iCDId,string userId)
+        public async Task<ActionResult<APIResponse>> GetChronicDisease(int id)
         {
             try
             {
-                if (iCDId==null || userId==null)
+                if (id < 1)
                 {
-                    return BadRequest(APIResponses.BadRequest("Ids are Null"));
+                    return BadRequest(APIResponses.BadRequest("Id is < 1"));
                 }
 
                 var entity = await _db._chronicDisease.GetAsync(
-                    expression: g => g.ICDId == iCDId && g.RegistrationDataId==userId);
+                     includeProperties: "ICD",
+                     expression: g => g.Id == id);
 
                 if (entity == null)
                 {
-                    return BadRequest(APIResponses.BadRequest($"No object with Ids = {userId} and {iCDId} "));
+                    return BadRequest(APIResponses.BadRequest($"No object with Id = {id}"));
                 }
 
                 _response.Result = _mapper.Map<ChronicDiseaseDTO>(entity);
@@ -136,24 +138,23 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpDelete("DeleteChronicDisease")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> DeleteChronicDisease(string iCDId, string userId)
+        public async Task<ActionResult<APIResponse>> DeleteChronicDisease(int id)
         {
             try
             {
-                if (iCDId==null || userId==null)
+                if (id < 1)
                 {
-                    return BadRequest(APIResponses.BadRequest("Ids are NULL"));
+                    return BadRequest(APIResponses.BadRequest("Id is < 1"));
                 }
 
-                var removedEntity = await _db._chronicDisease.GetAsync(
-                    expression: g => g.ICDId ==iCDId && g.RegistrationDataId==userId);
+                var removedEntity = await _db._chronicDisease.GetAsync(expression: g => g.Id == id);
                 if (removedEntity == null)
                 {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {iCDId}  and {userId}"));
+                    return NotFound(APIResponses.NotFound($"No object with Id = {id}"));
                 }
 
                 await _db._chronicDisease.DeleteAsync(removedEntity);
@@ -169,11 +170,11 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpPut("UpdateChronicDisease")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> UpdateChronicDisease(string iCDId,string userId, [FromBody] ChronicDiseaseUpdateDTO entityUpdateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateChronicDisease(int id, [FromBody] ChronicDiseaseUpdateDTO entityUpdateDTO)
         {
             try
             {
@@ -182,15 +183,14 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
 
-                if (userId != entityUpdateDTO.RegistrationDataId )
+                if (id != entityUpdateDTO.Id)
                 {
                     return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
-                if (await _db._chronicDisease.GetAsync(
-                    expression: g => g.ICDId == iCDId && g.RegistrationDataId ==userId)  == null)
+                if (await _db._chronicDisease.GetAsync(expression: g => g.Id == id) == null)
                 {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {iCDId} and {userId}"));
+                    return NotFound(APIResponses.NotFound($"No object with Id = {id}"));
                 }
 
                 var entity = _mapper.Map<ChronicDisease>(entityUpdateDTO);

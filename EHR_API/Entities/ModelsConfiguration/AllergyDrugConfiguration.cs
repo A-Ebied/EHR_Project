@@ -11,6 +11,7 @@ namespace EHR_API.Entities.ModelsConfiguration
             builder.HasData(
                 new AllergyDrug
                 {
+                    Id = 1,
                     AllergyId = 1,
                     MedicationId = 1,
                     CreatedAt = DateTime.Now,
@@ -18,6 +19,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 },
                 new AllergyDrug
                 {
+                    Id = 2,
                     AllergyId = 1,
                     MedicationId = 2,
                     CreatedAt = DateTime.Now,

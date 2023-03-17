@@ -139,25 +139,25 @@ namespace EHR_API.Controllers
         }
  
         ////[Authorize]
-        [HttpDelete("DeleteAllergyDrug")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> DeleteAllergyDrug(int allergyId, int medicationId)
+        public async Task<ActionResult<APIResponse>> DeleteAllergyDrug(int id)
         {
             try
             {
-                if (allergyId < 0 || medicationId < 0)
+                if (id < 0)
                 {
-                    return BadRequest(APIResponses.BadRequest("Invalid Ids"));
+                    return BadRequest(APIResponses.BadRequest("Invalid Id"));
                 }
 
                 var removedEntity = await _db._allergyDrug.GetAsync(
-                    expression: g => g.AllergyId == allergyId && g.MedicationId == medicationId);
+                    expression: g => g.Id == id);
 
                 if (removedEntity == null)
                 {
-                    return BadRequest(APIResponses.BadRequest($"No object with allergyId = {allergyId} and medicationId = {medicationId}"));
+                    return BadRequest(APIResponses.BadRequest($"No object with Id = {id}"));
                 }
 
                 await _db._allergyDrug.DeleteAsync(removedEntity);
