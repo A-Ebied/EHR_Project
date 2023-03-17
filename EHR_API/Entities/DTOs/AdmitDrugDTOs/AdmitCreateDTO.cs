@@ -6,7 +6,7 @@ namespace EHR_API.Entities.DTOs.AdmitDTOs
     {     
         [Required]
         public DateTime AdmitAt { get; set; }
-        public DateTime LeaveAt { get; set; }
+        public DateTime? LeaveAt { get; set; }
         [Required]
         public string MedicalTeamId { get; set; }
         [Required]

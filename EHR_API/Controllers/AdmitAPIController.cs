@@ -123,7 +123,11 @@ namespace EHR_API.Controllers
                 var entity = _mapper.Map<Admit>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
                 entity.UpdatedAt = DateTime.Now;
-                  
+                if (entity.LeaveAt == entity.AdmitAt)
+                {
+                    return BadRequest(APIResponses.BadRequest("Leave at can not be equal to Admit at"));
+                }
+
                 await _db._admit.CreateAsync(entity);
                  
                 _response.Result = _mapper.Map<AdmitDTO>(entity);
@@ -210,6 +214,11 @@ namespace EHR_API.Controllers
 
                 var entity = _mapper.Map<Admit>(entityUpdateDTO);
                 entity.UpdatedAt = DateTime.Now;
+                if (entity.LeaveAt == entity.AdmitAt)
+                {
+                    return BadRequest(APIResponses.BadRequest("Leave at can not be equal to Admit at"));
+                }
+
                 await _db._admit.UpdateAsync(entity);
 
                 _response.StatusCode = HttpStatusCode.OK;
