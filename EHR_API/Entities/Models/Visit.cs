@@ -13,9 +13,7 @@ namespace EHR_API.Entities.Models
         public int HealthFacilityId { get; set; }
         public string VisitType { get; set; }
         public string PatientCondition { get; set; }
-
         public string ICDId { get; set; }
-
         public string InstructionDescription { get; set; }
         public string Note { get; set; }
         public string ReportImageUrl { get; set; }
@@ -26,7 +24,6 @@ namespace EHR_API.Entities.Models
 
        // public double Price { get; set; }
        // public bool UnderInsurance { get; set; }
-        public bool IsAdmit { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
@@ -34,7 +31,6 @@ namespace EHR_API.Entities.Models
         public RegistrationData RegistrationData { get; set; }
         public MedicalTeam MedicalTeam { get; set; }
         public HealthFacility HealthFacility { get; set; }
-        public Admit Admit { get; set; }
 
         public ICollection<VisitVitalSign> VisitVitalSigns { get; set; }
         public ICollection<VisitMedication> VisitMedications { get; set; }

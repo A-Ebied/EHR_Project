@@ -24,9 +24,7 @@ namespace EHR_API.Controllers
             _mapper = mapper;
             _response = new();
         }
-
-      
-
+         
        // [Authorize]
         [HttpGet("GetUserReceiveBlood")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
@@ -44,7 +42,7 @@ namespace EHR_API.Controllers
 
                 var entities = await _db._receiveBlood.GetAllAsync(
                     expression: g => g.Id == id);
-                if (entities == null)
+                if (entities.Count == 0)
                 {
                     return BadRequest(APIResponses.BadRequest($"No objects with Id = {id} "));
                 }

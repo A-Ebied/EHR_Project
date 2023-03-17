@@ -21,7 +21,6 @@ namespace EHR_API.Entities.DTOs.VisitDTOs
         public string ImageName { get; set; }
         // public double Price { get; set; }
         // public bool UnderInsurance { get; set; }
-        public bool IsAdmit { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdateddAt { get; set; }
         public ICollection<VisitVitalSignDTOForOthers> VisitVitalSigns { get; set; }

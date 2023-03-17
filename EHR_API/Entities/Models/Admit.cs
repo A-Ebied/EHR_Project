@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EHR_API.Entities.Models.UsersData;
+using System.ComponentModel.DataAnnotations;
 
 namespace EHR_API.Entities.Models
 {
@@ -6,7 +7,7 @@ namespace EHR_API.Entities.Models
     {
         [Key]
         public int Id { get; set; }
-        public int VisitId { get; set; }
+        public string MedicalTeamId { get; set; }
         //public string Type { get; set; }
         public string Reason { get; set; }
         public string Place { get; set; }
@@ -16,7 +17,7 @@ namespace EHR_API.Entities.Models
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        public Visit Visit { get; set; }
+        public MedicalTeam MedicalTeam { get; set; }
         public HealthFacility HealthFacility { get; set; }
         public ICollection<Surgery> Surgeries { get; set; }
         public ICollection<ReceiveBlood> ReceiveBloods { get; set; }

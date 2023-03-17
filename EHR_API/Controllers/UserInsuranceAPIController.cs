@@ -75,7 +75,7 @@ namespace EHR_API.Controllers
                 }
 
                 var entities = await _db._userInsurance.GetAllAsync(expression: g => g.RegistrationDataId == userId);
-                if (entities == null)
+                if (entities.Count == 0)
                 {
                     return BadRequest(APIResponses.BadRequest($"No objects with Id = {userId} "));
                 }

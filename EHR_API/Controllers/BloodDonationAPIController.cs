@@ -42,7 +42,7 @@ namespace EHR_API.Controllers
 
                 var entities = await _db._bloodDonation.GetAllAsync(
                     expression: g => g.RegistrationDataId == UserId);
-                if (entities == null)
+                if (entities.Count == 0)
                 {
                     return BadRequest(APIResponses.BadRequest($"No objects with Id = {UserId} "));
                 }

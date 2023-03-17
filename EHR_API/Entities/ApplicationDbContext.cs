@@ -76,35 +76,7 @@ namespace EHR_API.Entities
                .HasOne(m => m.MedicalTeam)
                .WithOne(r => r.RegistrationData)
                .HasForeignKey<MedicalTeam>(m => m.Id);
-
-            modelBuilder.Entity<Admit>()
-           .HasAlternateKey(c => c.VisitId)
-           .HasName("AlternateKey_VisitId");
-
-            //modelBuilder.Entity<Visit>()
-            // .HasOne(a => a.Admit)
-            // .WithOne(i => i.Visit)
-            // .HasForeignKey<Admit>(i => i.VisitId);
-
-            /* composite key
-            //modelBuilder.Entity<AllergyDrug>()
-            //    .HasKey(a => new { a.AllergyId, a.MedicationId });
-
-            //modelBuilder.Entity<ChronicDisease>()
-            // .HasKey(a => new { a.RegistrationDataId, a.ICDId });
-
-            //modelBuilder.Entity<ChronicDiseaseDrug>()
-            //   .HasKey(a => new { a.RegistrationDataId, a.ICDId, a.MedicationId });
-
-            //modelBuilder.Entity<Contraindication>()
-            //   .HasKey(a => new { a.MedicationId, a.RegistrationDataId });
-
-            //modelBuilder.Entity<MedicalFacilityTeam>()
-            // .HasKey(a => new { a.HealthFacilityId, a.MedicalTeamId });
-
-            //modelBuilder.Entity<VisitMedication>()
-            // .HasKey(a => new { a.MedicationId, a.VisitId });
-            */
+ 
 
             // two columns unique
             modelBuilder.Entity<UserVaccination>()
