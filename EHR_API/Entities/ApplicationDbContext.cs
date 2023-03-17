@@ -81,10 +81,10 @@ namespace EHR_API.Entities
            .HasAlternateKey(c => c.VisitId)
            .HasName("AlternateKey_VisitId");
 
-            modelBuilder.Entity<Visit>()
-             .HasOne(a => a.Admit)
-             .WithOne(i => i.Visit)
-             .HasForeignKey<Admit>(i => i.VisitId);
+            //modelBuilder.Entity<Visit>()
+            // .HasOne(a => a.Admit)
+            // .WithOne(i => i.Visit)
+            // .HasForeignKey<Admit>(i => i.VisitId);
 
             /* composite key
             //modelBuilder.Entity<AllergyDrug>()

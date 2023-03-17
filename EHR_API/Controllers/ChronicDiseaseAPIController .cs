@@ -59,7 +59,7 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpGet("GetChronicDisease")]
+        [HttpGet("{id}")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -131,12 +131,27 @@ namespace EHR_API.Controllers
                 var entity = _mapper.Map<ChronicDisease>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
                 entity.UpdatedAt = DateTime.Now;
+                entity.ChronicDiseaseDrugs = null;
+
                 await _db._chronicDisease.CreateAsync(entity);
 
-                if (entityCreateDTO.ChronicDiseaseDrugs != null)
+                if (entityCreateDTO.ChronicDiseaseDrugs.Count > 0)
                 {
-                    await _db._chronicDiseaseDrug.CreateRangeAsync(
-                        _mapper.Map<List<ChronicDiseaseDrug>>(entityCreateDTO.ChronicDiseaseDrugs.ToList()));
+                    var chronicDiseaseDrugs = new List<ChronicDiseaseDrug>();
+                    var temp = new ChronicDiseaseDrug();
+
+                    foreach (var item in entityCreateDTO.ChronicDiseaseDrugs)
+                    {
+                        temp = _mapper.Map<ChronicDiseaseDrug>(item);
+                        temp.ChronicDiseaseId = entity.Id;
+                        temp.CreatedAt = DateTime.Now;
+                        temp.UpdatedAt = DateTime.Now;
+
+                        chronicDiseaseDrugs.Add(temp);
+                    }
+
+                    await _db._chronicDiseaseDrug.CreateRangeAsync(chronicDiseaseDrugs);
+                    entity.ChronicDiseaseDrugs = chronicDiseaseDrugs;
                 }
 
                 _response.Result = _mapper.Map<ChronicDiseaseDTO>(entity);
@@ -148,8 +163,7 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
-
-
+         
         //[Authorize]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -204,6 +218,16 @@ namespace EHR_API.Controllers
                 if (await _db._chronicDisease.GetAsync(expression: g => g.Id == id) == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id}"));
+                }
+
+                if (await _db._authentication.GetAsync(expression: e => e.Id == entityUpdateDTO.RegistrationDataId) == null)
+                {
+                    return BadRequest(APIResponses.BadRequest("User is not exists"));
+                }
+
+                if (await _db._icd.GetAsync(expression: e => e.Code == entityUpdateDTO.ICDId) == null)
+                {
+                    return BadRequest(APIResponses.BadRequest("ICD is not exists"));
                 }
 
                 var entity = _mapper.Map<ChronicDisease>(entityUpdateDTO);

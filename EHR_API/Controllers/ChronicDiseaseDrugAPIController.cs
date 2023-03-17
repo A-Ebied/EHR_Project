@@ -77,6 +77,7 @@ namespace EHR_API.Controllers
                 }
 
                 var entities = await _db._chronicDiseaseDrug.GetAllAsync(
+                    includeProperties: "Medication",
                     expression: g => g.ChronicDiseaseId == chronicDiseaseId);
 
                 if (entities.Count == 0)

@@ -7,10 +7,10 @@ namespace EHR_API.Entities.DTOs.ChronicDiseaseDTOs
     {
         public int Id { get; set; }
         //public string ICDId { get; set; }
-        public ICDDTOForOthers ICD { get; set; }
         public string RegistrationDataId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public ICDDTOForOthers ICD { get; set; }
         public IEnumerable<ChronicDiseaseDrugDTOForOthers> ChronicDiseaseDrugs { get; set; }
 
 
