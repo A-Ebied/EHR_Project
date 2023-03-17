@@ -77,11 +77,25 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = await _db._allergy.GetAsync(
+                    includeProperties: "AllergyDrugs",
                     expression: g => g.Id == id);
 
                 if (entity == null)
                 {
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id} "));
+                }
+
+                if (entity.AllergyDrugs.Count != 0)
+                {
+                    var temp = new List<AllergyDrug>();
+                    foreach (var item in entity.AllergyDrugs)
+                    {
+                        temp.Add(await _db._allergyDrug.GetAsync(
+                                    includeProperties: "Medication",
+                                    expression: g => g.Id == item.Id));
+                    }
+
+                    entity.AllergyDrugs = temp;
                 }
 
                 _response.Result = _mapper.Map<AllergyDTO>(entity);

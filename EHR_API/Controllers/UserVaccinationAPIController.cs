@@ -197,11 +197,6 @@ namespace EHR_API.Controllers
                     return NotFound(APIResponses.NotFound($"No Vaccination with code = {entityUpdateDTO.VaccinationId}"));
                 }
 
-                //if (await _db._userVaccination.GetAsync(expression: e => e.VisitId == entityUpdateDTO.VisitId && e.VaccinationId == entityUpdateDTO.VaccinationId) != null)
-                //{
-                //    return BadRequest(APIResponses.BadRequest("Object is exists"));
-                //}
-
                 var entity = _mapper.Map<UserVaccination>(entityUpdateDTO);
                 entity.UpdatedAt = DateTime.Now;
                 entity.CreatedAt = oldOne.CreatedAt;

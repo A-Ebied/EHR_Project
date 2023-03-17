@@ -5,6 +5,7 @@ namespace EHR_API.Entities.DTOs.AllergyDrugDTOs
 {
     public class AllergyDrugDTO
     {
+        public int Id { get; set; }
         public int AllergyId { get; set; }
         public int MedicationId { get; set; }
         public AllergyDTOForOthers Allergy { get; set; }
