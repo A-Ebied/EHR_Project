@@ -74,12 +74,25 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = await _db._chronicDisease.GetAsync(
-                     includeProperties: "ICD",
+                     includeProperties: "ICD,ChronicDiseaseDrugs",
                      expression: g => g.Id == id);
 
                 if (entity == null)
                 {
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id}"));
+                }
+
+                if (entity.ChronicDiseaseDrugs.Count != 0)
+                {
+                    var temp = new List<ChronicDiseaseDrug>();
+                    foreach (var item in entity.ChronicDiseaseDrugs)
+                    {
+                        temp.Add(await _db._chronicDiseaseDrug.GetAsync(
+                                    includeProperties: "Medication",
+                                    expression: g => g.Id == item.Id));
+                    }
+
+                    entity.ChronicDiseaseDrugs = temp;
                 }
 
                 _response.Result = _mapper.Map<ChronicDiseaseDTO>(entity);

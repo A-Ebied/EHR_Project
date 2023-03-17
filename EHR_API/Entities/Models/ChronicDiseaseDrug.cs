@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EHR_API.Entities.Models
 {
@@ -8,8 +7,7 @@ namespace EHR_API.Entities.Models
         [Key]
         public int Id { get; set; }
         public int MedicationId { get; set; }
-        public string ICDId { get; set; }
-        public string RegistrationDataId { get; set; }
+        public int ChronicDiseaseId { get; set; }
 
         public Medication Medication { get; set; }
         public ChronicDisease ChronicDisease { get; set; }

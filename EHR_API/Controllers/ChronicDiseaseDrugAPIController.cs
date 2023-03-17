@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using EHR_API.Entities;
 using EHR_API.Entities.DTOs.ChronicDiseaseDrugDTOs;
-using EHR_API.Entities.DTOs.ChronicDiseaseDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
@@ -68,21 +67,21 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetChronicDiseaseDrugs(string userId ,int medicationId , string iCDId)
+        public async Task<ActionResult<APIResponse>> GetChronicDiseaseDrugs(int chronicDiseaseId)
         {
             try
             {
-                if (userId==null || medicationId ==0 ||iCDId==null )
+                if (chronicDiseaseId < 1 )
                 {
-                    return BadRequest(APIResponses.BadRequest("Ids is NULl "));
+                    return BadRequest(APIResponses.BadRequest("Ids is < 1 "));
                 }
 
                 var entities = await _db._chronicDiseaseDrug.GetAllAsync(
-                    expression: g => g.RegistrationDataId == userId && g.MedicationId == medicationId && g.ICDId==iCDId);
+                    expression: g => g.ChronicDiseaseId == chronicDiseaseId);
 
-                if (entities==null)
+                if (entities.Count == 0)
                 {
-                    return BadRequest(APIResponses.BadRequest($"No object with Id = {userId} and {medicationId} and {iCDId}"));
+                    return BadRequest(APIResponses.BadRequest($"No objects with Id = {chronicDiseaseId}"));
                 }
 
                 _response.Result = _mapper.Map<List<ChronicDiseaseDrugDTOForOthers>>(entities);
@@ -95,7 +94,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        ////[Authorize]
+        //[Authorize]
         [HttpPost("CreateChronicDiseaseDrugs")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -109,19 +108,15 @@ namespace EHR_API.Controllers
                 }
 
                 foreach (var item in entityCreateDTO.ChronicDiseaseDrugs)
-                {
-                    if (await _db._icd.GetAsync(expression: e => e.Code == item.ICDId) == null)
-                    {
-                        return BadRequest(APIResponses.BadRequest($"ICD with id {item.ICDId} is not exists"));
-                    } 
-                    
+                {                    
                     if (await _db._medication.GetAsync(expression: e => e.Id == item.MedicationId) == null)
                     {
                         return BadRequest(APIResponses.BadRequest($"Medication with id {item.MedicationId} is not exists"));
                     }
-                    if (await _db._authentication.GetAsync(expression: e => e.Id == item.RegistrationDataId) == null)
+
+                    if (await _db._chronicDisease.GetAsync(expression: e => e.Id == item.ChronicDiseaseId) == null)
                     {
-                        return BadRequest(APIResponses.BadRequest($"RegistrationData with id {item.RegistrationDataId} is not exists"));
+                        return BadRequest(APIResponses.BadRequest($"Chronic Disease with id {item.ChronicDiseaseId} is not exists"));
                     }
                 }
 
@@ -144,27 +139,26 @@ namespace EHR_API.Controllers
         }
 
 
-        ////[Authorize]
-        [HttpDelete("DeleteChronicDiseaseDrug")]
+        //[Authorize]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> DeleteChronicDiseaseDrug(string iCDId, int medicationId,
-            string userId)
+        public async Task<ActionResult<APIResponse>> DeleteChronicDiseaseDrug(int id)
         {
             try
             {
-                if (iCDId ==null || medicationId == 0 || userId== null )
+                if (id < 1 )
                 {
-                    return BadRequest(APIResponses.BadRequest("Invalid Ids"));
+                    return BadRequest(APIResponses.BadRequest("Invalid Id"));
                 }
 
                 var removedEntity = await _db._chronicDiseaseDrug.GetAsync(
-                    expression: g => g.ICDId == iCDId && g.MedicationId == medicationId && g.RegistrationDataId==userId);
+                    expression: g => g.Id == id);
 
                 if (removedEntity == null)
                 {
-                    return BadRequest(APIResponses.BadRequest($"No object with allergyId = {iCDId} and medicationId = {medicationId} and {userId}"));
+                    return BadRequest(APIResponses.BadRequest($"No objects with Id = {id}"));
                 }
 
                 await _db._chronicDiseaseDrug.DeleteAsync(removedEntity);

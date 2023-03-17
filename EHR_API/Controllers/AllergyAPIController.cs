@@ -47,7 +47,7 @@ namespace EHR_API.Controllers
                 var entities = await _db._allergy.GetAllAsync(
                     expression: g => g.RegistrationDataId == userId);
 
-                if (entities == null || entities.Count == 0)
+                if (entities.Count == 0)
                 {
                     return BadRequest(APIResponses.BadRequest($"No objects with Id = {userId} "));
                 }

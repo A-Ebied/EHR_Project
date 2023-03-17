@@ -7,8 +7,6 @@ namespace EHR_API.Entities.DTOs.ChronicDiseaseDrugDTOs
         [Required]
         public int MedicationId { get; set; }
         [Required]
-        public string ICDId { get; set; }
-        [Required]
-        public string RegistrationDataId { get; set; }
+        public int ChronicDiseaseId { get; set; }
     }
 }
