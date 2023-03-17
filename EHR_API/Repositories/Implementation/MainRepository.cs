@@ -37,6 +37,7 @@ namespace EHR_API.Repositories.Implementation
             _receiveBlood = new ReceiveBloodRepository(db);
             _surgery = new SurgeryRepository(db);
             _surgeryProgressNote = new SurgeryProgressNoteRepository(db);
+            _admit = new AdmitRepository(db);
         }
 
         public IGovernorateRepository _governorate { get; private set; }
@@ -64,8 +65,8 @@ namespace EHR_API.Repositories.Implementation
         public IChronicDiseaseDrugRepository _chronicDiseaseDrug { get; private set; }
         public IReceiveBloodDataRepository _receiveBloodData { get; private set; }
         public IReceiveBloodRepository _receiveBlood { get; private set; }
-
         public ISurgeryRepository _surgery { get; private set; }
         public ISurgeryProgressNoteRepository _surgeryProgressNote { get; private set; }
+        public IAdmitRepository _admit { get; private set; }
     }
 }

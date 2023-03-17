@@ -1,5 +1,4 @@
-﻿using EHR_API.Entities.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace EHR_API.Entities.DTOs.AdmitDTOs
 {
@@ -14,6 +13,8 @@ namespace EHR_API.Entities.DTOs.AdmitDTOs
         public string MedicalTeamId { get; set; }
         [Required]
         public int HealthFacilityId { get; set; }
+        [Required]
+        public string RegistrationDataId { get; set; }
         [Required]
         public string Reason { get; set; }
         [Required]

@@ -29,5 +29,6 @@
         IReceiveBloodDataRepository _receiveBloodData { get; }
         ISurgeryRepository _surgery { get; }
         ISurgeryProgressNoteRepository _surgeryProgressNote { get; }
+        IAdmitRepository _admit { get; }
     }
 }
