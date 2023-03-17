@@ -86,7 +86,7 @@ namespace EHR_API.Entities
              .WithOne(i => i.Visit)
              .HasForeignKey<Admit>(i => i.VisitId);
 
-            // composite key
+            /* composite key
             //modelBuilder.Entity<AllergyDrug>()
             //    .HasKey(a => new { a.AllergyId, a.MedicationId });
 
@@ -104,6 +104,7 @@ namespace EHR_API.Entities
 
             //modelBuilder.Entity<VisitMedication>()
             // .HasKey(a => new { a.MedicationId, a.VisitId });
+            */
 
             // two columns unique
             modelBuilder.Entity<UserVaccination>()

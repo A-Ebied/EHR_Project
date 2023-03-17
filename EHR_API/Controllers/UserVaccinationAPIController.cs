@@ -47,11 +47,6 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Vaccination is not exists"));
                 }
 
-                //if (await _db._userVaccination.GetAsync(expression: e => e.VisitId == entityCreateDTO.VisitId && e.VaccinationId == entityCreateDTO.VaccinationId) != null)
-                //{
-                //    return BadRequest(APIResponses.BadRequest("Object is exists"));
-                //}
-
                 var entity = _mapper.Map<UserVaccination>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
                 entity.UpdatedAt = DateTime.Now;
@@ -132,30 +127,38 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> GetUserVaccinations(string userId)
         {
-            return BadRequest(APIResponses.BadRequest("Not work yet"));
-            //try
-            //{
-            //    if (id < 1)
-            //    {
-            //        return BadRequest(APIResponses.BadRequest("Id less than 1"));
-            //    }
+            try
+            {
+                if (userId == null)
+                {
+                    return BadRequest(APIResponses.BadRequest("Id is null"));
+                }
 
-            //    var entity = await _db._userVaccination.GetAsync(
-            //        expression: g => g.Id == id);
+                var entities = await _db._visit.GetAllAsync(
+                    expression: g => g.RegistrationDataId == userId);
 
-            //    if (entity == null)
-            //    {
-            //        return BadRequest(APIResponses.BadRequest($"No object with Id = {id}"));
-            //    }
+                if (entities == null)
+                {
+                    return BadRequest(APIResponses.BadRequest($"No object with Id = {userId}"));
+                }
 
-            //    _response.Result = _mapper.Map<UserVaccinationDTO>(entity);
-            //    _response.StatusCode = HttpStatusCode.OK;
-            //    return Ok(_response);
-            //}
-            //catch (Exception ex)
-            //{
-            //    return APIResponses.InternalServerError(ex);
-            //}
+                var vaccinations = new List<UserVaccination>();
+                foreach (var entity in entities)
+                {
+                    if (entity.UserVaccinations.Count != 0)
+                    {
+                        vaccinations.AddRange(entity.UserVaccinations);
+                    }
+                }
+
+                _response.Result = _mapper.Map<List<UserVaccinationDTO>>(vaccinations);
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                return APIResponses.InternalServerError(ex);
+            }
         }
 
         //[Authorize(Roles = SD.SystemManager + "," + SD.HealthFacilityManager)]
