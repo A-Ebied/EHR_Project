@@ -1,6 +1,4 @@
-﻿using static System.Net.Mime.MediaTypeNames;
-
-namespace EHR_API.Extensions
+﻿namespace EHR_API.Extensions
 {
     public static class CreateImage 
     {
@@ -19,7 +17,7 @@ namespace EHR_API.Extensions
                 file.CopyTo(fileStreams);
             }
 
-            var path = uploads + "\\" + fileName + extension;
+            var path =  "/" + folderName + "/" + fileName + extension;
             return path;
         }
     }

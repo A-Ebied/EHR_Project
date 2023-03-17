@@ -190,12 +190,6 @@ namespace EHR_API.Controllers
                     return NotFound(APIResponses.NotFound($"No User with Id = {entityUpdateDTO.RegistrationDataId}"));
                 }
 
-                //var manager = await _db._healthFacility.GetAsync(expression: e => e.RegistrationDataId == entityUpdateDTO.RegistrationDataId);
-                //if (manager != null && manager.Id != oldOne.Id)
-                //{
-                //    return BadRequest(APIResponses.BadRequest("The user is a manager of other"));
-                //}
-
                 var entity = _mapper.Map<HealthFacility>(entityUpdateDTO);
                 entity.UpdateddAt = DateTime.Now;
                 entity.CreatedAt = oldOne.CreatedAt;
