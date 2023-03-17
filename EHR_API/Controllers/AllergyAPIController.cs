@@ -46,7 +46,8 @@ namespace EHR_API.Controllers
 
                 var entities = await _db._allergy.GetAllAsync(
                     expression: g => g.RegistrationDataId == userId);
-                if (entities == null)
+
+                if (entities == null || entities.Count == 0)
                 {
                     return BadRequest(APIResponses.BadRequest($"No objects with Id = {userId} "));
                 }
@@ -133,7 +134,7 @@ namespace EHR_API.Controllers
 
                 await _db._allergy.CreateAsync(entity);
 
-                if (entityCreateDTO.AllergyDrugs != null)
+                if (entityCreateDTO.AllergyDrugs.Count > 0)
                 {
                     var allergyDrugs = new List<AllergyDrug>();
                     var temp = new AllergyDrug();

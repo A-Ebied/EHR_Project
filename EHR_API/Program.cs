@@ -2,6 +2,7 @@ using EHR_API.Entities;
 using EHR_API.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,7 +40,13 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 /*-------------------*/
 // enables using static files for the request.
-app.UseStaticFiles();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, "wwwroot/images")),
+    RequestPath = "/images"
+});
+
 app.UseCors("CorsPolicy");
 SeedDatabase();
 /*-------------------*/

@@ -175,16 +175,26 @@ namespace EHR_API.Controllers
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
                 }
 
+                if (await _db._healthFacility.GetAsync(expression: g => g.Title!.ToLower() == entityUpdateDTO.Title!.ToLower()) != null)
+                {
+                    return BadRequest(APIResponses.BadRequest("The object is already exists"));
+                }
+
                 if (await _db._governorate.GetAsync(expression: e => e.Id == entityUpdateDTO.GovernorateId) == null)
                 {
                     return NotFound(APIResponses.NotFound($"No Governorate with Id = {entityUpdateDTO.GovernorateId}"));
                 }
 
-                var manager = await _db._healthFacility.GetAsync(expression: e => e.RegistrationDataId == entityUpdateDTO.RegistrationDataId);
-                if (manager != null && manager.Id != oldOne.Id)
+                if (await _db._authentication.GetAsync(expression: e => e.Id == entityUpdateDTO.RegistrationDataId) == null)
                 {
-                    return BadRequest(APIResponses.BadRequest("The user is a manager of other"));
+                    return NotFound(APIResponses.NotFound($"No User with Id = {entityUpdateDTO.RegistrationDataId}"));
                 }
+
+                //var manager = await _db._healthFacility.GetAsync(expression: e => e.RegistrationDataId == entityUpdateDTO.RegistrationDataId);
+                //if (manager != null && manager.Id != oldOne.Id)
+                //{
+                //    return BadRequest(APIResponses.BadRequest("The user is a manager of other"));
+                //}
 
                 var entity = _mapper.Map<HealthFacility>(entityUpdateDTO);
                 entity.UpdateddAt = DateTime.Now;
