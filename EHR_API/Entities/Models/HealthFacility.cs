@@ -1,9 +1,11 @@
 ﻿using EHR_API.Entities.Models.UsersData;
+using System.ComponentModel.DataAnnotations;
 
 namespace EHR_API.Entities.Models
 {
     public class HealthFacility
     {
+        [Key]
         public int Id { get; set; }
         public string Title { get; set; }
         public string Type { get; set; }

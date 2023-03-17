@@ -1,9 +1,11 @@
 ﻿using EHR_API.Entities.Models.UsersData;
+using System.ComponentModel.DataAnnotations;
 
 namespace EHR_API.Entities.Models
 {
     public class ReceiveBlood
     {
+        [Key]
         public int Id { get; set; }
         public DateTime DateTime { get; set; }
         public string RegistrationDataId { get; set; }

@@ -6,8 +6,8 @@
         public DateTime Date { get; set; }
         public string Instruction { get; set; }
         public int VisitId { get; set; }
+        public int VaccinationId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public UserVaccinationDTOForOthers Vaccination { get; set; }
     }
 }

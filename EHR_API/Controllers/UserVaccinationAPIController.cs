@@ -42,10 +42,15 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Visit is not exists"));
                 }
 
-                if (await _db._vaccination.GetAsync(expression: e => e.Code == entityCreateDTO.VaccinationId) == null)
+                if (await _db._vaccination.GetAsync(expression: e => e.Id == entityCreateDTO.VaccinationId) == null)
                 {
                     return BadRequest(APIResponses.BadRequest("Vaccination is not exists"));
                 }
+
+                //if (await _db._userVaccination.GetAsync(expression: e => e.VisitId == entityCreateDTO.VisitId && e.VaccinationId == entityCreateDTO.VaccinationId) != null)
+                //{
+                //    return BadRequest(APIResponses.BadRequest("Object is exists"));
+                //}
 
                 var entity = _mapper.Map<UserVaccination>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
@@ -184,10 +189,15 @@ namespace EHR_API.Controllers
                     return NotFound(APIResponses.NotFound($"No Visit with Id = {entityUpdateDTO.VisitId}"));
                 }
                 
-                if (await _db._vaccination.GetAsync(expression: e => e.Code == entityUpdateDTO.VaccinationId) == null)
+                if (await _db._vaccination.GetAsync(expression: e => e.Id == entityUpdateDTO.VaccinationId) == null)
                 {
                     return NotFound(APIResponses.NotFound($"No Vaccination with code = {entityUpdateDTO.VaccinationId}"));
                 }
+
+                //if (await _db._userVaccination.GetAsync(expression: e => e.VisitId == entityUpdateDTO.VisitId && e.VaccinationId == entityUpdateDTO.VaccinationId) != null)
+                //{
+                //    return BadRequest(APIResponses.BadRequest("Object is exists"));
+                //}
 
                 var entity = _mapper.Map<UserVaccination>(entityUpdateDTO);
                 entity.UpdatedAt = DateTime.Now;

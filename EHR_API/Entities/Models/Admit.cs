@@ -1,9 +1,12 @@
-﻿namespace EHR_API.Entities.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EHR_API.Entities.Models
 {
     public class Admit
     {
+        [Key]
+        public int Id { get; set; }
         public int VisitId { get; set; }
-        
         //public string Type { get; set; }
         public string Reason { get; set; }
         public string Place { get; set; }

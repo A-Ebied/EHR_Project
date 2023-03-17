@@ -60,26 +60,26 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpGet("{code}")]
+        [HttpGet("{id}")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetVaccination(string code)
+        public async Task<ActionResult<APIResponse>> GetVaccination(int id)
         {
             try
             {
-                if (code == null)
+                if (id < 1)
                 {
-                    return BadRequest(APIResponses.BadRequest("code is null"));
+                    return BadRequest(APIResponses.BadRequest("Id is < 1"));
                 }
 
                 var entity = await _db._vaccination.GetAsync(
-                    expression: g => g.Code == code);
+                    expression: g => g.Id == id);
 
                 if (entity == null)
                 {
-                    return BadRequest(APIResponses.BadRequest($"No object with code = {code} "));
+                    return BadRequest(APIResponses.BadRequest($"No object with code = {id} "));
                 }
 
                 _response.Result = _mapper.Map<VaccinationDTO>(entity);
@@ -122,23 +122,23 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpDelete("{code}")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> DeleteVaccination(string code)
+        public async Task<ActionResult<APIResponse>> DeleteVaccination(int id)
         {
             try
             {
-                if (code == null)
+                if (id < 1)
                 {
-                    return BadRequest(APIResponses.BadRequest("code is null"));
+                    return BadRequest(APIResponses.BadRequest("Id is < 1"));
                 }
 
-                var removedEntity = await _db._vaccination.GetAsync(expression: g => g.Code == code);
+                var removedEntity = await _db._vaccination.GetAsync(expression: g => g.Id == id);
                 if (removedEntity == null)
                 {
-                    return NotFound(APIResponses.NotFound($"No object with code = {code} "));
+                    return NotFound(APIResponses.NotFound($"No object with code = {id} "));
                 }
 
                 await _db._vaccination.DeleteAsync(removedEntity);
@@ -154,11 +154,11 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpPut("{code}")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> UpdateICD(string code, [FromBody] VaccinationUpdateDTO entityUpdateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateICD(int id, [FromBody] VaccinationUpdateDTO entityUpdateDTO)
         {
             try
             {
@@ -167,14 +167,14 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
 
-                if (code != entityUpdateDTO.Code)
+                if (id != entityUpdateDTO.Id)
                 {
-                    return BadRequest(APIResponses.BadRequest("Code is not equal to the Code of the object"));
+                    return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
-                if (await _db._vaccination.GetAsync(expression: g => g.Code == code) == null)
+                if (await _db._vaccination.GetAsync(expression: g => g.Id == id) == null)
                 {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {code} "));
+                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
                 }
                  
                 var entity = _mapper.Map<Vaccination>(entityUpdateDTO);

@@ -1,7 +1,10 @@
-﻿namespace EHR_API.Entities.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EHR_API.Entities.Models
 {
     public class PhysicalTherapy
     {
+        [Key]
         public int Id { get; set; }
         public string Type { get; set; }
         public string Target { get; set; }

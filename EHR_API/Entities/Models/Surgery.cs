@@ -1,10 +1,12 @@
 ﻿using EHR_API.Entities.Models.UsersData;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EHR_API.Entities.Models
 {
     public class Surgery
     {
+        [Key]
         public int Id { get; set; }
         public string Title { get; set; }
         public DateTime Date { get; set; }

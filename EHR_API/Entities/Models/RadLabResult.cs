@@ -1,7 +1,10 @@
-﻿namespace EHR_API.Entities.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EHR_API.Entities.Models
 {
     public class RadLabResult
     {
+        [Key]
         public int Id { get; set; }
         //public double Price { get; set; }
         //public bool UnderInsurance { get; set; }

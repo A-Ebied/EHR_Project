@@ -1,7 +1,6 @@
 ﻿using EHR_API.Entities.Models;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Entities.ModelsConfiguration;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -60,6 +59,7 @@ namespace EHR_API.Entities
             modelBuilder.ApplyConfiguration(new BadHabitConfiguration());
             modelBuilder.ApplyConfiguration(new AllergyConfiguration());
             modelBuilder.ApplyConfiguration(new AllergyDrugConfiguration());
+            modelBuilder.ApplyConfiguration(new VaccinationConfiguration());
 
             //one-to-one
             modelBuilder.Entity<RegistrationData>()
@@ -77,9 +77,9 @@ namespace EHR_API.Entities
                .WithOne(r => r.RegistrationData)
                .HasForeignKey<MedicalTeam>(m => m.Id);
 
-           // modelBuilder.Entity<HealthFacility>()
-           //.HasAlternateKey(c => c.RegistrationDataId)
-           //.HasName("AlternateKey_RegistrationDataId");
+            modelBuilder.Entity<Admit>()
+           .HasAlternateKey(c => c.VisitId)
+           .HasName("AlternateKey_VisitId");
 
             modelBuilder.Entity<Visit>()
              .HasOne(a => a.Admit)
@@ -87,28 +87,45 @@ namespace EHR_API.Entities
              .HasForeignKey<Admit>(i => i.VisitId);
 
             // composite key
+            //modelBuilder.Entity<AllergyDrug>()
+            //    .HasKey(a => new { a.AllergyId, a.MedicationId });
+
+            //modelBuilder.Entity<ChronicDisease>()
+            // .HasKey(a => new { a.RegistrationDataId, a.ICDId });
+
+            //modelBuilder.Entity<ChronicDiseaseDrug>()
+            //   .HasKey(a => new { a.RegistrationDataId, a.ICDId, a.MedicationId });
+
+            //modelBuilder.Entity<Contraindication>()
+            //   .HasKey(a => new { a.MedicationId, a.RegistrationDataId });
+
+            //modelBuilder.Entity<MedicalFacilityTeam>()
+            // .HasKey(a => new { a.HealthFacilityId, a.MedicalTeamId });
+
+            //modelBuilder.Entity<VisitMedication>()
+            // .HasKey(a => new { a.MedicationId, a.VisitId });
+
+            // two columns unique
+            modelBuilder.Entity<UserVaccination>()
+                .HasIndex(p => new { p.VisitId, p.VaccinationId }).IsUnique();
+
             modelBuilder.Entity<AllergyDrug>()
-                .HasKey(a => new { a.AllergyId, a.MedicationId });
+                .HasIndex(p => new { p.AllergyId, p.MedicationId }).IsUnique();
 
             modelBuilder.Entity<ChronicDisease>()
-             .HasKey(a => new { a.RegistrationDataId, a.ICDId });
+                .HasIndex(p => new { p.RegistrationDataId, p.ICDId }).IsUnique();
 
             modelBuilder.Entity<ChronicDiseaseDrug>()
-               .HasKey(a => new { a.RegistrationDataId, a.ICDId, a.MedicationId });
+                .HasIndex(p => new { p.RegistrationDataId, p.ICDId, p.MedicationId }).IsUnique();
 
             modelBuilder.Entity<Contraindication>()
-               .HasKey(a => new { a.MedicationId, a.RegistrationDataId });
+                .HasIndex(p => new { p.RegistrationDataId, p.MedicationId }).IsUnique();
 
             modelBuilder.Entity<MedicalFacilityTeam>()
-             .HasKey(a => new { a.HealthFacilityId, a.MedicalTeamId });
+                .HasIndex(p => new { p.HealthFacilityId, p.MedicalTeamId }).IsUnique();
 
             modelBuilder.Entity<VisitMedication>()
-             .HasKey(a => new { a.MedicationId, a.VisitId });
-
-
-            // pk
-            modelBuilder.Entity<Admit>()
-               .HasKey(i => i.VisitId);
+                .HasIndex(p => new { p.MedicationId, p.VisitId }).IsUnique();
         }
 
 

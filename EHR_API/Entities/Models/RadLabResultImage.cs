@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EHR_API.Entities.Models
 {
     public class RadLabResultImage
     {
+        [Key]
         public int Id { get; set; }
         public string Note { get; set; }
         public string ResultImageUrl { get; set; }

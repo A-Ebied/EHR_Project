@@ -5,7 +5,7 @@ namespace EHR_API.Entities.DTOs.VaccinationDTOs
     public class VaccinationUpdateDTO
     {
         [Required]
-        public string Code { get; set; }
+        public int Id { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
@@ -17,18 +17,11 @@ namespace EHR_API.Entities.DTOs.VaccinationDTOs
         [Required]
         public string AgeRange { get; set; }
         [Required]
-        public string Duration { get; set; }
-        [Required]
-        public string NumberOfTimes { get; set; }
-        [Required]
         public string Dosage { get; set; }
-        public string DosageNote { get; set; }
         [Required]
-        public string Quantity { get; set; }
+        public string VaccinationEffectiveness { get; set; }
         public string Contraindication { get; set; }
         public string SideEffects { get; set; }
-        [Required]
-        public bool IsMandatory { get; set; } = false;
-        public string Note { get; set; } 
+        public string Note { get; set; }
     }
 }
