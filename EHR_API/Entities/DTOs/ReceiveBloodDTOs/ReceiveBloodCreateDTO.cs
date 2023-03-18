@@ -7,14 +7,10 @@ namespace EHR_API.Entities.DTOs.ReceiveBloodDTOs
     {
         [Required]
         public int Id { get; set; }
-
         [Required]
-        public string RegistrationDataId { get; set; }
-
+        public DateTime DateTime { get; set; }
         [Required]
         public int AdmitId { get; set; }
         public ICollection<ReceiveBloodDataCreateDTO> ReceivesBloodData { get; set; }
-
-
     }
 }

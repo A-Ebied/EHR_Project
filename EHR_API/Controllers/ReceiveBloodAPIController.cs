@@ -31,23 +31,34 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetUserReceiveBlood(int id)
+        public async Task<ActionResult<APIResponse>> GetUserReceiveBlood(string userId)
         {
             try
             {
-                if (id == 0)
+                if (userId == null)
                 {
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
-                var entities = await _db._receiveBlood.GetAllAsync(
-                    expression: g => g.Id == id);
+                var entities = await _db._admit.GetAllAsync(
+                    includeProperties: "ReceiveBloods",
+                    expression: g => g.RegistrationDataId == userId);
+
                 if (entities.Count == 0)
                 {
-                    return BadRequest(APIResponses.BadRequest($"No objects with Id = {id} "));
+                    return BadRequest(APIResponses.BadRequest($"No objects with Id = {userId} "));
                 }
 
-                _response.Result = _mapper.Map<List<ReceiveBloodDTOForOthers>>(entities);
+                var receives = new List<ReceiveBlood>();
+                foreach (var entity in entities)
+                {
+                    if (entity.ReceiveBloods.Count > 0)
+                    {
+                        receives.AddRange(entity.ReceiveBloods);
+                    }
+                }
+
+                _response.Result = _mapper.Map<List<ReceiveBloodDTOForOthers>>(receives);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -58,29 +69,30 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpGet("GetReceiveBlood")]
+        [HttpGet("{id}")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetReceiveBlood(int id, string userId ,int admitId)
+        public async Task<ActionResult<APIResponse>> GetReceiveBlood(int id)
         {
             try
             {
-                if (id==0||userId==null|| admitId ==0 )
+                if (id < 1)
                 {
-                    return BadRequest(APIResponses.BadRequest("Ids is NULl "));
+                    return BadRequest(APIResponses.BadRequest("Id is < 1 "));
                 }
 
-                var entities = await _db._receiveBlood.GetAllAsync(
-                    expression: g => g.Id ==id && g.RegistrationDataId == userId && g.AdmitId==admitId);
+                var entity = await _db._receiveBlood.GetAsync(
+                    includeProperties: "ReceivesBloodData",
+                    expression: g => g.Id ==id);
 
-                if (entities==null)
+                if (entity == null)
                 {
-                    return BadRequest(APIResponses.BadRequest($"No object with Id = {id} and {userId} and {admitId}"));
+                    return BadRequest(APIResponses.BadRequest($"No object with Id = {id}"));
                 }
 
-                _response.Result = _mapper.Map<List<ReceiveBloodDTOForOthers>>(entities);
+                _response.Result = _mapper.Map<ReceiveBloodDTOForOthers>(entity);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -91,7 +103,7 @@ namespace EHR_API.Controllers
         }
 
 
-        ////[Authorize]
+        //[Authorize]
         [HttpPost("CreateReceiveBlood")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -104,26 +116,35 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
 
-                if (await _db._authentication.GetAsync(expression: e => e.Id == entityCreateDTO.RegistrationDataId) == null)
+                if (await _db._admit.GetAsync(expression: e => e.Id== entityCreateDTO.AdmitId) == null)
                 {
-                    return BadRequest(APIResponses.BadRequest("User is not exists"));
-                }
-
-                if (await _db._visit.GetAsync(expression: e => e.Id== entityCreateDTO.AdmitId) == null)
-                {
-                    return BadRequest(APIResponses.BadRequest("AdmitId is not exists"));
+                    return BadRequest(APIResponses.BadRequest("Admit is not exists"));
                 }
 
                 var entity = _mapper.Map<ReceiveBlood>(entityCreateDTO);
-                //entity.CreatedAt = DateTime.Now;
-                //entity.UpdatedAt = DateTime.Now;
-                entity.DateTime = DateTime.Now;
+                entity.CreatedAt = DateTime.Now;
+                entity.UpdatedAt = DateTime.Now;
+                entity.ReceivesBloodData = null;
+
                 await _db._receiveBlood.CreateAsync(entity);
 
-                if (entityCreateDTO.ReceivesBloodData != null)
+                if (entityCreateDTO.ReceivesBloodData.Count > 0)
                 {
-                    await _db._receiveBloodData.CreateRangeAsync(
-                        _mapper.Map<List<ReceiveBloodData>>(entityCreateDTO.ReceivesBloodData.ToList()));
+                    var receivesData = new List<ReceiveBloodData>();
+                    var temp = new ReceiveBloodData();
+
+                    foreach (var item in entityCreateDTO.ReceivesBloodData)
+                    {
+                        temp = _mapper.Map<ReceiveBloodData>(item);
+                        temp.ReceiveBloodId = entity.Id;
+                        temp.CreatedAt = DateTime.Now;
+                        temp.UpdatedAt = DateTime.Now;
+
+                        receivesData.Add(temp);
+                    }
+
+                    await _db._receiveBloodData.CreateRangeAsync(receivesData);
+                    entity.ReceivesBloodData = receivesData;
                 }
 
                 _response.Result = _mapper.Map<ReceiveBloodDTO>(entity);
@@ -137,26 +158,26 @@ namespace EHR_API.Controllers
         }
 
 
-        ////[Authorize]
-        [HttpDelete("DeleteReceiveBlood")]
+        //[Authorize]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> DeleteReceiveBlood(int id, string userId, int admitId)
+        public async Task<ActionResult<APIResponse>> DeleteReceiveBlood(int id)
         {
             try
             {
-                if (id == 0 || userId == null || admitId == 0)
+                if (id < 1)
                 {
-                    return BadRequest(APIResponses.BadRequest("Invalid Ids"));
+                    return BadRequest(APIResponses.BadRequest("Invalid Id"));
                 }
 
                 var removedEntity = await _db._receiveBlood.GetAsync(
-                    expression: g => g.Id == id && g.RegistrationDataId == userId && g.AdmitId == admitId);
+                    expression: g => g.Id == id);
 
                 if (removedEntity == null)
                 {
-                    return BadRequest(APIResponses.BadRequest($"No object with  {id} and {userId} and {admitId}"));
+                    return BadRequest(APIResponses.BadRequest($"No object with  {id}"));
                 }
 
                 await _db._receiveBlood.DeleteAsync(removedEntity);
