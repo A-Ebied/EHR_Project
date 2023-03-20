@@ -1,6 +1,4 @@
 ﻿using EHR_API.Entities.DTOs.SurgeryProgressNoteDTOs;
-using EHR_API.Entities.Models;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EHR_API.Entities.DTOs.SurgeryDTOs
 {
@@ -13,7 +11,8 @@ namespace EHR_API.Entities.DTOs.SurgeryDTOs
         public string Description { get; set; }
         public string MedicalTeamId { get; set; }
         public int AdmitId { get; set; }
-
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
         public IEnumerable<SurgeryProgressNoteDTOForOthers> SurgeryProgressNotes { get; set; }
 
 

@@ -14,6 +14,9 @@ namespace EHR_API.Entities.Models
         public string ImageUrl { get; set; }
         public string MedicalTeamId { get; set; }
         public int SurgeryId { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+
         [NotMapped]
         public byte[] UserImage { get; set; }
         [NotMapped]

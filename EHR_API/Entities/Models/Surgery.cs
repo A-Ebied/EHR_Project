@@ -17,6 +17,8 @@ namespace EHR_API.Entities.Models
         public int AdmitId { get; set; }
         //public double Price { get; set; }
         //public bool UnderInsurance { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         public MedicalTeam MedicalTeam { get; set; }
         public Admit Admit { get; set; }
