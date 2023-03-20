@@ -9,7 +9,7 @@
         public DateTime UpdatedAt { get; set; } 
 
         public RegistrationData RegistrationData { get; set; }
-        //public ICollection<MedicalFacilityTeam> MedicalFacilityTeams { get; set; }
-        //public ICollection<Visit> Visits { get; set; }
+        public ICollection<MedicalFacilityTeam> MedicalFacilityTeams { get; set; }
+        public ICollection<Visit> Visits { get; set; }
     }
 }

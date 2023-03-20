@@ -14,6 +14,7 @@ namespace EHR_API.Entities.Models
         public string Place { get; set; }
         public DateTime AdmitAt { get; set; }
         public DateTime? LeaveAt { get; set; }
+        public string Note { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
