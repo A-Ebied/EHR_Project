@@ -25,6 +25,7 @@ namespace EHR_MVC.Repositories.Contracts
         Task<T> GetHealthFacilityManagersAsync<T>(string token = null);
         Task<T> GetRolesAsync<T>(string token = null);
         Task<T> GetUserAsync<T>(string id, string token = null);
+        Task<T> GetUsersAsync<T>(string token = null);
 
         Task<T> GetMedicalUsersAsync<T>(string token = null);
         Task<T> CreateMedicalTeamUserAsync<T>(MedicalTeamCreateDTO entity, string token = null);

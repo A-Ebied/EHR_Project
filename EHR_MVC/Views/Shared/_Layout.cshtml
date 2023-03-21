@@ -42,6 +42,8 @@
 
                                     <a class="dropdown-item" asp-controller="Authentication" asp-action="CreateUserMedicalData"> Create Medical Data</a>
 
+                                    <a class="dropdown-item" asp-controller="Admit" asp-action="Create"> Create Admit</a>
+
                                     @if (User.IsInRole(SD.Pharmacist) || User.IsInRole(SD.Physician) || User.IsInRole(SD.Nurse) || User.IsInRole(SD.Technician))
                                                     {
                                         <a class="dropdown-item" asp-controller="Authentication" asp-action="CreateMedicalTeam"> Create Medical Team</a>

@@ -1,8 +1,4 @@
-﻿using EHR_API.Entities.DTOs.HealthFacilityDTOs;
-using EHR_API.Entities.DTOs.ReceiveBloodDataDTOs;
-using EHR_API.Entities.DTOs.SurgeryDTOs;
-
-namespace EHR_API.Entities.DTOs.AdmitDTOs
+﻿namespace EHR_MVC.DTOs.AdmitDTOs
 {
     public class AdmitDTO
     {
@@ -14,11 +10,12 @@ namespace EHR_API.Entities.DTOs.AdmitDTOs
         public string RegistrationDataId { get; set; }
         public string Reason { get; set; }
         public string Place { get; set; }
+        public string Note { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        public HealthFacilityDTOForOthers HealthFacility { get; set; }
-        public ICollection<SurgeryDTOForOthers> Surgeries { get; set; }
-        public ICollection<ReceiveBloodDataDTOForOthers> ReceiveBloods { get; set; }
+        //public HealthFacilityDTOForOthers HealthFacility { get; set; }
+        //public ICollection<SurgeryDTOForOthers> Surgeries { get; set; }
+        //public ICollection<ReceiveBloodDataDTOForOthers> ReceiveBloods { get; set; }
     }
 }

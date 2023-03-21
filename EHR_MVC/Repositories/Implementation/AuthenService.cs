@@ -110,6 +110,16 @@ namespace EHR_MVC.Repositories.Implementation
                 Token = token
             });
         }
+        
+        public Task<T> GetUsersAsync<T>(string token = null)
+        {
+            return SendAsync<T>(new Models.APIRequest()
+            {
+                ApiType = ApiType.GET,
+                URL = $"{_url}/api/AuthenticationAPI/GetUsers",
+                Token = token
+            });
+        }
 
         public Task<T> LoginAsync<T>(LoginRequestDTO login)
         {

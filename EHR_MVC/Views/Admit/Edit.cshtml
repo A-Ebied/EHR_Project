@@ -1,0 +1,89 @@
+﻿@model EHR_MVC.VM.HealthFacilityUpdateVM
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1></h1>
+ 
+<br />
+<hr />
+<h1 style="text-align:center">Update the Health Facility</h1>
+<hr />
+<br />
+<div class="row">
+    <div class="col-md-5 m-auto">
+        <form asp-action="Edit">
+            <div asp-validation-summary="All" class="text-danger"></div>
+             
+            <input hidden asp-for="HealthFacility.Id" />
+            <div class="form-group">
+                <label asp-for="HealthFacility.RegistrationDataId" class="control-label"></label>
+                <select asp-for="HealthFacility.RegistrationDataId" class="form-select" asp-items="@Model.ManagerList">
+                    <option disabled selected>Select Manager</option>
+                </select>
+                <span asp-validation-for="HealthFacility.RegistrationDataId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HealthFacility.Title" class="control-label"></label>
+                <input asp-for="HealthFacility.Title" class="form-control" />
+                <span asp-validation-for="HealthFacility.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HealthFacility.Type" class="control-label"></label>
+                <input asp-for="HealthFacility.Type" class="form-control" />
+                <span asp-validation-for="HealthFacility.Type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HealthFacility.SubordinateTo" class="control-label"></label>
+                <input asp-for="HealthFacility.SubordinateTo" class="form-control" />
+                <span asp-validation-for="HealthFacility.SubordinateTo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HealthFacility.Phone1" class="control-label"></label>
+                <input asp-for="HealthFacility.Phone1" class="form-control" />
+                <span asp-validation-for="HealthFacility.Phone1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HealthFacility.Phone2" class="control-label"></label>
+                <input asp-for="HealthFacility.Phone2" class="form-control" />
+                <span asp-validation-for="HealthFacility.Phone2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HealthFacility.Phone3" class="control-label"></label>
+                <input asp-for="HealthFacility.Phone3" class="form-control" />
+                <span asp-validation-for="HealthFacility.Phone3" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HealthFacility.Email" class="control-label"></label>
+                <input asp-for="HealthFacility.Email" class="form-control" />
+                <span asp-validation-for="HealthFacility.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HealthFacility.GovernorateId" class="control-label"></label>
+                <select asp-for="HealthFacility.GovernorateId" class="form-select" asp-items="@Model.GovernoratesList">
+                    <option disabled selected>Select Governorate</option>
+                </select>
+                <span asp-validation-for="HealthFacility.GovernorateId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HealthFacility.Address" class="control-label"></label>
+                <input asp-for="HealthFacility.Address" class="form-control" />
+                <span asp-validation-for="HealthFacility.Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HealthFacility.Description" class="control-label"></label>
+                <input asp-for="HealthFacility.Description" class="form-control" />
+                <span asp-validation-for="HealthFacility.Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group m-3 p-3">
+                <input type="submit" value="Save" class="btn btn-primary" /> ||  <a asp-action="Index">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

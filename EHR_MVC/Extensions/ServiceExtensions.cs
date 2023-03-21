@@ -21,6 +21,9 @@ namespace EHR_API.Extensions
 
             services.AddHttpClient<IUserInsuranceService, UserInsuranceService>();
             services.AddScoped<IUserInsuranceService, UserInsuranceService>();
+            
+            services.AddHttpClient<IAdmitService, AdmitService>();
+            services.AddScoped<IAdmitService, AdmitService>();
         }
 
     }

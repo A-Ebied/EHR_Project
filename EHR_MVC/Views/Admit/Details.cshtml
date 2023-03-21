@@ -1,0 +1,127 @@
+﻿@model EHR_MVC.DTOs.HealthFacilityDTOs.HealthFacilityDTO
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor accessor
+@using EHR_MVC.Extensions;
+@{
+    ViewData["Title"] = "Details";
+}
+
+<br />
+<hr />
+<h1 style="text-align:center">Details of the Health Facility</h1>
+<hr />
+<br />
+
+<div class="col-md-5 m-auto">
+    <dl class="row">
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Type)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.SubordinateTo)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.SubordinateTo)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Phone1)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Phone1)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Phone2)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Phone2)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Phone3)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Phone3)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.CreatedAt)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.CreatedAt)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.UpdateddAt)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.UpdateddAt)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Governorate)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Governorate)
+        </dd>
+        <h5>Manager</h5>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Manager.Name)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Manager.Name)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Manager.UserImageUrl)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Manager.UserImageUrl)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Manager.Specialization)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Manager.Specialization)
+        </dd>
+    </dl>
+
+    <div class="form-group m-3 p-3">
+        @if (accessor.HttpContext.Session.GetString(SD.JWT) != null && accessor.HttpContext.Session.GetString(SD.JWT).ToString().Length > 0)
+        {
+            @if (User.IsInRole(SD.SystemManager))
+            {
+                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> <span> ||</span>
+
+            }
+        }
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>
+

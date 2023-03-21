@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EHR_API.Entities.DTOs.AdmitDTOs
+namespace EHR_MVC.DTOs.AdmitDTOs
 {
     public class AdmitCreateDTO
     {     
@@ -17,5 +17,6 @@ namespace EHR_API.Entities.DTOs.AdmitDTOs
         public string Reason { get; set; }
         [Required]
         public string Place { get; set; }
+        public string Note { get; set; }
     }
 }

@@ -1,0 +1,73 @@
+﻿@using EHR_MVC.Extensions;
+@model EHR_MVC.VM.AdmitCreateVM
+
+@{
+    ViewData["Title"] = "Create Admit";
+}
+  
+<br />
+<hr />
+<h1 style="text-align:center">Create Admit</h1>
+<hr />
+<br />
+<div class="row">
+    <div class="col-md-5 m-auto">
+        <form asp-action="Create">
+            <div asp-validation-summary="All" class="text-danger"></div>
+           
+            <input asp-for="Admit.MedicalTeamId" class="form-control" hidden value="@User.Claims.ToList()[0].Value" />
+            <div class="form-group">
+                <label asp-for="Admit.RegistrationDataId" class="control-label"></label>
+                <select asp-for="Admit.RegistrationDataId" class="form-select" asp-items="@Model.UsersList">
+                    <option disabled selected>Select User</option>
+                </select>
+                <span asp-validation-for="Admit.RegistrationDataId" class="text-danger"></span>
+            </div>
+             
+            <div class="form-group">
+                <label asp-for="Admit.Reason" class="control-label"></label>
+                <input asp-for="Admit.Reason" class="form-control" />
+                <span asp-validation-for="Admit.Reason" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Admit.Place" class="control-label"></label>
+                <input asp-for="Admit.Place" class="form-control" />
+                <span asp-validation-for="Admit.Place" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Admit.AdmitAt" class="control-label"></label>
+                <input asp-for="Admit.AdmitAt" class="form-control" type="datetime-local"/>
+                <span asp-validation-for="Admit.AdmitAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Admit.LeaveAt" class="control-label"></label>
+                <input asp-for="Admit.LeaveAt" class="form-control" type="datetime-local" />
+                <span asp-validation-for="Admit.LeaveAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Admit.Note" class="control-label"></label>
+                <input asp-for="Admit.Note" class="form-control" />
+                <span asp-validation-for="Admit.Note" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Admit.HealthFacilityId" class="control-label"></label>
+                <select asp-for="Admit.HealthFacilityId" class="form-select" asp-items="@Model.HealthFacilitiesList">
+                    <option disabled selected>Select Health Facility</option>
+                </select>
+                <span asp-validation-for="Admit.HealthFacilityId" class="text-danger"></span>
+            
+
+            <div class="form-group m-3 p-3">
+                <input type="submit" value="Create" class="btn btn-primary" />  
+            </div>
+            <div class="form-group">
+            </div>
+        </form>
+    </div>
+</div>
+ 
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
