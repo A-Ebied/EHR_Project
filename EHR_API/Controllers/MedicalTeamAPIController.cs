@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using EHR_API.Entities;
 using EHR_API.Entities.DTOs.UserDataDTOs.MedicalTeamDTOs;
+using EHR_API.Entities.Models;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -16,12 +18,14 @@ namespace EHR_API.Controllers
         protected APIResponse _response;
         private readonly IMapper _mapper;
         private readonly IMainRepository _db;
+        private readonly UserManager<RegistrationData> _userManager;
 
-        public MedicalTeamAPIController(IMainRepository db, IMapper mapper)
+        public MedicalTeamAPIController(IMainRepository db, IMapper mapper, UserManager<RegistrationData> userManager)
         {
             _db = db;
             _mapper = mapper;
             _response = new();
+            _userManager = userManager;
         }
 
         //[Authorize(Roles = SD.HealthFacilityManager)]
@@ -38,6 +42,13 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
 
+                IEnumerable<string> roles = await _userManager.GetRolesAsync(await _db._authentication.GetAsync(expression: g => g.Id.ToLower() == entityCreateDTO.Id.ToLower()));
+
+                if (roles.Contains("SystemManager") == true || roles.Contains("Patient") == true)
+                {
+                    return BadRequest(APIResponses.BadRequest("The object is not a medical member"));
+                }
+
                 if (await _db._medicalTeam.GetAsync(expression: g => g.Id.ToLower() == entityCreateDTO.Id.ToLower()) != null)
                 {
                     return BadRequest(APIResponses.BadRequest("The object is already exists"));
@@ -46,7 +57,27 @@ namespace EHR_API.Controllers
                 var entity = _mapper.Map<MedicalTeam>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
                 entity.UpdatedAt = DateTime.Now;
+                entity.MedicalFacilityTeams = null;
+
                 await _db._medicalTeam.CreateAsync(entity);
+
+                if (entityCreateDTO.MedicalFacilityTeams.Count > 0)
+                {
+                    var facilityTeam = new List<MedicalFacilityTeam>();
+                    var temp = new MedicalFacilityTeam();
+
+                    foreach (var item in entityCreateDTO.MedicalFacilityTeams)
+                    {
+                        temp = _mapper.Map<MedicalFacilityTeam>(item);
+                        temp.MedicalTeamId = entity.Id;
+                        temp.CreatedAt = DateTime.Now;
+
+                        facilityTeam.Add(temp);
+                    }
+
+                    await _db._facilityTeam.CreateRangeAsync(facilityTeam);
+                    entity.MedicalFacilityTeams = facilityTeam;
+                }
 
                 _response.Result = _mapper.Map<MedicalTeamDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;

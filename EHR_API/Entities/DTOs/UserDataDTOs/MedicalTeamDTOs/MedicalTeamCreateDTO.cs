@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EHR_API.Entities.DTOs.MedicalFacilityTeamDTOs;
+using System.ComponentModel.DataAnnotations;
 
 namespace EHR_API.Entities.DTOs.UserDataDTOs.MedicalTeamDTOs
 {
@@ -10,5 +11,7 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs.MedicalTeamDTOs
         public string MedicalSpecialization { get; set; }
         [Required]
         public string Degree { get; set; }
+
+        public ICollection<MedicalFacilityTeamCreateDTO> MedicalFacilityTeams { get; set; }
     }
 }

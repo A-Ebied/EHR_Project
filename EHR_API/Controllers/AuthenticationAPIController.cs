@@ -404,6 +404,12 @@ namespace EHR_API.Controllers
                     return NotFound(APIResponses.NotFound($"No object with Id = {userId} "));
                 }
 
+                if (entity.MedicalTeam != null)
+                {
+                    entity.MedicalTeam.MedicalFacilityTeams = await _db._facilityTeam.GetAllAsync(
+                        expression: t => t.MedicalTeamId == userId);
+                }
+
                 var newEntity = _mapper.Map<RegistrationDataDTO>(entity);
                 newEntity.Roles = await _userManager.GetRolesAsync(_mapper.Map<RegistrationData>(entity));
 
