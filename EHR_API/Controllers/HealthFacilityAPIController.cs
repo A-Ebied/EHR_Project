@@ -142,7 +142,7 @@ namespace EHR_API.Controllers
 
                 var entity = await _db._healthFacility.GetAsync(
                     expression: g => g.Id == id,
-                     includeProperties: "RegistrationData");
+                     includeProperties: "RegistrationData,MedicalFacilityTeams");
 
                 entity.RegistrationData = await _db._authentication.GetAsync(
                     expression: r => r.Id == entity.RegistrationData.Id,

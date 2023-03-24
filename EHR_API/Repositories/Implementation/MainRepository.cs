@@ -13,14 +13,14 @@ namespace EHR_API.Repositories.Implementation
             _governorate = new GovernorateRepository(db);
             _healthFacility = new HealthFacilityRepository(db);
             _authentication = new AuthenticationRepository(mapper, userManager, configuration, db);
-            _personal = new PersonalDataRepository(db, webHost);
+            //_personal = new PersonalDataRepository(db, webHost);
             _medicalTeam = new MedicalTeamRepository(db);
-            _medicalData = new MedicalDataRepository(db, webHost);
+            //_medicalData = new MedicalDataRepository(db, webHost);
              _userInsurance = new UserInsuranceRepository(db);
             _role = new RoleRepository(db);
             _allergy = new AllergyRepository(db);
             _allergyDrug = new AllergyDrugRepository(db);
-            _medication = new MedicationRepository(db);
+            _medication = new MedicationRepository(db, webHost);
             _icd = new ICDRepository(db);
             _badHabit = new BadHabitRepository(db);
             _bloodDonation = new BloodDonationRepository(db);
