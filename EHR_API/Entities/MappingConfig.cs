@@ -29,6 +29,7 @@ using EHR_API.Entities.DTOs.SurgeryProgressNoteDTOs;
 using EHR_API.Entities.DTOs.VisitDTOs;
 using EHR_API.Entities.DTOs.AdmitDTOs;
 using EHR_API.Entities.DTOs.BadHabitDTOs;
+using EHR_API.Entities.DTOs.MedicalFacilityTeamDTOs;
 
 namespace EHR_API.Entities
 {
@@ -167,6 +168,11 @@ namespace EHR_API.Entities
             CreateMap<BadHabit, BadHabitUpdateDTO>().ReverseMap();
             CreateMap<BadHabit, BadHabitDTO>().ReverseMap();
             CreateMap<BadHabit, BadHabitDTOForOthers>().ReverseMap();
+
+            CreateMap<MedicalFacilityTeam, MedicalFacilityTeamCreateDTO>().ReverseMap();
+            //CreateMap<MedicalFacilityTeam, MedicalFacilityTeamUpdateDTO>().ReverseMap();
+            CreateMap<MedicalFacilityTeam, MedicalFacilityTeamDTO>().ReverseMap();
+            //CreateMap<MedicalFacilityTeam, MedicalFacilityTeamDTOForOthers>().ReverseMap();
         }
     }
 }

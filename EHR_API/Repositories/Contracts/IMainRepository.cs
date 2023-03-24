@@ -30,5 +30,6 @@
         ISurgeryRepository _surgery { get; }
         ISurgeryProgressNoteRepository _surgeryProgressNote { get; }
         IAdmitRepository _admit { get; }
+        IMedicalFacilityTeamRepository _facilityTeamRepository { get; }
     }
 }

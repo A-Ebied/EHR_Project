@@ -14,7 +14,7 @@ namespace EHR_API.Extensions
             APIResponse _response = new();
             _response.StatusCode = HttpStatusCode.BadRequest;
             _response.IsSuccess = false;
-            _response.Result = "There are no result";
+            _response.Result = null;
             _response.Errors = new List<string>() { error };
             return _response;
         } 
@@ -24,7 +24,7 @@ namespace EHR_API.Extensions
             APIResponse _response = new();
             _response.StatusCode = HttpStatusCode.BadRequest;
             _response.IsSuccess = false;
-            _response.Result = "There are no result";
+            _response.Result = null;
             _response.Errors = new List<string>() { error };
             return _response;
         } 
@@ -33,6 +33,7 @@ namespace EHR_API.Extensions
         {
             APIResponse _response = new();
             _response.IsSuccess = false;
+            _response.Result = null;
             _response.StatusCode = HttpStatusCode.InternalServerError;
             _response.Errors = new List<string> { ex.GetBaseException().ToString() };
             return _response;
@@ -42,6 +43,7 @@ namespace EHR_API.Extensions
             APIResponse _response = new();
             _response.Errors = new() { "The Email and Password are wrong" };
             _response.IsSuccess = false;
+            _response.Result = null;
             _response.StatusCode = HttpStatusCode.Unauthorized;
             return _response;
         }
