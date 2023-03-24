@@ -162,6 +162,7 @@ namespace EHR_API.Controllers
             }
         }
 
+        /*
         //[Authorize]
         [HttpPost("CreateUserInsurances")]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -208,6 +209,8 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
+
+        */
 
         //[Authorize]
         [HttpDelete("{id}")]

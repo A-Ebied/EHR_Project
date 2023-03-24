@@ -1,4 +1,5 @@
-﻿using EHR_API.Entities.DTOs.UserDataDTOs;
+﻿using EHR_API.Entities.DTOs.MedicalFacilityTeamDTOs;
+using EHR_API.Entities.DTOs.UserDataDTOs;
 using System.ComponentModel;
 
 namespace EHR_API.Entities.DTOs.HealthFacilityDTOs
@@ -22,5 +23,6 @@ namespace EHR_API.Entities.DTOs.HealthFacilityDTOs
 
         public string Governorate { get; set; }
         public UserDTOForOthers Manager { get; set; }
+        public ICollection<MedicalFacilityTeamDTO> MedicalFacilityTeams { get; set; }
     }
 }

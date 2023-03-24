@@ -2,5 +2,8 @@
 
 namespace EHR_API.Repositories.Contracts
 {
-    public interface IMedicalFacilityTeamRepository : IRepositoryBase<MedicalFacilityTeam> { }
+    public interface IMedicalFacilityTeamRepository : IRepositoryBase<MedicalFacilityTeam> 
+    {
+        Task CreateRangeAsync(List<MedicalFacilityTeam> entities);
+    }
 }

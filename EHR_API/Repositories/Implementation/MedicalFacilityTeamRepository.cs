@@ -6,7 +6,17 @@ namespace EHR_API.Repositories.Implementation
 {
     public class MedicalFacilityTeamRepository : RepositoryBase<MedicalFacilityTeam>, IMedicalFacilityTeamRepository
     {
-        public MedicalFacilityTeamRepository(ApplicationDbContext db) : base(db) { }
+        private readonly ApplicationDbContext _db;
+        public MedicalFacilityTeamRepository(ApplicationDbContext db) : base(db)
+        {
+            _db = db;
+        }
+
+        public async Task CreateRangeAsync(List<MedicalFacilityTeam> entities)
+        {
+            await _dbSet.AddRangeAsync(entities);
+            await _db.SaveChangesAsync();
+        }
 
     }
 }

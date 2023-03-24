@@ -38,7 +38,7 @@ namespace EHR_API.Repositories.Implementation
             _surgery = new SurgeryRepository(db);
             _surgeryProgressNote = new SurgeryProgressNoteRepository(db);
             _admit = new AdmitRepository(db);
-            _facilityTeamRepository = new MedicalFacilityTeamRepository(db);
+            _facilityTeam = new MedicalFacilityTeamRepository(db);
         }
 
         public IGovernorateRepository _governorate { get; private set; }
@@ -69,6 +69,6 @@ namespace EHR_API.Repositories.Implementation
         public ISurgeryRepository _surgery { get; private set; }
         public ISurgeryProgressNoteRepository _surgeryProgressNote { get; private set; }
         public IAdmitRepository _admit { get; private set; }
-        public IMedicalFacilityTeamRepository _facilityTeamRepository { get; private set; }
+        public IMedicalFacilityTeamRepository _facilityTeam { get; private set; }
     }
 }

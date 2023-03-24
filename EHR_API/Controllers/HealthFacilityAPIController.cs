@@ -53,7 +53,27 @@ namespace EHR_API.Controllers
                 var entity = _mapper.Map<HealthFacility>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
                 entity.UpdateddAt = DateTime.Now;
+                entity.MedicalFacilityTeams = null;
+
                 await _db._healthFacility.CreateAsync(entity);
+
+                if (entityCreateDTO.MedicalFacilityTeams.Count > 0)
+                {
+                    var facilityTeam = new List<MedicalFacilityTeam>();
+                    var temp = new MedicalFacilityTeam();
+
+                    foreach (var item in entityCreateDTO.MedicalFacilityTeams)
+                    {
+                        temp = _mapper.Map<MedicalFacilityTeam>(item);
+                        temp.HealthFacilityId = entity.Id;
+                        temp.CreatedAt = DateTime.Now;
+
+                        facilityTeam.Add(temp);
+                    }
+
+                    await _db._facilityTeam.CreateRangeAsync(facilityTeam);
+                    entity.MedicalFacilityTeams = facilityTeam;
+                }
 
                 _response.Result = _mapper.Map<HealthFacilityDTOForOthers>(entity);
                 _response.StatusCode = HttpStatusCode.Created;

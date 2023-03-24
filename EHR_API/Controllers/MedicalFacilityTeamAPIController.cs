@@ -50,7 +50,7 @@ namespace EHR_API.Controllers
                 var entity = _mapper.Map<MedicalFacilityTeam>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
                  
-                await _db._facilityTeamRepository.CreateAsync(entity);
+                await _db._facilityTeam.CreateAsync(entity);
                  
                 _response.Result = _mapper.Map<MedicalFacilityTeamDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;
@@ -77,13 +77,13 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id less than 1"));
                 }
 
-                var removedEntity = await _db._facilityTeamRepository.GetAsync(expression: g => g.Id == id);
+                var removedEntity = await _db._facilityTeam.GetAsync(expression: g => g.Id == id);
                 if (removedEntity == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
                 }
 
-                await _db._facilityTeamRepository.DeleteAsync(removedEntity);
+                await _db._facilityTeam.DeleteAsync(removedEntity);
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = "The object has been deleted";
