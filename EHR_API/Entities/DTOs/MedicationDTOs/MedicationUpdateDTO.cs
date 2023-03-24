@@ -6,7 +6,8 @@ namespace EHR_API.Entities.DTOs.MedicationDTOs
     {
         [Required]
         public int Id { get; set; }
-        public byte[] MedicationImage { get; set; }
+        //public byte[] MedicationImage { get; set; }
+        public IFormFile MedicationImage { get; set; }
         public string ImageName { get; set; }
         [Required]
         public string Name { get; set; }
