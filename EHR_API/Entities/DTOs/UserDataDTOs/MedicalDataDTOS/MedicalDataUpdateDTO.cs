@@ -13,6 +13,6 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs.MedicalDataDTOs
         public string MedicalHistory { get; set; }
         //public byte[] DNAImageResult { get; set; }
         public IFormFile DNAImageResult { get; set; }
-        public string ImageName { get; set; }
+        //public string ImageName { get; set; }
     }
 }

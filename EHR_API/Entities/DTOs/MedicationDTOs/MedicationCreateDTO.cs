@@ -10,6 +10,6 @@ namespace EHR_API.Entities.DTOs.MedicationDTOs
         public string Contraindication { get; set; }
         //public byte[] MedicationImage { get; set; }
         public IFormFile MedicationImage { get; set; }
-        public string ImageName { get; set; }
+        //public string ImageName { get; set; }
     }
 }

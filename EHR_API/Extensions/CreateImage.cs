@@ -2,9 +2,9 @@
 {
     public static class CreateImage 
     {
-        public static string CreateFiles(IWebHostEnvironment _webHost, /*byte[] image,*/ IFormFile image, string imageName ,string folderName) 
+        public static string CreateFiles(IWebHostEnvironment _webHost, /*byte[] image,*/ IFormFile image, /*string imageName ,*/string folderName) 
         {
-            var extension = Path.GetExtension(imageName);
+            var extension = Path.GetExtension(image.FileName);
 
             //var stream = new MemoryStream(image);
             //IFormFile file = new FormFile(stream, 0, stream.Length, imageName, extension);

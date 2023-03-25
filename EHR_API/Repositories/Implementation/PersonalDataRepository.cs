@@ -20,9 +20,9 @@ namespace EHR_API.Repositories.Implementation
         {
 
 
-            if (entity.UserImage.Length > 0)
+            if (entity.UserImage != null && entity.UserImage.Length > 0)
             {
-                var path = CreateImage.CreateFiles(_webHost, entity.UserImage, entity.ImageName, "UserImage");
+                var path = CreateImage.CreateFiles(_webHost, entity.UserImage, /*entity.ImageName, */"UserImage");
                 entity.UserImageUrl = path;
             }
 
@@ -43,7 +43,7 @@ namespace EHR_API.Repositories.Implementation
                     }
                 }
 
-                var path = CreateImage.CreateFiles(_webHost, entity.UserImage, entity.ImageName, "UserImage");
+                var path = CreateImage.CreateFiles(_webHost, entity.UserImage, /*entity.ImageName,*/ "UserImage");
                 entity.UserImageUrl = path;
             }
 

@@ -18,9 +18,9 @@ namespace EHR_API.Repositories.Implementation
 
         public override async Task CreateAsync(MedicalData entity)
         {
-            if (entity.DNAImageResult.Length > 0)
+            if (entity.DNAImageResult != null && entity.DNAImageResult.Length > 0)
             {
-                var path = CreateImage.CreateFiles(_webHost, entity.DNAImageResult, entity.ImageName, "DNAImageResult");
+                var path = CreateImage.CreateFiles(_webHost, entity.DNAImageResult,/* entity.ImageName,*/ "DNAImageResult");
                 entity.DNAImageResultUrl = path;
             }
 
@@ -41,7 +41,7 @@ namespace EHR_API.Repositories.Implementation
                     }
                 }
 
-                var path = CreateImage.CreateFiles(_webHost, entity.DNAImageResult, entity.ImageName, "DNAImageResult");
+                var path = CreateImage.CreateFiles(_webHost, entity.DNAImageResult, /*entity.ImageName,*/ "DNAImageResult");
                 entity.DNAImageResultUrl = path;
             }
 

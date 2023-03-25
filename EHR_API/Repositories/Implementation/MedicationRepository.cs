@@ -18,9 +18,9 @@ namespace EHR_API.Repositories.Implementation
 
         public override async Task CreateAsync(Medication entity)
         {
-            if (entity.MedicationImage.Length > 0)
+            if (entity.MedicationImage != null && entity.MedicationImage.Length > 0)
             {
-                var path = CreateImage.CreateFiles(_webHost, entity.MedicationImage, entity.ImageName, "Medication");
+                var path = CreateImage.CreateFiles(_webHost, entity.MedicationImage, /*entity.ImageName, */"Medication");
                 entity.ImageUrl = path;
             }
 
@@ -41,7 +41,7 @@ namespace EHR_API.Repositories.Implementation
                     }
                 }
 
-                var path = CreateImage.CreateFiles(_webHost, entity.MedicationImage, entity.ImageName, "Medication");
+                var path = CreateImage.CreateFiles(_webHost, entity.MedicationImage, /*entity.ImageName,*/ "Medication");
                 entity.ImageUrl = path;
             }
 
