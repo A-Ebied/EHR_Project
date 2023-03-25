@@ -6,15 +6,10 @@ namespace EHR_API.Entities.DTOs.RadLabResultDTOs
     {
         [Required]
         public int Id { get; set; }
+        public string ResultNote { get; set; }
         [Required]
-        public string Type { get; set; }
+        public int VisitRadLabTestId { get; set; }
         [Required]
-        public string Allergen { get; set; }
-        public string Reaction { get; set; }
-        public string Instruction { get; set; }
-        [Required]
-        public bool IsChronic { get; set; }
-        [Required]
-        public string RegistrationDataId { get; set; }
+        public int HealthFacilityId { get; set; }
     }
 }

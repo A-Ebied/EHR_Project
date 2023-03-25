@@ -1,18 +1,17 @@
-﻿using EHR_API.Entities.DTOs.AllergyDrugDTOs;
+﻿using EHR_API.Entities.DTOs.HealthFacilityDTOs;
+using EHR_API.Entities.DTOs.RadLabResultImageDTOs;
 
 namespace EHR_API.Entities.DTOs.RadLabResultDTOs
 {
     public class RadLabResultDTO
     {
         public int Id { get; set; }
-        public string Type { get; set; }
-        public string Allergen { get; set; }
-        public string Reaction { get; set; }
-        public string Instruction { get; set; }
-        public bool IsChronic { get; set; }
+        public string ResultNote { get; set; }
+        public int VisitRadLabTestId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        public IEnumerable<AllergyDrugDTOForOthers> AllergyDrugs { get; set; }
+        public HealthFacilityDTOForOthers HealthFacility { get; set; }
+        public ICollection<RadLabResultImageDTOForOthers> RadiologyResultImages { get; set; }
     }
 }

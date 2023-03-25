@@ -12,6 +12,7 @@ namespace EHR_API.Entities.DTOs.RadLabResultDTOs
         public int VisitRadLabTestId { get; set; }
         [Required]
         public int HealthFacilityId { get; set; }
+
         public ICollection<RadLabResultImagesCreateDTO> RadiologyResultImages { get; set; }
     }
 }
