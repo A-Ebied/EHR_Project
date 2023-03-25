@@ -1,12 +1,9 @@
-﻿using EHR_API.Entities.Models.UsersData;
-using System.ComponentModel.DataAnnotations;
+﻿using EHR_API.Entities.DTOs.UserDataDTOs;
 
-namespace EHR_API.Entities.Models
+namespace EHR_API.Entities.DTOs.ContraindicationDTOs
 {
-    //موانع
-    public class Contraindication
+    public class ContraindicationDTO
     {
-        [Key]
         public int Id { get; set; }
         public string MedicalCondition { get; set; }
         public string Contraindications { get; set; }
@@ -14,10 +11,7 @@ namespace EHR_API.Entities.Models
         public bool IsChronic { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-
-        public string MedicalTeamId { get; set; }
-        public MedicalTeam MedicalTeam { get; set; }
+        public UserDTOForOthers MedicalTeam { get; set; }
         public string RegistrationDataId { get; set; }
-        public RegistrationData RegistrationData { get; set; }
     }
 }

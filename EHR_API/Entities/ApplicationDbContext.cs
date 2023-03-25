@@ -91,9 +91,6 @@ namespace EHR_API.Entities
             modelBuilder.Entity<ChronicDiseaseDrug>()
                 .HasIndex(p => new { p.ChronicDiseaseId, p.MedicationId }).IsUnique();
 
-            modelBuilder.Entity<Contraindication>()
-                .HasIndex(p => new { p.RegistrationDataId, p.MedicationId }).IsUnique();
-
             modelBuilder.Entity<MedicalFacilityTeam>()
                 .HasIndex(p => new { p.HealthFacilityId, p.MedicalTeamId }).IsUnique();
 

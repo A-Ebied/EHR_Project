@@ -30,6 +30,7 @@ using EHR_API.Entities.DTOs.VisitDTOs;
 using EHR_API.Entities.DTOs.AdmitDTOs;
 using EHR_API.Entities.DTOs.BadHabitDTOs;
 using EHR_API.Entities.DTOs.MedicalFacilityTeamDTOs;
+using EHR_API.Entities.DTOs.ContraindicationDTOs;
 
 namespace EHR_API.Entities
 {
@@ -173,6 +174,11 @@ namespace EHR_API.Entities
             //CreateMap<MedicalFacilityTeam, MedicalFacilityTeamUpdateDTO>().ReverseMap();
             CreateMap<MedicalFacilityTeam, MedicalFacilityTeamDTO>().ReverseMap();
             //CreateMap<MedicalFacilityTeam, MedicalFacilityTeamDTOForOthers>().ReverseMap();
+
+            CreateMap<Contraindication, ContraindicationCreateDTO>().ReverseMap();
+            CreateMap<Contraindication, ContraindicationUpdateDTO>().ReverseMap();
+            CreateMap<Contraindication, ContraindicationDTO>().ReverseMap();
+            CreateMap<Contraindication, ContraindicationDTOForOthers>().ReverseMap();
         }
     }
 }

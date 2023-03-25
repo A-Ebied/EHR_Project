@@ -88,7 +88,7 @@ namespace EHR_API.Controllers
                 var entity = _mapper.Map<Medication>(entityUpdateDTO);
                 entity.UpdatedAt = DateTime.Now;
                 entity.CreatedAt = oldOne.CreatedAt;
-                await _db._medication.UpdateAsync(entity);
+                await _db._medication.UpdateAsync(entity, oldOne);
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = _mapper.Map<MedicationDTO>(entity);

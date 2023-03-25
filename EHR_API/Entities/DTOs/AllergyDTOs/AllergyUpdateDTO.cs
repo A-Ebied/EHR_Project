@@ -16,7 +16,5 @@ namespace EHR_API.Entities.DTOs.AllergyDTOs
         public bool IsChronic { get; set; }
         [Required]
         public string RegistrationDataId { get; set; }
-
-        // public ICollection<AllergyDrug> AllergyDrugs { get; set; }
     }
 }
