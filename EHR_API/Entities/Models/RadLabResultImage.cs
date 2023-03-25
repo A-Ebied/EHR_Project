@@ -7,7 +7,6 @@ namespace EHR_API.Entities.Models
     {
         [Key]
         public int Id { get; set; }
-        public string Note { get; set; }
         public string ResultImageUrl { get; set; }
         public int RadLabResultId { get; set; }
         [NotMapped]

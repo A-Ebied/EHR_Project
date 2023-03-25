@@ -31,6 +31,8 @@ using EHR_API.Entities.DTOs.AdmitDTOs;
 using EHR_API.Entities.DTOs.BadHabitDTOs;
 using EHR_API.Entities.DTOs.MedicalFacilityTeamDTOs;
 using EHR_API.Entities.DTOs.ContraindicationDTOs;
+using EHR_API.Entities.DTOs.RadLabResultDTOs;
+using EHR_API.Entities.DTOs.RadLabResultImageDTOs;
 
 namespace EHR_API.Entities
 {
@@ -179,6 +181,17 @@ namespace EHR_API.Entities
             CreateMap<Contraindication, ContraindicationUpdateDTO>().ReverseMap();
             CreateMap<Contraindication, ContraindicationDTO>().ReverseMap();
             CreateMap<Contraindication, ContraindicationDTOForOthers>().ReverseMap();
+
+            CreateMap<RadLabResult, RadLabResultCreateDTO>().ReverseMap();
+            CreateMap<RadLabResult, RadLabResultUpdateDTO>().ReverseMap();
+            CreateMap<RadLabResult, RadLabResultDTO>().ReverseMap();
+            CreateMap<RadLabResult, RadLabResultDTOForOthers>().ReverseMap();
+
+            CreateMap<RadLabResultImage, RadLabResultImageCreateDTO>().ReverseMap();
+            CreateMap<RadLabResultImage, RadLabResultImagesCreateDTO>().ReverseMap();
+            CreateMap<RadLabResultImage, RadLabResultImageUpdateDTO>().ReverseMap();
+            CreateMap<RadLabResultImage, RadLabResultImageDTO>().ReverseMap();
+            CreateMap<RadLabResultImage, RadLabResultImageDTOForOthers>().ReverseMap();
         }
     }
 }
