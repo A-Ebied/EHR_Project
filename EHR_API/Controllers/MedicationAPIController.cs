@@ -30,7 +30,7 @@ namespace EHR_API.Controllers
         [HttpPost("CreateMedication")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> CreateMedication([FromBody] MedicationCreateDTO entityCreateDTO)
+        public async Task<ActionResult<APIResponse>> CreateMedication([FromForm] MedicationCreateDTO entityCreateDTO)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> UpdateMedication(int id, [FromBody] MedicationUpdateDTO entityUpdateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateMedication(int id, [FromForm] MedicationUpdateDTO entityUpdateDTO)
         {
             try
             {
