@@ -1,10 +1,4 @@
-﻿using EHR_API.Entities.DTOs.HealthFacilityDTOs;
-using EHR_API.Entities.DTOs.ReceiveBloodDataDTOs;
-using EHR_API.Entities.DTOs.SurgeryDTOs;
-using EHR_API.Entities.Models;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace EHR_API.Entities.DTOs.RadLabResultImageDTOs
+﻿namespace EHR_API.Entities.DTOs.RadLabResultImageDTOs
 {
     public class RadLabResultImageDTO
     {

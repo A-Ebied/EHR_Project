@@ -68,7 +68,7 @@ namespace EHRAPI.Migrations
 
                     b.HasIndex("RegistrationDataId");
 
-                    b.ToTable("Admits");
+                    b.ToTable("Admits", (string)null);
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.Allergy", b =>
@@ -107,7 +107,7 @@ namespace EHRAPI.Migrations
 
                     b.HasIndex("RegistrationDataId");
 
-                    b.ToTable("Allergies");
+                    b.ToTable("Allergies", (string)null);
 
                     b.HasData(
                         new
@@ -175,7 +175,7 @@ namespace EHRAPI.Migrations
                     b.HasIndex("AllergyId", "MedicationId")
                         .IsUnique();
 
-                    b.ToTable("AllergyDrugs");
+                    b.ToTable("AllergyDrugs", (string)null);
 
                     b.HasData(
                         new
@@ -223,7 +223,7 @@ namespace EHRAPI.Migrations
 
                     b.HasIndex("RegistrationDataId");
 
-                    b.ToTable("BadHabits");
+                    b.ToTable("BadHabits", (string)null);
 
                     b.HasData(
                         new
@@ -284,7 +284,7 @@ namespace EHRAPI.Migrations
 
                     b.HasIndex("RegistrationDataId");
 
-                    b.ToTable("BloodDonations");
+                    b.ToTable("BloodDonations", (string)null);
 
                     b.HasData(
                         new
@@ -335,7 +335,7 @@ namespace EHRAPI.Migrations
                         .IsUnique()
                         .HasFilter("[RegistrationDataId] IS NOT NULL AND [ICDId] IS NOT NULL");
 
-                    b.ToTable("ChronicDiseases");
+                    b.ToTable("ChronicDiseases", (string)null);
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.ChronicDiseaseDrug", b =>
@@ -365,7 +365,7 @@ namespace EHRAPI.Migrations
                     b.HasIndex("ChronicDiseaseId", "MedicationId")
                         .IsUnique();
 
-                    b.ToTable("ChronicDiseaseDrugs");
+                    b.ToTable("ChronicDiseaseDrugs", (string)null);
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.Contraindication", b =>
@@ -406,7 +406,7 @@ namespace EHRAPI.Migrations
 
                     b.HasIndex("RegistrationDataId");
 
-                    b.ToTable("Contraindications");
+                    b.ToTable("Contraindications", (string)null);
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.Governorate", b =>
@@ -428,7 +428,7 @@ namespace EHRAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Governorates");
+                    b.ToTable("Governorates", (string)null);
 
                     b.HasData(
                         new
@@ -528,7 +528,7 @@ namespace EHRAPI.Migrations
 
                     b.HasIndex("RegistrationDataId");
 
-                    b.ToTable("HealthFacilities");
+                    b.ToTable("HealthFacilities", (string)null);
 
                     b.HasData(
                         new
@@ -600,7 +600,7 @@ namespace EHRAPI.Migrations
 
                     b.HasKey("Code");
 
-                    b.ToTable("ICDs");
+                    b.ToTable("ICDs", (string)null);
 
                     b.HasData(
                         new
@@ -658,7 +658,7 @@ namespace EHRAPI.Migrations
                         .IsUnique()
                         .HasFilter("[MedicalTeamId] IS NOT NULL");
 
-                    b.ToTable("MedicalFacilityTeams");
+                    b.ToTable("MedicalFacilityTeams", (string)null);
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.Medication", b =>
@@ -689,7 +689,7 @@ namespace EHRAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Medications");
+                    b.ToTable("Medications", (string)null);
 
                     b.HasData(
                         new
@@ -767,7 +767,7 @@ namespace EHRAPI.Migrations
 
                     b.HasIndex("VisitId");
 
-                    b.ToTable("PhysicalTherapy");
+                    b.ToTable("PhysicalTherapy", (string)null);
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.RadLabResult", b =>
@@ -799,7 +799,7 @@ namespace EHRAPI.Migrations
 
                     b.HasIndex("VisitRadLabTestId");
 
-                    b.ToTable("RadLabResult");
+                    b.ToTable("RadLabResult", (string)null);
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.RadLabResultImage", b =>
@@ -826,7 +826,7 @@ namespace EHRAPI.Migrations
 
                     b.HasIndex("RadLabResultId");
 
-                    b.ToTable("RadLabResultImages");
+                    b.ToTable("RadLabResultImages", (string)null);
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.ReceiveBlood", b =>
@@ -858,7 +858,7 @@ namespace EHRAPI.Migrations
 
                     b.HasIndex("RegistrationDataId");
 
-                    b.ToTable("ReceiveBloods");
+                    b.ToTable("ReceiveBloods", (string)null);
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.ReceiveBloodData", b =>
@@ -888,7 +888,7 @@ namespace EHRAPI.Migrations
 
                     b.HasIndex("ReceiveBloodId");
 
-                    b.ToTable("Receives");
+                    b.ToTable("Receives", (string)null);
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.Surgery", b =>
@@ -929,7 +929,7 @@ namespace EHRAPI.Migrations
 
                     b.HasIndex("MedicalTeamId");
 
-                    b.ToTable("Surgeries");
+                    b.ToTable("Surgeries", (string)null);
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.SurgeryProgressNote", b =>
@@ -970,7 +970,7 @@ namespace EHRAPI.Migrations
 
                     b.HasIndex("SurgeryId");
 
-                    b.ToTable("SurgeryProgressNotes");
+                    b.ToTable("SurgeryProgressNotes", (string)null);
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.UserVaccination", b =>
@@ -1006,7 +1006,7 @@ namespace EHRAPI.Migrations
                     b.HasIndex("VisitId", "VaccinationId")
                         .IsUnique();
 
-                    b.ToTable("UserVaccinations");
+                    b.ToTable("UserVaccinations", (string)null);
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.UsersData.MedicalData", b =>
@@ -1034,7 +1034,7 @@ namespace EHRAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MedicalData");
+                    b.ToTable("MedicalData", (string)null);
 
                     b.HasData(
                         new
@@ -1088,7 +1088,7 @@ namespace EHRAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MedicalTeam");
+                    b.ToTable("MedicalTeam", (string)null);
 
                     b.HasData(
                         new
@@ -1205,7 +1205,7 @@ namespace EHRAPI.Migrations
 
                     b.HasIndex("GovernorateId");
 
-                    b.ToTable("PersonalData");
+                    b.ToTable("PersonalData", (string)null);
 
                     b.HasData(
                         new
@@ -1622,7 +1622,7 @@ namespace EHRAPI.Migrations
 
                     b.HasIndex("RegistrationDataId");
 
-                    b.ToTable("UserInsurances");
+                    b.ToTable("UserInsurances", (string)null);
 
                     b.HasData(
                         new
@@ -1693,7 +1693,7 @@ namespace EHRAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Vaccinations");
+                    b.ToTable("Vaccinations", (string)null);
 
                     b.HasData(
                         new
@@ -1781,7 +1781,7 @@ namespace EHRAPI.Migrations
 
                     b.HasIndex("RegistrationDataId");
 
-                    b.ToTable("Visits");
+                    b.ToTable("Visits", (string)null);
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.VisitMedication", b =>
@@ -1832,7 +1832,7 @@ namespace EHRAPI.Migrations
                     b.HasIndex("MedicationId", "VisitId")
                         .IsUnique();
 
-                    b.ToTable("VisitMedications");
+                    b.ToTable("VisitMedications", (string)null);
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.VisitRadLabTest", b =>
@@ -1862,7 +1862,7 @@ namespace EHRAPI.Migrations
 
                     b.HasIndex("VisitId");
 
-                    b.ToTable("VisitRadLabTests");
+                    b.ToTable("VisitRadLabTests", (string)null);
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.VisitVitalSign", b =>
@@ -1892,7 +1892,7 @@ namespace EHRAPI.Migrations
 
                     b.HasIndex("VisitId");
 
-                    b.ToTable("VisitVitalSigns");
+                    b.ToTable("VisitVitalSigns", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

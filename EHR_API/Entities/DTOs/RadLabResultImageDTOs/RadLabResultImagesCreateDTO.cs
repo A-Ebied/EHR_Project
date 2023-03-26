@@ -3,6 +3,6 @@ namespace EHR_API.Entities.DTOs.RadLabResultImageDTOs
 {
     public class RadLabResultImagesCreateDTO
     {
-        public List<RadLabResultImageCreateDTO> RadiologyResultImages { get; set; }
+        public List<RadLabResultImageCreateDTO> RadLabResultImages { get; set; }
     }
 }

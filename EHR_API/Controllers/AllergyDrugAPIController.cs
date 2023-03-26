@@ -60,39 +60,39 @@ namespace EHR_API.Controllers
         }
         */
 
-        //[Authorize]
-        [HttpGet("GetAllergyDrugs")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetAllergyDrugs(int allergyId)
-        {
-            try
-            {
-                if (allergyId < 0)
-                {
-                    return BadRequest(APIResponses.BadRequest("Id is less than 1"));
-                }
+        ////[Authorize]
+        //[HttpGet("GetAllergyDrugs")]
+        //[ResponseCache(CacheProfileName = SD.ProfileName)]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //public async Task<ActionResult<APIResponse>> GetAllergyDrugs(int allergyId)
+        //{
+        //    try
+        //    {
+        //        if (allergyId < 0)
+        //        {
+        //            return BadRequest(APIResponses.BadRequest("Id is less than 1"));
+        //        }
 
-                var entities = await _db._allergyDrug.GetAllAsync(
-                     includeProperties: "Medication",
-                    expression: g => g.AllergyId == allergyId);
+        //        var entities = await _db._allergyDrug.GetAllAsync(
+        //             includeProperties: "Medication",
+        //            expression: g => g.AllergyId == allergyId);
 
-                if (entities.Count == 0)
-                {
-                    return BadRequest(APIResponses.BadRequest($"No object with Id = {allergyId}"));
-                }
+        //        if (entities.Count == 0)
+        //        {
+        //            return BadRequest(APIResponses.BadRequest($"No object with Id = {allergyId}"));
+        //        }
 
-                _response.Result = _mapper.Map<List<AllergyDrugDTOForOthers>>(entities);
-                _response.StatusCode = HttpStatusCode.OK;
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                return APIResponses.InternalServerError(ex);
-            }
-        }
+        //        _response.Result = _mapper.Map<List<AllergyDrugDTOForOthers>>(entities);
+        //        _response.StatusCode = HttpStatusCode.OK;
+        //        return Ok(_response);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return APIResponses.InternalServerError(ex);
+        //    }
+        //}
 
         ////[Authorize]
         [HttpPost("CreateAllergyDrugs")]
