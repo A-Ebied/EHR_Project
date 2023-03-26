@@ -12,6 +12,6 @@ namespace EHR_API.Entities.DTOs.RadLabResultDTOs
         public DateTime UpdatedAt { get; set; }
 
         public HealthFacilityDTOForOthers HealthFacility { get; set; }
-        public ICollection<RadLabResultImageDTOForOthers> RadiologyResultImages { get; set; }
+        public ICollection<RadLabResultImageDTOForOthers> RadLabResultImages { get; set; }
     }
 }

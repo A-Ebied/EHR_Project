@@ -98,11 +98,25 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = await _db._visitRadLabTest.GetAsync(
+                    includeProperties: "VisitRadLabResults",
                     expression: g => g.Id == id);
 
                 if (entity == null)
                 {
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id}"));
+                }
+
+                if (entity.VisitRadLabResults.Count != 0)
+                {
+                    var temp = new List<RadLabResult>();
+                    foreach (var item in entity.VisitRadLabResults)
+                    {
+                        temp.Add(await _db._radLabResult.GetAsync(
+                                    includeProperties: "RadiologyResultImages",
+                                    expression: g => g.Id == item.Id));
+                    }
+
+                    entity.VisitRadLabResults = temp;
                 }
 
                 _response.Result = _mapper.Map<VisitRadLabTestDTO>(entity);

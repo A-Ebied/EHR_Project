@@ -1,8 +1,6 @@
 ﻿using EHR_API.Entities;
 using EHR_API.Entities.Models;
 using EHR_API.Repositories.Contracts;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore;
 
 namespace EHR_API.Repositories.Implementation
 {

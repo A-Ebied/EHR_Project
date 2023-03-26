@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\DNAImageResult\" />
+    <Folder Include="wwwroot\images\RadLabResultImage\" />
     <Folder Include="wwwroot\images\UserImage\" />
   </ItemGroup>
 
