@@ -33,6 +33,7 @@ using EHR_API.Entities.DTOs.MedicalFacilityTeamDTOs;
 using EHR_API.Entities.DTOs.ContraindicationDTOs;
 using EHR_API.Entities.DTOs.RadLabResultDTOs;
 using EHR_API.Entities.DTOs.RadLabResultImageDTOs;
+using EHR_API.Entities.DTOs.VaccinationDTOs;
 
 namespace EHR_API.Entities
 {
@@ -192,6 +193,11 @@ namespace EHR_API.Entities
             CreateMap<RadLabResultImage, RadLabResultImageUpdateDTO>().ReverseMap();
             CreateMap<RadLabResultImage, RadLabResultImageDTO>().ReverseMap();
             CreateMap<RadLabResultImage, RadLabResultImageDTOForOthers>().ReverseMap();
+
+            CreateMap<Vaccination, VaccinationCreateDTO>().ReverseMap();
+            CreateMap<Vaccination, VaccinationUpdateDTO>().ReverseMap();
+            CreateMap<Vaccination, VaccinationDTO>().ReverseMap();
+            CreateMap<Vaccination, VaccinationDTOForOthers>().ReverseMap();
         }
     }
 }
