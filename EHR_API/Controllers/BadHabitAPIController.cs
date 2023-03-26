@@ -47,7 +47,7 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest($"No objects with Id = {UserId} "));
                 }
 
-                _response.Result = _mapper.Map<List<BadHabitDTO>>(entities);
+                _response.Result = _mapper.Map<List<BadHabitDTOForOthers>>(entities);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
