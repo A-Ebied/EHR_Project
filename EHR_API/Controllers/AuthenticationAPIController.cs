@@ -581,6 +581,11 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
 
+                if (await _db._authentication.GetAsync(expression: r => r.Id == registrationDataDTO.Id) != null)
+                {
+                    return BadRequest(APIResponses.BadRequest("Enter another Id"));
+                }
+
                 var result = await _db._authentication.RegisterUser(registrationDataDTO);
                 if (!result.Succeeded)
                 {
