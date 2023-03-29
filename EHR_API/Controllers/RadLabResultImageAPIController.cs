@@ -29,7 +29,7 @@ namespace EHR_API.Controllers
         [HttpPost("CreateRadLabResultImages")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> CreateAllergyDrugs([FromBody] RadLabResultImagesCreateDTO entityCreateDTO)
+        public async Task<ActionResult<APIResponse>> CreateAllergyDrugs([FromForm] RadLabResultImagesCreateDTO entityCreateDTO)
         {
             try
             {

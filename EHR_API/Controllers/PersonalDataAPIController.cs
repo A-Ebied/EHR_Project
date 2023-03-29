@@ -28,7 +28,7 @@ namespace EHR_API.Controllers
         [HttpPost("CreateUserPersonalData")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> CreateUserPersonalData([FromBody] PersonalDataCreateDTO entityCreateDTO)
+        public async Task<ActionResult<APIResponse>> CreateUserPersonalData([FromForm] PersonalDataCreateDTO entityCreateDTO)
         {
             try
             {
@@ -98,7 +98,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> UpdateUserPersonalData(string userId, [FromBody] PersonalDataUpdateDTO entityUpdateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateUserPersonalData(string userId, [FromForm] PersonalDataUpdateDTO entityUpdateDTO)
         {
             try
             {

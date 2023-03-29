@@ -157,7 +157,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> UpdateAllergy(int id, [FromBody] RadLabResultUpdateDTO entityUpdateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateAllergy(int id, [FromForm] RadLabResultUpdateDTO entityUpdateDTO)
         {
             try
             {
