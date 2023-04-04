@@ -27,10 +27,4 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\images\DNAImageResult\" />
-    <Folder Include="wwwroot\images\RadLabResultImage\" />
-    <Folder Include="wwwroot\images\UserImage\" />
-  </ItemGroup>
-
 </Project>

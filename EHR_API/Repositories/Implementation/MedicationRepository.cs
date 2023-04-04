@@ -32,16 +32,16 @@ namespace EHR_API.Repositories.Implementation
         {
             if (entity.MedicationImage != null && entity.MedicationImage.Length > 0)
             {
-                if (oldEntity.MedicationImage != null)
+                if (oldEntity.ImageUrl != null)
                 {
-                    var oldPath = Path.Combine(_webHost.WebRootPath, oldEntity.ImageUrl.TrimStart('\\'));
+                    var oldPath = _webHost.WebRootPath + "\\images" + oldEntity.ImageUrl.Replace("/", "\\");
                     if (File.Exists(oldPath))
                     {
                         File.Delete(oldPath);
                     }
                 }
 
-                var path = CreateImage.CreateFiles(_webHost, entity.MedicationImage, /*entity.ImageName,*/ "Medication");
+                var path = CreateImage.CreateFiles(_webHost, entity.MedicationImage, "Medication");
                 entity.ImageUrl = path;
             }
 
@@ -52,9 +52,9 @@ namespace EHR_API.Repositories.Implementation
 
         public override async Task DeleteAsync(Medication entity)
         {
-            if (entity.MedicationImage != null && entity.MedicationImage.Length > 0)
+            if (entity.ImageUrl != null)
             {
-                var oldPath = Path.Combine(_webHost.WebRootPath, entity.ImageUrl.TrimStart('\\'));
+                var oldPath = _webHost.WebRootPath + "\\images" + entity.ImageUrl.Replace("/", "\\");
                 if (File.Exists(oldPath))
                 {
                     File.Delete(oldPath);

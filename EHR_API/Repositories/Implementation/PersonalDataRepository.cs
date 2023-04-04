@@ -2,6 +2,7 @@
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using System.Security.Principal;
 
 namespace EHR_API.Repositories.Implementation
 {
@@ -22,7 +23,7 @@ namespace EHR_API.Repositories.Implementation
 
             if (entity.UserImage != null && entity.UserImage.Length > 0)
             {
-                var path = CreateImage.CreateFiles(_webHost, entity.UserImage, /*entity.ImageName, */"UserImage");
+                var path = CreateImage.CreateFiles(_webHost, entity.UserImage, "UserImage");
                 entity.UserImageUrl = path;
             }
 
@@ -36,14 +37,14 @@ namespace EHR_API.Repositories.Implementation
             {
                 if (oldEntity.UserImageUrl != null)
                 {
-                    var oldPath = Path.Combine(_webHost.WebRootPath, oldEntity.UserImageUrl.TrimStart('\\'));
+                    var oldPath = _webHost.WebRootPath + "\\images" + oldEntity.UserImageUrl.Replace("/", "\\");
                     if (File.Exists(oldPath))
                     {
                         File.Delete(oldPath);
                     }
                 }
 
-                var path = CreateImage.CreateFiles(_webHost, entity.UserImage, /*entity.ImageName,*/ "UserImage");
+                var path = CreateImage.CreateFiles(_webHost, entity.UserImage, "UserImage");
                 entity.UserImageUrl = path;
             }
 
@@ -54,9 +55,9 @@ namespace EHR_API.Repositories.Implementation
 
         public override async Task DeleteAsync(PersonalData entity)
         {
-            if (entity.UserImage != null && entity.UserImageUrl.Length > 0)
+            if (entity.UserImageUrl != null)
             {
-                var oldPath = Path.Combine(_webHost.WebRootPath, entity.UserImageUrl.TrimStart('\\'));
+                var oldPath = _webHost.WebRootPath + "\\images" + entity.UserImageUrl.Replace("/", "\\");
                 if (File.Exists(oldPath))
                 {
                     File.Delete(oldPath);

@@ -12,6 +12,7 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs.PersonalDataDTOs
         public string Occupation { get; set; }
         public int NumOfChildren { get; set; }
         [Required]
+        [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
         [Required]
         public int GovernorateId { get; set; }

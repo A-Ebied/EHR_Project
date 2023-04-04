@@ -2,6 +2,7 @@
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using System.Security.Principal;
 
 namespace EHR_API.Repositories.Implementation
 {
@@ -20,7 +21,7 @@ namespace EHR_API.Repositories.Implementation
         {
             if (entity.DNAImageResult != null && entity.DNAImageResult.Length > 0)
             {
-                var path = CreateImage.CreateFiles(_webHost, entity.DNAImageResult,/* entity.ImageName,*/ "DNAImageResult");
+                var path = CreateImage.CreateFiles(_webHost, entity.DNAImageResult, "DNAImageResult");
                 entity.DNAImageResultUrl = path;
             }
 
@@ -30,18 +31,18 @@ namespace EHR_API.Repositories.Implementation
 
         public override async Task<MedicalData> UpdateAsync(MedicalData entity, MedicalData oldEntity = null)
         {
-            if (entity.DNAImageResultUrl != null && entity.DNAImageResult.Length > 0)
+            if (entity.DNAImageResult != null && entity.DNAImageResult.Length > 0)
             {
                 if (oldEntity.DNAImageResultUrl != null)
                 {
-                    var oldPath = Path.Combine(_webHost.WebRootPath, oldEntity.DNAImageResultUrl.TrimStart('\\'));
+                    var oldPath = _webHost.WebRootPath + "\\images" + oldEntity.DNAImageResultUrl.Replace("/", "\\");
                     if (File.Exists(oldPath))
                     {
                         File.Delete(oldPath);
                     }
                 }
 
-                var path = CreateImage.CreateFiles(_webHost, entity.DNAImageResult, /*entity.ImageName,*/ "DNAImageResult");
+                var path = CreateImage.CreateFiles(_webHost, entity.DNAImageResult, "DNAImageResult");
                 entity.DNAImageResultUrl = path;
             }
 
@@ -52,9 +53,9 @@ namespace EHR_API.Repositories.Implementation
 
         public override async Task DeleteAsync(MedicalData entity)
         {
-            if (entity.DNAImageResultUrl != null && entity.DNAImageResultUrl.Length > 0)
+            if (entity.DNAImageResultUrl != null)
             {
-                var oldPath = Path.Combine(_webHost.WebRootPath, entity.DNAImageResultUrl.TrimStart('\\'));
+                var oldPath = _webHost.WebRootPath + "\\images" + entity.DNAImageResultUrl.Replace("/", "\\");
                 if (File.Exists(oldPath))
                 {
                     File.Delete(oldPath);
