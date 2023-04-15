@@ -1,6 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace EHR_API.Entities.Models
 {
@@ -8,7 +6,7 @@ namespace EHR_API.Entities.Models
     {
         [Key]
         public int Id { get; set; }
-        public DateTime Date { get; set; }
+       // public DateTime Date { get; set; }
         public string Instruction { get; set; }
         /*public string RegistrationDataId { get; set; }*/
         public int VisitId { get; set; }
