@@ -95,7 +95,7 @@ namespace EHR_API.Controllers
         [HttpPost("CreateVisit")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> CreateVisit([FromBody] VisitCreateDTO entityCreateDTO)
+        public async Task<ActionResult<APIResponse>> CreateVisit([FromForm] VisitCreateDTO entityCreateDTO)
         {
             try
             {
@@ -278,7 +278,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> UpdateVisit(int id, [FromBody] VisitUpdateDTO entityUpdateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateVisit(int id, [FromForm] VisitUpdateDTO entityUpdateDTO)
         {
             try
             {
