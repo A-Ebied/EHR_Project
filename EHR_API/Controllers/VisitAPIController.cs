@@ -6,6 +6,7 @@ using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Security.Principal;
 
 namespace EHR_API.Controllers
 {
@@ -292,7 +293,8 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
-                if (await _db._visit.GetAsync(expression: g => g.Id == id) == null)
+                var oldEntity = await _db._visit.GetAsync(expression: g => g.Id == id);
+                if (oldEntity == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
                 }
@@ -319,7 +321,7 @@ namespace EHR_API.Controllers
 
                 var entity = _mapper.Map<Visit>(entityUpdateDTO);
                 entity.UpdatedAt = DateTime.Now;
-                await _db._visit.UpdateAsync(entity);
+                await _db._visit.UpdateAsync(entity, oldEntity);
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = _mapper.Map<VisitDTO>(entity);

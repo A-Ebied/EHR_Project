@@ -21,8 +21,7 @@ namespace EHR_API.Entities.DTOs.VisitDTOs
         [Required]
         public string InstructionDescription { get; set; }
         public string Note { get; set; }
-        public byte[] ReportImage { get; set; }
-        public string ImageName { get; set; }
+        public IFormFile ReportImage { get; set; }
         // public double Price { get; set; }
         // public bool UnderInsurance { get; set; }
     }

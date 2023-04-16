@@ -28,7 +28,7 @@ namespace EHR_API.Repositories.Implementation
             _visitMedication = new VisitMedicationRepository(db);
             _visitRadLabTest = new VisitRadLabTestRepository(db);
             _physicalTherapy = new PhysicalTherapyRepository(db);
-            _visit = new VisitRepository(db);
+            _visit = new VisitRepository(db, webHost);
             _userVaccination = new UserVaccinationRepository(db);
             _vaccination = new VaccinationRepository(db);
             _chronicDisease = new ChronicDiseaseRepository(db);

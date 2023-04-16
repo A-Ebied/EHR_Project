@@ -17,8 +17,7 @@ namespace EHR_API.Entities.DTOs.VisitDTOs
         public string ICDId { get; set; }
         public string InstructionDescription { get; set; }
         public string Note { get; set; }
-        public byte[] ReportImage { get; set; }
-        public string ImageName { get; set; }
+        public string ReportImageUrl { get; set; }
         // public double Price { get; set; }
         // public bool UnderInsurance { get; set; }
         public DateTime CreatedAt { get; set; }
