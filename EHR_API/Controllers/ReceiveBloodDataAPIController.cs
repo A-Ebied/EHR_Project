@@ -28,10 +28,10 @@ namespace EHR_API.Controllers
 
         //[Authorize(Roles = SD.Physician + SD.Nurse + "," + SD.Technician + "," + SD.HealthFacilityManager)]
         //[Authorize]
-        [HttpPost("CreateUserReceiveBloodDataData")]
+        [HttpPost("CreateUserReceiveBloodData")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> CreateUserReceiveBloodDataData([FromBody] ReceiveBloodDataCreateDTO entityCreateDTO)
+        public async Task<ActionResult<APIResponse>> CreateUserReceiveBloodData([FromBody] ReceiveBloodDataCreateDTO entityCreateDTO)
         {
             try
             {
