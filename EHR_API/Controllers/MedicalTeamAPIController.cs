@@ -28,6 +28,71 @@ namespace EHR_API.Controllers
             _userManager = userManager;
         }
 
+        [HttpGet("{userId}")]
+        [ResponseCache(CacheProfileName = SD.ProfileName)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<APIResponse>> GetMedicalMember(string userId)
+        {
+            try
+            {
+                if (userId == null)
+                {
+                    return BadRequest(APIResponses.BadRequest("User Id is null"));
+                }
+
+                /*
+                string jwtToken = null;
+                //if (HttpContext.Request.Headers.Authorization.Count > 0)
+                //{
+                //    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                //}
+                //var entity = new RegistrationData();
+                //string headerRole = null;
+                //string headerId = null;
+                //if (jwtToken != null)
+                //{
+                //    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                //    headerRole = user.Claims.ToList()[4].Value;
+                //    headerId = user.Claims.ToList()[0].Value;
+
+                //    if (headerRole == SD.Physician || headerRole == SD.Nurse || headerRole == SD.HealthFacilityManager || headerRole == SD.Pharmacist || headerRole == SD.Technician || headerId == userId)
+                //    {
+                //        entity = await _db._authentication.GetAsync(
+                //                 expression: g => g.Id == userId,
+                //                 includeProperties: "PersonalData,MedicalData,MedicalTeam");
+                //    }
+
+                //}
+                //else
+                //{
+                //    entity = await _db._authentication.GetAsync(
+                //             expression: g => g.Id == userId,
+                //             includeProperties: "PersonalData,MedicalTeam");
+                }
+                */
+
+                var entity = await _db._medicalTeam.GetAsync(
+                    expression: g => g.Id == userId,
+                    includeProperties: "MedicalFacilityTeams");
+
+                if (entity == null)
+                {
+                    return NotFound(APIResponses.NotFound($"No object with User Id = {userId} "));
+                }
+
+                _response.Result = _mapper.Map<MedicalTeamDTO>(entity);
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                return APIResponses.InternalServerError(ex);
+            }
+        }
+
         //[Authorize(Roles = SD.HealthFacilityManager)]
         //[Authorize]
         [HttpPost("CreateMedicalTeamUser")]
