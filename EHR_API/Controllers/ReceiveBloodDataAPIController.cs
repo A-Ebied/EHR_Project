@@ -26,6 +26,69 @@ namespace EHR_API.Controllers
         }
 
 
+        [HttpGet("{id}")]
+        [ResponseCache(CacheProfileName = SD.ProfileName)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<APIResponse>> GetReceiveBloodData(int id)
+        {
+            try
+            {
+                if (id < 1)
+                {
+                    return BadRequest(APIResponses.BadRequest("Id is less than 1"));
+                }
+
+                /*
+                string jwtToken = null;
+                //if (HttpContext.Request.Headers.Authorization.Count > 0)
+                //{
+                //    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                //}
+                //var entity = new RegistrationData();
+                //string headerRole = null;
+                //string headerId = null;
+                //if (jwtToken != null)
+                //{
+                //    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                //    headerRole = user.Claims.ToList()[4].Value;
+                //    headerId = user.Claims.ToList()[0].Value;
+
+                //    if (headerRole == SD.Physician || headerRole == SD.Nurse || headerRole == SD.HealthFacilityManager || headerRole == SD.Pharmacist || headerRole == SD.Technician || headerId == userId)
+                //    {
+                //        entity = await _db._authentication.GetAsync(
+                //                 expression: g => g.Id == userId,
+                //                 includeProperties: "PersonalData,MedicalData,MedicalTeam");
+                //    }
+
+                //}
+                //else
+                //{
+                //    entity = await _db._authentication.GetAsync(
+                //             expression: g => g.Id == userId,
+                //             includeProperties: "PersonalData,MedicalTeam");
+                }
+                */
+
+                var entity = await _db._receiveBloodData.GetAsync(expression: g => g.Id == id);
+
+                if (entity == null)
+                {
+                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+                }
+
+                _response.Result = _mapper.Map<ReceiveBloodDataDTOForOthers>(entity);
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                return APIResponses.InternalServerError(ex);
+            }
+        }
+
         //[Authorize(Roles = SD.Physician + SD.Nurse + "," + SD.Technician + "," + SD.HealthFacilityManager)]
         //[Authorize]
         [HttpPost("CreateUserReceiveBloodData")]
