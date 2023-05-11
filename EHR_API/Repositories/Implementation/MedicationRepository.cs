@@ -20,7 +20,7 @@ namespace EHR_API.Repositories.Implementation
         {
             if (entity.MedicationImage != null && entity.MedicationImage.Length > 0)
             {
-                var path = CreateImage.CreateFiles(_webHost, entity.MedicationImage, /*entity.ImageName, */"Medication");
+                var path = CreateImage.CreateFiles(_webHost, entity.MedicationImage, "Medication");
                 entity.ImageUrl = path;
             }
 

@@ -2,6 +2,7 @@
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using System.Linq.Expressions;
 using System.Security.Principal;
 
 namespace EHR_API.Repositories.Implementation
@@ -19,8 +20,6 @@ namespace EHR_API.Repositories.Implementation
 
         public override async Task CreateAsync(PersonalData entity)
         {
-
-
             if (entity.UserImage != null && entity.UserImage.Length > 0)
             {
                 var path = CreateImage.CreateFiles(_webHost, entity.UserImage, "UserImage");

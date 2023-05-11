@@ -4,6 +4,7 @@ using EHR_API.Entities.DTOs.UserDataDTOs.PersonalDataDTOs;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -23,6 +24,69 @@ namespace EHR_API.Controllers
             _db = db;
             _mapper = mapper;
             _response = new();
+        }
+
+        [HttpGet("{userId}")]
+        [ResponseCache(CacheProfileName = SD.ProfileName)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<APIResponse>> GetUserPersonalData(string userId)
+        {
+            try
+            {
+                if (userId == null)
+                {
+                    return BadRequest(APIResponses.BadRequest("User Id is null"));
+                }
+
+                /*
+                string jwtToken = null;
+                //if (HttpContext.Request.Headers.Authorization.Count > 0)
+                //{
+                //    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                //}
+                //var entity = new RegistrationData();
+                //string headerRole = null;
+                //string headerId = null;
+                //if (jwtToken != null)
+                //{
+                //    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                //    headerRole = user.Claims.ToList()[4].Value;
+                //    headerId = user.Claims.ToList()[0].Value;
+
+                //    if (headerRole == SD.Physician || headerRole == SD.Nurse || headerRole == SD.HealthFacilityManager || headerRole == SD.Pharmacist || headerRole == SD.Technician || headerId == userId)
+                //    {
+                //        entity = await _db._authentication.GetAsync(
+                //                 expression: g => g.Id == userId,
+                //                 includeProperties: "PersonalData,MedicalData,MedicalTeam");
+                //    }
+
+                //}
+                //else
+                //{
+                //    entity = await _db._authentication.GetAsync(
+                //             expression: g => g.Id == userId,
+                //             includeProperties: "PersonalData,MedicalTeam");
+                }
+                */
+
+                var entity = await _db._personal.GetAsync(expression: g => g.Id == userId);
+
+                if (entity == null)
+                {
+                    return NotFound(APIResponses.NotFound($"No object with User Id = {userId} "));
+                }
+
+                _response.Result = _mapper.Map<PersonalDataDTO>(entity);
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                return APIResponses.InternalServerError(ex);
+            }
         }
 
         [HttpPost("CreateUserPersonalData")]

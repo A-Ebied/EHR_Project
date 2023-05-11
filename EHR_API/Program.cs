@@ -1,6 +1,5 @@
 using EHR_API.Entities;
 using EHR_API.Extensions;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 
@@ -60,10 +59,7 @@ app.Run();
 
 void SeedDatabase()
 {
-    using (var scope = app.Services.CreateScope())
-    {
-        var dbInitializer = scope.ServiceProvider.GetRequiredService<DbInitializer>();
-        dbInitializer.Initialize();
-
-    }
+    using var scope = app.Services.CreateScope();
+    var dbInitializer = scope.ServiceProvider.GetRequiredService<DbInitializer>();
+    dbInitializer.Initialize();
 }
