@@ -43,7 +43,7 @@ namespace EHR_API.Entities
         {
             base.OnModelCreating(modelBuilder);
 
-            // ApplyConfiguration
+            // ApplyConfiguration 
             modelBuilder.ApplyConfiguration(new GovernorateConfiguration());
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new UsersConfiguration());
