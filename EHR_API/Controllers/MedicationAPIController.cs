@@ -104,23 +104,18 @@ namespace EHR_API.Controllers
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetMedications([FromQuery(Name = "searchName")] string name = null, int pageNumber = 1, int pageSize = 0)
+        public async Task<ActionResult<APIResponse>> GetMedications([FromQuery(Name = "searchName")] string name = null)
         {
             try
             {
                 IEnumerable<Medication> entities = new List<Medication>();
                 entities = await _db._medication.GetAllAsync(
-                    expression: name == null ? null : g => g.Name.ToLower().Contains(name.ToLower()),
-                    pageNumber: pageNumber,
-                    pageSize: pageSize);
+                    expression: name == null ? null : g => g.Name.ToLower().Contains(name.ToLower()));
 
                 if (entities.ToList().Count == 0)
                 {
                     return NotFound(APIResponses.NotFound("No data has been found"));
                 }
-
-                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
-                Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
 
                 _response.Result = _mapper.Map<List<MedicationDTOForOthers>>(entities);
                 _response.StatusCode = HttpStatusCode.OK;

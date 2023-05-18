@@ -38,7 +38,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<APIResponse>> GetSystemManagers([FromQuery(Name = "UserName")] string userName = null, int pageNumber = 1, int pageSize = 0)
+        public async Task<ActionResult<APIResponse>> GetSystemManagers([FromQuery(Name = "UserName")] string userName = null)
         {
             try
             {
@@ -63,19 +63,11 @@ namespace EHR_API.Controllers
                     return NotFound(APIResponses.NotFound("No data has been found"));
                 }
 
-                if (pageSize > 0)
-                {
-                    systemManagers = (systemManagers.Skip(pageSize * (pageNumber - 1)).Take(pageSize)).ToList();
-                }
-
                 List<UserDTOForOthers> managerUsers = new();
                 foreach (var item in systemManagers)
                 {
                     managerUsers.Add(APIResponses.User(_mapper.Map<RegistrationData>(item)));
                 }
-
-                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
-                Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
 
                 _response.Result = managerUsers;
                 _response.StatusCode = HttpStatusCode.OK;
@@ -87,13 +79,13 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
- 
+
         [HttpGet("GetHealthFacilityManagers")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<APIResponse>> GetHealthFacilityManagers([FromQuery(Name = "Nationality")] string nationality = null, int pageNumber = 1, int pageSize = 0)
+        public async Task<ActionResult<APIResponse>> GetHealthFacilityManagers([FromQuery(Name = "Nationality")] string nationality = null)
         {
             try
             {
@@ -118,19 +110,11 @@ namespace EHR_API.Controllers
                     return NotFound(APIResponses.NotFound("No data has been found"));
                 }
 
-                if (pageSize > 0)
-                {
-                    managers = (managers.Skip(pageSize * (pageNumber - 1)).Take(pageSize)).ToList();
-                }
-
                 List<UserDTOForOthers> managerUsers = new();
                 foreach (var item in managers)
                 {
                     managerUsers.Add(APIResponses.User(_mapper.Map<RegistrationData>(item)));
                 }
-
-                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
-                Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
 
                 _response.Result = managerUsers;
                 _response.StatusCode = HttpStatusCode.OK;
@@ -149,7 +133,7 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<APIResponse>> GetMedicalUsers([FromQuery(Name = "filterByMedicalSpecialization")] string medicalSpecialization = null, int pageNumber = 1, int pageSize = 0)
+        public async Task<ActionResult<APIResponse>> GetMedicalUsers([FromQuery(Name = "filterByMedicalSpecialization")] string medicalSpecialization = null)
         {
             try
             {
@@ -191,19 +175,11 @@ namespace EHR_API.Controllers
                     return NotFound(APIResponses.NotFound("No data has been found"));
                 }
 
-                if (pageSize > 0)
-                {
-                    medicalUsers = (medicalUsers.Skip(pageSize * (pageNumber - 1)).Take(pageSize)).ToList();
-                }
-
                 List<UserDTOForOthers> medicalTeam = new();
                 foreach (var item in medicalUsers)
                 {
                     medicalTeam.Add(APIResponses.User(_mapper.Map<RegistrationData>(item)));
                 }
-
-                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
-                Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
 
                 _response.Result = medicalTeam;
                 _response.StatusCode = HttpStatusCode.OK;
@@ -476,15 +452,12 @@ namespace EHR_API.Controllers
                 {
                     entities = (entities.Skip(pageSize * (pageNumber - 1)).Take(pageSize)).ToList();
                 }
-                 
+
                 List<UserDTOForOthers> users = new();
                 foreach (var item in entities)
                 {
                     users.Add(APIResponses.User(_mapper.Map<RegistrationData>(item)));
                 }
-
-                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
-                Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
 
                 _response.Result = users;
                 _response.StatusCode = HttpStatusCode.OK;
@@ -593,6 +566,40 @@ namespace EHR_API.Controllers
                 }
 
                 _response.Result = result;
+                _response.StatusCode = HttpStatusCode.Created;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                return APIResponses.InternalServerError(ex);
+            }
+        }
+
+        [HttpPost("ConfirmEmail")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<APIResponse>> ConfirmEmail([FromQuery]string email)
+        {
+            try
+            {
+                if (email == null)
+                {
+                    return BadRequest(APIResponses.BadRequest("No data has been sent"));
+                }
+
+                //if (await _db._authentication.GetAsync(expression: r => r.Id == registrationDataDTO.Id) != null)
+                //{
+                //    return BadRequest(APIResponses.BadRequest("Enter another Id"));
+                //}
+
+                await _db._authentication.ConfirmEmail(email);
+                //if (!result.Succeeded)
+                //{
+                //    return BadRequest(APIResponses.BadRequest(result.ToString()));
+                //}
+
+                _response.Result = "The Email is Confirmed" ;
                 _response.StatusCode = HttpStatusCode.Created;
                 return Ok(_response);
             }

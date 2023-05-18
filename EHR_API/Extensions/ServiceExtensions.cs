@@ -62,6 +62,8 @@ namespace EHR_API.Extensions
                     o.Password.RequireNonAlphanumeric = true;
                     o.Password.RequiredLength = 5;
                     o.User.RequireUniqueEmail = true;
+                    o.SignIn.RequireConfirmedEmail = true;
+
                 }).AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
         }
@@ -69,9 +71,10 @@ namespace EHR_API.Extensions
         public static void ConfigureInterfaces(this IServiceCollection services)
         {
             //services.AddScoped<IGovernorateRepository, GovernorateRepository>();
-            services.AddScoped<IAllergyRepository, AllergyRepository>();
-            services.AddScoped<IAllergyDrugRepository, AllergyDrugRepository>();
+            //services.AddScoped<IAllergyRepository, AllergyRepository>();
+            //services.AddScoped<IAllergyDrugRepository, AllergyDrugRepository>();
             services.AddScoped<IMainRepository, MainRepository>();
+            services.AddScoped<IEmailSender, EmailSender>();
         }
 
         /*

@@ -31,23 +31,18 @@ namespace EHR_API.Controllers
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetICDs(string type = null, int pageNumber = 1, int pageSize = 0)
+        public async Task<ActionResult<APIResponse>> GetICDs(string type = null)
         {
             try
             {
                 IEnumerable<Vaccination> entities = new List<Vaccination>();
                 entities = await _db._vaccination.GetAllAsync(
-                    expression: type == null ? null : g => g.Type.ToLower().Contains(type.ToLower()),
-                    pageNumber: pageNumber,
-                    pageSize: pageSize);
+                    expression: type == null ? null : g => g.Type.ToLower().Contains(type.ToLower()));
 
                 if (entities.ToList().Count == 0)
                 {
                     return NotFound(APIResponses.NotFound("No data has been found"));
                 }
-
-                Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
-                Response.Headers.Add("Pagination", JsonSerializer.Serialize(pagination));
 
                 _response.Result = _mapper.Map<List<VaccinationDTOForOthers>>(entities);
                 _response.StatusCode = HttpStatusCode.OK;

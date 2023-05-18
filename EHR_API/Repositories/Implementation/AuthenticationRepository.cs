@@ -19,15 +19,17 @@ namespace EHR_API.Repositories.Implementation
         private readonly IMapper _mapper; 
         private readonly UserManager<RegistrationData> _userManager; 
         private readonly IConfiguration _configuration;
+        private readonly IEmailSender _emailSender;
         private RegistrationData _user;
         private ApplicationDbContext _db;
 
-        public AuthenticationRepository(IMapper mapper, UserManager<RegistrationData> userManager, IConfiguration configuration, ApplicationDbContext db)
+        public AuthenticationRepository(IMapper mapper, UserManager<RegistrationData> userManager, IConfiguration configuration, ApplicationDbContext db, IEmailSender emailSender)
         {
             _mapper = mapper;
             _userManager = userManager;
             _configuration = configuration;
             _db = db;
+            _emailSender = emailSender;
         }
 
         public async Task<IdentityResult> RegisterUser(RegistrationDataCreateDTO registrationDataDTO)
@@ -39,10 +41,25 @@ namespace EHR_API.Repositories.Implementation
             
             if (result.Succeeded)
             {
-                await _userManager.AddToRolesAsync(user, new List<string>() { registrationDataDTO.Role }); 
+                await _userManager.AddToRolesAsync(user, new List<string>() { registrationDataDTO.Role });
+
+                var message = new Message(new string[] { registrationDataDTO.Email }, "Confirm Email", "Please, confirm your account.");
+                await _emailSender.SendEmailAsync(message);
             }
 
             return result;
+        }
+        
+        public async Task ConfirmEmail(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email); 
+            
+            if (user != null)
+            {
+                user.EmailConfirmed = true;
+
+                await _userManager.UpdateAsync(user);
+            }
         }
 
         public async Task<RegistrationData> ValidateUser(LoginRequestDTO loginRequestDTO)
@@ -50,7 +67,7 @@ namespace EHR_API.Repositories.Implementation
             _user = await _userManager.FindByEmailAsync(loginRequestDTO.Email); 
             var result = (_user != null && await _userManager.CheckPasswordAsync(_user, loginRequestDTO.Password));
 
-            if (!result)
+            if (!result || _user.EmailConfirmed == false)
             {
                 _user = null;
             }

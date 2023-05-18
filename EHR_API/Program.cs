@@ -23,6 +23,9 @@ builder.Services.ConfigureJWT(builder.Configuration);
 builder.Services.AddResponseCaching();
 builder.Services.AddControllersConfiguration();
 builder.Services.AddScoped<DbInitializer>();
+
+var emailConfig = builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
+builder.Services.AddSingleton(emailConfig);
 /*-------------------*/
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

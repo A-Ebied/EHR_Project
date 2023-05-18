@@ -8,11 +8,11 @@ namespace EHR_API.Repositories.Implementation
 {
     public class MainRepository : IMainRepository
     {
-        public MainRepository(ApplicationDbContext  db, IMapper mapper, UserManager<RegistrationData> userManager, IConfiguration configuration, IWebHostEnvironment webHost)
+        public MainRepository(ApplicationDbContext  db, IMapper mapper, UserManager<RegistrationData> userManager, IConfiguration configuration, IWebHostEnvironment webHost, IEmailSender emailSender)
         {
             _governorate = new GovernorateRepository(db);
             _healthFacility = new HealthFacilityRepository(db);
-            _authentication = new AuthenticationRepository(mapper, userManager, configuration, db);
+            _authentication = new AuthenticationRepository(mapper, userManager, configuration, db, emailSender);
             _personal = new PersonalDataRepository(db, webHost);
             _medicalTeam = new MedicalTeamRepository(db);
             _medicalData = new MedicalDataRepository(db, webHost);
