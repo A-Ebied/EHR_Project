@@ -575,33 +575,39 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpPost("ConfirmEmail")]
+        [HttpGet("ConfirmEmail")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> ConfirmEmail([FromQuery]string email)
+        public async Task<ActionResult<APIResponse>> ConfirmEmail([FromQuery] string email, string code)
         {
             try
             {
-                if (email == null)
+                if (email == null || code == null)
                 {
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
 
-                //if (await _db._authentication.GetAsync(expression: r => r.Id == registrationDataDTO.Id) != null)
-                //{
-                //    return BadRequest(APIResponses.BadRequest("Enter another Id"));
-                //}
+                var user = await _db._authentication.ConfirmEmail(email, code);
+                if (user != null)
+                {
+                    var loginResponse = new LoginResponseDTO()
+                    {
+                        User = _mapper.Map<LoginResponseaDataDTO>(user),
+                        Roles = await _userManager.GetRolesAsync(user),
+                        Token = await _db._authentication.CreateToken()
+                    };
 
-                await _db._authentication.ConfirmEmail(email);
-                //if (!result.Succeeded)
-                //{
-                //    return BadRequest(APIResponses.BadRequest(result.ToString()));
-                //}
-
-                _response.Result = "The Email is Confirmed" ;
-                _response.StatusCode = HttpStatusCode.Created;
-                return Ok(_response);
+                    _response.Result = loginResponse;
+                    _response.StatusCode = HttpStatusCode.OK;
+                    return Ok(_response);
+                }
+                else
+                {
+                    _response.Result = "The Email is not Confirmed";
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(_response);
+                }
             }
             catch (Exception ex)
             {
@@ -618,6 +624,7 @@ namespace EHR_API.Controllers
             try
             {
                 var _user = await _db._authentication.ValidateUser(user);
+
                 if (_user == null)
                 {
                     return APIResponses.Unauthorized();

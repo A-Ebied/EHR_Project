@@ -9,7 +9,7 @@ namespace EHR_API.Repositories.Contracts
     public interface IAuthenticationRepository
     {
         Task<IdentityResult> RegisterUser(RegistrationDataCreateDTO registrationDataDTO);
-        Task ConfirmEmail(string email);
+        Task<RegistrationData> ConfirmEmail(string email, string code);
         Task<RegistrationData> ValidateUser(LoginRequestDTO loginRequestDTO); 
         Task<string> CreateToken();
 

@@ -3,6 +3,7 @@ using EHR_API.Entities;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Login;
 using EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration;
 using EHR_API.Entities.Models.UsersData;
+using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -37,29 +38,38 @@ namespace EHR_API.Repositories.Implementation
             var user = _mapper.Map<RegistrationData>(registrationDataDTO);
             user.CreatedAt = DateTime.Now;
             user.UpdateddAt = DateTime.Now;
+            user.ConfirmEmail = ServiceExtensions.RandomCode();
+
             var result = await _userManager.CreateAsync(user, registrationDataDTO.Password); 
-            
             if (result.Succeeded)
             {
                 await _userManager.AddToRolesAsync(user, new List<string>() { registrationDataDTO.Role });
 
-                var message = new Message(new string[] { registrationDataDTO.Email }, "Confirm Email", "Please, confirm your account.");
+                var message = new Message(new string[] { registrationDataDTO.Email }, "Confirm Email", user.ConfirmEmail);
+
                 await _emailSender.SendEmailAsync(message);
             }
 
             return result;
         }
         
-        public async Task ConfirmEmail(string email)
+        public async Task<RegistrationData> ConfirmEmail(string email, string code)
         {
-            var user = await _userManager.FindByEmailAsync(email); 
+            _user = await _userManager.FindByEmailAsync(email); 
             
-            if (user != null)
+            if (_user != null && code == _user.ConfirmEmail)
             {
-                user.EmailConfirmed = true;
+                _user.EmailConfirmed = true;
+                _user.ConfirmEmail = null;
 
-                await _userManager.UpdateAsync(user);
+                var result = await _userManager.UpdateAsync(_user);
+                if (result.Succeeded)
+                {
+                    return _user;
+                }
             }
+
+            return null;
         }
 
         public async Task<RegistrationData> ValidateUser(LoginRequestDTO loginRequestDTO)

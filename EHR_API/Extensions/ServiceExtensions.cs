@@ -21,6 +21,26 @@ namespace EHR_API.Extensions
       */
     public static class ServiceExtensions
     {
+        public static string RandomCode()
+        {
+            var ran = new Random();
+
+            var b = "012345abcdefg6789hijklmn!@#$%opqrstuvwxyz^&*-";
+
+            int length = 8;
+
+            var random = "";
+
+            for (int i = 0; i < length; i++)
+            {
+                int a = ran.Next(b.Length);
+                random +=  b.ElementAt(a);
+            }
+
+            return random;
+        }
+
+
         /*
             - CORS (Cross-Origin Resource Sharing): 
                 * it is a mechanism to give or restrict access rights to applications from different domains.
@@ -82,32 +102,32 @@ namespace EHR_API.Extensions
          * JWTs can be signed using a secret (with the HMAC algorithm) or a public/private key pair using RSA or ECDSA.
          */
 
-        public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration) 
+        public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
         {
             var jwtSettings = configuration.GetSection("JwtSettings");
             var secretKey = jwtSettings.GetValue<string>("Secret");
-            
+
             services.AddAuthentication(
-                opt => 
-                { 
+                opt =>
+                {
                     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                 // it allows the app to perform authentication checks based on an incoming JWT token.
+                    // it allows the app to perform authentication checks based on an incoming JWT token.
                 }).AddJwtBearer(
-                    options => 
+                    options =>
                     {
                         // specify which aspects of the incoming JWTs to validate
-                        options.TokenValidationParameters = new TokenValidationParameters 
+                        options.TokenValidationParameters = new TokenValidationParameters
                         {
-                            ValidateIssuer = true, 
-                            ValidateAudience = true, 
-                            ValidateLifetime = true, 
-                            ValidateIssuerSigningKey = true, 
-                            ValidIssuer = jwtSettings["validIssuer"], 
-                            ValidAudience = jwtSettings["validAudience"], 
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)) 
-                        }; 
-                    }); 
+                            ValidateIssuer = true,
+                            ValidateAudience = true,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            ValidIssuer = jwtSettings["validIssuer"],
+                            ValidAudience = jwtSettings["validAudience"],
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                        };
+                    });
         }
 
         public static void AddControllersConfiguration(this IServiceCollection services)

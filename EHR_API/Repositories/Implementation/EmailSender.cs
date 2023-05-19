@@ -2,6 +2,7 @@
 using EHR_API.Repositories.Contracts;
 using MimeKit;
 using MailKit.Net.Smtp;
+using EHR_API.Extensions;
 
 namespace EHR_API.Repositories.Implementation
 {
@@ -25,11 +26,10 @@ namespace EHR_API.Repositories.Implementation
             emailMessage.To.AddRange(message.To);
             emailMessage.Subject = message.Subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = string.Format("""
-                <h2 style='color:red;'>{0}</h2> <br/> 
-                <form action="https://localhost:7200/api/AuthenticationAPI/ConfirmEmail?email={1}">
-                    <input type="submit" value="Confirm Email" />
-                </form>
-                """, message.Content, message.To) };
+                <h2 style='color:red;'>Please, confirm your account.</h2> <br/> 
+
+                Confirm your Email using: {0} 
+                """, message.Content) };
 
             return emailMessage;
         }
