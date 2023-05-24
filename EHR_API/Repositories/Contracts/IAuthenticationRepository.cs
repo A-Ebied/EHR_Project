@@ -10,6 +10,8 @@ namespace EHR_API.Repositories.Contracts
     {
         Task<IdentityResult> RegisterUser(RegistrationDataCreateDTO registrationDataDTO);
         Task<RegistrationData> ConfirmEmail(string email, string code);
+        Task<bool> ForgotPassword(string email);
+        Task<RegistrationData> NewPassword(string email, string code, string password);
         Task<RegistrationData> ValidateUser(LoginRequestDTO loginRequestDTO); 
         Task<string> CreateToken();
 

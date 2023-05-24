@@ -575,11 +575,11 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpGet("ConfirmEmail")]
+        [HttpPut("ConfirmEmail")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> ConfirmEmail([FromQuery] string email, string code)
+        public async Task<ActionResult<APIResponse>> ConfirmEmail(string email, string code)
         {
             try
             {
@@ -604,7 +604,7 @@ namespace EHR_API.Controllers
                 }
                 else
                 {
-                    _response.Result = "The Email is not Confirmed";
+                    _response.Result = "The email has not been confirmed";
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(_response);
                 }
@@ -647,6 +647,85 @@ namespace EHR_API.Controllers
             }
         }
 
+
+        [HttpPost("ForgotPassword")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<APIResponse>> ForgotPassword(string email)
+        {
+            try
+            {
+                if (email == null)
+                {
+                    return BadRequest(APIResponses.BadRequest("No data has been sent"));
+                }
+
+                 var result = await _db._authentication.ForgotPassword(email);
+
+                if (result)
+                {
+                    _response.Result = "The code has been sent";
+                    _response.StatusCode = HttpStatusCode.OK;
+                    return Ok(_response);
+                }
+                else
+                {
+                    _response.Result = "The code has not been sent";
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(_response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return APIResponses.InternalServerError(ex);
+            }
+        }
+        
+        [HttpPut("NewPassword")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<APIResponse>> NewPassword(string email, string code, string password, string confirmPassword)
+        {
+            try
+            {
+                if (email == null || code == null || password == null || confirmPassword == null)
+                {
+                    return BadRequest(APIResponses.BadRequest("No data has been sent"));
+                } 
+                
+                if (password != confirmPassword)
+                {
+                    return BadRequest(APIResponses.BadRequest("Password & Confirm Password do not match"));
+                }
+
+                var user = await _db._authentication.NewPassword(email, code, password);
+                if (user != null)
+                {
+                    var loginResponse = new LoginResponseDTO()
+                    {
+                        User = _mapper.Map<LoginResponseaDataDTO>(user),
+                        Roles = await _userManager.GetRolesAsync(user),
+                        Token = await _db._authentication.CreateToken()
+                    };
+
+                    _response.Result = loginResponse;
+                    _response.StatusCode = HttpStatusCode.OK;
+                    return Ok(_response);
+                }
+                else
+                {
+                    _response.Result = "Password has not been changed";
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(_response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return APIResponses.InternalServerError(ex);
+            }
+        }
 
         //[Authorize]
         [HttpPut("{userId}")]

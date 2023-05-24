@@ -10,7 +10,8 @@ namespace EHR_API.Entities.Models.UsersData
         public override string Id { get; set; }
         public string Nationality { get; set; }
         public string FullName { get; set; }
-        public string ConfirmEmail { get; set; }
+        public string ConfirmEmailCode { get; set; }
+        public string ForgotPasswordCode { get; set; }
         // email
         // password
         // UserName

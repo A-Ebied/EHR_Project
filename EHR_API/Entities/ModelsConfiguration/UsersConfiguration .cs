@@ -21,6 +21,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 Email = "k@gmail.com",
                 NormalizedEmail = "K@GMAIL.COM",
                 PhoneNumber = "01234567890",
+                EmailConfirmed = true,
             };
 
             PasswordHasher<string> pw = new PasswordHasher<string>();
@@ -37,6 +38,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 Email = "A@gmail.com",
                 NormalizedEmail = "A@GMAIL.COM",
                 PhoneNumber = "",
+                EmailConfirmed = true,
             };
 
             pw = new PasswordHasher<string>();
@@ -53,6 +55,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 Email = "M@gmail.com",
                 NormalizedEmail = "M@GMAIL.COM",
                 PhoneNumber = "01234567899",
+                EmailConfirmed = true,
             };
 
             pw = new PasswordHasher<string>();
@@ -69,6 +72,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 Email = "Al@gmail.com",
                 NormalizedEmail = "AL@GMAIL.COM",
                 PhoneNumber = "01234567890",
+                EmailConfirmed = true,
             };
 
             pw = new PasswordHasher<string>();
@@ -85,6 +89,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 Email = "Ka@gmail.com",
                 NormalizedEmail = "KA@GMAIL.COM",
                 PhoneNumber = "",
+                EmailConfirmed = true,
             };
 
             pw = new PasswordHasher<string>();
@@ -101,6 +106,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 Email = "Ma@gmail.com",
                 NormalizedEmail = "MA@GMAIL.COM",
                 PhoneNumber = "",
+                EmailConfirmed = true,
             };
 
             pw = new PasswordHasher<string>();
@@ -117,6 +123,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 Email = "Ma2@gmail.com",
                 NormalizedEmail = "MA2@GMAIL.COM",
                 PhoneNumber = "",
+                EmailConfirmed = true,
             };
 
             pw = new PasswordHasher<string>();
@@ -133,6 +140,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 Email = "Ka2@gmail.com",
                 NormalizedEmail = "KA2@GMAIL.COM",
                 PhoneNumber = "",
+                EmailConfirmed = true,
             };
 
             pw = new PasswordHasher<string>();
@@ -149,6 +157,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 Email = "TE@gmail.com",
                 NormalizedEmail = "TE@GMAIL.COM",
                 PhoneNumber = "",
+                EmailConfirmed = true,
             };
 
             pw = new PasswordHasher<string>();
@@ -165,6 +174,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 Email = "Fa@gmail.com",
                 NormalizedEmail = "FA@GMAIL.COM",
                 PhoneNumber = "",
+                EmailConfirmed = true,
             };
 
             pw = new PasswordHasher<string>();
@@ -181,6 +191,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 Email = "AlFa@gmail.com",
                 NormalizedEmail = "ALFA@GMAIL.COM",
                 PhoneNumber = "",
+                EmailConfirmed = true,
             };
 
             pw = new PasswordHasher<string>();
@@ -197,6 +208,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 Email = "AFa@gmail.com",
                 NormalizedEmail = "AFA@GMAIL.COM",
                 PhoneNumber = "",
+                EmailConfirmed = true,
             };
 
             pw = new PasswordHasher<string>();

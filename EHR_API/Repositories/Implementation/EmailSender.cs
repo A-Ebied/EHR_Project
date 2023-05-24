@@ -25,11 +25,7 @@ namespace EHR_API.Repositories.Implementation
             emailMessage.From.Add(new MailboxAddress("email", _emailConfig.From));
             emailMessage.To.AddRange(message.To);
             emailMessage.Subject = message.Subject;
-            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = string.Format("""
-                <h2 style='color:red;'>Please, confirm your account.</h2> <br/> 
-
-                Confirm your Email using: {0} 
-                """, message.Content) };
+            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = string.Format("<h2 style='color:red;'>{0}: {1}</h2> <br/> ", message.Subject, message.Content) };
 
             return emailMessage;
         }
