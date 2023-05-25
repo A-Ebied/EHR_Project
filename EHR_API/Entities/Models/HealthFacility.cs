@@ -19,11 +19,11 @@ namespace EHR_API.Entities.Models
         public DateTime CreatedAt { get; set; } 
         public DateTime UpdateddAt { get; set; }
 
-        public string RegistrationDataId { get; set; }
+        public string MedicalTeamId { get; set; }
         public int GovernorateId { get; set; }
 
         public Governorate Governorate { get; set; }
-        public RegistrationData RegistrationData { get; set; }
+        public MedicalTeam MedicalTeam { get; set; }
         public ICollection<MedicalFacilityTeam> MedicalFacilityTeams { get; set; }
         public ICollection<Visit> Visits { get; set; }
     }

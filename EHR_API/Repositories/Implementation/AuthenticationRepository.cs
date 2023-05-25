@@ -33,6 +33,13 @@ namespace EHR_API.Repositories.Implementation
             _emailSender = emailSender;
         }
 
+        private async Task Code(string email, string code) 
+        {
+            var message = new Message(new string[] { email }, "Confirm Email", code);
+
+            await _emailSender.SendEmailAsync(message);
+        }
+
         public async Task<IdentityResult> RegisterUser(RegistrationDataCreateDTO registrationDataDTO)
         {
             var user = _mapper.Map<RegistrationData>(registrationDataDTO);
@@ -45,12 +52,16 @@ namespace EHR_API.Repositories.Implementation
             {
                 await _userManager.AddToRolesAsync(user, new List<string>() { registrationDataDTO.Role });
 
-                var message = new Message(new string[] { registrationDataDTO.Email }, "Confirm Email", user.ConfirmEmailCode);
-
-                await _emailSender.SendEmailAsync(message);
+                await Code(registrationDataDTO.Email, user.ConfirmEmailCode);              
             }
 
             return result;
+        }
+
+        public async Task ReSendEmailConfirmCode(string email)
+        {
+            _user = await _userManager.FindByEmailAsync(email);
+            await Code(email, _user.ConfirmEmailCode);
         }
 
         public async Task<RegistrationData> ConfirmEmail(string email, string code)

@@ -137,18 +137,18 @@ namespace EHR_API.Controllers
 
                 var entity = await _db._healthFacility.GetAsync(
                     expression: g => g.Id == id,
-                     includeProperties: "RegistrationData,MedicalFacilityTeams");
+                     includeProperties: "MedicalTeam,MedicalFacilityTeams");
 
-                entity.RegistrationData = await _db._authentication.GetAsync(
-                    expression: r => r.Id == entity.RegistrationData.Id,
-                    includeProperties: "PersonalData,MedicalTeam");
+                entity.MedicalTeam = await _db._medicalTeam.GetAsync(
+                    expression: r => r.Id == entity.MedicalTeam.Id,
+                    includeProperties: "RegistrationData");
 
                 if (entity == null)
                 {
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id} "));
                 }
 
-                UserDTOForOthers manager = APIResponses.User(entity.RegistrationData);
+                UserDTOForOthers manager = APIResponses.User(entity.MedicalTeam.RegistrationData);
                 var gov = await _db._governorate.GetAsync(
                     expression: g => g.Id == entity.GovernorateId);
 

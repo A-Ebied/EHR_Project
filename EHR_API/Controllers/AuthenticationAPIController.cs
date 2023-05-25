@@ -85,23 +85,27 @@ namespace EHR_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<APIResponse>> GetHealthFacilityManagers([FromQuery(Name = "Nationality")] string nationality = null)
+        public async Task<ActionResult<APIResponse>> GetHealthFacilityManagers()
         {
             try
             {
-                IEnumerable<RegistrationData> entities = new List<RegistrationData>();
-                entities = await _db._authentication.GetAllAsync(
-                    expression: nationality == null ? null : e => e.Nationality.ToLower().Contains(nationality),
-                    includeProperties: "PersonalData,MedicalTeam");
+                //IEnumerable<RegistrationData> entities = new List<RegistrationData>();
+                //entities = await _db._authentication.GetAllAsync(
+                //    includeProperties: "PersonalData,MedicalTeam");
 
+                IEnumerable<MedicalTeam> entities = new List<MedicalTeam>();
+                entities = await _db._medicalTeam.GetAllAsync(
+                   includeProperties: "RegistrationData");
+
+                //var managers = new List<RegistrationData>();
                 var managers = new List<RegistrationData>();
                 IEnumerable<string> roles = new List<string>();
                 foreach (var entity in entities)
                 {
-                    roles = await _userManager.GetRolesAsync(entity);
+                    roles = await _userManager.GetRolesAsync(entity.RegistrationData);
                     if (roles.Contains("HealthFacilityManager") == true)
                     {
-                        managers.Add(entity);
+                        managers.Add(entity.RegistrationData);
                     }
                 }
 
@@ -604,10 +608,36 @@ namespace EHR_API.Controllers
                 }
                 else
                 {
-                    _response.Result = "The email has not been confirmed";
+                    _response.Result = "Oops! The verification code you entered is incorrect. Please try again. Thank you!";
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(_response);
                 }
+            }
+            catch (Exception ex)
+            {
+                return APIResponses.InternalServerError(ex);
+            }
+        }
+
+        [HttpPost("ReSendEmailConfirmCode")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<APIResponse>> ReSendEmailConfirmCode(string email)
+        {
+            try
+            {
+                if (email == null)
+                {
+                    return BadRequest(APIResponses.BadRequest("No data has been sent"));
+                }
+
+                await _db._authentication.ReSendEmailConfirmCode(email);
+
+                _response.Result = "The code has been resent.";
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+
             }
             catch (Exception ex)
             {
@@ -661,7 +691,7 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
 
-                 var result = await _db._authentication.ForgotPassword(email);
+                var result = await _db._authentication.ForgotPassword(email);
 
                 if (result)
                 {
@@ -681,7 +711,7 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
-        
+
         [HttpPut("NewPassword")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -693,8 +723,8 @@ namespace EHR_API.Controllers
                 if (email == null || code == null || password == null || confirmPassword == null)
                 {
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
-                } 
-                
+                }
+
                 if (password != confirmPassword)
                 {
                     return BadRequest(APIResponses.BadRequest("Password & Confirm Password do not match"));

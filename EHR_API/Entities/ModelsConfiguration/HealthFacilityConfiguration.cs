@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using EHR_API.Extensions;
 using EHR_API.Entities.Models;
-using EHR_API.Entities.Models.UsersData;
 
 namespace EHR_API.Entities.ModelsConfiguration
 {
@@ -25,7 +22,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                      Address = "Address1",
                      Description = "Description1",
                      GovernorateId = 1,
-                     RegistrationDataId = "12345678912342",
+                     MedicalTeamId = "12345678912342",
                      CreatedAt = DateTime.Now,
                      UpdateddAt = DateTime.Now,
                  },
@@ -42,7 +39,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                      Address = "Address2",
                      Description = "Description2",
                      GovernorateId = 1,
-                     RegistrationDataId = "12345678912348",
+                     MedicalTeamId = "12345678912348",
                      CreatedAt = DateTime.Now,
                      UpdateddAt = DateTime.Now,
                  },
@@ -59,7 +56,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                       Address = "Address3",
                       Description = "Description3",
                       GovernorateId = 1,
-                      RegistrationDataId = "12345678912349",
+                      MedicalTeamId = "12345678912349",
                       CreatedAt = DateTime.Now,
                       UpdateddAt = DateTime.Now,
                   });
