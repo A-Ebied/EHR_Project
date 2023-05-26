@@ -88,6 +88,7 @@ namespace EHR_API.Controllers
                 
                 visitDTO.HealthFacilityTitle = _db._healthFacility.GetAsync(h => h.Id == visitDTO.HealthFacilityId).Result.Title;
 
+                visitDTO.ICDName = _db._icd.GetAsync(h => h.Code == visitDTO.ICDId).Result.DiagnosisName;
 
                 var i = 0;
                 foreach (var item in entity.UserVaccinations)

@@ -17,6 +17,7 @@ namespace EHR_API.Entities.DTOs.VisitDTOs
         public string VisitType { get; set; }
         public string PatientCondition { get; set; }
         public string ICDId { get; set; }
+        public string ICDName { get; set; }
         public string InstructionDescription { get; set; }
         public string Note { get; set; }
         public string ReportImageUrl { get; set; }
