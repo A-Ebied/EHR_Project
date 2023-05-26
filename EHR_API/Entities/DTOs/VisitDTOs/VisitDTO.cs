@@ -11,7 +11,9 @@ namespace EHR_API.Entities.DTOs.VisitDTOs
         public int Id { get; set; }
         public string RegistrationDataId { get; set; }
         public string MedicalTeamId { get; set; }
+        public string MedicalMemberName { get; set; }
         public int HealthFacilityId { get; set; }
+        public string HealthFacilityTitle { get; set; }
         public string VisitType { get; set; }
         public string PatientCondition { get; set; }
         public string ICDId { get; set; }
@@ -21,7 +23,7 @@ namespace EHR_API.Entities.DTOs.VisitDTOs
         // public double Price { get; set; }
         // public bool UnderInsurance { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime UpdateddAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
         public ICollection<VisitVitalSignDTOForOthers> VisitVitalSigns { get; set; }
         public ICollection<VisitMedicationDTOForOthers> VisitMedications { get; set; }
         public ICollection<VisitRadLabTestDTOForOthers> VisitRadLabTests { get; set; }

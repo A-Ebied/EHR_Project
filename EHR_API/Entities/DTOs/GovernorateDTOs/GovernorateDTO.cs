@@ -8,7 +8,7 @@ namespace EHR_API.Entities.DTOs.GovernorateDTOs
         public int Id { get; set; }
         public string Title { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime UpdateddAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         public ICollection<HealthFacilityDTOForOthers> HealthFacilitys { get; set; }
         public ICollection<UserDTOForOthers> Users { get; set; }

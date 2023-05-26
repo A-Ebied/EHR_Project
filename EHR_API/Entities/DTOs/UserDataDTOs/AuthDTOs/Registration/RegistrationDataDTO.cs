@@ -14,7 +14,7 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime UpdateddAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         public IEnumerable<string> Roles { get; set; }  
         public IEnumerable<UserInsuranceDTO> UserInsurances { get; set; }  

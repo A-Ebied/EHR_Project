@@ -82,7 +82,30 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id} "));
                 }
 
-                _response.Result = _mapper.Map<VisitDTO>(entity);
+                var visitDTO = _mapper.Map<VisitDTO>(entity);
+                
+                visitDTO.MedicalMemberName = _db._authentication.GetAsync(h => h.Id == visitDTO.MedicalTeamId).Result.FullName;
+                
+                visitDTO.HealthFacilityTitle = _db._healthFacility.GetAsync(h => h.Id == visitDTO.HealthFacilityId).Result.Title;
+
+
+                var i = 0;
+                foreach (var item in entity.UserVaccinations)
+                {
+                    item.Vaccination = await _db._vaccination.GetAsync(v => v.Id == item.Id);
+                    visitDTO.UserVaccinations.ToList()[i].VaccinationName = item.Vaccination.Name;
+                    ++i;
+                }
+                
+                i = 0;
+                foreach (var item in entity.VisitMedications)
+                {
+                    item.Medication = await _db._medication.GetAsync(v => v.Id == item.Id);
+                    visitDTO.VisitMedications.ToList()[i].MedicationName = item.Medication.Name;
+                    ++i;
+                }
+
+                _response.Result = visitDTO;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -321,6 +344,7 @@ namespace EHR_API.Controllers
 
                 var entity = _mapper.Map<Visit>(entityUpdateDTO);
                 entity.UpdatedAt = DateTime.Now;
+                entity.CreatedAt = oldEntity.CreatedAt;
                 await _db._visit.UpdateAsync(entity, oldEntity);
 
                 _response.StatusCode = HttpStatusCode.OK;

@@ -16,10 +16,8 @@ namespace EHR_API.Entities.DTOs.HealthFacilityDTOs
         public string Email { get; set; }
         public string Address { get; set; }
         public string Description { get; set; }
-        [DisplayName("Created at")]
         public DateTime CreatedAt { get; set; }
-        [DisplayName("Updated at")]
-        public DateTime UpdateddAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         public string Governorate { get; set; }
         public UserDTOForOthers Manager { get; set; }

@@ -15,7 +15,8 @@ namespace EHR_API.Entities.DTOs.SurgeryProgressNoteDTOs
         public int SurgeryId { get; set; }
         public byte[] UserImage { get; set; }
         public string ImageName { get; set; }
-
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
     }
 }

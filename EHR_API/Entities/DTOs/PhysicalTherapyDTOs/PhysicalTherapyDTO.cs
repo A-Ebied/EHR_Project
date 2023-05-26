@@ -9,6 +9,6 @@
         public string Duration { get; set; }
         public int VisitId { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime UpdateddAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }
