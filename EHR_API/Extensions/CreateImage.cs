@@ -14,7 +14,7 @@
                 image.CopyTo(fileStreams);
             }
 
-            var path =  "/" + folderName + "/" + fileName + extension;
+            var path = "/images/" + folderName + "/" + fileName + extension;
             return path;
         }
     }
