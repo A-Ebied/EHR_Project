@@ -45,8 +45,8 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, "wwwroot/images")),
-    RequestPath = "/images"
+    FileProvider = new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, "wwwroot/files")),
+    RequestPath = "/files"
 });
 
 app.UseCors("CorsPolicy");

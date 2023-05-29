@@ -36,7 +36,8 @@ namespace EHR_API.Repositories.Implementation
             _receiveBloodData = new ReceiveBloodDataRepository(db);
             _receiveBlood = new ReceiveBloodRepository(db);
             _surgery = new SurgeryRepository(db);
-            _surgeryProgressNote = new SurgeryProgressNoteRepository(db);
+            _surgeryProgressNote = new SurgeryProgressNoteRepository(db, webHost);
+            _admitProgressNote = new AdmitProgressNoteRepository(db, webHost);
             _admit = new AdmitRepository(db);
             _facilityTeam = new MedicalFacilityTeamRepository(db);
             _contraindication = new ContraindicationRepository(db);
@@ -71,6 +72,7 @@ namespace EHR_API.Repositories.Implementation
         public IReceiveBloodRepository _receiveBlood { get; private set; }
         public ISurgeryRepository _surgery { get; private set; }
         public ISurgeryProgressNoteRepository _surgeryProgressNote { get; private set; }
+        public IAdmitProgressNoteRepository _admitProgressNote { get; private set; }
         public IAdmitRepository _admit { get; private set; }
         public IMedicalFacilityTeamRepository _facilityTeam { get; private set; }
         public IContraindicationRepository _contraindication { get; private set; }

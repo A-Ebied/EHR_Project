@@ -5,27 +5,27 @@ using EHR_API.Repositories.Contracts;
 
 namespace EHR_API.Repositories.Implementation
 {
-    public class SurgeryProgressNoteRepository : RepositoryBase<SurgeryProgressNote>, ISurgeryProgressNoteRepository
+    public class AdmitProgressNoteRepository : RepositoryBase<AdmitProgressNote>, IAdmitProgressNoteRepository
     {
         private readonly ApplicationDbContext _db;
         private readonly IWebHostEnvironment _webHost;
-        public SurgeryProgressNoteRepository(ApplicationDbContext db, IWebHostEnvironment webHost) : base(db)
+        public AdmitProgressNoteRepository(ApplicationDbContext db, IWebHostEnvironment webHost) : base(db)
         {
             _db = db;
             _webHost = webHost;
         }
 
-        public async Task CreateRangeAsync(List<SurgeryProgressNote> entities)
+        public async Task CreateRangeAsync(List<AdmitProgressNote> entities)
         {
             await _dbSet.AddRangeAsync(entities);
             await _db.SaveChangesAsync();
         }
-         
-        public override async Task CreateAsync(SurgeryProgressNote entity)
+
+        public override async Task CreateAsync(AdmitProgressNote entity)
         {
             if (entity.File != null && entity.File.Length > 0)
             {
-                var path = CreateImage.CreateFiles(_webHost, entity.File, "SurgeryProgressNote");
+                var path = CreateImage.CreateFiles(_webHost, entity.File, "AdmitProgressNote");
                 entity.FileUrl = path;
             }
 
@@ -33,7 +33,7 @@ namespace EHR_API.Repositories.Implementation
             await _db.SaveChangesAsync();
         }
 
-        public override async Task<SurgeryProgressNote> UpdateAsync(SurgeryProgressNote entity, SurgeryProgressNote oldEntity)
+        public override async Task<AdmitProgressNote> UpdateAsync(AdmitProgressNote entity, AdmitProgressNote oldEntity)
         {
             if (entity.File != null && entity.File.Length > 0)
             {
@@ -46,7 +46,7 @@ namespace EHR_API.Repositories.Implementation
                     }
                 }
 
-                var path = CreateImage.CreateFiles(_webHost, entity.File, "SurgeryProgressNote");
+                var path = CreateImage.CreateFiles(_webHost, entity.File, "AdmitProgressNote");
                 entity.FileUrl = path;
             }
 
@@ -55,7 +55,7 @@ namespace EHR_API.Repositories.Implementation
             return entity;
         }
 
-        public override async Task DeleteAsync(SurgeryProgressNote entity)
+        public override async Task DeleteAsync(AdmitProgressNote entity)
         {
             if (entity.FileUrl != null)
             {

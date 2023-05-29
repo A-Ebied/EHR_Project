@@ -23,5 +23,6 @@ namespace EHR_API.Entities.Models
         public RegistrationData RegistrationData { get; set; }
         public ICollection<Surgery> Surgeries { get; set; }
         public ICollection<ReceiveBlood> ReceiveBloods { get; set; }
+        public ICollection<AdmitProgressNote> AdmitProgressNotes { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EHR_API.Entities;
+using EHR_API.Entities.DTOs.AdmitProgressNoteDTOs;
 using EHR_API.Entities.DTOs.SurgeryProgressNoteDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
@@ -9,15 +10,15 @@ using System.Net;
 
 namespace EHR_API.Controllers
 {
-    [Route("api/SurgeryProgressNoteAPI")]
+    [Route("api/AdmitProgressNoteAPI")]
     [ApiController]
-    public class SurgeryProgressNoteAPIController : ControllerBase
+    public class AdmitProgressNoteAPIController : ControllerBase
     {
         protected APIResponse _response;
         private readonly IMapper _mapper;
         private readonly IMainRepository _db;
 
-        public SurgeryProgressNoteAPIController(IMainRepository db, IMapper mapper)
+        public AdmitProgressNoteAPIController(IMainRepository db, IMapper mapper)
         {
             _db = db;
             _mapper = mapper;
@@ -26,24 +27,23 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpGet("GetSurgeryProgressNotes")]
-        public async Task<ActionResult<APIResponse>> GetSurgeryProgressNotes(int surgeryId)
+        [HttpGet("GetAdmitProgressNotes")]
+        public async Task<ActionResult<APIResponse>> GetAdmitProgressNotes(int admitId)
         {
             try
             {
-                if (surgeryId == 0)
+                if (admitId == 0)
                 {
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
-                var entities = await _db._surgeryProgressNote.GetAllAsync(
-                    expression: g => g.SurgeryId == surgeryId);
+                var entities = await _db._admitProgressNote.GetAllAsync(expression: g => g.AdmitId == admitId);
                 if (entities.Count == 0)
                 {
-                    return BadRequest(APIResponses.BadRequest($"No objects with Id = {surgeryId} "));
+                    return BadRequest(APIResponses.BadRequest($"No objects with Id = {admitId} "));
                 }
 
-                _response.Result = _mapper.Map<List<SurgeryProgressNoteDTOForOthers>>(entities);
+                _response.Result = _mapper.Map<List<AdmitProgressNoteDTOForOthers>>(entities);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -54,8 +54,8 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpGet("GetSurgeryProgressNote")]
-        public async Task<ActionResult<APIResponse>> GetSurgeryProgressNote(int id)
+        [HttpGet("GetAdmitProgressNote")]
+        public async Task<ActionResult<APIResponse>> GetAdmitProgressNote(int id)
         {
             try
             {
@@ -64,13 +64,13 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is Null"));
                 }
 
-                var entity = await _db._surgeryProgressNote.GetAsync(expression: g => g.Id == id);
+                var entity = await _db._admitProgressNote.GetAsync(expression: g => g.Id == id);
                 if (entity == null)
                 {
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id}"));
                 }
 
-                _response.Result = _mapper.Map<SurgeryProgressNoteDTO>(entity);
+                _response.Result = _mapper.Map<AdmitProgressNoteDTO>(entity);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -82,8 +82,8 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpPost("CreateSurgeryProgressNote")]
-        public async Task<ActionResult<APIResponse>> CreateSurgeryProgressNote([FromForm] SurgeryProgressNoteCreateDTO entityCreateDTO)
+        [HttpPost("CreateAdmitProgressNote")]
+        public async Task<ActionResult<APIResponse>> CreateAdmitProgressNote([FromForm] AdmitProgressNoteCreateDTO entityCreateDTO)
         {
             try
             {
@@ -92,14 +92,14 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
 
-                if (await _db._surgeryProgressNote.GetAsync(expression: e => e.Id == entityCreateDTO.Id) == null)
+                if (await _db._admitProgressNote.GetAsync(expression: e => e.Id == entityCreateDTO.Id) == null)
                 {
                     return BadRequest(APIResponses.BadRequest("ID is not exists"));
                 }
 
-                if (await _db._surgery.GetAsync(expression: e => e.Id == entityCreateDTO.SurgeryId) == null)
+                if (await _db._admit.GetAsync(expression: e => e.Id == entityCreateDTO.AdmitId) == null)
                 {
-                    return BadRequest(APIResponses.BadRequest("SurgeryId is not exists"));
+                    return BadRequest(APIResponses.BadRequest("Admit Id is not exists"));
                 }
 
                 if (await _db._medicalTeam.GetAsync(expression: e => e.Id == entityCreateDTO.MedicalTeamId) == null)
@@ -108,13 +108,13 @@ namespace EHR_API.Controllers
                 }
 
 
-                var entity = _mapper.Map<SurgeryProgressNote>(entityCreateDTO);
+                var entity = _mapper.Map<AdmitProgressNote>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
                 entity.UpdatedAt = DateTime.Now;
 
-                await _db._surgeryProgressNote.CreateAsync(entity);
+                await _db._admitProgressNote.CreateAsync(entity);
 
-                _response.Result = _mapper.Map<SurgeryProgressNoteDTO>(entity);
+                _response.Result = _mapper.Map<AdmitProgressNoteDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;
                 return Ok(_response);
             }
@@ -126,8 +126,8 @@ namespace EHR_API.Controllers
 
 
         //[Authorize]
-        [HttpDelete("DeleteSurgeryProgressNote")]
-        public async Task<ActionResult<APIResponse>> DeleteSurgeryProgressNote(int id)
+        [HttpDelete("DeleteAdmitProgressNote")]
+        public async Task<ActionResult<APIResponse>> DeleteAdmitProgressNote(int id)
         {
             try
             {
@@ -136,13 +136,13 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is Null"));
                 }
 
-                var removedEntity = await _db._surgeryProgressNote.GetAsync(expression: g => g.Id == id);
+                var removedEntity = await _db._admitProgressNote.GetAsync(expression: g => g.Id == id);
                 if (removedEntity == null)
                 {
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id}"));
                 }
 
-                await _db._surgeryProgressNote.DeleteAsync(removedEntity);
+                await _db._admitProgressNote.DeleteAsync(removedEntity);
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = "The object has been deleted";
@@ -155,11 +155,8 @@ namespace EHR_API.Controllers
         }
 
         //[Authorize]
-        [HttpPut("UpdateSurgeryProgressNote")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> UpdateSurgeryProgressNote(int id, [FromForm] SurgeryProgressNoteUpdateDTO entityUpdateDTO)
+        [HttpPut("UpdateAdmitProgressNote")]
+        public async Task<ActionResult<APIResponse>> UpdateAdmitProgressNote(int id, [FromForm] AdmitProgressNoteUpdateDTO entityUpdateDTO)
         {
             try
             {
@@ -173,20 +170,20 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
-                var oldOne = await _db._surgeryProgressNote.GetAsync(expression: g => g.Id == id);
+                var oldOne = await _db._admitProgressNote.GetAsync(expression: g => g.Id == id);
                 if (oldOne == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id}"));
                 }
 
-                var entity = _mapper.Map<SurgeryProgressNote>(entityUpdateDTO);
+                var entity = _mapper.Map<AdmitProgressNote>(entityUpdateDTO);
                 entity.UpdatedAt = DateTime.Now;
                 entity.CreatedAt = oldOne.CreatedAt;
 
-                await _db._surgeryProgressNote.UpdateAsync(entity);
+                await _db._admitProgressNote.UpdateAsync(entity);
 
                 _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = _mapper.Map<SurgeryProgressNoteDTO>(entity);
+                _response.Result = _mapper.Map<AdmitProgressNoteDTO>(entity);
                 return Ok(_response);
             }
             catch (Exception ex)

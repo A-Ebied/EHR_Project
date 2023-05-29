@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EHR_API.Entities.DTOs.SurgeryProgressNoteDTOs
+namespace EHR_API.Entities.DTOs.AdmitProgressNoteDTOs
 {
-    public class SurgeryProgressNoteUpdateDTO
+    public class AdmitProgressNoteUpdateDTO
     {
         [Required]
         public int Id { get; set; }

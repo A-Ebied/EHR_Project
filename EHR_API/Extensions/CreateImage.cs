@@ -7,14 +7,14 @@
             var extension = Path.GetExtension(image.FileName);
 
             string fileName = Guid.NewGuid().ToString();
-            var uploads = Path.Combine(_webHost.WebRootPath, $@"images\{folderName}");
+            var uploads = Path.Combine(_webHost.WebRootPath, $@"files\{folderName}");
 
             using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
             {
                 image.CopyTo(fileStreams);
             }
 
-            var path = "/images/" + folderName + "/" + fileName + extension;
+            var path = "/files/" + folderName + "/" + fileName + extension;
             return path;
         }
     }

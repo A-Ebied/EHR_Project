@@ -2,15 +2,20 @@
 using EHR_API.Entities;
 using EHR_API.Entities.DTOs.AdmitDTOs;
 using EHR_API.Entities.Models;
+using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
 namespace EHR_API.Controllers
 {
-    [Route("api/AdmitAPI")]
+    [Authorize]
     [ApiController]
+    [Route("api/AdmitAPI")]
     public class AdmitAPIController : ControllerBase
     {
         protected APIResponse _response;
@@ -24,14 +29,8 @@ namespace EHR_API.Controllers
             _response = new();
         }
 
-
-        //[Authorize]
         [HttpGet("GetUserAdmits")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetUserAdmits(string userId)
+        public async Task<ActionResult<APIResponse>> GetUserAdmits(string userId = null)
         {
             try
             {
@@ -40,7 +39,35 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
-                var entities = await _db._admit.GetAllAsync(
+                var entities = new List<Admit>();
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerRole = null;
+                string headerId = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId == userId || headerRole == SD.Physician || headerRole == SD.Nurse || headerRole == SD.HealthFacilityManager)
+                    {
+                        entities = await _db._admit.GetAllAsync(expression: g => g.RegistrationDataId == userId);
+                    }
+
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
+
+                entities = await _db._admit.GetAllAsync(
                     expression: g => g.RegistrationDataId == userId);
 
                 if (entities.Count == 0)
@@ -60,10 +87,7 @@ namespace EHR_API.Controllers
 
         //[Authorize]
         [HttpGet("{id}")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = SD.SystemManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> GetAdmit(int id)
         {
             try
@@ -109,12 +133,12 @@ namespace EHR_API.Controllers
                 {
                     return BadRequest(APIResponses.BadRequest("User is not exists"));
                 }
-                
+
                 if (await _db._medicalTeam.GetAsync(expression: e => e.Id == entityCreateDTO.MedicalTeamId) == null)
                 {
                     return BadRequest(APIResponses.BadRequest("Medical member is not exists"));
                 }
-                
+
                 if (await _db._healthFacility.GetAsync(expression: e => e.Id == entityCreateDTO.HealthFacilityId) == null)
                 {
                     return BadRequest(APIResponses.BadRequest("Health Facility is not exists"));
@@ -129,7 +153,7 @@ namespace EHR_API.Controllers
                 }
 
                 await _db._admit.CreateAsync(entity);
-                 
+
                 _response.Result = _mapper.Map<AdmitDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;
                 return Ok(_response);

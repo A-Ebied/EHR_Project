@@ -380,9 +380,6 @@ namespace EHR_API.Controllers
         }
 
         [HttpPost("RegisterUser")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<APIResponse>> RegisterUser([FromBody] RegistrationDataCreateDTO registrationDataDTO)
         {
             try
@@ -414,9 +411,6 @@ namespace EHR_API.Controllers
         }
 
         [HttpPut("ConfirmEmail")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<APIResponse>> ConfirmEmail(string email, string code)
         {
             try
@@ -454,9 +448,6 @@ namespace EHR_API.Controllers
         }
 
         [HttpPost("ReSendEmailConfirmCode")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<APIResponse>> ReSendEmailConfirmCode(string email)
         {
             try
@@ -480,9 +471,6 @@ namespace EHR_API.Controllers
         }
 
         [HttpPost("Login")]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<APIResponse>> Login([FromBody] LoginRequestDTO user)
         {
             try
@@ -513,9 +501,6 @@ namespace EHR_API.Controllers
 
 
         [HttpPost("ForgotPassword")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<APIResponse>> ForgotPassword(string email)
         {
             try
@@ -547,9 +532,6 @@ namespace EHR_API.Controllers
         }
 
         [HttpPut("NewPassword")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<APIResponse>> NewPassword(string email, string code, string password, string confirmPassword)
         {
             try
@@ -593,9 +575,6 @@ namespace EHR_API.Controllers
 
         //[Authorize]
         [HttpPut("{userId}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> UpdateRegistrationData(string userId, [FromBody] RegistrationDataUpdateDTO entityUpdateDTO)
         {
             try

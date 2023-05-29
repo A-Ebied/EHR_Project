@@ -12,10 +12,7 @@ namespace EHR_API.Entities.Models
         public string Contraindication { get; set; }
         public string ImageUrl { get; set; }
         [NotMapped]
-        //public byte[] MedicationImage { get; set; }
         public IFormFile MedicationImage { get; set; }
-        //[NotMapped]
-        //public string ImageName { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
