@@ -3,8 +3,10 @@ using EHR_API.Entities;
 using EHR_API.Entities.DTOs.ContraindicationDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs;
 using EHR_API.Entities.Models;
+using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -17,12 +19,14 @@ namespace EHR_API.Controllers
         protected APIResponse _response;
         private readonly IMapper _mapper;
         private readonly IMainRepository _db;
+        private readonly UserManager<RegistrationData> _userManager;
 
-        public ContraindicationAPIController(IMainRepository db, IMapper mapper)
+        public ContraindicationAPIController(IMainRepository db, IMapper mapper, UserManager<RegistrationData> userManager)
         {
             _db = db;
             _mapper = mapper;
             _response = new();
+            _userManager = userManager;
         }
 
 
@@ -83,9 +87,15 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id} "));
                 }
 
-                UserDTOForOthers medicalMember = APIResponses.User(await _db._authentication.GetAsync(
-                        expression: r => r.Id == entity.MedicalTeam.Id,
-                        includeProperties: "PersonalData,MedicalTeam"));
+                
+                var reg = await _db._authentication.GetAsync(
+                    expression: r => r.Id == entity.MedicalTeam.Id,
+                    includeProperties: "PersonalData");
+
+                var role = "";
+                role = _userManager.GetRolesAsync(reg).Result.FirstOrDefault();
+
+                UserDTOForOthers medicalMember = APIResponses.User(reg, role);
 
                 var result = _mapper.Map<ContraindicationDTO>(entity);
                 result.MedicalTeam = medicalMember;
@@ -116,18 +126,18 @@ namespace EHR_API.Controllers
                 {
                     return BadRequest(APIResponses.BadRequest("User is not exists"));
                 }
-                
+
                 if (await _db._medicalTeam.GetAsync(expression: e => e.Id == entityCreateDTO.MedicalTeamId) == null)
                 {
                     return BadRequest(APIResponses.BadRequest("Medical member is not exists"));
                 }
-                
+
                 var entity = _mapper.Map<Contraindication>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
                 entity.UpdatedAt = DateTime.Now;
-                
+
                 await _db._contraindication.CreateAsync(entity);
-                 
+
                 _response.Result = _mapper.Map<ContraindicationDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;
                 return Ok(_response);
@@ -205,11 +215,11 @@ namespace EHR_API.Controllers
                 {
                     return BadRequest(APIResponses.BadRequest("Medical member is not exists"));
                 }
- 
+
                 var entity = _mapper.Map<Contraindication>(entityUpdateDTO);
                 entity.UpdatedAt = DateTime.Now;
                 entity.CreatedAt = oldOne.CreatedAt;
-                 
+
                 await _db._contraindication.UpdateAsync(entity);
 
                 _response.StatusCode = HttpStatusCode.OK;

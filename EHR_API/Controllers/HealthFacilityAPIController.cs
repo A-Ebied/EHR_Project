@@ -3,12 +3,12 @@ using EHR_API.Entities;
 using EHR_API.Entities.DTOs.HealthFacilityDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs;
 using EHR_API.Entities.Models;
+using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using System.Text.Json;
 
 namespace EHR_API.Controllers
 {
@@ -19,12 +19,14 @@ namespace EHR_API.Controllers
         protected APIResponse _response;
         private readonly IMapper _mapper;
         private readonly IMainRepository _db;
+        private readonly UserManager<RegistrationData> _userManager;
 
-        public HealthFacilityAPIController(IMainRepository db, IMapper mapper)
+        public HealthFacilityAPIController(IMainRepository db, IMapper mapper, UserManager<RegistrationData> userManager = null)
         {
             _db = db;
             _mapper = mapper;
             _response = new();
+            _userManager = userManager;
         }
 
         //[Authorize(Roles = SD.SystemManager + "," + SD.HealthFacilityManager)]
@@ -148,7 +150,10 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id} "));
                 }
 
-                UserDTOForOthers manager = APIResponses.User(entity.MedicalTeam.RegistrationData);
+                var role = "";
+                role = _userManager.GetRolesAsync(entity.MedicalTeam.RegistrationData).Result.FirstOrDefault();
+
+                UserDTOForOthers manager = APIResponses.User(entity.MedicalTeam.RegistrationData, role);
                 var gov = await _db._governorate.GetAsync(
                     expression: g => g.Id == entity.GovernorateId);
 

@@ -48,22 +48,26 @@ namespace EHR_API.Extensions
             return _response;
         }
 
-        public static UserDTOForOthers User(RegistrationData registrationData)
+        public static UserDTOForOthers User(RegistrationData registrationData, string role)
         {
             UserDTOForOthers user = new();
             user.Id = registrationData.Id;
             user.Name = registrationData.FullName;
             user.UserName = registrationData.UserName;
+
             if (registrationData.PersonalData != null)
             {
                 user.UserImageUrl = registrationData.PersonalData.UserImageUrl;
                 user.AgeGroup = registrationData.PersonalData.AgeGroup;
             }
+
             if (registrationData.MedicalTeam != null)
             {
                 user.Specialization = registrationData.MedicalTeam.MedicalSpecialization;
             }
-              
+
+            user.Role = role;
+
             return user;
         }   
     }

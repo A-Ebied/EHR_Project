@@ -13,7 +13,7 @@ using System.Net;
 
 namespace EHR_API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/AdmitAPI")]
     public class AdmitAPIController : ControllerBase
@@ -147,6 +147,7 @@ namespace EHR_API.Controllers
                 var entity = _mapper.Map<Admit>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
                 entity.UpdatedAt = DateTime.Now;
+
                 if (entity.LeaveAt == entity.AdmitAt)
                 {
                     return BadRequest(APIResponses.BadRequest("Leave at can not be equal to Admit at"));

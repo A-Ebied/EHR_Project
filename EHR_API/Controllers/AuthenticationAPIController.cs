@@ -62,7 +62,7 @@ namespace EHR_API.Controllers
                 List<UserDTOForOthers> managerUsers = new();
                 foreach (var item in systemManagers)
                 {
-                    managerUsers.Add(APIResponses.User(_mapper.Map<RegistrationData>(item)));
+                    managerUsers.Add(APIResponses.User(_mapper.Map<RegistrationData>(item), "SystemManager"));
                 }
 
                 _response.Result = managerUsers;
@@ -76,7 +76,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        
+
         [HttpGet("GetHealthFacilityManagers")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         public async Task<ActionResult<APIResponse>> GetHealthFacilityManagers()
@@ -106,7 +106,7 @@ namespace EHR_API.Controllers
                 List<UserDTOForOthers> managerUsers = new();
                 foreach (var item in managers)
                 {
-                    managerUsers.Add(APIResponses.User(_mapper.Map<RegistrationData>(item)));
+                    managerUsers.Add(APIResponses.User(_mapper.Map<RegistrationData>(item), "HealthFacilityManager"));
                 }
 
                 _response.Result = managerUsers;
@@ -120,7 +120,7 @@ namespace EHR_API.Controllers
             }
         }
 
-      
+
         [HttpGet("GetMedicalUsers")]
         [ResponseCache(CacheProfileName = SD.ProfileName)]
         public async Task<ActionResult<APIResponse>> GetMedicalUsers()
@@ -153,15 +153,17 @@ namespace EHR_API.Controllers
                 }
 
                 List<UserDTOForOthers> medicalTeam = new();
+                var role = "";
                 foreach (var item in medicalUsers)
                 {
-                    medicalTeam.Add(APIResponses.User(_mapper.Map<RegistrationData>(item)));
+                    role = _userManager.GetRolesAsync(item).Result.FirstOrDefault();
+                    medicalTeam.Add(APIResponses.User(_mapper.Map<RegistrationData>(item), role));
                 }
 
                 _response.Result = medicalTeam;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
-               
+
             }
             catch (Exception ex)
             {
@@ -292,9 +294,11 @@ namespace EHR_API.Controllers
                 }
 
                 List<UserDTOForOthers> users = new();
+                var role = "";
                 foreach (var item in entities)
                 {
-                    users.Add(APIResponses.User(_mapper.Map<RegistrationData>(item)));
+                    role = _userManager.GetRolesAsync(item).Result.FirstOrDefault();
+                    users.Add(APIResponses.User(_mapper.Map<RegistrationData>(item), role));
                 }
 
                 _response.Result = users;

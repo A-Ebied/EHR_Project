@@ -7,6 +7,7 @@ using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text.Json;
@@ -20,12 +21,14 @@ namespace EHR_API.Controllers
         protected APIResponse _response;
         private readonly IMapper _mapper;
         private readonly IMainRepository _db;
+        private readonly UserManager<RegistrationData> _userManager;
 
-        public GovernorateAPIController(IMainRepository db, IMapper mapper)
+        public GovernorateAPIController(IMainRepository db, IMapper mapper, UserManager<RegistrationData> userManager = null)
         {
             _db = db;
             _mapper = mapper;
             _response = new();
+            _userManager = userManager;
         }
 
         //[Authorize(Roles = SD.SystemManager)]
@@ -155,20 +158,20 @@ namespace EHR_API.Controllers
                 }
 
                 var temp = await _db._medicalTeam.GetAllAsync();
-                var medicalTeam = new RegistrationData();
+                var medicalMem = new RegistrationData();
                 var users = new List<UserDTOForOthers>();
-
+                var role = "";
                 foreach (var item in entity.PersonalData)
                 {
                     if (temp.FirstOrDefault(t => t.Id == item.Id) != null)
                     {
-                        medicalTeam = await _db._authentication.GetAsync(
+                        medicalMem = await _db._authentication.GetAsync(
                             includeProperties: "MedicalTeam",
                             expression: r => r.Id == item.Id);
+                        medicalMem.PersonalData = item;
 
-                        medicalTeam.PersonalData = item;
-
-                        users.Add(APIResponses.User(medicalTeam));
+                        role = _userManager.GetRolesAsync(medicalMem).Result.FirstOrDefault();
+                        users.Add(APIResponses.User(medicalMem, role));
                     }
                 }
 
