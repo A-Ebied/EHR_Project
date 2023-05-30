@@ -33,7 +33,7 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration
         public ICollection<ContraindicationDTO> Contraindications { get; set; }
         public ICollection<AllergyDTO> Allergies { get; set; }
         public ICollection<VisitDTO> Visits { get; set; }
-        public ICollection<AdmitDTO> Admits { get; set; }
+        public ICollection<AdmitDTOForOthers> Admits { get; set; }
         public ICollection<BloodDonationDTO> BloodDonations { get; set; }
         public ICollection<ChronicDiseaseDTO> ChronicDiseases { get; set; }
     }

@@ -18,9 +18,5 @@ namespace EHR_API.Entities.DTOs.SurgeryDTOs
         [Required]
         public int AdmitId { get; set; }
 
-
-        public ICollection<SurgeryProgressNoteCreateDTO> SurgeryProgressNotes { get; set; }
-
-
     }
 }

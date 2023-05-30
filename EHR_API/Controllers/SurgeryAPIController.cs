@@ -131,24 +131,24 @@ namespace EHR_API.Controllers
 
                 await _db._surgery.CreateAsync(entity);
 
-                if (entityCreateDTO.SurgeryProgressNotes.Count > 0)
-                {
-                    var progressNotes = new List<SurgeryProgressNote>();
-                    var temp = new SurgeryProgressNote();
+                //if (entityCreateDTO.SurgeryProgressNotes.Count > 0)
+                //{
+                //    var progressNotes = new List<SurgeryProgressNote>();
+                //    var temp = new SurgeryProgressNote();
 
-                    foreach (var item in entityCreateDTO.SurgeryProgressNotes)
-                    {
-                        temp = _mapper.Map<SurgeryProgressNote>(item);
-                        temp.SurgeryId = entity.Id;
-                        temp.CreatedAt = DateTime.Now;
-                        temp.UpdatedAt = DateTime.Now;
+                //    foreach (var item in entityCreateDTO.SurgeryProgressNotes)
+                //    {
+                //        temp = _mapper.Map<SurgeryProgressNote>(item);
+                //        temp.SurgeryId = entity.Id;
+                //        temp.CreatedAt = DateTime.Now;
+                //        temp.UpdatedAt = DateTime.Now;
 
-                        progressNotes.Add(temp);
-                    }
+                //        progressNotes.Add(temp);
+                //    }
 
-                    await _db._surgeryProgressNote.CreateRangeAsync(progressNotes);
-                    entity.SurgeryProgressNotes = progressNotes;
-                }
+                //    await _db._surgeryProgressNote.CreateRangeAsync(progressNotes);
+                //    entity.SurgeryProgressNotes = progressNotes;
+                //}
 
                 _response.Result = _mapper.Map<SurgeryDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;
