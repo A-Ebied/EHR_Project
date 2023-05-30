@@ -2,12 +2,10 @@
 using EHR_API.Entities;
 using EHR_API.Entities.DTOs.AdmitDTOs;
 using EHR_API.Entities.Models;
-using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
@@ -41,35 +39,33 @@ namespace EHR_API.Controllers
 
                 var entities = new List<Admit>();
 
-                string jwtToken = null;
-                if (HttpContext.Request.Headers.Authorization.Count > 0)
-                {
-                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
-                }
+                //string jwtToken = null;
+                //if (HttpContext.Request.Headers.Authorization.Count > 0)
+                //{
+                //    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                //}
 
-                string headerRole = null;
-                string headerId = null;
+                //string headerRole = null;
+                //string headerId = null;
 
-                if (jwtToken != null)
-                {
-                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
-                    headerRole = user.Claims.ToList()[4].Value;
-                    headerId = user.Claims.ToList()[0].Value;
+                //if (jwtToken != null)
+                //{
+                //    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                //    headerRole = user.Claims.ToList()[4].Value;
+                //    headerId = user.Claims.ToList()[0].Value;
 
-                    if (headerId == userId || headerRole == SD.Physician || headerRole == SD.Nurse || headerRole == SD.HealthFacilityManager)
-                    {
-                        entities = await _db._admit.GetAllAsync(expression: g => g.RegistrationDataId == userId);
-                    }
+                //    if (headerId == userId || headerRole == SD.Physician || /*headerRole == SD.Nurse ||*/ headerRole == SD.HealthFacilityManager || headerRole == SD.SystemManager)
+                //    {
+                //        entities = await _db._admit.GetAllAsync(expression: g => g.RegistrationDataId == userId);
+                //    }
 
-                }
-                else
-                {
-                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
-                }
+                //}
+                //else
+                //{
+                //    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                //}
 
-                entities = await _db._admit.GetAllAsync(
-                    expression: g => g.RegistrationDataId == userId);
-
+                entities = await _db._admit.GetAllAsync(expression: g => g.RegistrationDataId == userId);
                 if (entities.Count == 0)
                 {
                     return BadRequest(APIResponses.BadRequest($"No objects with Id = {userId} "));
@@ -85,9 +81,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
         [HttpGet("{id}")]
-        [Authorize(Roles = SD.SystemManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> GetAdmit(int id)
         {
             try
@@ -116,7 +110,6 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
         [HttpPost("CreateAdmit")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
