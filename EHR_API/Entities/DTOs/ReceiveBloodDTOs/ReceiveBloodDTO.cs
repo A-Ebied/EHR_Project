@@ -1,4 +1,4 @@
-﻿using EHR_API.Entities.DTOs.ReceiveBloodDataDTOs;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace EHR_API.Entities.DTOs.ReceiveBloodDTOs
 {
@@ -6,9 +6,9 @@ namespace EHR_API.Entities.DTOs.ReceiveBloodDTOs
     {
         public int Id { get; set; }
         public int AdmitId { get; set; }
-        public DateTime DateTime { get; set; }
+        public string BloodGroup { get; set; }
+        public string ReceiveType { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public IEnumerable<ReceiveBloodDataDTOForOthers> ReceivesBloodData { get; set; }
     }
 }

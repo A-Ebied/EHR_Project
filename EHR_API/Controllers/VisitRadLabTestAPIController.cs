@@ -112,7 +112,7 @@ namespace EHR_API.Controllers
                     foreach (var item in entity.VisitRadLabResults)
                     {
                         temp.Add(await _db._radLabResult.GetAsync(
-                                    includeProperties: "RadiologyResultImages",
+                                    includeProperties: "HealthFacility,RadLabResultImages",
                                     expression: g => g.Id == item.Id));
                     }
 

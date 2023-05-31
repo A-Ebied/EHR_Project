@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using EHR_API.Entities;
 using EHR_API.Entities.DTOs.AdmitProgressNoteDTOs;
-using EHR_API.Entities.DTOs.SurgeryProgressNoteDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -26,7 +26,7 @@ namespace EHR_API.Controllers
         }
 
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("GetAdmitProgressNotes")]
         public async Task<ActionResult<APIResponse>> GetAdmitProgressNotes(int admitId)
         {
@@ -53,7 +53,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("GetAdmitProgressNote")]
         public async Task<ActionResult<APIResponse>> GetAdmitProgressNote(int id)
         {
@@ -81,7 +81,7 @@ namespace EHR_API.Controllers
         }
 
 
-        //[Authorize]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         [HttpPost("CreateAdmitProgressNote")]
         public async Task<ActionResult<APIResponse>> CreateAdmitProgressNote([FromForm] AdmitProgressNoteCreateDTO entityCreateDTO)
         {
@@ -125,7 +125,7 @@ namespace EHR_API.Controllers
         }
 
 
-        //[Authorize]
+        [Authorize(Roles = SD.SystemManager)]
         [HttpDelete("DeleteAdmitProgressNote")]
         public async Task<ActionResult<APIResponse>> DeleteAdmitProgressNote(int id)
         {
@@ -154,7 +154,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         [HttpPut("UpdateAdmitProgressNote")]
         public async Task<ActionResult<APIResponse>> UpdateAdmitProgressNote(int id, [FromForm] AdmitProgressNoteUpdateDTO entityUpdateDTO)
         {

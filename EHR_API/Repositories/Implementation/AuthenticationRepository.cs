@@ -247,34 +247,5 @@ namespace EHR_API.Repositories.Implementation
             await _userManager.UpdateAsync(user);
             return user;
         }
-
-        //public async Task<bool> LogoutAsync(LogoutRequestDTO entity)
-        //{
-        //    var user = await _userManager.FindByEmailAsync(entity.Email);
-
-        //    IdentityUserToken<string> userToken = new()
-        //                {
-        //                    Name = user.UserName,
-        //                    LoginProvider = "EHR",
-        //                    UserId= user.Id,
-        //                    Value = entity.Token
-        //                };
-
-        //    var result = _userManager.GetAuthenticationTokenAsync(user, "EHR", userToken.Name).Result;
-        //    if (result == null)
-        //    {
-        //        return false;
-        //    }
-
-        //    _db.UserTokens.Remove(userToken);
-        //    await _db.SaveChangesAsync();
-
-        //     result = _userManager.GetAuthenticationTokenAsync(user, "EHR", userToken.Name).Result;
-        //    if (result == null)
-        //    {
-        //        return true;
-        //    }
-        //    return false;
-        //}
     }
 }

@@ -15,17 +15,21 @@ namespace EHR_API.Repositories.Implementation
             _webHost = webHost;
         }
 
-        public async Task CreateRangeAsync(List<RadLabResultImage> entities)
+        public async Task CreateRangeAsync(List<IFormFile> entities, int id)
         {
             List<RadLabResultImage> newEntities = new();
+            RadLabResultImage temp;
             foreach (var entity in entities)
             {
-                if (entity.Image != null && entity.Image.Length > 0)
+                if (entity != null && entity.Length > 0)
                 {
-                    var path = CreateImage.CreateFiles(_webHost, entity.Image, "RadLabResultImage");
-                    entity.ResultImageUrl = path;
+                    temp = new();
+                    temp.RadLabResultId = id;
+                    temp.ResultImageUrl = CreateImage.CreateFiles(_webHost, entity, "RadLabResultImage");
+                    temp.CreatedAt = DateTime.Now;
+                    temp.UpdatedAt = DateTime.Now;
 
-                    newEntities.Add(entity);
+                    newEntities.Add(temp);
                 }
             }
 

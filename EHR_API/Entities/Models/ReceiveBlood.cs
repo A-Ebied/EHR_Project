@@ -6,12 +6,12 @@ namespace EHR_API.Entities.Models
     {
         [Key]
         public int Id { get; set; }
-        public DateTime DateTime { get; set; }
+        public string BloodGroup { get; set; }
+        public string ReceiveType { get; set; }
         public int AdmitId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
         public Admit Admit { get; set; }
-        public ICollection<ReceiveBloodData> ReceivesBloodData { get; set; }
     }
 }

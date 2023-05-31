@@ -16,12 +16,14 @@ namespace EHR_API.Controllers
         protected APIResponse _response;
         private readonly IMapper _mapper;
         private readonly IMainRepository _db;
-       
-        public RadLabResultAPIController(IMainRepository db, IMapper mapper)
+        private readonly IWebHostEnvironment _webHost;
+
+        public RadLabResultAPIController(IMainRepository db, IMapper mapper, IWebHostEnvironment webHost)
         {
             _db = db;
             _mapper = mapper;
             _response = new();
+            _webHost = webHost;
         }
 
 
@@ -41,7 +43,7 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = await _db._radLabResult.GetAsync(
-                    includeProperties: "RadiologyResultImages",
+                    includeProperties: "HealthFacility,RadLabResultImages",
                     expression: g => g.Id == id);
 
                 if (entity == null)
@@ -90,23 +92,42 @@ namespace EHR_API.Controllers
 
                 await _db._radLabResult.CreateAsync(entity);
 
-                if (entityCreateDTO.RadLabResultImages.Count > 0)
+                //if (entityCreateDTO.RadLabResultImages != null && entityCreateDTO.RadLabResultImages.Count > 0)
+                //{
+                //    var images = new List<RadLabResultImage>();
+                //    var temp = new RadLabResultImage();
+
+                //    foreach (var item in entityCreateDTO.RadLabResultImages)
+                //    {
+                //        temp = _mapper.Map<RadLabResultImage>(item);
+                //        temp.RadLabResultId = entity.Id;
+                //        temp.CreatedAt = DateTime.Now;
+                //        temp.UpdatedAt = DateTime.Now;
+
+                //        images.Add(temp);
+                //    }
+
+                //    await _db._radLabResultImage.CreateRangeAsync(images);
+                //    entity.RadLabResultImages = images;
+                //}
+
+                if (entityCreateDTO.ResultImages != null && entityCreateDTO.ResultImages.Count > 0)
                 {
-                    var images = new List<RadLabResultImage>();
-                    var temp = new RadLabResultImage();
+                    //var images = new List<RadLabResultImage>();
+                    //var temp = new RadLabResultImage();
 
-                    foreach (var item in entityCreateDTO.RadLabResultImages)
-                    {
-                        temp = _mapper.Map<RadLabResultImage>(item);
-                        temp.RadLabResultId = entity.Id;
-                        temp.CreatedAt = DateTime.Now;
-                        temp.UpdatedAt = DateTime.Now;
+                    //foreach (var item in entityCreateDTO.ResultImages)
+                    //{
+                    //    temp.RadLabResultId = entity.Id;
+                    //    temp.ResultImageUrl = CreateImage.CreateFiles(_webHost, item, "RadLabResultImage");
+                    //    temp.CreatedAt = DateTime.Now;
+                    //    temp.UpdatedAt = DateTime.Now;
 
-                        images.Add(temp);
-                    }
+                    //    images.Add(temp);
+                    //}
 
-                    await _db._radLabResultImage.CreateRangeAsync(images);
-                    entity.RadLabResultImages = images;
+                    await _db._radLabResultImage.CreateRangeAsync(entityCreateDTO.ResultImages.ToList(), entity.Id);
+                    //entity.RadLabResultImages = images;
                 }
 
                 _response.Result = _mapper.Map<RadLabResultDTO>(entity);

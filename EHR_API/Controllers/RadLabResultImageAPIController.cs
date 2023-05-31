@@ -25,44 +25,44 @@ namespace EHR_API.Controllers
         }
 
 
-        ////[Authorize]
-        [HttpPost("CreateRadLabResultImages")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> CreateAllergyDrugs([FromForm] RadLabResultImagesCreateDTO entityCreateDTO)
-        {
-            try
-            {
-                if (entityCreateDTO == null)
-                {
-                    return BadRequest(APIResponses.BadRequest("No data has been sent"));
-                }
+        //////[Authorize]
+        //[HttpPost("CreateRadLabResultImages")]
+        //[ProducesResponseType(StatusCodes.Status201Created)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //public async Task<ActionResult<APIResponse>> CreateAllergyDrugs([FromForm] RadLabResultImagesCreateDTO entityCreateDTO)
+        //{
+        //    try
+        //    {
+        //        if (entityCreateDTO == null)
+        //        {
+        //            return BadRequest(APIResponses.BadRequest("No data has been sent"));
+        //        }
 
-                foreach (var item in entityCreateDTO.RadLabResultImages)
-                {
-                    if (await _db._radLabResult.GetAsync(expression: e => e.Id == item.RadLabResultId) == null)
-                    {
-                        return BadRequest(APIResponses.BadRequest($"RadLab Result with id {item.RadLabResultId} is not exists"));
-                    } 
-                }
+        //        foreach (var item in entityCreateDTO.RadLabResultImages)
+        //        {
+        //            if (await _db._radLabResult.GetAsync(expression: e => e.Id == item.RadLabResultId) == null)
+        //            {
+        //                return BadRequest(APIResponses.BadRequest($"RadLab Result with id {item.RadLabResultId} is not exists"));
+        //            } 
+        //        }
 
-                var entities = _mapper.Map<List<RadLabResultImage>>(entityCreateDTO.RadLabResultImages);
-                foreach (var item in entities)
-                {
-                    item.CreatedAt = DateTime.Now;
-                    item.UpdatedAt = DateTime.Now;
-                }
-                await _db._radLabResultImage.CreateRangeAsync(entities);
+        //        var entities = _mapper.Map<List<RadLabResultImage>>(entityCreateDTO.RadLabResultImages);
+        //        foreach (var item in entities)
+        //        {
+        //            item.CreatedAt = DateTime.Now;
+        //            item.UpdatedAt = DateTime.Now;
+        //        }
+        //        await _db._radLabResultImage.CreateRangeAsync(entities);
 
-                _response.Result = _mapper.Map<List<RadLabResultImageDTO>>(entities);
-                _response.StatusCode = HttpStatusCode.Created;
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                return APIResponses.InternalServerError(ex);
-            }
-        }
+        //        _response.Result = _mapper.Map<List<RadLabResultImageDTO>>(entities);
+        //        _response.StatusCode = HttpStatusCode.Created;
+        //        return Ok(_response);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return APIResponses.InternalServerError(ex);
+        //    }
+        //}
  
         ////[Authorize]
         [HttpDelete("{id}")]

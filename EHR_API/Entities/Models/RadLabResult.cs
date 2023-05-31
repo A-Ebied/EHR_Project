@@ -17,5 +17,6 @@ namespace EHR_API.Entities.Models
         public VisitRadLabTest VisitRadLabTest { get; set; }
         public HealthFacility HealthFacility { get; set; }
         public ICollection<RadLabResultImage> RadLabResultImages { get; set; }
+
     }
 }

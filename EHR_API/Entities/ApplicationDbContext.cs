@@ -3,6 +3,7 @@ using EHR_API.Entities.Models.UsersData;
 using EHR_API.Entities.ModelsConfiguration;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace EHR_API.Entities
 {
@@ -37,7 +38,6 @@ namespace EHR_API.Entities
         public DbSet<SurgeryProgressNote> SurgeryProgressNotes { get; set; }
         public DbSet<BloodDonation> BloodDonations { get; set; }
         public DbSet<ReceiveBlood> ReceiveBloods { get; set; }
-        public DbSet<ReceiveBloodData> Receives { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -104,6 +104,11 @@ namespace EHR_API.Entities
             ChangeTracker.AutoDetectChangesEnabled = false;
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             Database.SetCommandTimeout(360);
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.ConfigureWarnings(warnings => warnings.Throw(CoreEventId.InvalidIncludePathError));
         }
     }
 }

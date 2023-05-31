@@ -41,7 +41,8 @@ namespace EHR_API.Controllers
                 }
 
                 var temp = await _db._admit.GetAllAsync(
-                    expression: g => g.RegistrationDataId == userId);
+                    expression: g => g.RegistrationDataId == userId,
+                    includeProperties: "Surgeries");
                  
                 if (temp.Count == 0)
                 {
@@ -51,7 +52,7 @@ namespace EHR_API.Controllers
                 var entities = new List<Surgery>();
                 foreach (var item in temp)
                 {
-                    if (item.Surgeries.Count != 0)
+                    if (item.Surgeries != null && item.Surgeries.Count != 0)
                     {
                         entities.AddRange(item.Surgeries);
                     }
@@ -91,7 +92,7 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id}"));
                 }
 
-                _response.Result = _mapper.Map<SurgeryDTOForOthers>(entity);
+                _response.Result = _mapper.Map<SurgeryDTO>(entity);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }

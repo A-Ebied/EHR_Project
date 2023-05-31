@@ -26,7 +26,6 @@
         IChronicDiseaseRepository _chronicDisease { get; }
         IChronicDiseaseDrugRepository _chronicDiseaseDrug { get; }
         IReceiveBloodRepository _receiveBlood { get; }
-        IReceiveBloodDataRepository _receiveBloodData { get; }
         ISurgeryRepository _surgery { get; }
         ISurgeryProgressNoteRepository _surgeryProgressNote { get; }
         IAdmitProgressNoteRepository _admitProgressNote { get; }

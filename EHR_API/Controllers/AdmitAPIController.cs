@@ -11,9 +11,8 @@ using System.Net;
 
 namespace EHR_API.Controllers
 {
-    //[Authorize]
-    [ApiController]
     [Route("api/AdmitAPI")]
+    [ApiController]
     public class AdmitAPIController : ControllerBase
     {
         protected APIResponse _response;
@@ -28,6 +27,7 @@ namespace EHR_API.Controllers
         }
 
         [HttpGet("GetUserAdmits")]
+        [Authorize]
         public async Task<ActionResult<APIResponse>> GetUserAdmits(string userId = null)
         {
             try
@@ -39,33 +39,32 @@ namespace EHR_API.Controllers
 
                 var entities = new List<Admit>();
 
-                //string jwtToken = null;
-                //if (HttpContext.Request.Headers.Authorization.Count > 0)
-                //{
-                //    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
-                //}
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
 
-                //string headerRole = null;
-                //string headerId = null;
+                string headerRole = null;
+                string headerId = null;
 
-                //if (jwtToken != null)
-                //{
-                //    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
-                //    headerRole = user.Claims.ToList()[4].Value;
-                //    headerId = user.Claims.ToList()[0].Value;
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
 
-                //    if (headerId == userId || headerRole == SD.Physician || /*headerRole == SD.Nurse ||*/ headerRole == SD.HealthFacilityManager || headerRole == SD.SystemManager)
-                //    {
-                //        entities = await _db._admit.GetAllAsync(expression: g => g.RegistrationDataId == userId);
-                //    }
+                    if (headerId == userId || headerRole == SD.Physician || /*headerRole == SD.Nurse ||*/ headerRole == SD.HealthFacilityManager || headerRole == SD.SystemManager)
+                    {
+                        entities = await _db._admit.GetAllAsync(expression: g => g.RegistrationDataId == userId);
+                    }
 
-                //}
-                //else
-                //{
-                //    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
-                //}
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
 
-                entities = await _db._admit.GetAllAsync(expression: g => g.RegistrationDataId == userId);
                 if (entities.Count == 0)
                 {
                     return BadRequest(APIResponses.BadRequest($"No objects with Id = {userId} "));
@@ -81,6 +80,7 @@ namespace EHR_API.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<APIResponse>> GetAdmit(int id)
         {
@@ -110,9 +110,8 @@ namespace EHR_API.Controllers
             }
         }
 
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         [HttpPost("CreateAdmit")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> CreateAdmit([FromBody] AdmitCreateDTO entityCreateDTO)
         {
             try
@@ -159,11 +158,8 @@ namespace EHR_API.Controllers
         }
 
 
-        //[Authorize]
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.SystemManager)]
+        [HttpDelete("DeleteAdmit")]
         public async Task<ActionResult<APIResponse>> DeleteAdmit(int id)
         {
             try
@@ -191,11 +187,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> UpdateAdmit(int id, [FromBody] AdmitUpdateDTO entityUpdateDTO)
         {
             try

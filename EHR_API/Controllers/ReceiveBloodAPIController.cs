@@ -84,7 +84,6 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = await _db._receiveBlood.GetAsync(
-                    includeProperties: "ReceivesBloodData",
                     expression: g => g.Id ==id);
 
                 if (entity == null)
@@ -124,28 +123,8 @@ namespace EHR_API.Controllers
                 var entity = _mapper.Map<ReceiveBlood>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
                 entity.UpdatedAt = DateTime.Now;
-                entity.ReceivesBloodData = null;
 
                 await _db._receiveBlood.CreateAsync(entity);
-
-                if (entityCreateDTO.ReceivesBloodData.Count > 0)
-                {
-                    var receivesData = new List<ReceiveBloodData>();
-                    var temp = new ReceiveBloodData();
-
-                    foreach (var item in entityCreateDTO.ReceivesBloodData)
-                    {
-                        temp = _mapper.Map<ReceiveBloodData>(item);
-                        temp.ReceiveBloodId = entity.Id;
-                        temp.CreatedAt = DateTime.Now;
-                        temp.UpdatedAt = DateTime.Now;
-
-                        receivesData.Add(temp);
-                    }
-
-                    await _db._receiveBloodData.CreateRangeAsync(receivesData);
-                    entity.ReceivesBloodData = receivesData;
-                }
 
                 _response.Result = _mapper.Map<ReceiveBloodDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;

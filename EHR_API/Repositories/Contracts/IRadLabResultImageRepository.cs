@@ -5,6 +5,6 @@ namespace EHR_API.Repositories.Contracts
 {
     public interface IRadLabResultImageRepository : IRepositoryBase<RadLabResultImage> 
     {
-        Task CreateRangeAsync(List<RadLabResultImage> entities);
+        Task CreateRangeAsync(List<IFormFile> entities, int id);
     }
 }

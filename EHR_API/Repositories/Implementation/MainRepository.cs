@@ -33,7 +33,6 @@ namespace EHR_API.Repositories.Implementation
             _vaccination = new VaccinationRepository(db);
             _chronicDisease = new ChronicDiseaseRepository(db);
             _chronicDiseaseDrug = new ChronicDiseaseDrugRepository(db);
-            _receiveBloodData = new ReceiveBloodDataRepository(db);
             _receiveBlood = new ReceiveBloodRepository(db);
             _surgery = new SurgeryRepository(db);
             _surgeryProgressNote = new SurgeryProgressNoteRepository(db, webHost);
@@ -68,7 +67,6 @@ namespace EHR_API.Repositories.Implementation
         public IVaccinationRepository _vaccination { get; private set; }
         public IChronicDiseaseRepository _chronicDisease { get; private set; }
         public IChronicDiseaseDrugRepository _chronicDiseaseDrug { get; private set; }
-        public IReceiveBloodDataRepository _receiveBloodData { get; private set; }
         public IReceiveBloodRepository _receiveBlood { get; private set; }
         public ISurgeryRepository _surgery { get; private set; }
         public ISurgeryProgressNoteRepository _surgeryProgressNote { get; private set; }

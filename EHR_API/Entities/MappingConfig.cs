@@ -22,7 +22,6 @@ using EHR_API.Entities.DTOs.UserDataDTOs.MedicalDataDTOs;
 using EHR_API.Entities.DTOs.UserDataDTOs.MedicalTeamDTOs;
 using EHR_API.Entities.DTOs.ChronicDiseaseDrugDTOs;
 using EHR_API.Entities.DTOs.ChronicDiseaseDTOs;
-using EHR_API.Entities.DTOs.ReceiveBloodDataDTOs;
 using EHR_API.Entities.DTOs.ReceiveBloodDTOs;
 using EHR_API.Entities.DTOs.SurgeryDTOs;
 using EHR_API.Entities.DTOs.SurgeryProgressNoteDTOs;
@@ -149,11 +148,6 @@ namespace EHR_API.Entities
             CreateMap<ReceiveBlood, ReceiveBloodUpdateDTO>().ReverseMap();
             CreateMap<ReceiveBlood, ReceiveBloodDTO>().ReverseMap();
             CreateMap<ReceiveBlood, ReceiveBloodDTOForOthers>().ReverseMap();
-
-            CreateMap<ReceiveBloodData, ReceiveBloodDataCreateDTO>().ReverseMap();
-            CreateMap<ReceiveBloodData, ReceiveBloodDataUpdateDTO>().ReverseMap();
-            CreateMap<ReceiveBloodData, ReceiveBloodDataDTO>().ReverseMap();
-            CreateMap<ReceiveBloodData, ReceiveBloodDataDTOForOthers>().ReverseMap();
 
             CreateMap<Surgery, SurgeryCreateDTO>().ReverseMap();
             CreateMap<Surgery, SurgeryUpdateDTO>().ReverseMap();
