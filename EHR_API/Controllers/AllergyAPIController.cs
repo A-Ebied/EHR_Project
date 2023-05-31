@@ -81,7 +81,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<APIResponse>> GetAllergy(int id)
         {
@@ -114,7 +114,21 @@ namespace EHR_API.Controllers
                     entity.AllergyDrugs = temp;
                 }
 
-                _response.Result = _mapper.Map<AllergyDTO>(entity);
+                var response = _mapper.Map<AllergyDTO>(entity);
+                response.Drugs = new();
+                foreach (var item in entity.AllergyDrugs)
+                {
+                    if (item.Medication != null)
+                    {
+                        response.Drugs.Add(new { 
+                            id = item.Medication.Id, 
+                            name = item.Medication.Name,
+                            imageUrl = item.Medication.ImageUrl});
+                    }
+                    
+                }
+
+                _response.Result = response;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }

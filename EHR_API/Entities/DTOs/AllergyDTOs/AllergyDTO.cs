@@ -13,6 +13,6 @@ namespace EHR_API.Entities.DTOs.AllergyDTOs
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        public IEnumerable<AllergyDrugDTOForOthers> AllergyDrugs { get; set; }
+        public List<object> Drugs { get; set; }
     }
 }
