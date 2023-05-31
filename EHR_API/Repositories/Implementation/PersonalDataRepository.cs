@@ -36,7 +36,7 @@ namespace EHR_API.Repositories.Implementation
             {
                 if (oldEntity.UserImageUrl != null)
                 {
-                    var oldPath = _webHost.WebRootPath + "\\images" + oldEntity.UserImageUrl.Replace("/", "\\");
+                    var oldPath = _webHost.WebRootPath + "\\files" + oldEntity.UserImageUrl.Replace("/", "\\");
                     if (File.Exists(oldPath))
                     {
                         File.Delete(oldPath);
@@ -56,7 +56,7 @@ namespace EHR_API.Repositories.Implementation
         {
             if (entity.UserImageUrl != null)
             {
-                var oldPath = _webHost.WebRootPath + "\\images" + entity.UserImageUrl.Replace("/", "\\");
+                var oldPath = _webHost.WebRootPath + "\\files" + entity.UserImageUrl.Replace("/", "\\");
                 if (File.Exists(oldPath))
                 {
                     File.Delete(oldPath);

@@ -40,8 +40,7 @@ namespace EHR_API.Repositories.Implementation
             _admit = new AdmitRepository(db);
             _facilityTeam = new MedicalFacilityTeamRepository(db);
             _contraindication = new ContraindicationRepository(db);
-            _radLabResult = new RadLabResultRepository(db);
-            _radLabResultImage = new RadLabResultImageRepository(db, webHost);
+            _radLabResult = new RadLabResultRepository(db, webHost);
         }
 
         public IGovernorateRepository _governorate { get; private set; }
@@ -75,6 +74,5 @@ namespace EHR_API.Repositories.Implementation
         public IMedicalFacilityTeamRepository _facilityTeam { get; private set; }
         public IContraindicationRepository _contraindication { get; private set; }
         public IRadLabResultRepository _radLabResult { get; private set; }
-        public IRadLabResultImageRepository _radLabResultImage { get; private set; }
     }
 }

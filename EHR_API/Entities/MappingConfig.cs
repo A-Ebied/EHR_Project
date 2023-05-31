@@ -32,7 +32,6 @@ using EHR_API.Entities.DTOs.BadHabitDTOs;
 using EHR_API.Entities.DTOs.MedicalFacilityTeamDTOs;
 using EHR_API.Entities.DTOs.ContraindicationDTOs;
 using EHR_API.Entities.DTOs.RadLabResultDTOs;
-using EHR_API.Entities.DTOs.RadLabResultImageDTOs;
 using EHR_API.Entities.DTOs.VaccinationDTOs;
 using EHR_API.Entities.DTOs.UserVaccinationDTOs;
 
@@ -190,12 +189,6 @@ namespace EHR_API.Entities
             CreateMap<RadLabResult, RadLabResultUpdateDTO>().ReverseMap();
             CreateMap<RadLabResult, RadLabResultDTO>().ReverseMap();
             CreateMap<RadLabResult, RadLabResultDTOForOthers>().ReverseMap();
-
-            CreateMap<RadLabResultImage, RadLabResultImageCreateDTO>().ReverseMap();
-            CreateMap<RadLabResultImage, RadLabResultImagesCreateDTO>().ReverseMap();
-            CreateMap<RadLabResultImage, RadLabResultImageUpdateDTO>().ReverseMap();
-            CreateMap<RadLabResultImage, RadLabResultImageDTO>().ReverseMap();
-            CreateMap<RadLabResultImage, RadLabResultImageDTOForOthers>().ReverseMap();
 
             CreateMap<Vaccination, VaccinationCreateDTO>().ReverseMap();
             CreateMap<Vaccination, VaccinationUpdateDTO>().ReverseMap();

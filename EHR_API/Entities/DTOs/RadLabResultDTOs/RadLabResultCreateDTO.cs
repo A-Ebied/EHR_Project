@@ -1,5 +1,4 @@
-﻿using EHR_API.Entities.DTOs.RadLabResultImageDTOs;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace EHR_API.Entities.DTOs.RadLabResultDTOs
 {
@@ -7,10 +6,11 @@ namespace EHR_API.Entities.DTOs.RadLabResultDTOs
     {
         public string ResultNote { get; set; }
         [Required]
+        public IFormFile Image { get; set; }
+        public IFormFile File { get; set; }
+        [Required]
         public int VisitRadLabTestId { get; set; }
         [Required]
         public int HealthFacilityId { get; set; }
-
-        public ICollection<IFormFile> ResultImages { get; set; }
     }
 }

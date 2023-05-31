@@ -33,6 +33,5 @@
         IMedicalFacilityTeamRepository _facilityTeam { get; }
         IContraindicationRepository _contraindication { get; }
         IRadLabResultRepository _radLabResult { get; }
-        IRadLabResultImageRepository _radLabResultImage { get; }
     }
 }

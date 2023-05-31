@@ -31,7 +31,6 @@ namespace EHR_API.Entities
         public DbSet<Visit> Visits { get; set; }
         public DbSet<VisitVitalSign> VisitVitalSigns { get; set; }
         public DbSet<VisitMedication> VisitMedications { get; set; }
-        public DbSet<RadLabResultImage> RadLabResultImages { get; set; }
         public DbSet<VisitRadLabTest> VisitRadLabTests { get; set; }
         public DbSet<Admit> Admits { get; set; }
         public DbSet<Surgery> Surgeries { get; set; }
@@ -106,9 +105,9 @@ namespace EHR_API.Entities
             Database.SetCommandTimeout(360);
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.ConfigureWarnings(warnings => warnings.Throw(CoreEventId.InvalidIncludePathError));
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.ConfigureWarnings(warnings => warnings.Throw(CoreEventId.InvalidIncludePathError));
+        //}
     }
 }

@@ -35,7 +35,7 @@ namespace EHR_API.Repositories.Implementation
             {
                 if (oldEntity.DNAImageResultUrl != null)
                 {
-                    var oldPath = _webHost.WebRootPath + "\\images" + oldEntity.DNAImageResultUrl.Replace("/", "\\");
+                    var oldPath = _webHost.WebRootPath + "\\files" + oldEntity.DNAImageResultUrl.Replace("/", "\\");
                     if (File.Exists(oldPath))
                     {
                         File.Delete(oldPath);
@@ -55,7 +55,7 @@ namespace EHR_API.Repositories.Implementation
         {
             if (entity.DNAImageResultUrl != null)
             {
-                var oldPath = _webHost.WebRootPath + "\\images" + entity.DNAImageResultUrl.Replace("/", "\\");
+                var oldPath = _webHost.WebRootPath + "\\files" + entity.DNAImageResultUrl.Replace("/", "\\");
                 if (File.Exists(oldPath))
                 {
                     File.Delete(oldPath);

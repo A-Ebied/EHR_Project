@@ -43,7 +43,7 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = await _db._radLabResult.GetAsync(
-                    includeProperties: "HealthFacility,RadLabResultImages",
+                    includeProperties: "HealthFacility",
                     expression: g => g.Id == id);
 
                 if (entity == null)
@@ -88,47 +88,8 @@ namespace EHR_API.Controllers
                 var entity = _mapper.Map<RadLabResult>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
                 entity.UpdatedAt = DateTime.Now;
-                entity.RadLabResultImages = null;
 
                 await _db._radLabResult.CreateAsync(entity);
-
-                //if (entityCreateDTO.RadLabResultImages != null && entityCreateDTO.RadLabResultImages.Count > 0)
-                //{
-                //    var images = new List<RadLabResultImage>();
-                //    var temp = new RadLabResultImage();
-
-                //    foreach (var item in entityCreateDTO.RadLabResultImages)
-                //    {
-                //        temp = _mapper.Map<RadLabResultImage>(item);
-                //        temp.RadLabResultId = entity.Id;
-                //        temp.CreatedAt = DateTime.Now;
-                //        temp.UpdatedAt = DateTime.Now;
-
-                //        images.Add(temp);
-                //    }
-
-                //    await _db._radLabResultImage.CreateRangeAsync(images);
-                //    entity.RadLabResultImages = images;
-                //}
-
-                if (entityCreateDTO.ResultImages != null && entityCreateDTO.ResultImages.Count > 0)
-                {
-                    //var images = new List<RadLabResultImage>();
-                    //var temp = new RadLabResultImage();
-
-                    //foreach (var item in entityCreateDTO.ResultImages)
-                    //{
-                    //    temp.RadLabResultId = entity.Id;
-                    //    temp.ResultImageUrl = CreateImage.CreateFiles(_webHost, item, "RadLabResultImage");
-                    //    temp.CreatedAt = DateTime.Now;
-                    //    temp.UpdatedAt = DateTime.Now;
-
-                    //    images.Add(temp);
-                    //}
-
-                    await _db._radLabResultImage.CreateRangeAsync(entityCreateDTO.ResultImages.ToList(), entity.Id);
-                    //entity.RadLabResultImages = images;
-                }
 
                 _response.Result = _mapper.Map<RadLabResultDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;
