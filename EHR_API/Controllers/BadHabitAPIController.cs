@@ -174,7 +174,8 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
-                if (await _db._badHabit.GetAsync(expression: g => g.Id == id) == null)
+                var oldOne = await _db._badHabit.GetAsync(expression: g => g.Id == id);
+                if (oldOne == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
                 }
@@ -186,6 +187,7 @@ namespace EHR_API.Controllers
 
                 var entity = _mapper.Map<BadHabit>(entityUpdateDTO);
                 entity.UpdatedAt = DateTime.Now;
+                entity.CreatedAt = oldOne.CreatedAt;
                 await _db._badHabit.UpdateAsync(entity);
 
                 _response.StatusCode = HttpStatusCode.OK;
