@@ -2,6 +2,7 @@
 using EHR_API.Entities.DTOs.GovernorateDTOs;
 using System.ComponentModel;
 using EHR_API.Entities.DTOs.MedicalFacilityTeamDTOs;
+using EHR_API.Entities.DTOs.HealthFacilityDTOs;
 
 namespace EHR_API.Entities.DTOs.UserDataDTOs.MedicalTeamDTOs
 {
@@ -12,6 +13,6 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs.MedicalTeamDTOs
         public string Degree { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public ICollection<MedicalFacilityTeamDTO> MedicalFacilityTeams { get; set; }
+        public ICollection<HealthFacilityDTOForOthers> MedicalFacilities { get; set; }
     }
 }

@@ -1,7 +1,10 @@
-﻿namespace EHR_API.Entities.Models.UsersData
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EHR_API.Entities.Models.UsersData
 {
     public class MedicalTeam
     {
+        [Key]
         public string Id { get; set; }
         public string MedicalSpecialization { get; set; }
         public string Degree { get; set; }

@@ -98,23 +98,6 @@ namespace EHR_API.Entities.ModelsConfiguration
 
             user = new RegistrationData
             {
-                Id = "12345678912347",
-                Nationality = "مصري",
-                FullName = "منال خاطر علي",
-                UserName = "@Manal123",
-                NormalizedUserName = "@MANAL123",
-                Email = "Ma@gmail.com",
-                NormalizedEmail = "MA@GMAIL.COM",
-                PhoneNumber = "",
-                EmailConfirmed = true,
-            };
-
-            pw = new PasswordHasher<string>();
-            user.PasswordHash = pw.HashPassword(user.UserName, "123@Tt");
-            registrations.Add(user);
-
-            user = new RegistrationData
-            {
                 Id = "12345678912348",
                 Nationality = "مصري",
                 FullName = "منال خاطر أحمد",

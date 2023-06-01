@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EHRAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230531150106_db5")]
-    partial class db5
+    [Migration("20230601085211_db1")]
+    partial class db1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,37 +158,37 @@ namespace EHRAPI.Migrations
                         {
                             Id = 1,
                             Allergen = "التراب",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(9571),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(2050),
                             Instruction = "---",
                             IsChronic = true,
                             Reaction = "سيلان الأنف والكحة",
                             RegistrationDataId = "12345678912351",
                             Type = "حساسية التراب",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(9581)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(2056)
                         },
                         new
                         {
                             Id = 2,
                             Allergen = "الفول السوداني والحليب والبيض",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(9588),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(2061),
                             Instruction = "",
                             IsChronic = true,
                             Reaction = "طفح جلدي",
                             RegistrationDataId = "12345678912352",
                             Type = "حساسية الطعام",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(9591)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(2064)
                         },
                         new
                         {
                             Id = 3,
                             Allergen = "فراء الحيوانات ، وخاصة من الحيوانات الأليفة مثل القطط والكلاب",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(9595),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(2068),
                             Instruction = "الابتعاد عن الحيوانات الأليفة",
                             IsChronic = true,
                             Reaction = "ضيق في الصدر وفقدان أنفاسك",
                             RegistrationDataId = "12345678912353",
                             Type = "حساسية الحيوانات الأليفة",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(9598)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(2071)
                         });
                 });
 
@@ -226,17 +226,17 @@ namespace EHRAPI.Migrations
                         {
                             Id = 1,
                             AllergyId = 1,
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 660, DateTimeKind.Local).AddTicks(260),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(2776),
                             MedicationId = 1,
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 660, DateTimeKind.Local).AddTicks(268)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(2782)
                         },
                         new
                         {
                             Id = 2,
                             AllergyId = 1,
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 660, DateTimeKind.Local).AddTicks(274),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(2786),
                             MedicationId = 2,
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 660, DateTimeKind.Local).AddTicks(277)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(2788)
                         });
                 });
 
@@ -273,29 +273,29 @@ namespace EHRAPI.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(8643),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(1376),
                             Habit = "التدخين",
                             Notes = "",
                             RegistrationDataId = "12345678912351",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(8654)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(1382)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(8660),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(1388),
                             Habit = "التدخين",
                             Notes = "",
                             RegistrationDataId = "12345678912352",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(8663)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(1390)
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(8668),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(1395),
                             Habit = "شرب الخمور",
                             Notes = "",
                             RegistrationDataId = "12345678912353",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(8671)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(1397)
                         });
                 });
 
@@ -334,20 +334,20 @@ namespace EHRAPI.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(7891),
-                            DonationDateTime = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(7879),
-                            MedicalTeamId = "12345678912347",
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(757),
+                            DonationDateTime = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(743),
+                            MedicalTeamId = "12345678912348",
                             RegistrationDataId = "12345678912351",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(7895)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(761)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(7905),
-                            DonationDateTime = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(7902),
-                            MedicalTeamId = "12345678912347",
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(769),
+                            DonationDateTime = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(766),
+                            MedicalTeamId = "12345678912348",
                             RegistrationDataId = "12345678912352",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(7908)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(771)
                         });
                 });
 
@@ -478,44 +478,44 @@ namespace EHRAPI.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 4, 236, DateTimeKind.Local).AddTicks(1648),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6211),
                             Title = "القاهرة",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 4, 236, DateTimeKind.Local).AddTicks(1736)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6262)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 4, 236, DateTimeKind.Local).AddTicks(1740),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6266),
                             Title = "الجيزة",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 4, 236, DateTimeKind.Local).AddTicks(1742)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6267)
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 4, 236, DateTimeKind.Local).AddTicks(1745),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6269),
                             Title = "مطروح",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 4, 236, DateTimeKind.Local).AddTicks(1746)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6271)
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 4, 236, DateTimeKind.Local).AddTicks(1748),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6273),
                             Title = "شمال سيناء",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 4, 236, DateTimeKind.Local).AddTicks(1750)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6274)
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 4, 236, DateTimeKind.Local).AddTicks(1752),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6276),
                             Title = "الشرقية",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 4, 236, DateTimeKind.Local).AddTicks(1754)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6278)
                         },
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 4, 236, DateTimeKind.Local).AddTicks(1756),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6280),
                             Title = "الدقهلية",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 4, 236, DateTimeKind.Local).AddTicks(1757)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6281)
                         });
                 });
 
@@ -579,7 +579,7 @@ namespace EHRAPI.Migrations
                         {
                             Id = 1,
                             Address = "Address1",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(2087),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7248),
                             Description = "Description1",
                             Email = "m@gmail.com",
                             GovernorateId = 1,
@@ -590,13 +590,13 @@ namespace EHRAPI.Migrations
                             SubordinateTo = "المؤسسة العسكرية",
                             Title = "المستشفى العسكري بالشرقية",
                             Type = "مستشفى عسكري",
-                            UpdateddAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(2178)
+                            UpdateddAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7308)
                         },
                         new
                         {
                             Id = 2,
                             Address = "Address2",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(2190),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7316),
                             Description = "Description2",
                             Email = "a@gmail.com",
                             GovernorateId = 1,
@@ -607,13 +607,13 @@ namespace EHRAPI.Migrations
                             SubordinateTo = "وزارة الصحة",
                             Title = "المستشفى العام بالعريش",
                             Type = "مستشفى عام",
-                            UpdateddAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(2193)
+                            UpdateddAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7317)
                         },
                         new
                         {
                             Id = 3,
                             Address = "Address3",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(2199),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7321),
                             Description = "Description3",
                             Email = "j@gmail.com",
                             GovernorateId = 1,
@@ -624,7 +624,7 @@ namespace EHRAPI.Migrations
                             SubordinateTo = "مستشفيات الجامعة",
                             Title = "مستشفى الجامعة بالزقازيق",
                             Type = "مستشفى جامعي",
-                            UpdateddAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(2202)
+                            UpdateddAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7323)
                         });
                 });
 
@@ -650,30 +650,30 @@ namespace EHRAPI.Migrations
                         new
                         {
                             Code = "A00.0",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(2822),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7740),
                             DiagnosisName = "Cholera due to Vibrio cholerae 01, biovar cholerae",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(2830)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7744)
                         },
                         new
                         {
                             Code = "A00.1",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(2836),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7747),
                             DiagnosisName = "Cholera due to Vibrio cholerae 01, biovar eltor",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(2839)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7748)
                         },
                         new
                         {
                             Code = "A00.9",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(2843),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7750),
                             DiagnosisName = "Cholera, unspecified",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(2846)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7752)
                         },
                         new
                         {
                             Code = "A01.00",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(2849),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7754),
                             DiagnosisName = "Typhoid fever, unspecified",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(2853)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7756)
                         });
                 });
 
@@ -740,41 +740,41 @@ namespace EHRAPI.Migrations
                         {
                             Id = 1,
                             Contraindication = "ممنوع على مرضى الكلى والكبد",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6911),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9993),
                             Description = "أقراص",
                             ImageUrl = "/files/Medication/fexofenadine.jpg",
                             Name = "Fexofenadine (الفيكسوفينادين)",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6921)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9996)
                         },
                         new
                         {
                             Id = 2,
                             Contraindication = "لا يستخدم مع مرضى السكري.....الخ",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6930),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(1),
                             Description = "بخاخ أنف",
                             ImageUrl = "/files/Medication/NASONEX.jpg",
                             Name = "Nasonex (نازونكس)",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6932)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(3)
                         },
                         new
                         {
                             Id = 3,
                             Contraindication = "لا تستخدم مع أي منتجات أخرى تحتوي على الباراسيتامول. يزيد مرض الكبد الأساسي من خطر تلف الكبد المرتبط بالباراسيتامول. يجب على المرضى الذين تم تشخيص إصابتهم بضعف في الكبد أو الكلى طلب المشورة الطبية قبل تناول هذا الدواء.",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6937),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(5),
                             Description = "أقراص",
                             ImageUrl = "/files/Medication/advance.jpg",
                             Name = "Panadol Advance (بانادول أدفانس)",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6939)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(7)
                         },
                         new
                         {
                             Id = 4,
                             Contraindication = "فرط الحساسية لأي من المكونات",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6943),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(9),
                             Description = "أقراص",
                             ImageUrl = "/files/Medication/Kerovit.jpg",
                             Name = "Kerovit (كيروفيت)",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6946)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(11)
                         });
                 });
 
@@ -825,8 +825,14 @@ namespace EHRAPI.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("FileUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("HealthFacilityId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ResultNote")
                         .HasColumnType("nvarchar(max)");
@@ -844,33 +850,6 @@ namespace EHRAPI.Migrations
                     b.HasIndex("VisitRadLabTestId");
 
                     b.ToTable("RadLabResult");
-                });
-
-            modelBuilder.Entity("EHR_API.Entities.Models.RadLabResultImage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("RadLabResultId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ResultImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RadLabResultId");
-
-                    b.ToTable("RadLabResultImages");
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.ReceiveBlood", b =>
@@ -1047,31 +1026,31 @@ namespace EHRAPI.Migrations
                         {
                             Id = "12345678912351",
                             BloodGroup = "A+",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(5315),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9136),
                             DNAImageResultUrl = "",
                             FamilyHistory = "الجد من الأب كان مصاب بالسكري",
                             MedicalHistory = "",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(5321)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9139)
                         },
                         new
                         {
                             Id = "12345678912352",
                             BloodGroup = "O+",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(5330),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9142),
                             DNAImageResultUrl = "",
                             FamilyHistory = "الجد من الأب كان مصاب بمرض ذهني",
                             MedicalHistory = "المريض أصيب بحالة من الهلوسة مرتين سابقا",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(5334)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9144)
                         },
                         new
                         {
                             Id = "12345678912353",
                             BloodGroup = "AB+",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(5338),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9147),
                             DNAImageResultUrl = "",
                             FamilyHistory = "",
                             MedicalHistory = "",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(5341)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9148)
                         });
                 });
 
@@ -1100,66 +1079,58 @@ namespace EHRAPI.Migrations
                         new
                         {
                             Id = "12345678912342",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6071),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9555),
                             Degree = "ماجستير جراحة العمود الفقري",
                             MedicalSpecialization = "جراحة العمود الفقري",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6081)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9558)
                         },
                         new
                         {
                             Id = "12345678912348",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6088),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9562),
                             Degree = "ماجستير أورام العظام",
                             MedicalSpecialization = "أورام العظام",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6091)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9563)
                         },
                         new
                         {
                             Id = "12345678912349",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6095),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9565),
                             Degree = "دكتوراة أورام المسالك البولية",
                             MedicalSpecialization = "أورام المسالك البولية",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6098)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9567)
                         },
                         new
                         {
                             Id = "12345678912350",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6102),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9570),
                             Degree = "دكتوراة جراحة القلب",
                             MedicalSpecialization = "جراحة القلب",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6105)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9572)
                         },
                         new
                         {
                             Id = "12345678912343",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6108),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9574),
                             Degree = "ماجستير أنف وأذن وحنجرة",
                             MedicalSpecialization = "أنف وأذن وحنجرة",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6111)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9575)
                         },
                         new
                         {
                             Id = "12345678912344",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6115),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9577),
                             Degree = "بكالوريوس الصيدلة",
                             MedicalSpecialization = "طب الصيدلة",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6118)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9579)
                         },
                         new
                         {
                             Id = "12345678912346",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6123),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9581),
                             Degree = "معهد فني صحي",
                             MedicalSpecialization = "فني أشعة",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6126)
-                        },
-                        new
-                        {
-                            Id = "12345678912347",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6130),
-                            Degree = "معهد فني تمريض",
-                            MedicalSpecialization = "ممرضة",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(6134)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9583)
                         });
                 });
 
@@ -1220,7 +1191,7 @@ namespace EHRAPI.Migrations
                             Address = "",
                             AgeGroup = "",
                             BirthDate = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(4619),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(8680),
                             EmergencyPhone1 = "01234546788",
                             EmergencyPhone2 = "",
                             Gender = "ذكر",
@@ -1228,7 +1199,7 @@ namespace EHRAPI.Migrations
                             NumOfChildren = 3,
                             Occupation = "مدرس",
                             Phone1 = "01234546787",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(4628),
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(8683),
                             UserImageUrl = ""
                         },
                         new
@@ -1237,7 +1208,7 @@ namespace EHRAPI.Migrations
                             Address = "",
                             AgeGroup = "",
                             BirthDate = new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(4652),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(8695),
                             EmergencyPhone1 = "01234746788",
                             EmergencyPhone2 = "",
                             Gender = "ذكر",
@@ -1245,7 +1216,7 @@ namespace EHRAPI.Migrations
                             NumOfChildren = 1,
                             Occupation = "دكتور جامعي",
                             Phone1 = "01234544487",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(4656),
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(8696),
                             UserImageUrl = ""
                         },
                         new
@@ -1254,7 +1225,7 @@ namespace EHRAPI.Migrations
                             Address = "",
                             AgeGroup = "",
                             BirthDate = new DateTime(1980, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(4671),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(8703),
                             EmergencyPhone1 = "01234506788",
                             EmergencyPhone2 = "",
                             Gender = "ذكر",
@@ -1262,7 +1233,7 @@ namespace EHRAPI.Migrations
                             NumOfChildren = 3,
                             Occupation = "عمل حر",
                             Phone1 = "01234500787",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(4674),
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(8705),
                             UserImageUrl = ""
                         });
                 });
@@ -1330,7 +1301,7 @@ namespace EHRAPI.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("UpdateddAt")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserName")
@@ -1354,7 +1325,7 @@ namespace EHRAPI.Migrations
                         {
                             Id = "12345678912341",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "640219e4-2455-44bb-8a24-4bbe28089ae5",
+                            ConcurrencyStamp = "e545b85e-cbdc-4b6e-8455-4bd5b50ec0eb",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "k@gmail.com",
                             EmailConfirmed = true,
@@ -1363,19 +1334,19 @@ namespace EHRAPI.Migrations
                             Nationality = "مصري",
                             NormalizedEmail = "K@GMAIL.COM",
                             NormalizedUserName = "@KAMAL123",
-                            PasswordHash = "AQAAAAIAAYagAAAAEP5GvjN71ycrP4q9arkkOm0iVIvZcBbj8l3/jZXA300D/MoqDEdte+WSEI8I6omCww==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIMtisEA8VZhecW87IVCdgmpG39cmqzFGiW1bMt6KydVF6FSvuY7TeSK4P6utB1AEw==",
                             PhoneNumber = "01234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "4f35454f-d580-4eb0-b82d-51aa960b0f35",
+                            SecurityStamp = "8ce72237-8810-45eb-b7af-9a446bc9cb6b",
                             TwoFactorEnabled = false,
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "@Kamal123"
                         },
                         new
                         {
                             Id = "12345678912342",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0ef47124-70b4-4aa3-928e-5d54ebb8dacb",
+                            ConcurrencyStamp = "6f5eb83a-8e3d-423a-b1c6-e627784fd144",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "A@gmail.com",
                             EmailConfirmed = true,
@@ -1384,19 +1355,19 @@ namespace EHRAPI.Migrations
                             Nationality = "مصري",
                             NormalizedEmail = "A@GMAIL.COM",
                             NormalizedUserName = "@AHMED123",
-                            PasswordHash = "AQAAAAIAAYagAAAAEB5YcyTPxWD+LalR4NUXMfWetWHVhD3p11qGQsyfCbHlJEdKxBQofx7vyD2Rq/Z2nA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELM+vCBLIKFa/HyFR9MeuoN7toTdgbCNcHc3N8dJ2A7IVciYS1SGXG8TF3zqnWy3oQ==",
                             PhoneNumber = "",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "babc8d52-27a9-4f4c-8f07-eebd86042aee",
+                            SecurityStamp = "0c97412a-6a21-437e-81dc-2c08001cbfaf",
                             TwoFactorEnabled = false,
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "@Ahmed123"
                         },
                         new
                         {
                             Id = "12345678912343",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "65bef192-bb8e-4348-8847-307ed2069b3e",
+                            ConcurrencyStamp = "3d2f727e-4ed5-4446-b82e-937c48cbf0c7",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "M@gmail.com",
                             EmailConfirmed = true,
@@ -1405,19 +1376,19 @@ namespace EHRAPI.Migrations
                             Nationality = "مصري",
                             NormalizedEmail = "M@GMAIL.COM",
                             NormalizedUserName = "@MUHAMMAD123",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKPhn6MUmu9aD70NzFoNqE39OjctbzcnvnMbpU9Z9SzlxWuzuCv0Z//z3vzpLmkVaw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEK7DPMNZxxtvdwzAdZVmu8mvsPkuvM5CIdZUopPXSNTZzTdhwqXJ7cD6bkNpbr/ZsQ==",
                             PhoneNumber = "01234567899",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "d517902b-5451-442f-ab7a-0a06ce1de609",
+                            SecurityStamp = "9fa46295-21ce-4d06-a695-5bfc8b3d4898",
                             TwoFactorEnabled = false,
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "@Muhammad123"
                         },
                         new
                         {
                             Id = "12345678912344",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "66e894ce-f3f9-4f39-a78a-e99bb02ceea6",
+                            ConcurrencyStamp = "9f0337b1-32c9-40d5-b7bc-8493a10cd968",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "Al@gmail.com",
                             EmailConfirmed = true,
@@ -1426,19 +1397,19 @@ namespace EHRAPI.Migrations
                             Nationality = "مصري",
                             NormalizedEmail = "AL@GMAIL.COM",
                             NormalizedUserName = "@ALI123",
-                            PasswordHash = "AQAAAAIAAYagAAAAELepBHRKawQcFPTjRsr3mFCmnOESv7BZ1xg2ZY+WNWO2Eh0ug/G0SyG2gkYnY8RSIA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEC340D8YeTTUmh7idpqGRCB2lNyHPUpF4xnV1qtlk6ouuNJteWx82l8ew1QWBnmLhw==",
                             PhoneNumber = "01234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "4fb9ed79-0875-41c8-81d4-f9dee8ab2992",
+                            SecurityStamp = "4afe4b50-10f1-4cbc-8239-a60f68e4709a",
                             TwoFactorEnabled = false,
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "@Ali123"
                         },
                         new
                         {
                             Id = "12345678912346",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3fb93cfe-50c3-4639-bebc-89ad051d229f",
+                            ConcurrencyStamp = "fa199050-3bb2-4e1b-8178-c6d9b5c1a9b4",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "Ka@gmail.com",
                             EmailConfirmed = true,
@@ -1447,40 +1418,19 @@ namespace EHRAPI.Migrations
                             Nationality = "مصري",
                             NormalizedEmail = "KA@GMAIL.COM",
                             NormalizedUserName = "@KHATER123",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFrlaPJ6FdO2QXhdXlyHX+onCKgOrsPC4np5+MVlKfsZWzTbPkW3FyoKut0tFiullg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEAawQBruND/HTv03349oCjPM7+jZZ8w1NPGIBzqlkrRVSIFee0wQyu9dlJcXa6SL4w==",
                             PhoneNumber = "",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "30b6a417-eec4-462d-a63e-cc2bd6a91478",
+                            SecurityStamp = "29a89ee1-b033-4aaf-a23b-8e8721840e82",
                             TwoFactorEnabled = false,
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "@Khater123"
-                        },
-                        new
-                        {
-                            Id = "12345678912347",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "9112431d-a8f5-4734-bf5d-28624009824e",
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "Ma@gmail.com",
-                            EmailConfirmed = true,
-                            FullName = "منال خاطر علي",
-                            LockoutEnabled = false,
-                            Nationality = "مصري",
-                            NormalizedEmail = "MA@GMAIL.COM",
-                            NormalizedUserName = "@MANAL123",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMlpdYgEWvBfZ6vbAlIqZBGhQ5nqK7Oox2ISG++T3/1Qyk5BTrH+tSgN5+I8CrOjsg==",
-                            PhoneNumber = "",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "deba9b65-5770-4ae5-b9d0-9547d2998f64",
-                            TwoFactorEnabled = false,
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserName = "@Manal123"
                         },
                         new
                         {
                             Id = "12345678912348",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8fc89ee5-0af4-42bd-8cad-ed278165ce0f",
+                            ConcurrencyStamp = "df039f77-52b6-47fa-8826-e50e446cee29",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "Ma2@gmail.com",
                             EmailConfirmed = true,
@@ -1489,19 +1439,19 @@ namespace EHRAPI.Migrations
                             Nationality = "مصري",
                             NormalizedEmail = "MA2@GMAIL.COM",
                             NormalizedUserName = "@MANAL2123",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKWBmK6KyAUectowPeJuTyjXoSb0Ee0rMTzYTAPyuw2MxXReQ07GzfV1o0/Fw1YOAg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENPOpZkevP6NS+6TTMf3X4zZlBG7BvBjDOlSfnocpKc3WQXjFWLoX2k1kx/hrJlcXg==",
                             PhoneNumber = "",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "87c5e0c3-35de-4af9-bd9f-03baa086ac1c",
+                            SecurityStamp = "0db1bad5-2c60-4287-9485-c5a4b0ef0248",
                             TwoFactorEnabled = false,
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "@Manal2123"
                         },
                         new
                         {
                             Id = "12345678912349",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c9f73f85-160e-4908-9800-8cce113fc9f4",
+                            ConcurrencyStamp = "27bbb60b-a60b-4950-b239-f08b26438e44",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "Ka2@gmail.com",
                             EmailConfirmed = true,
@@ -1510,19 +1460,19 @@ namespace EHRAPI.Migrations
                             Nationality = "مصري",
                             NormalizedEmail = "KA2@GMAIL.COM",
                             NormalizedUserName = "@KHATER2123",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOd0DvlOjLLEA2RGGjmii9l79QSiC8vZNVZutKOfBmFEFdQC3kZkuvw65kf626w9lQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPJzSSg4z9XDjjg+XqSNJXSE1iQ2/mbGStY56Wiw5a0F0TkoqzmBXST1xD5PFKgB1g==",
                             PhoneNumber = "",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ce4c1c35-571a-4f3e-aaee-c7a1b3dbf2cf",
+                            SecurityStamp = "a693a839-57cc-43c2-b0d2-ffd400f1d450",
                             TwoFactorEnabled = false,
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "@Khater2123"
                         },
                         new
                         {
                             Id = "12345678912350",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1bb920e7-e70e-4ac1-ab40-27b5b869f837",
+                            ConcurrencyStamp = "3ef16edd-3cd3-4cb8-9e04-5afe53a75b12",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "TE@gmail.com",
                             EmailConfirmed = true,
@@ -1531,19 +1481,19 @@ namespace EHRAPI.Migrations
                             Nationality = "مصري",
                             NormalizedEmail = "TE@GMAIL.COM",
                             NormalizedUserName = "@TEST2123",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMkfXADWRzsgUZV/t2tjXdPuUtBDSxyi+hlChxUS0aOVPCLbQnX/9y0Z9qN/DMvBGQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOlIvn8SS+qeu3RT5UlsR0gfXh+OhBQ4XaztwpT9paKpISTzr7ck15O06Y+zmywJ2A==",
                             PhoneNumber = "",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ae8442aa-553d-4ae2-a9f3-a488eed0c000",
+                            SecurityStamp = "e0da791e-17be-4280-ad61-59def71d2d82",
                             TwoFactorEnabled = false,
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "@Test2123"
                         },
                         new
                         {
                             Id = "12345678912351",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e19db3a4-e559-4808-8aaf-f7a3a013afc8",
+                            ConcurrencyStamp = "0b76ffc4-2131-4d9f-b6d4-c45eadc0b520",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "Fa@gmail.com",
                             EmailConfirmed = true,
@@ -1552,19 +1502,19 @@ namespace EHRAPI.Migrations
                             Nationality = "مصري",
                             NormalizedEmail = "FA@GMAIL.COM",
                             NormalizedUserName = "@FAWZY123",
-                            PasswordHash = "AQAAAAIAAYagAAAAEHTWZxxUaqod+cWQmgAOXbjZ0lI5bTFP8Hc+lYJ79klcC2Kyd2y6TE9HLGf3IzQYqg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJthI0DblT2nJBdutNUFiJHVz3KjB1bqzG3R3PEZjuW+3ep731ENVhSbEwx8DU9lrg==",
                             PhoneNumber = "",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c7e1b3f8-ae07-4c11-9a10-9ccebf06cb25",
+                            SecurityStamp = "1a78ef5d-a35b-4ae1-9813-c9f70c3622d3",
                             TwoFactorEnabled = false,
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "@Fawzy123"
                         },
                         new
                         {
                             Id = "12345678912352",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "30cdba6c-18f5-479f-8388-e229e09d1533",
+                            ConcurrencyStamp = "85950c61-6c1c-4f20-ab48-b40db8bae0b5",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "AlFa@gmail.com",
                             EmailConfirmed = true,
@@ -1573,19 +1523,19 @@ namespace EHRAPI.Migrations
                             Nationality = "مصري",
                             NormalizedEmail = "ALFA@GMAIL.COM",
                             NormalizedUserName = "@ALIFAWZY123",
-                            PasswordHash = "AQAAAAIAAYagAAAAENo2TEhZOL/UxRvAWO3XAPSnSDBrgUxrWkO4RInVm5bm30Zmp85DEn3wNJCgQp3xUw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAECbQuVcJ65hdJ87PAFDnvBafoxqFpfoOpTCn7GROxhtyq2rkwLsWaV92a8amct5R8Q==",
                             PhoneNumber = "",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "468e77d4-77d2-458c-80ba-7bb7f7fa0599",
+                            SecurityStamp = "1f129575-6acb-4e2c-b00f-31638e97c0c6",
                             TwoFactorEnabled = false,
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "@AliFawzy123"
                         },
                         new
                         {
                             Id = "12345678912353",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d9dc03e7-de12-4ce6-85df-73b317836fb7",
+                            ConcurrencyStamp = "7ba58229-83ce-4ee4-ab4a-32c13af3d9ee",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "AFa@gmail.com",
                             EmailConfirmed = true,
@@ -1594,12 +1544,12 @@ namespace EHRAPI.Migrations
                             Nationality = "مصري",
                             NormalizedEmail = "AFA@GMAIL.COM",
                             NormalizedUserName = "@AFAWZY123",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMLdzXn7El75mwyFTkZdFsL24NjErUv7AVL3JkbnLrJLbK23M8vnValbWRu915tYAQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFq2VOQlmF2YTS9J0MlQ8dcoqG5qiqAN+Zfzmxzs2+OSf7oPhyIJFlR01fUkcwd4vQ==",
                             PhoneNumber = "",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "9b265b25-8d44-456a-94cd-5647d80148a8",
+                            SecurityStamp = "3585db52-044a-45a4-bcad-3d468430e82f",
                             TwoFactorEnabled = false,
-                            UpdateddAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "@AFawzy123"
                         });
                 });
@@ -1640,22 +1590,22 @@ namespace EHRAPI.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(3672),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(8160),
                             InsuranceNo = "123OP",
                             InsuranceOrganizationName = "التأمين الصحي المصري",
                             InsuranceType = "حكومي",
                             RegistrationDataId = "12345678912351",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(3680)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(8163)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(3687),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(8166),
                             InsuranceNo = "124OP",
                             InsuranceOrganizationName = "التأمين الصحي المصري",
                             InsuranceType = "حكومي",
                             RegistrationDataId = "12345678912352",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 659, DateTimeKind.Local).AddTicks(3689)
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(8168)
                         });
                 });
 
@@ -1713,7 +1663,7 @@ namespace EHRAPI.Migrations
                             Id = 1,
                             AgeRange = "2-64 عام",
                             Contraindication = "",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 660, DateTimeKind.Local).AddTicks(1159),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(3386),
                             Dosage = "1 dose",
                             Name = "Vaxchora",
                             Note = "",
@@ -1721,7 +1671,7 @@ namespace EHRAPI.Migrations
                             Route = "عن طريق الفم",
                             SideEffects = "",
                             Type = "حبوب",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 660, DateTimeKind.Local).AddTicks(1168),
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(3391),
                             VaccinationEffectiveness = "3-6 أشهر"
                         },
                         new
@@ -1729,7 +1679,7 @@ namespace EHRAPI.Migrations
                             Id = 2,
                             AgeRange = "من عامين وأكبر",
                             Contraindication = "",
-                            CreatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 660, DateTimeKind.Local).AddTicks(1177),
+                            CreatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(3398),
                             Dosage = "2 doses, given 1–6 weeks apart ",
                             Name = "Dukoral",
                             Note = "Children aged 2–5 years need 3 doses, given 1 to 6 weeks apart",
@@ -1737,7 +1687,7 @@ namespace EHRAPI.Migrations
                             Route = "عن طريق الفم",
                             SideEffects = "",
                             Type = "حبوب",
-                            UpdatedAt = new DateTime(2023, 5, 31, 18, 1, 5, 660, DateTimeKind.Local).AddTicks(1180),
+                            UpdatedAt = new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(3401),
                             VaccinationEffectiveness = "عامين"
                         });
                 });
@@ -1954,12 +1904,6 @@ namespace EHRAPI.Migrations
                         },
                         new
                         {
-                            Id = "4",
-                            Name = "Nurse",
-                            NormalizedName = "NURSE"
-                        },
-                        new
-                        {
                             Id = "5",
                             Name = "Pharmacist",
                             NormalizedName = "PHARMACIST"
@@ -2119,11 +2063,6 @@ namespace EHRAPI.Migrations
                         {
                             UserId = "12345678912346",
                             RoleId = "7"
-                        },
-                        new
-                        {
-                            UserId = "12345678912347",
-                            RoleId = "4"
                         });
                 });
 
@@ -2349,17 +2288,6 @@ namespace EHRAPI.Migrations
                     b.Navigation("HealthFacility");
 
                     b.Navigation("VisitRadLabTest");
-                });
-
-            modelBuilder.Entity("EHR_API.Entities.Models.RadLabResultImage", b =>
-                {
-                    b.HasOne("EHR_API.Entities.Models.RadLabResult", "RadLabResult")
-                        .WithMany("RadLabResultImages")
-                        .HasForeignKey("RadLabResultId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("RadLabResult");
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.ReceiveBlood", b =>
@@ -2644,11 +2572,6 @@ namespace EHRAPI.Migrations
                     b.Navigation("ChronicDiseaseDrugs");
 
                     b.Navigation("VisitMedications");
-                });
-
-            modelBuilder.Entity("EHR_API.Entities.Models.RadLabResult", b =>
-                {
-                    b.Navigation("RadLabResultImages");
                 });
 
             modelBuilder.Entity("EHR_API.Entities.Models.Surgery", b =>

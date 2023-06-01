@@ -14,7 +14,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                     Id = 1,
                     DonationDateTime = DateTime.Now,
                     RegistrationDataId = "12345678912351",
-                    MedicalTeamId = "12345678912347",
+                    MedicalTeamId = "12345678912348",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
                 },
@@ -22,7 +22,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 {
                     Id = 2,
                     DonationDateTime = DateTime.Now,
-                    MedicalTeamId = "12345678912347",
+                    MedicalTeamId = "12345678912348",
                     RegistrationDataId = "12345678912352",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,

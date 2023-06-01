@@ -4,7 +4,9 @@ using EHR_API.Entities.DTOs.ChronicDiseaseDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Net;
 
 namespace EHR_API.Controllers
@@ -24,12 +26,8 @@ namespace EHR_API.Controllers
             _response = new();
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("GetUserChronicDiseases")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> GetUserChronicDiseases(string userId)
         {
             try
@@ -58,12 +56,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("{id}")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> GetChronicDisease(int id)
         {
             try
@@ -105,10 +99,9 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
+
         [HttpPost("CreateChronicDisease")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> CreateChronicDisease([FromBody] ChronicDiseaseCreateDTO entityCreateDTO)
         {
             try
@@ -164,11 +157,9 @@ namespace EHR_API.Controllers
             }
         }
          
-        //[Authorize]
+
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> DeleteChronicDisease(int id)
         {
             try
@@ -196,11 +187,9 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
+
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> UpdateChronicDisease(int id, [FromBody] ChronicDiseaseUpdateDTO entityUpdateDTO)
         {
             try

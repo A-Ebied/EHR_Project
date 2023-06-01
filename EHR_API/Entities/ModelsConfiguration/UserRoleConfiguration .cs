@@ -69,12 +69,6 @@ namespace EHR_API.Entities.ModelsConfiguration
                 {
                     UserId = "12345678912346",
                     RoleId = "7"
-                },
-                //Nurse
-                new IdentityUserRole<string>()
-                {
-                    UserId = "12345678912347",
-                    RoleId = "4"
                 });
         }
     }

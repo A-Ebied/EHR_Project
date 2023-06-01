@@ -4,6 +4,7 @@ using EHR_API.Entities.DTOs.BadHabitDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -25,12 +26,8 @@ namespace EHR_API.Controllers
         }
 
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("GetUserBadHabits")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> GetUserBadHabits(string UserId)
         {
             try
@@ -57,12 +54,9 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
+        
+        [Authorize]
         [HttpGet("{id}")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> GetBadHabit(int id)
         {
             try
@@ -90,10 +84,9 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
+
         [HttpPost("CreateBadHabit")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> CreateBadHabit([FromBody] BadHabitCreateDTO entityCreateDTO)
         {
             try
@@ -123,11 +116,9 @@ namespace EHR_API.Controllers
             }
         }
          
-        //[Authorize]
+
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> DeleteBadHabit(int id)
         {
             try
@@ -155,11 +146,9 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
+
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> UpdateBadHabit(int id, [FromBody] BadHabitUpdateDTO entityUpdateDTO)
         {
             try

@@ -7,6 +7,7 @@ using EHR_API.Entities.DTOs.UserDataDTOs.RolesDTOs;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
@@ -32,9 +33,8 @@ namespace EHR_API.Controllers
             _userManager = userManager;
         }
 
-        //[Authorize(Roles = SD.SystemManager)]
         [HttpGet("GetSystemManagers")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
+        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> GetSystemManagers()
         {
             try
@@ -78,7 +78,7 @@ namespace EHR_API.Controllers
 
 
         [HttpGet("GetHealthFacilityManagers")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
+        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> GetHealthFacilityManagers()
         {
             try
@@ -122,7 +122,6 @@ namespace EHR_API.Controllers
 
 
         [HttpGet("GetMedicalUsers")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
         public async Task<ActionResult<APIResponse>> GetMedicalUsers()
         {
             try
@@ -184,40 +183,32 @@ namespace EHR_API.Controllers
 
                 var entity = new RegistrationData();
 
-                /*
                 string jwtToken = null;
-                //if (HttpContext.Request.Headers.Authorization.Count > 0)
-                //{
-                //    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
-                //}
-                //var entity = new RegistrationData();
-                //string headerRole = null;
-                //string headerId = null;
-                //if (jwtToken != null)
-                //{
-                //    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
-                //    headerRole = user.Claims.ToList()[4].Value;
-                //    headerId = user.Claims.ToList()[0].Value;
-
-                //    if (headerRole == SD.Physician || headerRole == SD.Nurse || headerRole == SD.HealthFacilityManager || headerRole == SD.Pharmacist || headerRole == SD.Technician || headerId == userId)
-                //    {
-                //        entity = await _db._authentication.GetAsync(
-                //                 expression: g => g.Id == userId,
-                //                 includeProperties: "PersonalData,MedicalData,MedicalTeam");
-                //    }
-
-                //}
-                //else
-                //{
-                //    entity = await _db._authentication.GetAsync(
-                //             expression: g => g.Id == userId,
-                //             includeProperties: "PersonalData,MedicalTeam");
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
                 }
-                */
+                string headerRole = null;
+                string headerId = null;
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
 
-                entity = await _db._authentication.GetAsync(
+                    if (headerRole == SD.Physician || headerRole == SD.HealthFacilityManager || headerRole == SD.Pharmacist || headerRole == SD.Technician || headerId == userId)
+                    {
+                        entity = await _db._authentication.GetAsync(
                             expression: g => g.Id == userId,
                             includeProperties: "PersonalData,MedicalTeam,MedicalData,UserInsurances,BadHabits,Contraindications,Allergies,Visits,Admits,BloodDonations,ChronicDiseases");
+                    }
+                }
+                else
+                {
+                    entity = await _db._authentication.GetAsync(
+                             expression: g => g.Id == userId,
+                             includeProperties: "PersonalData,MedicalTeam");
+                }
 
                 if (entity == null)
                 {
@@ -244,42 +235,11 @@ namespace EHR_API.Controllers
         }
 
         [HttpGet("GetUsers")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
+        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> GetUsers()
         {
             try
             {
-                /*
-                string jwtToken = null;
-                //if (HttpContext.Request.Headers.Authorization.Count > 0)
-                //{
-                //    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
-                //}
-                //var entity = new RegistrationData();
-                //string headerRole = null;
-                //string headerId = null;
-                //if (jwtToken != null)
-                //{
-                //    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
-                //    headerRole = user.Claims.ToList()[4].Value;
-                //    headerId = user.Claims.ToList()[0].Value;
-
-                //    if (headerRole == SD.Physician || headerRole == SD.Nurse || headerRole == SD.HealthFacilityManager || headerRole == SD.Pharmacist || headerRole == SD.Technician || headerId == userId)
-                //    {
-                //        entity = await _db._authentication.GetAsync(
-                //                 expression: g => g.Id == userId,
-                //                 includeProperties: "PersonalData,MedicalData,MedicalTeam");
-                //    }
-
-                //}
-                //else
-                //{
-                //    entity = await _db._authentication.GetAsync(
-                //             expression: g => g.Id == userId,
-                //             includeProperties: "PersonalData,MedicalTeam");
-                }
-                */
-
                 var entities = await _db._authentication.GetAllAsync(
                             includeProperties: "PersonalData,MedicalTeam");
 
@@ -307,9 +267,6 @@ namespace EHR_API.Controllers
         }
 
         [HttpGet("GetRoles")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<APIResponse>> GetRoles()
         {
             try
@@ -334,24 +291,19 @@ namespace EHR_API.Controllers
                     var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
                     headerRole = user.Claims.ToList()[1].Value;
 
-                    if (headerRole == SD.Physician || headerRole == SD.Nurse)
+                    if (headerRole == SD.Physician)
                     {
                         result = entities.Where(r => r.Name == SD.Patient);
                     }
 
-                    //if (headerRole == SD.SystemManager)
-                    //{
-                    //    result = entities.Where(r => r.Name == SD.HealthFacilitiesAdministrator);
-                    //}
-
-                    //if (headerRole == SD.HealthFacilitiesAdministrator)
-                    //{
-                    //    result = entities.Where(r => r.Name == SD.HealthFacilityManager);
-                    //}
+                    if (headerRole == SD.SystemManager)
+                    {
+                        result = entities.Where(r => r.Name == SD.SystemManager || r.Name == SD.HealthFacilityManager);
+                    }
 
                     if (headerRole == SD.HealthFacilityManager)
                     {
-                        entities = entities.Where(r => r.Name == SD.Physician || r.Name == SD.Nurse || r.Name == SD.Pharmacist);
+                        entities = entities.Where(r => r.Name == SD.Physician || r.Name == SD.Technician || r.Name == SD.Pharmacist);
                     }
                 }
 
@@ -360,15 +312,16 @@ namespace EHR_API.Controllers
                     result = entities.Where(r => r.Name == SD.Patient);
                 }
 
-                if (result != null)
-                {
-                    _response.Result = _mapper.Map<List<RolesDTO>>(result);
-                }
-                else
-                {
-                    _response.Result = _mapper.Map<List<RolesDTO>>(entities);
-                }
+                //if (result != null)
+                //{
+                //    _response.Result = _mapper.Map<List<RolesDTO>>(result);
+                //}
+                //else
+                //{
+                //    _response.Result = _mapper.Map<List<RolesDTO>>(entities);
+                //}
 
+                _response.Result = _mapper.Map<List<RolesDTO>>(result);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -572,7 +525,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPut("{userId}")]
         public async Task<ActionResult<APIResponse>> UpdateRegistrationData(string userId, [FromBody] RegistrationDataUpdateDTO entityUpdateDTO)
         {
@@ -588,13 +541,36 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
-                if (await _db._authentication.GetAsync(expression: g => g.Id == userId) == null)
+                var oldOne = await _db._authentication.GetAsync(expression: g => g.Id == userId);
+                if ( oldOne == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {userId} "));
                 }
 
-                await _db._authentication.UpdateAsync(entityUpdateDTO);
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
 
+                string headerRole = null;
+                string headerId = null;
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerRole == SD.Physician || headerRole == SD.HealthFacilityManager || headerId == userId)
+                    {
+                        await _db._authentication.UpdateAsync(entityUpdateDTO);
+                    }
+                    else
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = _mapper.Map<RegistrationDataDTO>(entityUpdateDTO);
                 return Ok(_response);

@@ -4,7 +4,9 @@ using EHR_API.Entities.DTOs.BloodDonationDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Net;
 
 namespace EHR_API.Controllers
@@ -25,12 +27,8 @@ namespace EHR_API.Controllers
         }
 
 
-        //[Authorize]
-        [HttpGet("GetUserBloodDonations")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize]
+        [HttpGet("GetUserBloodDonations")]     
         public async Task<ActionResult<APIResponse>> GetUserBloodDonations(string UserId)
         {
             try
@@ -57,12 +55,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("{id}")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> GetBloodDonation(int id)
         {
             try
@@ -90,10 +84,9 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
+
         [HttpPost("CreateBloodDonation")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> CreateBloodDonation([FromBody] BloodDonationCreateDTO entityCreateDTO)
         {
             try
@@ -129,11 +122,8 @@ namespace EHR_API.Controllers
         }
 
 
-        //[Authorize]
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> DeleteBloodDonation(int id)
         {
             try
@@ -163,11 +153,10 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
+
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> UpdateBloodDonation(int id, [FromBody] BloodDonationUpdateDTO entityUpdateDTO)
         {
             try

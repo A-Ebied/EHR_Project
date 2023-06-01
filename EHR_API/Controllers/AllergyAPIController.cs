@@ -81,7 +81,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<APIResponse>> GetAllergy(int id)
         {
@@ -138,8 +138,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         [HttpPost("CreateAllergy")]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> CreateAllergy([FromBody] AllergyCreateDTO entityCreateDTO)
         {
             try
@@ -191,8 +191,8 @@ namespace EHR_API.Controllers
         }
 
 
-        [Authorize(Roles = SD.SystemManager)]
         [HttpDelete("{id}")]
+        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> DeleteAllergy(int id)
         {
             try
@@ -220,8 +220,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         [HttpPut("{id}")] 
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> UpdateAllergy(int id, [FromBody] AllergyUpdateDTO entityUpdateDTO)
         {
             try

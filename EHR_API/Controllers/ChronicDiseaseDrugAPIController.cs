@@ -4,6 +4,7 @@ using EHR_API.Entities.DTOs.ChronicDiseaseDrugDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -25,48 +26,9 @@ namespace EHR_API.Controllers
             _response = new();
         }
 
-        /*
-        //[Authorize]
-        [HttpGet("GetAllergyDrug")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetAllergyDrug([FromQuery(Name = "allergyId")] int allergyId, [FromQuery(Name = "medicationId")] int medicationId)
-        {
-            try
-            {
-                if (allergyId < 0 || medicationId < 0)
-                {
-                    return BadRequest(APIResponses.BadRequest("Id is less than 1"));
-                }
 
-                var entity = await _db._allergyDrug.GetAsync(
-                     includeProperties: "Medication,Allergy",
-                    expression: g => g.AllergyId == allergyId && g.MedicationId == medicationId);
-
-                if (entity == null)
-                {
-                    return BadRequest(APIResponses.BadRequest($"No object with allergyId = {allergyId} and medicationId = {medicationId}"));
-                }
-
-                _response.Result = _mapper.Map<AllergyDrugDTO>(entity);
-                _response.StatusCode = HttpStatusCode.OK;
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                return APIResponses.InternalServerError(ex);
-            }
-        }
-        */
-
-        //[Authorize]
+        [Authorize]
         [HttpGet("GetChronicDiseaseDrugs")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> GetChronicDiseaseDrugs(int chronicDiseaseId)
         {
             try
@@ -95,10 +57,9 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
+
         [HttpPost("CreateChronicDiseaseDrugs")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> CreateChronicDiseaseDrugs([FromBody] ChronicDiseaseDrugsCreateDTO entityCreateDTO)
         {
             try
@@ -139,12 +100,9 @@ namespace EHR_API.Controllers
             }
         }
 
-
-        //[Authorize]
+      
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> DeleteChronicDiseaseDrug(int id)
         {
             try

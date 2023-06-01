@@ -65,14 +65,6 @@ namespace EHR_API.Entities.ModelsConfiguration
                     Degree = "معهد فني صحي",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
-                },
-                new MedicalTeam
-                {
-                    Id = "12345678912347",
-                    MedicalSpecialization = "ممرضة",
-                    Degree = "معهد فني تمريض",
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now,
                 });
         }
     }

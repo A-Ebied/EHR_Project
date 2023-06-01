@@ -54,7 +54,7 @@ namespace EHR_API.Controllers
                     headerRole = user.Claims.ToList()[4].Value;
                     headerId = user.Claims.ToList()[0].Value;
 
-                    if (headerId == userId || headerRole == SD.Physician || /*headerRole == SD.Nurse ||*/ headerRole == SD.HealthFacilityManager || headerRole == SD.SystemManager)
+                    if (headerId == userId || headerRole == SD.Physician || headerRole == SD.HealthFacilityManager || headerRole == SD.SystemManager)
                     {
                         entities = await _db._admit.GetAllAsync(expression: g => g.RegistrationDataId == userId);
                     }
@@ -110,8 +110,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         [HttpPost("CreateAdmit")]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> CreateAdmit([FromBody] AdmitCreateDTO entityCreateDTO)
         {
             try
@@ -158,8 +158,8 @@ namespace EHR_API.Controllers
         }
 
 
-        [Authorize(Roles = SD.SystemManager)]
         [HttpDelete("DeleteAdmit")]
+        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> DeleteAdmit(int id)
         {
             try
@@ -187,8 +187,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         [HttpPut("{id}")]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> UpdateAdmit(int id, [FromBody] AdmitUpdateDTO entityUpdateDTO)
         {
             try

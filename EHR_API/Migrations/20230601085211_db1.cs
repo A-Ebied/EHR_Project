@@ -37,7 +37,7 @@ namespace EHRAPI.Migrations
                     ConfirmEmailCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ForgotPasswordCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdateddAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -350,42 +350,6 @@ namespace EHRAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HealthFacilities",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SubordinateTo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Phone1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Phone2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Phone3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdateddAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    RegistrationDataId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    GovernorateId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_HealthFacilities", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_HealthFacilities_AspNetUsers_RegistrationDataId",
-                        column: x => x.RegistrationDataId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_HealthFacilities_Governorates_GovernorateId",
-                        column: x => x.GovernorateId,
-                        principalTable: "Governorates",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "PersonalData",
                 columns: table => new
                 {
@@ -533,6 +497,70 @@ namespace EHRAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "HealthFacilities",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SubordinateTo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Phone1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Phone2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Phone3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateddAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    MedicalTeamId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    GovernorateId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HealthFacilities", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HealthFacilities_Governorates_GovernorateId",
+                        column: x => x.GovernorateId,
+                        principalTable: "Governorates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_HealthFacilities_MedicalTeam_MedicalTeamId",
+                        column: x => x.MedicalTeamId,
+                        principalTable: "MedicalTeam",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ChronicDiseaseDrugs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MedicationId = table.Column<int>(type: "int", nullable: false),
+                    ChronicDiseaseId = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChronicDiseaseDrugs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ChronicDiseaseDrugs_ChronicDiseases_ChronicDiseaseId",
+                        column: x => x.ChronicDiseaseId,
+                        principalTable: "ChronicDiseases",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ChronicDiseaseDrugs_Medications_MedicationId",
+                        column: x => x.MedicationId,
+                        principalTable: "Medications",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Admits",
                 columns: table => new
                 {
@@ -641,31 +669,34 @@ namespace EHRAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ChronicDiseaseDrugs",
+                name: "AdmitProgressNote",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    MedicationId = table.Column<int>(type: "int", nullable: false),
-                    ChronicDiseaseId = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FileUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MedicalTeamId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    AdmitId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ChronicDiseaseDrugs", x => x.Id);
+                    table.PrimaryKey("PK_AdmitProgressNote", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ChronicDiseaseDrugs_ChronicDiseases_ChronicDiseaseId",
-                        column: x => x.ChronicDiseaseId,
-                        principalTable: "ChronicDiseases",
+                        name: "FK_AdmitProgressNote_Admits_AdmitId",
+                        column: x => x.AdmitId,
+                        principalTable: "Admits",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ChronicDiseaseDrugs_Medications_MedicationId",
-                        column: x => x.MedicationId,
-                        principalTable: "Medications",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_AdmitProgressNote_MedicalTeam_MedicalTeamId",
+                        column: x => x.MedicalTeamId,
+                        principalTable: "MedicalTeam",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -674,11 +705,11 @@ namespace EHRAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BloodGroup = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReceiveType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AdmitId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    RegistrationDataId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -689,11 +720,6 @@ namespace EHRAPI.Migrations
                         principalTable: "Admits",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ReceiveBloods_AspNetUsers_RegistrationDataId",
-                        column: x => x.RegistrationDataId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -863,38 +889,14 @@ namespace EHRAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Receives",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    BloodGroup = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ReceiveType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ReceiveBloodId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Receives", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Receives_ReceiveBloods_ReceiveBloodId",
-                        column: x => x.ReceiveBloodId,
-                        principalTable: "ReceiveBloods",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "SurgeryProgressNotes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FileUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MedicalTeamId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     SurgeryId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -923,6 +925,8 @@ namespace EHRAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ResultNote = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FileUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     VisitRadLabTestId = table.Column<int>(type: "int", nullable: false),
                     HealthFacilityId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -945,28 +949,6 @@ namespace EHRAPI.Migrations
                         onDelete: ReferentialAction.NoAction);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "RadLabResultImages",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ResultImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RadLabResultId = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RadLabResultImages", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RadLabResultImages_RadLabResult_RadLabResultId",
-                        column: x => x.RadLabResultId,
-                        principalTable: "RadLabResult",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
@@ -975,7 +957,6 @@ namespace EHRAPI.Migrations
                     { "1", null, "SystemManager", "SYSTEMMANAGER" },
                     { "2", null, "HealthFacilityManager", "HEALTHFACILITYAMANAGER" },
                     { "3", null, "Physician", "PHYSICIAN" },
-                    { "4", null, "Nurse", "NURSE" },
                     { "5", null, "Pharmacist", "PHARMACIST" },
                     { "6", null, "Patient", "PATIENT" },
                     { "7", null, "Technician", "TECHNICIAN" }
@@ -983,21 +964,20 @@ namespace EHRAPI.Migrations
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "ConfirmEmailCode", "CreatedAt", "Email", "EmailConfirmed", "ForgotPasswordCode", "FullName", "LockoutEnabled", "LockoutEnd", "Nationality", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UpdateddAt", "UserName" },
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "ConfirmEmailCode", "CreatedAt", "Email", "EmailConfirmed", "ForgotPasswordCode", "FullName", "LockoutEnabled", "LockoutEnd", "Nationality", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UpdatedAt", "UserName" },
                 values: new object[,]
                 {
-                    { "12345678912341", 0, "dd818f7b-1d06-4828-bb0c-ea05d8a67915", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "k@gmail.com", true, null, "أحمد محمد كمال", false, null, "مصري", "K@GMAIL.COM", "@KAMAL123", "AQAAAAIAAYagAAAAEBKCJarLJyf7qNMGD9DTGeGyo9mkVTRxOlNt/W0/17ijO7hmAM35Rm6QRhNPCczGGg==", "01234567890", false, "006019c9-ff96-4da9-ade3-8fbffa1f862c", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Kamal123" },
-                    { "12345678912342", 0, "599d4d69-7cb2-4b57-b0a2-db7a9f5c17ba", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "A@gmail.com", true, null, "أحمد محمد أحمد", false, null, "مصري", "A@GMAIL.COM", "@AHMED123", "AQAAAAIAAYagAAAAEDVI+LIH8eEC6BAScHDuXJZLKc4tfMNxuhD0H4NdIQ0kgYWP5TE4mePILLAZ3vSrfw==", "", false, "f684eb3f-d5cf-40c8-b7b9-529a88fed691", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Ahmed123" },
-                    { "12345678912343", 0, "f75d573f-9027-49f2-85cf-f625e259d99a", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "M@gmail.com", true, null, "أحمد محمد محمد", false, null, "مصري", "M@GMAIL.COM", "@MUHAMMAD123", "AQAAAAIAAYagAAAAEKw0D63+/QPjwjLxRrIbx7JX/wX9RxC6ungHB8fVi2fIE8gAbc5D08JxpuZ7YyOqxQ==", "01234567899", false, "34d75e22-d0b8-42c9-ba4a-4cdb2eeaa261", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Muhammad123" },
-                    { "12345678912344", 0, "7cff46a6-0c30-4e4b-bdd3-dd712692d0bc", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Al@gmail.com", true, null, "أحمد محمد علي", false, null, "مصري", "AL@GMAIL.COM", "@ALI123", "AQAAAAIAAYagAAAAEAOJFK4E4e+CQlgPKXm76GlIp7iiwqBziFsySVfYmFMOqp4o5CWMGKvSTzh4/0ZHbQ==", "01234567890", false, "c3c70749-3439-405b-9f81-71b0c3e47e74", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Ali123" },
-                    { "12345678912346", 0, "d67e650b-dc13-480b-b5ed-6b8141cc51df", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ka@gmail.com", true, null, "أحمد خاطر علي", false, null, "مصري", "KA@GMAIL.COM", "@KHATER123", "AQAAAAIAAYagAAAAEP/AYaEsa65wn8GvQBnWvreMXwhfSumsgkZjmbzzjy7qzKlSWockRrvF1LW6YoggIA==", "", false, "41a90fd1-a3cb-4d93-ae17-5e89c10d3760", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Khater123" },
-                    { "12345678912347", 0, "18b49a05-3415-4b7c-a6b6-da52e2ad1bfb", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ma@gmail.com", true, null, "منال خاطر علي", false, null, "مصري", "MA@GMAIL.COM", "@MANAL123", "AQAAAAIAAYagAAAAEGRJHqEw82krl/JcKvzUYVOsshxZBVmiLrfuHKog9OX87V8POxflHZghmdoNUNWpCA==", "", false, "bdbb502f-9f8d-4930-a83d-ec876034817e", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Manal123" },
-                    { "12345678912348", 0, "89b404a1-cc25-4216-a9c3-1bcc9fab94ea", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ma2@gmail.com", true, null, "منال خاطر أحمد", false, null, "مصري", "MA2@GMAIL.COM", "@MANAL2123", "AQAAAAIAAYagAAAAEAz3tdR5iPNrPQNXi9jBFRupJz+HWB07TyU4RhuiccO8stq7HQZ8xtWho2T5aIvnYA==", "", false, "6312af78-2e91-49a4-8cbf-1bdf5faa5128", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Manal2123" },
-                    { "12345678912349", 0, "b5f3efec-57ed-4d26-b71e-afb3bc33434a", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ka2@gmail.com", true, null, "خاطر أحمد", false, null, "مصري", "KA2@GMAIL.COM", "@KHATER2123", "AQAAAAIAAYagAAAAEN9C0iXHAQnynEKUG8Vhx7aUTXT4dXLbFTR1KiyhLI/BrJfU1G0FXQ4uReC+A7pDZQ==", "", false, "67e1ec51-de8a-4566-9e38-b0b60fdfd6ab", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Khater2123" },
-                    { "12345678912350", 0, "214b4d09-9cda-4133-a66c-c2d38ccda8b7", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "TE@gmail.com", true, null, "test", false, null, "مصري", "TE@GMAIL.COM", "@TEST2123", "AQAAAAIAAYagAAAAEAucf7alF9EaGFg/w+7kswvsKy4L3wO3oSXGlzBSpr+nvndb0WTE0ceoTRJu0PNMvw==", "", false, "a7adabfb-d976-4abd-9d7f-b7ce3900a60e", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Test2123" },
-                    { "12345678912351", 0, "b2859e03-cb0e-4315-8e46-8c50212ad43d", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Fa@gmail.com", true, null, "أحمد فوزي محمد", false, null, "مصري", "FA@GMAIL.COM", "@FAWZY123", "AQAAAAIAAYagAAAAEPmK7AM7+GJ0g1vVP/vhi0SiObJFNKHUU9QnSC+NMAUJV2f2mPuFDeFkqV7b8acFaA==", "", false, "2a2967ba-e516-4601-9adf-5152c3bbf320", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Fawzy123" },
-                    { "12345678912352", 0, "c4d507b8-cb19-4889-bb3b-d8a8c3992bdc", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "AlFa@gmail.com", true, null, "علي فوزي محمد", false, null, "مصري", "ALFA@GMAIL.COM", "@ALIFAWZY123", "AQAAAAIAAYagAAAAEO8iLlEaWdS98uyOYDS2iFoCGMzKymOLSjMtuz2q/4O5Dj92IZfuUhkPGSus4OuA9A==", "", false, "ae4feea2-59d7-42ab-91eb-915da14891b3", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@AliFawzy123" },
-                    { "12345678912353", 0, "d4619ed4-c4f0-43e4-85b9-e844805ac156", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "AFa@gmail.com", true, null, "علي فوزي أحمد", false, null, "مصري", "AFA@GMAIL.COM", "@AFAWZY123", "AQAAAAIAAYagAAAAEG2AHBhTdeyEHqgrpd/5IWwbLY1qq627c9FwlOSdIploU5BCAxfwJz6nypDgWOSdwg==", "", false, "7e18d078-1e6a-4f9d-8606-18dbf1a96ded", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@AFawzy123" }
+                    { "12345678912341", 0, "e545b85e-cbdc-4b6e-8455-4bd5b50ec0eb", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "k@gmail.com", true, null, "أحمد محمد كمال", false, null, "مصري", "K@GMAIL.COM", "@KAMAL123", "AQAAAAIAAYagAAAAEIMtisEA8VZhecW87IVCdgmpG39cmqzFGiW1bMt6KydVF6FSvuY7TeSK4P6utB1AEw==", "01234567890", false, "8ce72237-8810-45eb-b7af-9a446bc9cb6b", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Kamal123" },
+                    { "12345678912342", 0, "6f5eb83a-8e3d-423a-b1c6-e627784fd144", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "A@gmail.com", true, null, "أحمد محمد أحمد", false, null, "مصري", "A@GMAIL.COM", "@AHMED123", "AQAAAAIAAYagAAAAELM+vCBLIKFa/HyFR9MeuoN7toTdgbCNcHc3N8dJ2A7IVciYS1SGXG8TF3zqnWy3oQ==", "", false, "0c97412a-6a21-437e-81dc-2c08001cbfaf", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Ahmed123" },
+                    { "12345678912343", 0, "3d2f727e-4ed5-4446-b82e-937c48cbf0c7", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "M@gmail.com", true, null, "أحمد محمد محمد", false, null, "مصري", "M@GMAIL.COM", "@MUHAMMAD123", "AQAAAAIAAYagAAAAEK7DPMNZxxtvdwzAdZVmu8mvsPkuvM5CIdZUopPXSNTZzTdhwqXJ7cD6bkNpbr/ZsQ==", "01234567899", false, "9fa46295-21ce-4d06-a695-5bfc8b3d4898", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Muhammad123" },
+                    { "12345678912344", 0, "9f0337b1-32c9-40d5-b7bc-8493a10cd968", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Al@gmail.com", true, null, "أحمد محمد علي", false, null, "مصري", "AL@GMAIL.COM", "@ALI123", "AQAAAAIAAYagAAAAEC340D8YeTTUmh7idpqGRCB2lNyHPUpF4xnV1qtlk6ouuNJteWx82l8ew1QWBnmLhw==", "01234567890", false, "4afe4b50-10f1-4cbc-8239-a60f68e4709a", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Ali123" },
+                    { "12345678912346", 0, "fa199050-3bb2-4e1b-8178-c6d9b5c1a9b4", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ka@gmail.com", true, null, "أحمد خاطر علي", false, null, "مصري", "KA@GMAIL.COM", "@KHATER123", "AQAAAAIAAYagAAAAEAawQBruND/HTv03349oCjPM7+jZZ8w1NPGIBzqlkrRVSIFee0wQyu9dlJcXa6SL4w==", "", false, "29a89ee1-b033-4aaf-a23b-8e8721840e82", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Khater123" },
+                    { "12345678912348", 0, "df039f77-52b6-47fa-8826-e50e446cee29", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ma2@gmail.com", true, null, "منال خاطر أحمد", false, null, "مصري", "MA2@GMAIL.COM", "@MANAL2123", "AQAAAAIAAYagAAAAENPOpZkevP6NS+6TTMf3X4zZlBG7BvBjDOlSfnocpKc3WQXjFWLoX2k1kx/hrJlcXg==", "", false, "0db1bad5-2c60-4287-9485-c5a4b0ef0248", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Manal2123" },
+                    { "12345678912349", 0, "27bbb60b-a60b-4950-b239-f08b26438e44", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ka2@gmail.com", true, null, "خاطر أحمد", false, null, "مصري", "KA2@GMAIL.COM", "@KHATER2123", "AQAAAAIAAYagAAAAEPJzSSg4z9XDjjg+XqSNJXSE1iQ2/mbGStY56Wiw5a0F0TkoqzmBXST1xD5PFKgB1g==", "", false, "a693a839-57cc-43c2-b0d2-ffd400f1d450", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Khater2123" },
+                    { "12345678912350", 0, "3ef16edd-3cd3-4cb8-9e04-5afe53a75b12", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "TE@gmail.com", true, null, "test", false, null, "مصري", "TE@GMAIL.COM", "@TEST2123", "AQAAAAIAAYagAAAAEOlIvn8SS+qeu3RT5UlsR0gfXh+OhBQ4XaztwpT9paKpISTzr7ck15O06Y+zmywJ2A==", "", false, "e0da791e-17be-4280-ad61-59def71d2d82", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Test2123" },
+                    { "12345678912351", 0, "0b76ffc4-2131-4d9f-b6d4-c45eadc0b520", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Fa@gmail.com", true, null, "أحمد فوزي محمد", false, null, "مصري", "FA@GMAIL.COM", "@FAWZY123", "AQAAAAIAAYagAAAAEJthI0DblT2nJBdutNUFiJHVz3KjB1bqzG3R3PEZjuW+3ep731ENVhSbEwx8DU9lrg==", "", false, "1a78ef5d-a35b-4ae1-9813-c9f70c3622d3", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Fawzy123" },
+                    { "12345678912352", 0, "85950c61-6c1c-4f20-ab48-b40db8bae0b5", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "AlFa@gmail.com", true, null, "علي فوزي محمد", false, null, "مصري", "ALFA@GMAIL.COM", "@ALIFAWZY123", "AQAAAAIAAYagAAAAECbQuVcJ65hdJ87PAFDnvBafoxqFpfoOpTCn7GROxhtyq2rkwLsWaV92a8amct5R8Q==", "", false, "1f129575-6acb-4e2c-b00f-31638e97c0c6", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@AliFawzy123" },
+                    { "12345678912353", 0, "7ba58229-83ce-4ee4-ab4a-32c13af3d9ee", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "AFa@gmail.com", true, null, "علي فوزي أحمد", false, null, "مصري", "AFA@GMAIL.COM", "@AFAWZY123", "AQAAAAIAAYagAAAAEFq2VOQlmF2YTS9J0MlQ8dcoqG5qiqAN+Zfzmxzs2+OSf7oPhyIJFlR01fUkcwd4vQ==", "", false, "3585db52-044a-45a4-bcad-3d468430e82f", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@AFawzy123" }
                 });
 
             migrationBuilder.InsertData(
@@ -1005,12 +985,12 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "CreatedAt", "Title", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 5, 24, 21, 42, 30, 719, DateTimeKind.Local).AddTicks(9213), "القاهرة", new DateTime(2023, 5, 24, 21, 42, 30, 719, DateTimeKind.Local).AddTicks(9260) },
-                    { 2, new DateTime(2023, 5, 24, 21, 42, 30, 719, DateTimeKind.Local).AddTicks(9264), "الجيزة", new DateTime(2023, 5, 24, 21, 42, 30, 719, DateTimeKind.Local).AddTicks(9266) },
-                    { 3, new DateTime(2023, 5, 24, 21, 42, 30, 719, DateTimeKind.Local).AddTicks(9269), "مطروح", new DateTime(2023, 5, 24, 21, 42, 30, 719, DateTimeKind.Local).AddTicks(9271) },
-                    { 4, new DateTime(2023, 5, 24, 21, 42, 30, 719, DateTimeKind.Local).AddTicks(9274), "شمال سيناء", new DateTime(2023, 5, 24, 21, 42, 30, 719, DateTimeKind.Local).AddTicks(9276) },
-                    { 5, new DateTime(2023, 5, 24, 21, 42, 30, 719, DateTimeKind.Local).AddTicks(9279), "الشرقية", new DateTime(2023, 5, 24, 21, 42, 30, 719, DateTimeKind.Local).AddTicks(9281) },
-                    { 6, new DateTime(2023, 5, 24, 21, 42, 30, 719, DateTimeKind.Local).AddTicks(9284), "الدقهلية", new DateTime(2023, 5, 24, 21, 42, 30, 719, DateTimeKind.Local).AddTicks(9287) }
+                    { 1, new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6211), "القاهرة", new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6262) },
+                    { 2, new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6266), "الجيزة", new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6267) },
+                    { 3, new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6269), "مطروح", new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6271) },
+                    { 4, new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6273), "شمال سيناء", new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6274) },
+                    { 5, new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6276), "الشرقية", new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6278) },
+                    { 6, new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6280), "الدقهلية", new DateTime(2023, 6, 1, 11, 52, 9, 654, DateTimeKind.Local).AddTicks(6281) }
                 });
 
             migrationBuilder.InsertData(
@@ -1018,10 +998,10 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Code", "CreatedAt", "DiagnosisName", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { "A00.0", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(6944), "Cholera due to Vibrio cholerae 01, biovar cholerae", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(6947) },
-                    { "A00.1", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(6950), "Cholera due to Vibrio cholerae 01, biovar eltor", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(6951) },
-                    { "A00.9", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(6953), "Cholera, unspecified", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(6954) },
-                    { "A01.00", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(6955), "Typhoid fever, unspecified", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(6956) }
+                    { "A00.0", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7740), "Cholera due to Vibrio cholerae 01, biovar cholerae", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7744) },
+                    { "A00.1", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7747), "Cholera due to Vibrio cholerae 01, biovar eltor", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7748) },
+                    { "A00.9", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7750), "Cholera, unspecified", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7752) },
+                    { "A01.00", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7754), "Typhoid fever, unspecified", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7756) }
                 });
 
             migrationBuilder.InsertData(
@@ -1029,10 +1009,10 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "Contraindication", "CreatedAt", "Description", "ImageUrl", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, "ممنوع على مرضى الكلى والكبد", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8571), "أقراص", "/Medication/fexofenadine.jpg", "Fexofenadine (الفيكسوفينادين)", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8574) },
-                    { 2, "لا يستخدم مع مرضى السكري.....الخ", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8577), "بخاخ أنف", "/Medication/NASONEX.jpg", "Nasonex (نازونكس)", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8578) },
-                    { 3, "لا تستخدم مع أي منتجات أخرى تحتوي على الباراسيتامول. يزيد مرض الكبد الأساسي من خطر تلف الكبد المرتبط بالباراسيتامول. يجب على المرضى الذين تم تشخيص إصابتهم بضعف في الكبد أو الكلى طلب المشورة الطبية قبل تناول هذا الدواء.", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8580), "أقراص", "/Medication/advance.jpg", "Panadol Advance (بانادول أدفانس)", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8581) },
-                    { 4, "فرط الحساسية لأي من المكونات", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8582), "أقراص", "/Medication/Kerovit.jpg", "Kerovit (كيروفيت)", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8583) }
+                    { 1, "ممنوع على مرضى الكلى والكبد", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9993), "أقراص", "/files/Medication/fexofenadine.jpg", "Fexofenadine (الفيكسوفينادين)", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9996) },
+                    { 2, "لا يستخدم مع مرضى السكري.....الخ", new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(1), "بخاخ أنف", "/files/Medication/NASONEX.jpg", "Nasonex (نازونكس)", new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(3) },
+                    { 3, "لا تستخدم مع أي منتجات أخرى تحتوي على الباراسيتامول. يزيد مرض الكبد الأساسي من خطر تلف الكبد المرتبط بالباراسيتامول. يجب على المرضى الذين تم تشخيص إصابتهم بضعف في الكبد أو الكلى طلب المشورة الطبية قبل تناول هذا الدواء.", new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(5), "أقراص", "/files/Medication/advance.jpg", "Panadol Advance (بانادول أدفانس)", new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(7) },
+                    { 4, "فرط الحساسية لأي من المكونات", new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(9), "أقراص", "/files/Medication/Kerovit.jpg", "Kerovit (كيروفيت)", new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(11) }
                 });
 
             migrationBuilder.InsertData(
@@ -1040,8 +1020,8 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "AgeRange", "Contraindication", "CreatedAt", "Dosage", "Name", "Note", "Reason", "Route", "SideEffects", "Type", "UpdatedAt", "VaccinationEffectiveness" },
                 values: new object[,]
                 {
-                    { 1, "2-64 عام", "", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(9979), "1 dose", "Vaxchora", "", "لقاح يستخدم للوقاية من الكوليرا", "عن طريق الفم", "", "حبوب", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(9981), "3-6 أشهر" },
-                    { 2, "من عامين وأكبر", "", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(9984), "2 doses, given 1–6 weeks apart ", "Dukoral", "Children aged 2–5 years need 3 doses, given 1 to 6 weeks apart", "لقاح يستخدم للوقاية من الكوليرا", "عن طريق الفم", "", "حبوب", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(9985), "عامين" }
+                    { 1, "2-64 عام", "", new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(3386), "1 dose", "Vaxchora", "", "لقاح يستخدم للوقاية من الكوليرا", "عن طريق الفم", "", "حبوب", new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(3391), "3-6 أشهر" },
+                    { 2, "من عامين وأكبر", "", new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(3398), "2 doses, given 1–6 weeks apart ", "Dukoral", "Children aged 2–5 years need 3 doses, given 1 to 6 weeks apart", "لقاح يستخدم للوقاية من الكوليرا", "عن طريق الفم", "", "حبوب", new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(3401), "عامين" }
                 });
 
             migrationBuilder.InsertData(
@@ -1049,9 +1029,9 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "Allergen", "CreatedAt", "Instruction", "IsChronic", "Reaction", "RegistrationDataId", "Type", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, "التراب", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(9434), "---", true, "سيلان الأنف والكحة", "12345678912351", "حساسية التراب", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(9437) },
-                    { 2, "الفول السوداني والحليب والبيض", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(9440), "", true, "طفح جلدي", "12345678912352", "حساسية الطعام", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(9441) },
-                    { 3, "فراء الحيوانات ، وخاصة من الحيوانات الأليفة مثل القطط والكلاب", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(9443), "الابتعاد عن الحيوانات الأليفة", true, "ضيق في الصدر وفقدان أنفاسك", "12345678912353", "حساسية الحيوانات الأليفة", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(9444) }
+                    { 1, "التراب", new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(2050), "---", true, "سيلان الأنف والكحة", "12345678912351", "حساسية التراب", new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(2056) },
+                    { 2, "الفول السوداني والحليب والبيض", new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(2061), "", true, "طفح جلدي", "12345678912352", "حساسية الطعام", new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(2064) },
+                    { 3, "فراء الحيوانات ، وخاصة من الحيوانات الأليفة مثل القطط والكلاب", new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(2068), "الابتعاد عن الحيوانات الأليفة", true, "ضيق في الصدر وفقدان أنفاسك", "12345678912353", "حساسية الحيوانات الأليفة", new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(2071) }
                 });
 
             migrationBuilder.InsertData(
@@ -1064,7 +1044,6 @@ namespace EHRAPI.Migrations
                     { "3", "12345678912343" },
                     { "5", "12345678912344" },
                     { "7", "12345678912346" },
-                    { "4", "12345678912347" },
                     { "2", "12345678912348" },
                     { "2", "12345678912349" },
                     { "2", "12345678912350" },
@@ -1078,19 +1057,9 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "CreatedAt", "Habit", "Notes", "RegistrationDataId", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(9115), "التدخين", "", "12345678912351", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(9117) },
-                    { 2, new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(9120), "التدخين", "", "12345678912352", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(9121) },
-                    { 3, new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(9123), "شرب الخمور", "", "12345678912353", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(9124) }
-                });
-
-            migrationBuilder.InsertData(
-                table: "HealthFacilities",
-                columns: new[] { "Id", "Address", "CreatedAt", "Description", "Email", "GovernorateId", "Phone1", "Phone2", "Phone3", "RegistrationDataId", "SubordinateTo", "Title", "Type", "UpdateddAt" },
-                values: new object[,]
-                {
-                    { 1, "Address1", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(6449), "Description1", "m@gmail.com", 1, "01123456878", "", "", "12345678912342", "المؤسسة العسكرية", "المستشفى العسكري بالشرقية", "مستشفى عسكري", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(6635) },
-                    { 2, "Address2", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(6640), "Description2", "a@gmail.com", 1, "01122456878", "", "", "12345678912348", "وزارة الصحة", "المستشفى العام بالعريش", "مستشفى عام", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(6641) },
-                    { 3, "Address3", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(6644), "Description3", "j@gmail.com", 1, "01123416878", "", "", "12345678912349", "مستشفيات الجامعة", "مستشفى الجامعة بالزقازيق", "مستشفى جامعي", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(6645) }
+                    { 1, new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(1376), "التدخين", "", "12345678912351", new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(1382) },
+                    { 2, new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(1388), "التدخين", "", "12345678912352", new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(1390) },
+                    { 3, new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(1395), "شرب الخمور", "", "12345678912353", new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(1397) }
                 });
 
             migrationBuilder.InsertData(
@@ -1098,9 +1067,9 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "BloodGroup", "CreatedAt", "DNAImageResultUrl", "FamilyHistory", "MedicalHistory", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { "12345678912351", "A+", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(7988), "", "الجد من الأب كان مصاب بالسكري", "", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(7990) },
-                    { "12345678912352", "O+", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(7994), "", "الجد من الأب كان مصاب بمرض ذهني", "المريض أصيب بحالة من الهلوسة مرتين سابقا", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(7995) },
-                    { "12345678912353", "AB+", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(7998), "", "", "", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(7999) }
+                    { "12345678912351", "A+", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9136), "", "الجد من الأب كان مصاب بالسكري", "", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9139) },
+                    { "12345678912352", "O+", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9142), "", "الجد من الأب كان مصاب بمرض ذهني", "المريض أصيب بحالة من الهلوسة مرتين سابقا", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9144) },
+                    { "12345678912353", "AB+", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9147), "", "", "", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9148) }
                 });
 
             migrationBuilder.InsertData(
@@ -1108,14 +1077,13 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "CreatedAt", "Degree", "MedicalSpecialization", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { "12345678912342", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8274), "ماجستير جراحة العمود الفقري", "جراحة العمود الفقري", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8277) },
-                    { "12345678912343", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8287), "ماجستير أنف وأذن وحنجرة", "أنف وأذن وحنجرة", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8289) },
-                    { "12345678912344", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8290), "بكالوريوس الصيدلة", "طب الصيدلة", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8291) },
-                    { "12345678912346", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8293), "معهد فني صحي", "فني أشعة", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8294) },
-                    { "12345678912347", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8296), "معهد فني تمريض", "ممرضة", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8297) },
-                    { "12345678912348", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8279), "ماجستير أورام العظام", "أورام العظام", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8280) },
-                    { "12345678912349", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8282), "دكتوراة أورام المسالك البولية", "أورام المسالك البولية", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8283) },
-                    { "12345678912350", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8285), "دكتوراة جراحة القلب", "جراحة القلب", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8286) }
+                    { "12345678912342", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9555), "ماجستير جراحة العمود الفقري", "جراحة العمود الفقري", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9558) },
+                    { "12345678912343", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9574), "ماجستير أنف وأذن وحنجرة", "أنف وأذن وحنجرة", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9575) },
+                    { "12345678912344", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9577), "بكالوريوس الصيدلة", "طب الصيدلة", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9579) },
+                    { "12345678912346", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9581), "معهد فني صحي", "فني أشعة", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9583) },
+                    { "12345678912348", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9562), "ماجستير أورام العظام", "أورام العظام", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9563) },
+                    { "12345678912349", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9565), "دكتوراة أورام المسالك البولية", "أورام المسالك البولية", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9567) },
+                    { "12345678912350", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9570), "دكتوراة جراحة القلب", "جراحة القلب", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(9572) }
                 });
 
             migrationBuilder.InsertData(
@@ -1123,9 +1091,9 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "Address", "AgeGroup", "BirthDate", "CreatedAt", "EmergencyPhone1", "EmergencyPhone2", "Gender", "GovernorateId", "NumOfChildren", "Occupation", "Phone1", "UpdatedAt", "UserImageUrl" },
                 values: new object[,]
                 {
-                    { "12345678912351", "", "", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(7670), "01234546788", "", "ذكر", 1, 3, "مدرس", "01234546787", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(7673), "" },
-                    { "12345678912352", "", "", new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(7684), "01234746788", "", "ذكر", 3, 1, "دكتور جامعي", "01234544487", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(7685), "" },
-                    { "12345678912353", "", "", new DateTime(1980, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(7690), "01234506788", "", "ذكر", 2, 3, "عمل حر", "01234500787", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(7691), "" }
+                    { "12345678912351", "", "", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(8680), "01234546788", "", "ذكر", 1, 3, "مدرس", "01234546787", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(8683), "" },
+                    { "12345678912352", "", "", new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(8695), "01234746788", "", "ذكر", 3, 1, "دكتور جامعي", "01234544487", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(8696), "" },
+                    { "12345678912353", "", "", new DateTime(1980, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(8703), "01234506788", "", "ذكر", 2, 3, "عمل حر", "01234500787", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(8705), "" }
                 });
 
             migrationBuilder.InsertData(
@@ -1133,8 +1101,8 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "CreatedAt", "InsuranceNo", "InsuranceOrganizationName", "InsuranceType", "RegistrationDataId", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(7258), "123OP", "التأمين الصحي المصري", "حكومي", "12345678912351", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(7261) },
-                    { 2, new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(7263), "124OP", "التأمين الصحي المصري", "حكومي", "12345678912352", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(7264) }
+                    { 1, new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(8160), "123OP", "التأمين الصحي المصري", "حكومي", "12345678912351", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(8163) },
+                    { 2, new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(8166), "124OP", "التأمين الصحي المصري", "حكومي", "12345678912352", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(8168) }
                 });
 
             migrationBuilder.InsertData(
@@ -1142,8 +1110,8 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "AllergyId", "CreatedAt", "MedicationId", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(9709), 1, new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(9711) },
-                    { 2, 1, new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(9714), 2, new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(9715) }
+                    { 1, 1, new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(2776), 1, new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(2782) },
+                    { 2, 1, new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(2786), 2, new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(2788) }
                 });
 
             migrationBuilder.InsertData(
@@ -1151,9 +1119,29 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "CreatedAt", "DonationDateTime", "MedicalTeamId", "RegistrationDataId", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8852), new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8848), "12345678912347", "12345678912351", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8853) },
-                    { 2, new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8857), new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8855), "12345678912347", "12345678912352", new DateTime(2023, 5, 24, 21, 42, 31, 606, DateTimeKind.Local).AddTicks(8858) }
+                    { 1, new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(757), new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(743), "12345678912348", "12345678912351", new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(761) },
+                    { 2, new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(769), new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(766), "12345678912348", "12345678912352", new DateTime(2023, 6, 1, 11, 52, 10, 644, DateTimeKind.Local).AddTicks(771) }
                 });
+
+            migrationBuilder.InsertData(
+                table: "HealthFacilities",
+                columns: new[] { "Id", "Address", "CreatedAt", "Description", "Email", "GovernorateId", "MedicalTeamId", "Phone1", "Phone2", "Phone3", "SubordinateTo", "Title", "Type", "UpdateddAt" },
+                values: new object[,]
+                {
+                    { 1, "Address1", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7248), "Description1", "m@gmail.com", 1, "12345678912342", "01123456878", "", "", "المؤسسة العسكرية", "المستشفى العسكري بالشرقية", "مستشفى عسكري", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7308) },
+                    { 2, "Address2", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7316), "Description2", "a@gmail.com", 1, "12345678912348", "01122456878", "", "", "وزارة الصحة", "المستشفى العام بالعريش", "مستشفى عام", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7317) },
+                    { 3, "Address3", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7321), "Description3", "j@gmail.com", 1, "12345678912349", "01123416878", "", "", "مستشفيات الجامعة", "مستشفى الجامعة بالزقازيق", "مستشفى جامعي", new DateTime(2023, 6, 1, 11, 52, 10, 643, DateTimeKind.Local).AddTicks(7323) }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AdmitProgressNote_AdmitId",
+                table: "AdmitProgressNote",
+                column: "AdmitId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AdmitProgressNote_MedicalTeamId",
+                table: "AdmitProgressNote",
+                column: "MedicalTeamId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Admits_HealthFacilityId",
@@ -1279,9 +1267,9 @@ namespace EHRAPI.Migrations
                 column: "GovernorateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HealthFacilities_RegistrationDataId",
+                name: "IX_HealthFacilities_MedicalTeamId",
                 table: "HealthFacilities",
-                column: "RegistrationDataId");
+                column: "MedicalTeamId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MedicalFacilityTeams_HealthFacilityId_MedicalTeamId",
@@ -1316,24 +1304,9 @@ namespace EHRAPI.Migrations
                 column: "VisitRadLabTestId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RadLabResultImages_RadLabResultId",
-                table: "RadLabResultImages",
-                column: "RadLabResultId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ReceiveBloods_AdmitId",
                 table: "ReceiveBloods",
                 column: "AdmitId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ReceiveBloods_RegistrationDataId",
-                table: "ReceiveBloods",
-                column: "RegistrationDataId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Receives_ReceiveBloodId",
-                table: "Receives",
-                column: "ReceiveBloodId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Surgeries_AdmitId",
@@ -1417,6 +1390,9 @@ namespace EHRAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AdmitProgressNote");
+
+            migrationBuilder.DropTable(
                 name: "AllergyDrugs");
 
             migrationBuilder.DropTable(
@@ -1459,10 +1435,10 @@ namespace EHRAPI.Migrations
                 name: "PhysicalTherapy");
 
             migrationBuilder.DropTable(
-                name: "RadLabResultImages");
+                name: "RadLabResult");
 
             migrationBuilder.DropTable(
-                name: "Receives");
+                name: "ReceiveBloods");
 
             migrationBuilder.DropTable(
                 name: "SurgeryProgressNotes");
@@ -1489,10 +1465,7 @@ namespace EHRAPI.Migrations
                 name: "ChronicDiseases");
 
             migrationBuilder.DropTable(
-                name: "RadLabResult");
-
-            migrationBuilder.DropTable(
-                name: "ReceiveBloods");
+                name: "VisitRadLabTests");
 
             migrationBuilder.DropTable(
                 name: "Surgeries");
@@ -1504,25 +1477,22 @@ namespace EHRAPI.Migrations
                 name: "Medications");
 
             migrationBuilder.DropTable(
-                name: "VisitRadLabTests");
+                name: "Visits");
 
             migrationBuilder.DropTable(
                 name: "Admits");
 
             migrationBuilder.DropTable(
-                name: "Visits");
+                name: "ICDs");
 
             migrationBuilder.DropTable(
                 name: "HealthFacilities");
 
             migrationBuilder.DropTable(
-                name: "ICDs");
+                name: "Governorates");
 
             migrationBuilder.DropTable(
                 name: "MedicalTeam");
-
-            migrationBuilder.DropTable(
-                name: "Governorates");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
