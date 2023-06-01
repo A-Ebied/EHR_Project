@@ -44,7 +44,7 @@ namespace EHR_API.Repositories.Implementation
         {
             var user = _mapper.Map<RegistrationData>(registrationDataDTO);
             user.CreatedAt = DateTime.Now;
-            user.UpdateddAt = DateTime.Now;
+            user.UpdatedAt = DateTime.Now;
             user.ConfirmEmailCode = ServiceExtensions.RandomCode();
 
             var result = await _userManager.CreateAsync(user, registrationDataDTO.Password);
@@ -239,7 +239,7 @@ namespace EHR_API.Repositories.Implementation
             user.UserName = entity.UserName;
             user.Email = entity.Email;
             user.PhoneNumber = entity.PhoneNumber;
-            user.UpdateddAt = DateTime.Now;
+            user.UpdatedAt = DateTime.Now;
 
             var pw = new PasswordHasher<string>();
             user.PasswordHash = pw.HashPassword(entity.UserName, entity.Password);
