@@ -15,8 +15,6 @@ namespace EHR_API.Entities.Models
         public string MedicalTeamId { get; set; }
         [ForeignKey("Admit")]
         public int AdmitId { get; set; }
-        //public double Price { get; set; }
-        //public bool UnderInsurance { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 

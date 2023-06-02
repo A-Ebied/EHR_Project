@@ -4,7 +4,10 @@ using EHR_API.Entities.DTOs.MedicationDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using EHR_MVC.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Net;
 using System.Text.Json;
 
@@ -17,7 +20,7 @@ namespace EHR_API.Controllers
         protected APIResponse _response;
         private readonly IMapper _mapper;
         private readonly IMainRepository _db;
-
+        
         public MedicationAPIController(IMainRepository db, IMapper mapper)
         {
             _db = db;
@@ -25,11 +28,8 @@ namespace EHR_API.Controllers
             _response = new();
         }
 
-        //[Authorize(Roles = SD.SystemManager)]
-        //[Authorize]
         [HttpPost("CreateMedication")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> CreateMedication([FromForm] MedicationCreateDTO entityCreateDTO)
         {
             try
@@ -60,11 +60,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize(Roles = SD.SystemManager)]
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> UpdateMedication(int id, [FromForm] MedicationUpdateDTO entityUpdateDTO)
         {
             try
@@ -101,16 +98,12 @@ namespace EHR_API.Controllers
         }
 
         [HttpGet("GetMedications")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetMedications([FromQuery(Name = "searchName")] string name = null)
+        public async Task<ActionResult<APIResponse>> GetMedications()
         {
             try
             {
                 IEnumerable<Medication> entities = new List<Medication>();
-                entities = await _db._medication.GetAllAsync(
-                    expression: name == null ? null : g => g.Name.ToLower().Contains(name.ToLower()));
+                entities = await _db._medication.GetAllAsync();
 
                 if (entities.ToList().Count == 0)
                 {
@@ -128,10 +121,6 @@ namespace EHR_API.Controllers
         }
 
         [HttpGet("{id}")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> GetMedication(int id)
         {
             try
@@ -160,11 +149,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize(Roles = SD.SystemManager)]
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> DeleteMedication(int id)
         {
             try

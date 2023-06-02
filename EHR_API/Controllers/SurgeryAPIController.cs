@@ -4,7 +4,9 @@ using EHR_API.Entities.DTOs.SurgeryDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
 namespace EHR_API.Controllers
@@ -25,12 +27,8 @@ namespace EHR_API.Controllers
         }
 
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("GetUserSurgeryies")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> GetUserSurgeryies(string userId)
         {
             try
@@ -47,6 +45,31 @@ namespace EHR_API.Controllers
                 if (temp.Count == 0)
                 {
                     return BadRequest(APIResponses.BadRequest($"No objects with Id = {userId} "));
+                }
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerRole = null;
+                string headerId = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != temp[0].RegistrationDataId && headerRole != SD.Physician && headerRole != SD.HealthFacilityManager && headerRole != SD.SystemManager)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
                 }
 
                 var entities = new List<Surgery>();
@@ -68,12 +91,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("{id}")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> GetSurgery(int id)
         {
             try
@@ -84,12 +103,37 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = await _db._surgery.GetAsync(
-                    includeProperties: "SurgeryProgressNotes",
+                    includeProperties: "SurgeryProgressNotes,Admit",
                     expression: g => g.Id == id);
 
                 if (entity == null)
                 {
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id}"));
+                }
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerRole = null;
+                string headerId = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != entity.Admit.RegistrationDataId && headerRole != SD.Physician && headerRole != SD.HealthFacilityManager && headerRole != SD.SystemManager)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
                 }
 
                 _response.Result = _mapper.Map<SurgeryDTO>(entity);
@@ -102,10 +146,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
         [HttpPost("CreateSurgery")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> CreateSurgery([FromBody] SurgeryCreateDTO entityCreateDTO)
         {
             try
@@ -128,28 +170,9 @@ namespace EHR_API.Controllers
                 var entity = _mapper.Map<Surgery>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
                 entity.UpdatedAt = DateTime.Now;
-                entity.SurgeryProgressNotes = null;
+                //entity.SurgeryProgressNotes = null;
 
                 await _db._surgery.CreateAsync(entity);
-
-                //if (entityCreateDTO.SurgeryProgressNotes.Count > 0)
-                //{
-                //    var progressNotes = new List<SurgeryProgressNote>();
-                //    var temp = new SurgeryProgressNote();
-
-                //    foreach (var item in entityCreateDTO.SurgeryProgressNotes)
-                //    {
-                //        temp = _mapper.Map<SurgeryProgressNote>(item);
-                //        temp.SurgeryId = entity.Id;
-                //        temp.CreatedAt = DateTime.Now;
-                //        temp.UpdatedAt = DateTime.Now;
-
-                //        progressNotes.Add(temp);
-                //    }
-
-                //    await _db._surgeryProgressNote.CreateRangeAsync(progressNotes);
-                //    entity.SurgeryProgressNotes = progressNotes;
-                //}
 
                 _response.Result = _mapper.Map<SurgeryDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;
@@ -161,11 +184,8 @@ namespace EHR_API.Controllers
             }
         }
          
-        //[Authorize]
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> DeleteSurgery(int id)
         {
             try
@@ -193,11 +213,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> UpdateSurgery(int id, [FromBody] SurgeryUpdateDTO entityUpdateDTO)
         {
             try
@@ -212,8 +229,8 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
-                var oldEntity = await _db._surgery.GetAsync(expression: g => g.Id == id);
-                if (oldEntity == null)
+                var oldOne = await _db._surgery.GetAsync(expression: g => g.Id == id);
+                if (oldOne == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
                 }
@@ -230,7 +247,29 @@ namespace EHR_API.Controllers
 
                 var entity = _mapper.Map<Surgery>(entityUpdateDTO);
                 entity.UpdatedAt = DateTime.Now;
-                entity.CreatedAt = oldEntity.CreatedAt;
+                entity.CreatedAt = oldOne.CreatedAt;
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerId = null;
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != oldOne.MedicalTeamId)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
 
                 await _db._surgery.UpdateAsync(entity);
 

@@ -4,7 +4,9 @@ using EHR_API.Entities.DTOs.VaccinationDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Net;
 using System.Text.Json;
 
@@ -26,18 +28,13 @@ namespace EHR_API.Controllers
         }
 
 
-        //[Authorize]
         [HttpGet("GetVaccinations")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetICDs(string type = null)
+        public async Task<ActionResult<APIResponse>> GetVaccinations()
         {
             try
             {
                 IEnumerable<Vaccination> entities = new List<Vaccination>();
-                entities = await _db._vaccination.GetAllAsync(
-                    expression: type == null ? null : g => g.Type.ToLower().Contains(type.ToLower()));
+                entities = await _db._vaccination.GetAllAsync();
 
                 if (entities.ToList().Count == 0)
                 {
@@ -54,12 +51,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
         [HttpGet("{id}")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> GetVaccination(int id)
         {
             try
@@ -87,11 +79,9 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
         [HttpPost("CreateVaccination")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> CreateICD([FromBody] VaccinationCreateDTO entityCreateDTO)
+        [Authorize(Roles = SD.SystemManager)]
+        public async Task<ActionResult<APIResponse>> CreateVaccination([FromBody] VaccinationCreateDTO entityCreateDTO)
         {
             try
             {
@@ -116,11 +106,8 @@ namespace EHR_API.Controllers
         }
 
 
-        //[Authorize]
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> DeleteVaccination(int id)
         {
             try
@@ -148,12 +135,9 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> UpdateICD(int id, [FromBody] VaccinationUpdateDTO entityUpdateDTO)
+        [Authorize(Roles = SD.SystemManager)]
+        public async Task<ActionResult<APIResponse>> UpdateVaccination(int id, [FromBody] VaccinationUpdateDTO entityUpdateDTO)
         {
             try
             {

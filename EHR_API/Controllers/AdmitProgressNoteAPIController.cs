@@ -6,6 +6,8 @@ using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MimeKit;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
 namespace EHR_API.Controllers
@@ -37,10 +39,39 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
-                var entities = await _db._admitProgressNote.GetAllAsync(expression: g => g.AdmitId == admitId);
+                var entities = await _db._admitProgressNote.GetAllAsync(
+                    expression: g => g.AdmitId == admitId);
+
+                var entity = await _db._admit.GetAsync(
+                    expression: g => g.Id == admitId);
+
                 if (entities.Count == 0)
                 {
                     return BadRequest(APIResponses.BadRequest($"No objects with Id = {admitId} "));
+                }
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerRole = null;
+                string headerId = null;
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != entity.RegistrationDataId && headerRole != SD.Physician && headerRole != SD.HealthFacilityManager && headerRole != SD.SystemManager)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
                 }
 
                 _response.Result = _mapper.Map<List<AdmitProgressNoteDTOForOthers>>(entities);
@@ -68,6 +99,33 @@ namespace EHR_API.Controllers
                 if (entity == null)
                 {
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id}"));
+                }
+
+                var admit = await _db._admit.GetAsync(
+                    expression: g => g.Id == entity.AdmitId);
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerRole = null;
+                string headerId = null;
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+                     
+                    if (headerId != admit.RegistrationDataId && headerRole != SD.Physician && headerRole != SD.HealthFacilityManager && headerRole != SD.SystemManager)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
                 }
 
                 _response.Result = _mapper.Map<AdmitProgressNoteDTO>(entity);
@@ -154,8 +212,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         [HttpPut("UpdateAdmitProgressNote")]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> UpdateAdmitProgressNote(int id, [FromForm] AdmitProgressNoteUpdateDTO entityUpdateDTO)
         {
             try
@@ -174,6 +232,29 @@ namespace EHR_API.Controllers
                 if (oldOne == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id}"));
+                }
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerId = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != oldOne.MedicalTeamId)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
                 }
 
                 var entity = _mapper.Map<AdmitProgressNote>(entityUpdateDTO);

@@ -4,7 +4,9 @@ using EHR_API.Entities.DTOs.VisitVitalSignDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
 namespace EHR_API.Controllers
@@ -24,10 +26,8 @@ namespace EHR_API.Controllers
             _response = new();
         }
 
-        //[Authorize(Roles = SD.SystemManager + "," + SD.HealthFacilityManager)]
         [HttpPost("CreateVisitVitalSign")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = SD.Physician + "," + SD.HealthFacilityManager)]
         public async Task<ActionResult<APIResponse>> CreateVisitVitalSign([FromBody] VisitVitalSignCreateDTO entityCreateDTO)
         {
             try
@@ -36,8 +36,9 @@ namespace EHR_API.Controllers
                 {
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
-                 
-                if (await _db._visit.GetAsync(expression: e => e.Id == entityCreateDTO.VisitId) == null)
+
+                var visit = await _db._visit.GetAsync(expression: e => e.Id == entityCreateDTO.VisitId);
+                if (visit == null)
                 {
                     return BadRequest(APIResponses.BadRequest("Visit is not exists"));
                 }
@@ -45,6 +46,30 @@ namespace EHR_API.Controllers
                 var entity = _mapper.Map<VisitVitalSign>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
                 entity.UpdatedAt = DateTime.Now;
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerId = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != visit.MedicalTeamId)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
+
                 await _db._visitVital.CreateAsync(entity);
 
                 _response.Result = _mapper.Map<VisitVitalSignDTOForOthers>(entity);
@@ -57,20 +82,44 @@ namespace EHR_API.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("GetVisitVitalSigns")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<APIResponse>> GetVisitVitalSigns(int visitId)
         {
             try
             {
                 var entities = await _db._visitVital.GetAllAsync(
-                    expression: visitId == 0? null : g => g.VisitId == visitId);
+                    expression: visitId == 0 ? null : g => g.VisitId == visitId,
+                    includeProperties: "Visit");
 
                 if (entities.Count == 0)
                 {
                     return NotFound(APIResponses.NotFound("No data has been found"));
+                }
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerRole = null;
+                string headerId = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != entities[0].Visit.RegistrationDataId && headerRole != SD.Physician && headerRole != SD.HealthFacilityManager && headerRole != SD.SystemManager)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
                 }
 
                 _response.Result = _mapper.Map<List<VisitVitalSignDTOForOthers>>(entities);
@@ -83,11 +132,8 @@ namespace EHR_API.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("{id}")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> GetVisitVitalSign(int id)
         {
             try
@@ -98,13 +144,39 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = await _db._visitVital.GetAsync(
-                    expression: g => g.Id == id);
+                    expression: g => g.Id == id,
+                    includeProperties: "Visit");
 
                 if (entity == null)
                 {
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id} "));
                 }
- 
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerRole = null;
+                string headerId = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != entity.Visit.RegistrationDataId && headerRole != SD.Physician && headerRole != SD.HealthFacilityManager && headerRole != SD.SystemManager)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
+
                 _response.Result = _mapper.Map<VisitVitalSignDTO>(entity);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -115,11 +187,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize(Roles = SD.SystemManager + "," + SD.HealthFacilityManager)]
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.Physician + "," + SD.HealthFacilityManager)]
         public async Task<ActionResult<APIResponse>> UpdateVisitVitalSign(int id, [FromBody] VisitVitalSignUpdateDTO entityUpdateDTO)
         {
             try
@@ -134,7 +203,10 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
-                var oldOne = await _db._visitVital.GetAsync(expression: g => g.Id == id);
+                var oldOne = await _db._visitVital.GetAsync(
+                    expression: g => g.Id == id,
+                    includeProperties: "Visit");
+
                 if (oldOne == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
@@ -144,10 +216,37 @@ namespace EHR_API.Controllers
                 {
                     return NotFound(APIResponses.NotFound($"No Visit with Id = {entityUpdateDTO.VisitId}"));
                 }
-                 
+
                 var entity = _mapper.Map<VisitVitalSign>(entityUpdateDTO);
                 entity.UpdatedAt = DateTime.Now;
                 entity.CreatedAt = oldOne.CreatedAt;
+
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerRole = null;
+                string headerId = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != oldOne.Visit.MedicalTeamId)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
+
                 await _db._visitVital.UpdateAsync(entity);
 
                 _response.StatusCode = HttpStatusCode.OK;
@@ -160,11 +259,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize(Roles = SD.SystemManager + "," + SD.HealthFacilityManager)]
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> DeleteVisitVitalSign(int id)
         {
             try

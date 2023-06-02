@@ -4,9 +4,10 @@ using EHR_API.Entities.DTOs.VisitDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
-using System.Security.Principal;
 
 namespace EHR_API.Controllers
 {
@@ -26,12 +27,8 @@ namespace EHR_API.Controllers
         }
 
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("GetUserVisits")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> GetUserVisits(string userId)
         {
             try
@@ -48,6 +45,30 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest($"No objects with Id = {userId} "));
                 }
 
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerId = null;
+                string headerRole = null;
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerId = user.Claims.ToList()[0].Value;
+                    headerRole = user.Claims.ToList()[4].Value;
+
+                    if (headerId != userId && headerRole == SD.Patient)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
+
                 _response.Result = _mapper.Map<List<VisitDTOForOthers>>(entities);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -58,12 +79,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("{id}")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> GetVisit(int id)
         {
             try
@@ -77,6 +94,45 @@ namespace EHR_API.Controllers
                     includeProperties: "VisitVitalSigns,VisitMedications,VisitRadLabTests,PhysicalTherapies,UserVaccinations",
                     expression: g => g.Id == id);
 
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerId = null;
+                string headerRole = null;
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerId = user.Claims.ToList()[0].Value;
+                    headerRole = user.Claims.ToList()[4].Value;
+
+                    if (headerId != entity.RegistrationDataId && headerRole == SD.Patient)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+
+                    if (headerRole == SD.Pharmacist)
+                    {
+                        entity.VisitRadLabTests = null;
+                        entity.VisitVitalSigns = null;
+                        entity.PhysicalTherapies = null;
+                    }
+
+                    if (headerRole == SD.Technician)
+                    {
+                        entity.VisitMedications = null;
+                        entity.VisitVitalSigns = null;
+                        entity.PhysicalTherapies = null;
+                        entity.UserVaccinations = null;
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
+                 
                 if (entity == null)
                 {
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id} "));
@@ -116,10 +172,9 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
+        
         [HttpPost("CreateVisit")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> CreateVisit([FromForm] VisitCreateDTO entityCreateDTO)
         {
             try
@@ -266,11 +321,8 @@ namespace EHR_API.Controllers
         }
 
 
-        //[Authorize]
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> DeleteVisit(int id)
         {
             try
@@ -298,11 +350,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> UpdateVisit(int id, [FromForm] VisitUpdateDTO entityUpdateDTO)
         {
             try
@@ -317,10 +366,32 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
-                var oldEntity = await _db._visit.GetAsync(expression: g => g.Id == id);
-                if (oldEntity == null)
+                var oldOne = await _db._visit.GetAsync(expression: g => g.Id == id);
+                if (oldOne == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+                }
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerId = null;
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != oldOne.MedicalTeamId)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
                 }
 
                 if (await _db._authentication.GetAsync(expression: e => e.Id == entityUpdateDTO.RegistrationDataId) == null)
@@ -345,8 +416,8 @@ namespace EHR_API.Controllers
 
                 var entity = _mapper.Map<Visit>(entityUpdateDTO);
                 entity.UpdatedAt = DateTime.Now;
-                entity.CreatedAt = oldEntity.CreatedAt;
-                await _db._visit.UpdateAsync(entity, oldEntity);
+                entity.CreatedAt = oldOne.CreatedAt;
+                await _db._visit.UpdateAsync(entity, oldOne);
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = _mapper.Map<VisitDTO>(entity);

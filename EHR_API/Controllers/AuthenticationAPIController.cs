@@ -196,7 +196,7 @@ namespace EHR_API.Controllers
                     headerRole = user.Claims.ToList()[4].Value;
                     headerId = user.Claims.ToList()[0].Value;
 
-                    if (headerRole == SD.Physician || headerRole == SD.HealthFacilityManager || headerRole == SD.Pharmacist || headerRole == SD.Technician || headerId == userId)
+                    if (headerRole == SD.Physician || headerRole == SD.HealthFacilityManager|| headerRole == SD.SystemManager || headerRole == SD.Pharmacist || headerRole == SD.Technician || headerId == userId)
                     {
                         entity = await _db._authentication.GetAsync(
                             expression: g => g.Id == userId,

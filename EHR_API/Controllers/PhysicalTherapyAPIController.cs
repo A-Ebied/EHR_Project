@@ -4,7 +4,9 @@ using EHR_API.Entities.DTOs.PhysicalTherapyDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
 namespace EHR_API.Controllers
@@ -24,10 +26,8 @@ namespace EHR_API.Controllers
             _response = new();
         }
 
-        //[Authorize(Roles = SD.SystemManager + "," + SD.HealthFacilityManager)]
         [HttpPost("CreatePhysicalTherapy")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> CreatePhysicalTherapy([FromBody] PhysicalTherapyCreateDTO entityCreateDTO)
         {
             try
@@ -41,7 +41,7 @@ namespace EHR_API.Controllers
                 {
                     return BadRequest(APIResponses.BadRequest("Visit is not exists"));
                 }
-                 
+
                 var entity = _mapper.Map<PhysicalTherapy>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
                 entity.UpdatedAt = DateTime.Now;
@@ -58,15 +58,42 @@ namespace EHR_API.Controllers
         }
 
         [HttpGet("GetVisitPhysicalTherapies")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize]
         public async Task<ActionResult<APIResponse>> GetVisitPhysicalTherapies(int visitId)
         {
             try
             {
-                var entities = await _db._physicalTherapy.GetAllAsync(
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerRole = null;
+                string headerId = null;
+                var entities = new List<PhysicalTherapy>();
+                var visit = await _db._visit.GetAsync(v => v.Id == visitId);
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId == visit.RegistrationDataId || headerRole == SD.Physician || headerRole == SD.HealthFacilityManager || headerRole == SD.SystemManager)
+                    {
+                        entities = await _db._physicalTherapy.GetAllAsync(
                     expression: visitId == 0 ? null : g => g.VisitId == visitId);
+                    }
+                    else
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
 
                 if (entities.Count == 0)
                 {
@@ -84,10 +111,7 @@ namespace EHR_API.Controllers
         }
 
         [HttpGet("{id}")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize]
         public async Task<ActionResult<APIResponse>> GetPhysicalTherapy(int id)
         {
             try
@@ -97,9 +121,34 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id less than 1"));
                 }
 
-                var entity = await _db._physicalTherapy.GetAsync(
-                    expression: g => g.Id == id);
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
 
+                string headerRole = null;
+                string headerId = null;
+                var entity = await _db._physicalTherapy.GetAsync(
+                   expression: g => g.Id == id,
+                   includeProperties: "Visit");
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != entity.Visit.RegistrationDataId && headerRole != SD.Physician && headerRole != SD.HealthFacilityManager && headerRole == SD.SystemManager)
+                    {
+                         return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
+                 
                 if (entity == null)
                 {
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id}"));
@@ -115,11 +164,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize(Roles = SD.SystemManager + "," + SD.HealthFacilityManager)]
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> UpdatePhysicalTherapy(int id, [FromBody] PhysicalTherapyUpdateDTO entityUpdateDTO)
         {
             try
@@ -135,7 +181,9 @@ namespace EHR_API.Controllers
                 }
 
                 var oldOne = await _db._physicalTherapy.GetAsync(
-                    expression: g => g.Id == id);
+                   expression: g => g.Id == id,
+                   includeProperties: "Visit");
+
                 if (oldOne == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id}"));
@@ -145,7 +193,30 @@ namespace EHR_API.Controllers
                 {
                     return NotFound(APIResponses.NotFound($"No Visit with Id = {entityUpdateDTO.VisitId}"));
                 }
-                 
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerId = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != oldOne.Visit.MedicalTeamId)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
+
                 var entity = _mapper.Map<PhysicalTherapy>(entityUpdateDTO);
                 entity.UpdatedAt = DateTime.Now;
                 entity.CreatedAt = oldOne.CreatedAt;
@@ -161,11 +232,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize(Roles = SD.SystemManager + "," + SD.HealthFacilityManager)]
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> DeletePhysicalTherapy(int id)
         {
             try

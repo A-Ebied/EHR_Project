@@ -21,6 +21,6 @@ namespace EHR_API.Entities.DTOs.HealthFacilityDTOs
 
         public string Governorate { get; set; }
         public UserDTOForOthers Manager { get; set; }
-        public ICollection<MedicalFacilityTeamDTO> MedicalFacilityTeams { get; set; }
+        public ICollection<UserDTOForOthers> MedicalTeams { get; set; }
     }
 }

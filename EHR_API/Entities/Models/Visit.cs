@@ -19,9 +19,6 @@ namespace EHR_API.Entities.Models
         public string ReportImageUrl { get; set; }
         [NotMapped]
         public IFormFile ReportImage { get; set; }
-         
-       // public double Price { get; set; }
-       // public bool UnderInsurance { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 

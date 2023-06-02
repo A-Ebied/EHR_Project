@@ -1,4 +1,6 @@
-﻿namespace EHR_API.Repositories.Contracts
+﻿using EHR_MVC.Repositories.Contracts;
+
+namespace EHR_API.Repositories.Contracts
 {
     public interface IMainRepository
     {

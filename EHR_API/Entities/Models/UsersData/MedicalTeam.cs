@@ -16,5 +16,6 @@ namespace EHR_API.Entities.Models.UsersData
         public ICollection<MedicalFacilityTeam> MedicalFacilityTeams { get; set; }
         public ICollection<Visit> Visits { get; set; }
         public ICollection<Admit> Admits { get; set; }
+        public ICollection<Allergy> Allergies { get; set; }
     }
 }

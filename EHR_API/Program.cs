@@ -15,7 +15,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(
         options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection"));
         options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
     });
-builder.Services.ConfigureInterfaces();
+builder.Services.ConfigureInterfacesAPI();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 builder.Services.AddAuthentication();
 builder.Services.ConfigureIdentity();

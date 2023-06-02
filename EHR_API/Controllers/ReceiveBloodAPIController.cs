@@ -4,7 +4,9 @@ using EHR_API.Entities.DTOs.ReceiveBloodDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
 
@@ -25,12 +27,8 @@ namespace EHR_API.Controllers
             _response = new();
         }
          
-       // [Authorize]
+        [Authorize]
         [HttpGet("GetUserReceiveBlood")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> GetUserReceiveBlood(string userId)
         {
             try
@@ -47,6 +45,31 @@ namespace EHR_API.Controllers
                 if (entities.Count == 0)
                 {
                     return BadRequest(APIResponses.BadRequest($"No objects with Id = {userId} "));
+                }
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerRole = null;
+                string headerId = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != entities[0].RegistrationDataId && headerRole != SD.Physician && headerRole != SD.HealthFacilityManager && headerRole != SD.SystemManager)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
                 }
 
                 var receives = new List<ReceiveBlood>();
@@ -68,12 +91,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("{id}")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> GetReceiveBlood(int id)
         {
             try
@@ -84,11 +103,37 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = await _db._receiveBlood.GetAsync(
-                    expression: g => g.Id ==id);
+                    expression: g => g.Id ==id,
+                    includeProperties: "Admit");
 
                 if (entity == null)
                 {
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id}"));
+                }
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerRole = null;
+                string headerId = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != entity.Admit.RegistrationDataId && headerRole != SD.Physician && headerRole != SD.HealthFacilityManager && headerRole != SD.SystemManager)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
                 }
 
                 _response.Result = _mapper.Map<ReceiveBloodDTOForOthers>(entity);
@@ -102,10 +147,8 @@ namespace EHR_API.Controllers
         }
 
 
-        //[Authorize]
         [HttpPost("CreateReceiveBlood")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> CreateReceiveBlood([FromBody] ReceiveBloodCreateDTO entityCreateDTO)
         {
             try
@@ -124,6 +167,25 @@ namespace EHR_API.Controllers
                 entity.CreatedAt = DateTime.Now;
                 entity.UpdatedAt = DateTime.Now;
 
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerId = null;
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    entity.MedicalTeamId = headerId;
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
+
                 await _db._receiveBlood.CreateAsync(entity);
 
                 _response.Result = _mapper.Map<ReceiveBloodDTO>(entity);
@@ -136,12 +198,8 @@ namespace EHR_API.Controllers
             }
         }
 
-
-        //[Authorize]
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> DeleteReceiveBlood(int id)
         {
             try
@@ -163,6 +221,80 @@ namespace EHR_API.Controllers
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = "The object has been deleted";
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                return APIResponses.InternalServerError(ex);
+            }
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
+        public async Task<ActionResult<APIResponse>> UpdateAdmit(int id, [FromBody] ReceiveBloodUpdateDTO entityUpdateDTO)
+        {
+            try
+            {
+                if (entityUpdateDTO == null)
+                {
+                    return BadRequest(APIResponses.BadRequest("No data has been sent"));
+                }
+
+                if (id != entityUpdateDTO.Id)
+                {
+                    return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
+                }
+
+                var oldOne = await _db._receiveBlood.GetAsync(
+                    expression: g => g.Id == id,
+                    includeProperties: "Admit");
+
+                if (oldOne == null)
+                {
+                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+                }
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerId = null;
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != oldOne.MedicalTeamId)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
+
+                if (await _db._admit.GetAsync(expression: e => e.Id == entityUpdateDTO.AdmitId) == null)
+                {
+                    return BadRequest(APIResponses.BadRequest("Admit is not exists"));
+                }
+
+                var entity = _mapper.Map<Admit>(entityUpdateDTO);
+                entity.UpdatedAt = DateTime.Now;
+                entity.CreatedAt = oldOne.CreatedAt;
+                entity.MedicalTeamId = oldOne.MedicalTeamId;
+
+                if (entity.LeaveAt == entity.AdmitAt)
+                {
+                    return BadRequest(APIResponses.BadRequest("Leave at can not be equal to Admit at"));
+                }
+
+                await _db._admit.UpdateAsync(entity);
+
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.Result = _mapper.Map<ReceiveBloodDTO>(entity);
                 return Ok(_response);
             }
             catch (Exception ex)

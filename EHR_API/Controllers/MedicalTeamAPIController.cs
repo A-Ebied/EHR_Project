@@ -9,7 +9,6 @@ using EHR_API.Repositories.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
@@ -61,7 +60,7 @@ namespace EHR_API.Controllers
                             expression: h => h.Id == item.HealthFacilityId)));
                     }
                 }
-                 
+
                 _response.Result = result;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -71,9 +70,9 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
-         
+
         [HttpPost("CreateMedicalTeamUser")]
-        [Authorize(Roles = SD.HealthFacilityManager)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> CreateMedicalTeamUser([FromBody] MedicalTeamCreateDTO entityCreateDTO)
         {
             try
@@ -95,7 +94,35 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("The object is already exists"));
                 }
 
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerRole = null;
+                string headerId = null;
                 var entity = _mapper.Map<MedicalTeam>(entityCreateDTO);
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    var role = _userManager.GetRolesAsync(
+                        await _db._authentication.GetAsync(
+                            a => a.Id == entityCreateDTO.Id)).Result.FirstOrDefault();
+
+                    if (headerRole == SD.HealthFacilityManager && role == SD.HealthFacilityManager)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
+
                 entity.CreatedAt = DateTime.Now;
                 entity.UpdatedAt = DateTime.Now;
                 entity.MedicalFacilityTeams = null;
@@ -119,6 +146,7 @@ namespace EHR_API.Controllers
                     await _db._facilityTeam.CreateRangeAsync(facilityTeam);
                     entity.MedicalFacilityTeams = facilityTeam;
                 }
+
 
                 _response.Result = _mapper.Map<MedicalTeamDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;
@@ -158,9 +186,9 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
- 
-        [Authorize]
+
         [HttpPut("{userId}")]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> UpdateMedicalTeamUser(string userId, [FromBody] MedicalTeamUpdateDTO entityUpdateDTO)
         {
             try
@@ -189,24 +217,31 @@ namespace EHR_API.Controllers
 
                 string headerRole = null;
                 string headerId = null;
-                var entity = _mapper.Map<MedicalTeam>(entityUpdateDTO); 
+                var entity = _mapper.Map<MedicalTeam>(entityUpdateDTO);
                 if (jwtToken != null)
                 {
                     var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
                     headerRole = user.Claims.ToList()[4].Value;
                     headerId = user.Claims.ToList()[0].Value;
 
-                    if (headerId == userId || headerRole == SD.HealthFacilityManager)
+                    var role = _userManager.GetRolesAsync(
+                        await _db._authentication.GetAsync(
+                            a => a.Id == entityUpdateDTO.Id)).Result.FirstOrDefault();
+
+                    if (headerRole == SD.HealthFacilityManager && role == SD.HealthFacilityManager)
                     {
-                        entity.UpdatedAt = DateTime.Now;
-                        entity.CreatedAt = oldOne.CreatedAt;
-                        await _db._medicalTeam.UpdateAsync(entity);
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
                     }
                 }
                 else
                 {
                     return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
                 }
+
+                entity.UpdatedAt = DateTime.Now;
+                entity.CreatedAt = oldOne.CreatedAt;
+                await _db._medicalTeam.UpdateAsync(entity);
+
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = _mapper.Map<MedicalTeamDTO>(entity);

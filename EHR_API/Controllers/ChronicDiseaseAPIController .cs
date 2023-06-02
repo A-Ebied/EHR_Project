@@ -6,7 +6,7 @@ using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
 namespace EHR_API.Controllers
@@ -40,11 +40,38 @@ namespace EHR_API.Controllers
                 var entities = await _db._chronicDisease.GetAllAsync(
                     includeProperties: "ICD",
                     expression: g => g.RegistrationDataId == userId);
-
+                
                 if (entities.Count == 0)
                 {
                     return BadRequest(APIResponses.BadRequest($"No objects with Id = {userId} "));
                 }
+                
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerRole = null;
+                string headerId = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != userId && headerRole != SD.Physician && headerRole != SD.HealthFacilityManager && headerRole != SD.SystemManager)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
+
+
 
                 _response.Result = _mapper.Map<List<ChronicDiseaseDTOForOthers>>(entities);
                 _response.StatusCode = HttpStatusCode.OK;
@@ -74,6 +101,31 @@ namespace EHR_API.Controllers
                 if (entity == null)
                 {
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id}"));
+                }
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerRole = null;
+                string headerId = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != entity.RegistrationDataId && headerRole != SD.Physician && headerRole != SD.HealthFacilityManager && headerRole != SD.SystemManager)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
                 }
 
                 if (entity.ChronicDiseaseDrugs.Count != 0)
@@ -126,6 +178,26 @@ namespace EHR_API.Controllers
                 entity.UpdatedAt = DateTime.Now;
                 entity.ChronicDiseaseDrugs = null;
 
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerId = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    entity.MedicalTeamId = headerId;
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
+
                 await _db._chronicDisease.CreateAsync(entity);
 
                 if (entityCreateDTO.ChronicDiseaseDrugs.Count > 0)
@@ -156,7 +228,7 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
-         
+
 
         [HttpDelete("{id}")]
         [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
@@ -173,6 +245,28 @@ namespace EHR_API.Controllers
                 if (removedEntity == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id}"));
+                }
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerId = null;
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != removedEntity.MedicalTeamId)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
                 }
 
                 await _db._chronicDisease.DeleteAsync(removedEntity);
@@ -204,9 +298,33 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
-                if (await _db._chronicDisease.GetAsync(expression: g => g.Id == id) == null)
+                var oldOne = await _db._chronicDisease.GetAsync(expression: g => g.Id == id);
+                if (oldOne == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id}"));
+                }
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerId = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != oldOne.MedicalTeamId)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
                 }
 
                 if (await _db._authentication.GetAsync(expression: e => e.Id == entityUpdateDTO.RegistrationDataId) == null)
@@ -221,6 +339,7 @@ namespace EHR_API.Controllers
 
                 var entity = _mapper.Map<ChronicDisease>(entityUpdateDTO);
                 entity.UpdatedAt = DateTime.Now;
+                entity.CreatedAt = oldOne.CreatedAt;
                 await _db._chronicDisease.UpdateAsync(entity);
 
                 _response.StatusCode = HttpStatusCode.OK;

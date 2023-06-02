@@ -17,6 +17,8 @@ namespace EHR_API.Entities.Models
 
         public string RegistrationDataId { get; set; }
         public RegistrationData RegistrationData { get; set; }
+        public string MedicalTeamId { get; set; }
+        public MedicalTeam MedicalTeam { get; set; }
         public ICollection<AllergyDrug> AllergyDrugs { get; set; }
     }
 }

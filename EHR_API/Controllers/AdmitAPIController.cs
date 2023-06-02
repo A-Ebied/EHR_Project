@@ -26,8 +26,8 @@ namespace EHR_API.Controllers
             _response = new();
         }
 
-        [HttpGet("GetUserAdmits")]
         [Authorize]
+        [HttpGet("GetUserAdmits")]
         public async Task<ActionResult<APIResponse>> GetUserAdmits(string userId = null)
         {
             try
@@ -58,7 +58,10 @@ namespace EHR_API.Controllers
                     {
                         entities = await _db._admit.GetAllAsync(expression: g => g.RegistrationDataId == userId);
                     }
-
+                    else
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
                 }
                 else
                 {
@@ -100,6 +103,31 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id} "));
                 }
 
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerRole = null;
+                string headerId = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != entity.RegistrationDataId && headerRole != SD.Physician && headerRole != SD.HealthFacilityManager && headerRole != SD.SystemManager)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
+                 
                 _response.Result = _mapper.Map<AdmitDTO>(entity);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -209,6 +237,28 @@ namespace EHR_API.Controllers
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
                 }
 
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerId = null;
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != oldOne.MedicalTeamId)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
+
                 if (await _db._authentication.GetAsync(expression: e => e.Id == entityUpdateDTO.RegistrationDataId) == null)
                 {
                     return BadRequest(APIResponses.BadRequest("User is not exists"));
@@ -223,7 +273,7 @@ namespace EHR_API.Controllers
                 {
                     return BadRequest(APIResponses.BadRequest("Health Facility is not exists"));
                 }
-
+                 
                 var entity = _mapper.Map<Admit>(entityUpdateDTO);
                 entity.UpdatedAt = DateTime.Now;
                 entity.CreatedAt = oldOne.CreatedAt;

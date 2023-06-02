@@ -24,6 +24,9 @@ namespace EHR_API.Extensions
             
             services.AddHttpClient<IAdmitService, AdmitService>();
             services.AddScoped<IAdmitService, AdmitService>();
+
+            services.AddHttpClient<IMLAPI, MLAPI>();
+            services.AddScoped<IMLAPI, MLAPI>();
         }
 
     }

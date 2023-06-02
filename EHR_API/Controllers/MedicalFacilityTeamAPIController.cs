@@ -4,7 +4,10 @@ using EHR_API.Entities.DTOs.MedicalFacilityTeamDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
 namespace EHR_API.Controllers
@@ -24,10 +27,8 @@ namespace EHR_API.Controllers
             _response = new();
         }
 
-        //[Authorize]
         [HttpPost("CreateMedicalFacilityTeam")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> CreateMedicalFacilityTeam([FromBody] MedicalFacilityTeamCreateDTO entityCreateDTO)
         {
             try
@@ -49,7 +50,33 @@ namespace EHR_API.Controllers
              
                 var entity = _mapper.Map<MedicalFacilityTeam>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
-                 
+
+                var managerId = _db._healthFacility.GetAsync(h=>h.Id == entityCreateDTO.HealthFacilityId).Result.MedicalTeamId;
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerRole = null;
+                string headerId = null;
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != managerId && headerRole == SD.HealthFacilityManager)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
+
                 await _db._facilityTeam.CreateAsync(entity);
                  
                 _response.Result = _mapper.Map<MedicalFacilityTeamDTO>(entity);
@@ -63,11 +90,8 @@ namespace EHR_API.Controllers
         }
 
 
-        //[Authorize]
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> DeleteMedicalFacilityTeam(int id)
         {
             try
@@ -81,6 +105,32 @@ namespace EHR_API.Controllers
                 if (removedEntity == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+                }
+
+                var managerId = _db._healthFacility.GetAsync(h => h.Id == removedEntity.HealthFacilityId).Result.MedicalTeamId;
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerRole = null;
+                string headerId = null;
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != managerId && headerRole == SD.HealthFacilityManager)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
                 }
 
                 await _db._facilityTeam.DeleteAsync(removedEntity);

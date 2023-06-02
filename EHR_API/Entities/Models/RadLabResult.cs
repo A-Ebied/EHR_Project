@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EHR_API.Entities.Models.UsersData;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EHR_API.Entities.Models
@@ -22,5 +23,8 @@ namespace EHR_API.Entities.Models
          
         public VisitRadLabTest VisitRadLabTest { get; set; }
         public HealthFacility HealthFacility { get; set; }
+
+        public string MedicalTeamId { get; set; }
+        public MedicalTeam MedicalTeam { get; set; }
     }
 }

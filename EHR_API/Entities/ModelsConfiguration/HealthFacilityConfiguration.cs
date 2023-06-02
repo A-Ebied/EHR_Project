@@ -24,7 +24,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                      GovernorateId = 1,
                      MedicalTeamId = "12345678912342",
                      CreatedAt = DateTime.Now,
-                     UpdateddAt = DateTime.Now,
+                     UpdatedAt = DateTime.Now,
                  },
                  new HealthFacility
                  {
@@ -41,7 +41,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                      GovernorateId = 1,
                      MedicalTeamId = "12345678912348",
                      CreatedAt = DateTime.Now,
-                     UpdateddAt = DateTime.Now,
+                     UpdatedAt = DateTime.Now,
                  },
                   new HealthFacility
                   {
@@ -58,7 +58,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                       GovernorateId = 1,
                       MedicalTeamId = "12345678912349",
                       CreatedAt = DateTime.Now,
-                      UpdateddAt = DateTime.Now,
+                      UpdatedAt = DateTime.Now,
                   });
         }
     }

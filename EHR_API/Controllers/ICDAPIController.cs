@@ -4,7 +4,9 @@ using EHR_API.Entities.DTOs.ICDDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Net;
 using System.Text.Json;
 
@@ -26,18 +28,14 @@ namespace EHR_API.Controllers
         }
 
 
-        //[Authorize]
         [HttpGet("GetICDs")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetICDs(string diagnosisName = null)
+        //[Authorize(Roles = SD.SystemManager + "," + SD.HealthFacilityManager + "," + SD.Physician)]
+        public async Task<ActionResult<APIResponse>> GetICDs()
         {
             try
             {
                 IEnumerable<ICD> entities = new List<ICD>();
-                entities = await _db._icd.GetAllAsync(
-                    expression: diagnosisName == null ? null : g => g.DiagnosisName.ToLower().Contains(diagnosisName.ToLower()));
+                entities = await _db._icd.GetAllAsync();
 
                 if (entities.ToList().Count == 0)
                 {
@@ -54,12 +52,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
         [HttpGet("GetICD")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[Authorize(Roles = SD.SystemManager + "," + SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> GetICD(string code)
         {
             try
@@ -87,10 +81,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
         [HttpPost("CreateICD")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> CreateICD([FromBody] ICDCreateDTO entityCreateDTO)
         {
             try
@@ -116,11 +108,8 @@ namespace EHR_API.Controllers
         }
 
 
-        //[Authorize]
         [HttpDelete("{code}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> DeleteICD(string code)
         {
             try
@@ -148,11 +137,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
         [HttpPut("{code}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> UpdateICD(string code, [FromBody] ICDUpdateDTO entityUpdateDTO)
         {
             try

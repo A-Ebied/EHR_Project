@@ -6,6 +6,7 @@ using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
 namespace EHR_API.Controllers
@@ -28,20 +29,49 @@ namespace EHR_API.Controllers
 
         [Authorize]
         [HttpGet("GetUserBadHabits")]
-        public async Task<ActionResult<APIResponse>> GetUserBadHabits(string UserId)
+        public async Task<ActionResult<APIResponse>> GetUserBadHabits(string userId)
         {
             try
             {
-                if (UserId == null)
+                if (userId == null)
                 {
                     return BadRequest(APIResponses.BadRequest("Id is null"));
                 }
 
-                var entities = await _db._badHabit.GetAllAsync(
-                    expression: g => g.RegistrationDataId == UserId);
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerRole = null;
+                string headerId = null;
+                var entities = new List<BadHabit>();
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId == userId || headerRole == SD.Physician || headerRole == SD.HealthFacilityManager || headerRole == SD.SystemManager)
+                    {
+                        entities = await _db._badHabit.GetAllAsync(
+                            expression: g => g.RegistrationDataId == userId);
+                    }
+                    else
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
+
                 if (entities.Count == 0)
                 {
-                    return BadRequest(APIResponses.BadRequest($"No objects with Id = {UserId} "));
+                    return BadRequest(APIResponses.BadRequest($"No objects with Id = {userId} "));
                 }
 
                 _response.Result = _mapper.Map<List<BadHabitDTOForOthers>>(entities);
@@ -54,7 +84,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        
+
         [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<APIResponse>> GetBadHabit(int id)
@@ -72,6 +102,31 @@ namespace EHR_API.Controllers
                 if (entity == null)
                 {
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id} "));
+                }
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerRole = null;
+                string headerId = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != entity.RegistrationDataId || headerRole != SD.Physician || headerRole != SD.HealthFacilityManager || headerRole != SD.SystemManager)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
                 }
 
                 _response.Result = _mapper.Map<BadHabitDTO>(entity);
@@ -105,7 +160,7 @@ namespace EHR_API.Controllers
                 entity.CreatedAt = DateTime.Now;
                 entity.UpdatedAt = DateTime.Now;
                 await _db._badHabit.CreateAsync(entity);
-                 
+
                 _response.Result = _mapper.Map<BadHabitDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;
                 return Ok(_response);
@@ -115,7 +170,7 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
-         
+
 
         [HttpDelete("{id}")]
         [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]

@@ -1,13 +1,17 @@
 ﻿using EHR_API.Entities;
+using EHR_API.Entities.Models;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Repositories.Contracts;
 using EHR_API.Repositories.Implementation;
+using EHR_MVC.Repositories.Contracts;
+using EHR_MVC.Repositories.Implementation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using System.Text.Json;
 
 namespace EHR_API.Extensions
 {
@@ -39,8 +43,8 @@ namespace EHR_API.Extensions
 
             return random;
         }
-
-
+        
+         
         /*
             - CORS (Cross-Origin Resource Sharing): 
                 * it is a mechanism to give or restrict access rights to applications from different domains.
@@ -88,7 +92,7 @@ namespace EHR_API.Extensions
                 .AddDefaultTokenProviders();
         }
 
-        public static void ConfigureInterfaces(this IServiceCollection services)
+        public static void ConfigureInterfacesAPI(this IServiceCollection services)
         {
             //services.AddScoped<IGovernorateRepository, GovernorateRepository>();
             //services.AddScoped<IAllergyRepository, AllergyRepository>();

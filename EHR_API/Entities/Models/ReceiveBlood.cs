@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EHR_API.Entities.Models.UsersData;
+using System.ComponentModel.DataAnnotations;
 
 namespace EHR_API.Entities.Models
 {
@@ -13,5 +14,8 @@ namespace EHR_API.Entities.Models
         public DateTime UpdatedAt { get; set; }
 
         public Admit Admit { get; set; }
+        public string MedicalTeamId { get; set; }
+        public MedicalTeam MedicalTeam { get; set; }
+
     }
 }

@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using System.Text.Json;
 
 namespace EHR_API.Controllers
 {
@@ -31,11 +30,8 @@ namespace EHR_API.Controllers
             _userManager = userManager;
         }
 
-        //[Authorize(Roles = SD.SystemManager)]
-        //[Authorize]
         [HttpPost("CreateGovernorate")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> CreateGovernorate([FromBody] GovernorateCreateDTO entityCreateDTO)
         {
             try
@@ -66,11 +62,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize(Roles = SD.SystemManager)]
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> UpdateGovernorate(int id, [FromBody] GovernorateUpdateDTO entityUpdateDTO)
         {
             try
@@ -107,9 +100,6 @@ namespace EHR_API.Controllers
         }
 
         [HttpGet("GetGovernorates")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<APIResponse>> GetGovernorates([FromQuery(Name = "searchTitle")] string title = null)
         {
             try
@@ -134,10 +124,6 @@ namespace EHR_API.Controllers
         }
 
         [HttpGet("{id}")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> GetGovernorate(int id)
         {
             try
@@ -187,11 +173,8 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize(Roles = SD.SystemManager)]
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> DeleteGovernorate(int id)
         {
             try

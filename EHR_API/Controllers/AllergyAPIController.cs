@@ -18,7 +18,7 @@ namespace EHR_API.Controllers
         protected APIResponse _response;
         private readonly IMapper _mapper;
         private readonly IMainRepository _db;
-       
+
         public AllergyAPIController(IMainRepository db, IMapper mapper)
         {
             _db = db;
@@ -59,7 +59,10 @@ namespace EHR_API.Controllers
                     {
                         entities = await _db._allergy.GetAllAsync(expression: g => g.RegistrationDataId == userId);
                     }
-
+                    else
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
                 }
                 else
                 {
@@ -101,6 +104,31 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id} "));
                 }
 
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerRole = null;
+                string headerId = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != entity.RegistrationDataId && headerRole != SD.Physician && headerRole != SD.HealthFacilityManager && headerRole != SD.SystemManager)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
+
                 if (entity.AllergyDrugs.Count != 0)
                 {
                     var temp = new List<AllergyDrug>();
@@ -115,17 +143,21 @@ namespace EHR_API.Controllers
                 }
 
                 var response = _mapper.Map<AllergyDTO>(entity);
+                response.IsChronicStr = entity.IsChronic.ToString();
+
                 response.Drugs = new();
                 foreach (var item in entity.AllergyDrugs)
                 {
                     if (item.Medication != null)
                     {
-                        response.Drugs.Add(new { 
-                            id = item.Medication.Id, 
+                        response.Drugs.Add(new
+                        {
+                            id = item.Medication.Id,
                             name = item.Medication.Name,
-                            imageUrl = item.Medication.ImageUrl});
+                            imageUrl = item.Medication.ImageUrl
+                        });
                     }
-                    
+
                 }
 
                 _response.Result = response;
@@ -159,9 +191,29 @@ namespace EHR_API.Controllers
                 entity.UpdatedAt = DateTime.Now;
                 entity.AllergyDrugs = null;
 
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerId = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    entity.MedicalTeamId = headerId;
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
+
                 await _db._allergy.CreateAsync(entity);
 
-                if (entityCreateDTO.AllergyDrugs.Count > 0)
+                if (entityCreateDTO.AllergyDrugs != null && entityCreateDTO.AllergyDrugs.Count > 0)
                 {
                     var allergyDrugs = new List<AllergyDrug>();
                     var temp = new AllergyDrug();
@@ -220,7 +272,7 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpPut("{id}")] 
+        [HttpPut("{id}")]
         [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> UpdateAllergy(int id, [FromBody] AllergyUpdateDTO entityUpdateDTO)
         {
@@ -236,9 +288,32 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Id is not equal to the Id of the object"));
                 }
 
-                if (await _db._allergy.GetAsync(expression: g => g.Id == id) == null)
+                var oldOne = await _db._allergy.GetAsync(expression: g => g.Id == id);
+                if (oldOne == null)
                 {
                     return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+                }
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerId = null;
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != oldOne.MedicalTeamId)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
                 }
 
                 if (await _db._authentication.GetAsync(expression: e => e.Id == entityUpdateDTO.RegistrationDataId) == null)
@@ -247,7 +322,9 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = _mapper.Map<Allergy>(entityUpdateDTO);
+                entity.MedicalTeamId = headerId;
                 entity.UpdatedAt = DateTime.Now;
+                entity.CreatedAt = oldOne.CreatedAt;
                 await _db._allergy.UpdateAsync(entity);
 
                 _response.StatusCode = HttpStatusCode.OK;

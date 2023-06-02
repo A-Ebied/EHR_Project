@@ -2,6 +2,8 @@
 using EHR_API.Entities;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Repositories.Contracts;
+using EHR_MVC.Repositories.Contracts;
+using EHR_MVC.Repositories.Implementation;
 using Microsoft.AspNetCore.Identity;
 
 namespace EHR_API.Repositories.Implementation

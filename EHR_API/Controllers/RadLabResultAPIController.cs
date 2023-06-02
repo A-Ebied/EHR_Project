@@ -4,7 +4,9 @@ using EHR_API.Entities.DTOs.RadLabResultDTOs;
 using EHR_API.Entities.Models;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
 namespace EHR_API.Controllers
@@ -17,22 +19,20 @@ namespace EHR_API.Controllers
         private readonly IMapper _mapper;
         private readonly IMainRepository _db;
         private readonly IWebHostEnvironment _webHost;
+        private readonly IEmailSender _emailSender;
 
-        public RadLabResultAPIController(IMainRepository db, IMapper mapper, IWebHostEnvironment webHost)
+        public RadLabResultAPIController(IMainRepository db, IMapper mapper, IWebHostEnvironment webHost, IEmailSender emailSender)
         {
             _db = db;
             _mapper = mapper;
             _response = new();
             _webHost = webHost;
+            _emailSender = emailSender;
         }
 
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("{id}")]
-        [ResponseCache(CacheProfileName = SD.ProfileName)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> GetRadLabResult(int id)
         {
             try
@@ -43,12 +43,41 @@ namespace EHR_API.Controllers
                 }
 
                 var entity = await _db._radLabResult.GetAsync(
-                    includeProperties: "HealthFacility",
+                    includeProperties: "HealthFacility,VisitRadLabTest",
                     expression: g => g.Id == id);
 
                 if (entity == null)
                 {
                     return BadRequest(APIResponses.BadRequest($"No object with Id = {id} "));
+                }
+
+                var visitRadLabTest = await _db._visitRadLabTest.GetAsync(
+                    expression: v => v.Id == entity.VisitRadLabTest.Id,
+                    includeProperties: "Visit");
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerRole = null;
+                string headerId = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerRole = user.Claims.ToList()[4].Value;
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != visitRadLabTest.Visit.RegistrationDataId && headerRole != SD.Physician && headerRole != SD.HealthFacilityManager && headerRole != SD.SystemManager & headerRole != SD.Technician)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
                 }
 
                 _response.Result = _mapper.Map<RadLabResultDTO>(entity);
@@ -62,10 +91,8 @@ namespace EHR_API.Controllers
         }
 
 
-        //[Authorize]
         [HttpPost("CreateRadLabResult")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician + "," + SD.Technician)]
         public async Task<ActionResult<APIResponse>> CreateRadLabResult([FromForm] RadLabResultCreateDTO entityCreateDTO)
         {
             try
@@ -85,14 +112,35 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("RadLab Test Id is not exists"));
                 }
 
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerId = null;
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerId = user.Claims.ToList()[0].Value;
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
+
                 var entity = _mapper.Map<RadLabResult>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
                 entity.UpdatedAt = DateTime.Now;
+                entity.MedicalTeamId = headerId;
 
                 await _db._radLabResult.CreateAsync(entity);
 
                 _response.Result = _mapper.Map<RadLabResultDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;
+
+                await PneumoniaModelAsync(entity);
+
                 return Ok(_response);
             }
             catch (Exception ex)
@@ -102,11 +150,8 @@ namespace EHR_API.Controllers
         }
 
 
-        //[Authorize]
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> DeleteRadLabResult(int id)
         {
             try
@@ -134,12 +179,10 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
+
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<APIResponse>> UpdateAllergy(int id, [FromForm] RadLabResultUpdateDTO entityUpdateDTO)
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician + "," + SD.Technician)]
+        public async Task<ActionResult<APIResponse>> UpdateRadLabResult(int id, [FromForm] RadLabResultUpdateDTO entityUpdateDTO)
         {
             try
             {
@@ -169,19 +212,72 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("RadLab Test Id is not exists"));
                 }
 
+
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+                }
+
+                string headerId = null;
+
+                if (jwtToken != null)
+                {
+                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                    headerId = user.Claims.ToList()[0].Value;
+
+                    if (headerId != oldOne.MedicalTeamId)
+                    {
+                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                    }
+                }
+                else
+                {
+                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                }
+
                 var entity = _mapper.Map<RadLabResult>(entityUpdateDTO);
                 entity.UpdatedAt = DateTime.Now;
                 entity.CreatedAt = oldOne.CreatedAt;
+                entity.MedicalTeamId = oldOne.MedicalTeamId;
 
                 await _db._radLabResult.UpdateAsync(entity);
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = _mapper.Map<RadLabResultDTO>(entity);
+
+                await PneumoniaModelAsync(entity);
+
                 return Ok(_response);
             }
             catch (Exception ex)
             {
                 return APIResponses.InternalServerError(ex);
+            }
+        }
+
+        private async Task PneumoniaModelAsync(RadLabResult entity)
+        {
+            var visitRadLabTest = await _db._visitRadLabTest.GetAsync(
+                    expression: r => r.Id == entity.VisitRadLabTestId);
+
+            var visit = await _db._visit.GetAsync(
+                expression: r => r.Id == visitRadLabTest.VisitId,
+                includeProperties: "RegistrationData");
+
+            var physician = await _db._authentication.GetAsync(
+                expression: r => r.Id == visit.MedicalTeamId);
+
+            var temp = visitRadLabTest.TestType.ToLower();
+            if (temp.Contains("lung radiology") || temp.Contains("pneumonia") || temp.Contains("lung x-ray"))
+            {
+                string is_normal = await SD.MLAPIPneumoniaModelAsync(entity.ImageUrl.ToString());
+                if (is_normal.ToLower() == "false")
+                {
+                    var message = new Message(new string[] { physician.Email }, $"Lung Radiology Result for {visit.RegistrationData.FullName}({visit.RegistrationData.UserName})", "Pneumonia test is positive");
+
+                    await _emailSender.SendEmailAsync(message);
+                }
             }
         }
     }

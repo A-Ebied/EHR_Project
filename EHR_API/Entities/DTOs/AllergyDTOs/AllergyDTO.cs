@@ -9,7 +9,7 @@ namespace EHR_API.Entities.DTOs.AllergyDTOs
         public string Allergen { get; set; }
         public string Reaction { get; set; }
         public string Instruction { get; set; }
-        public bool IsChronic { get; set; }
+        public string IsChronicStr { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
