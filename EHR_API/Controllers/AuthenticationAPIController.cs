@@ -234,8 +234,8 @@ namespace EHR_API.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("GetUsers")]
-        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> GetUsers()
         {
             try
