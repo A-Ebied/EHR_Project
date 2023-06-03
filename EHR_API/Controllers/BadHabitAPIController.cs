@@ -119,7 +119,7 @@ namespace EHR_API.Controllers
                     headerRole = user.Claims.ToList()[4].Value;
                     headerId = user.Claims.ToList()[0].Value;
 
-                    if (headerId != entity.RegistrationDataId || headerRole != SD.Physician || headerRole != SD.HealthFacilityManager || headerRole != SD.SystemManager)
+                    if (headerId != entity.RegistrationDataId && headerRole != SD.Physician && headerRole != SD.HealthFacilityManager && headerRole != SD.SystemManager)
                     {
                         return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
                     }

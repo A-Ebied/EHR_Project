@@ -28,13 +28,13 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration
         public MedicalDataDTO MedicalData { get; set; }
         public MedicalTeamDTO MedicalTeam { get; set; }
 
-        public IEnumerable<UserInsuranceDTO> UserInsurances { get; set; }
-        public ICollection<BadHabitDTO> BadHabits { get; set; }
-        public ICollection<ContraindicationDTO> Contraindications { get; set; }
-        public ICollection<AllergyDTO> Allergies { get; set; }
-        public ICollection<VisitDTO> Visits { get; set; }
+        public IEnumerable<UserInsuranceDTOForOthers> UserInsurances { get; set; }
+        public ICollection<BadHabitDTOForOthers> BadHabits { get; set; }
+        public ICollection<ContraindicationDTOForOthers> Contraindications { get; set; }
+        public ICollection<AllergyDTOForOthers> Allergies { get; set; }
+        public ICollection<VisitDTOForOthers> Visits { get; set; }
         public ICollection<AdmitDTOForOthers> Admits { get; set; }
-        public ICollection<BloodDonationDTO> BloodDonations { get; set; }
-        public ICollection<ChronicDiseaseDTO> ChronicDiseases { get; set; }
+        public ICollection<BloodDonationDTOForOthers> BloodDonations { get; set; }
+        public ICollection<ChronicDiseaseDTOForOthers> ChronicDiseases { get; set; }
     }
 }
