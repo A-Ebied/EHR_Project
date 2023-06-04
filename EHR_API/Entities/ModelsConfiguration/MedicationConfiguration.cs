@@ -61,7 +61,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 },
                 new Medication
                 {
-                    Id = 5,
+                    Id = 6,
                     Name = "Oracea",
                     Description = "Route, Oral",
                     Contraindication = "Allergy to any of the components of the drug",

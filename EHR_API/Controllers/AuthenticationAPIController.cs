@@ -289,7 +289,7 @@ namespace EHR_API.Controllers
                 if (jwtToken != null)
                 {
                     var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
-                    headerRole = user.Claims.ToList()[1].Value;
+                    headerRole = user.Claims.ToList()[4].Value;
 
                     if (headerRole == SD.Physician)
                     {
@@ -303,7 +303,7 @@ namespace EHR_API.Controllers
 
                     if (headerRole == SD.HealthFacilityManager)
                     {
-                        entities = entities.Where(r => r.Name == SD.Physician || r.Name == SD.Technician || r.Name == SD.Pharmacist);
+                        result = entities.Where(r => r.Name == SD.Physician || r.Name == SD.Technician || r.Name == SD.Pharmacist);
                     }
                 }
 
