@@ -47,15 +47,15 @@ namespace EHR_API.Entities.ModelsConfiguration
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
 
-                }
-                //new ICD
-                //{
-                //    Id = 6,
-                //    Title = "الدقهلية",
-                //    CreatedAt = DateTime.Now,
-                //    UpdatedAt = DateTime.Now,
+                },
+                new ICD
+                {
+                    Code = " I10",
+                    DiagnosisName = "Essential (primary) hypertension",
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
 
-                //}
+                }
                 );
         }
     }

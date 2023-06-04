@@ -18,33 +18,36 @@ namespace EHR_API.Entities.ModelsConfiguration
                     Instruction = "Avoid allergens",
                     IsChronic = true,
                     RegistrationDataId = "12345678912351",
+                    MedicalTeamId = "12345678912343",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
                 },
                 new Allergy
                 {
                     Id = 2,
-                    Type = "حساسية الطعام",
-                    Allergen = "الفول السوداني والحليب والبيض",
-                    Reaction = "طفح جلدي",
+                    Type = "Food Allergy",
+                    Allergen = "Peanuts, Milk, Eggs",
+                    Reaction = "Rash",
                     Instruction = "",
                     IsChronic = true,
                     RegistrationDataId = "12345678912352",
+                    MedicalTeamId = "12345678912350",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
-                },
-                new Allergy
-                {
-                    Id = 3,
-                    Type = "حساسية الحيوانات الأليفة",
-                    Allergen = "فراء الحيوانات ، وخاصة من الحيوانات الأليفة مثل القطط والكلاب",
-                    Reaction = "ضيق في الصدر وفقدان أنفاسك",
-                    Instruction = "الابتعاد عن الحيوانات الأليفة",
-                    IsChronic = true,
-                    RegistrationDataId = "12345678912353",
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now,
-                });
+                }
+                //,new Allergy
+                //{
+                //    Id = 3,
+                //    Type = "حساسية الحيوانات الأليفة",
+                //    Allergen = "فراء الحيوانات ، وخاصة من الحيوانات الأليفة مثل القطط والكلاب",
+                //    Reaction = "ضيق في الصدر وفقدان أنفاسك",
+                //    Instruction = "الابتعاد عن الحيوانات الأليفة",
+                //    IsChronic = true,
+                //    RegistrationDataId = "12345678912353",
+                //    CreatedAt = DateTime.Now,
+                //    UpdatedAt = DateTime.Now,
+                //}
+                );
         }
     }
 }

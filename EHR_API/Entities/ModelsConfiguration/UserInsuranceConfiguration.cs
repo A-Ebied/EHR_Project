@@ -13,8 +13,8 @@ namespace EHR_API.Entities.ModelsConfiguration
                 {
                     Id = 1,
                     InsuranceNo = "123OP",
-                    InsuranceType = "حكومي",
-                    InsuranceOrganizationName = "التأمين الصحي المصري",
+                    InsuranceType = "Governmental",
+                    InsuranceOrganizationName = "Egyptian health insurance",
                     RegistrationDataId = "12345678912351",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
@@ -23,8 +23,8 @@ namespace EHR_API.Entities.ModelsConfiguration
                 {
                     Id = 2,
                     InsuranceNo = "124OP",
-                    InsuranceType = "حكومي",
-                    InsuranceOrganizationName = "التأمين الصحي المصري",
+                    InsuranceType = "Governmental",
+                    InsuranceOrganizationName = "Egyptian health insurance",
                     RegistrationDataId = "12345678912352",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,

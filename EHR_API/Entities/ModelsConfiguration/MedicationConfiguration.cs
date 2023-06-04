@@ -68,6 +68,16 @@ namespace EHR_API.Entities.ModelsConfiguration
                     ImageUrl = "/files/Medication/Oracea.jpg",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
+                },
+                new Medication
+                {
+                    Id = 7,
+                    Name = "Hydrochlorothiazide",
+                    Description = "Route, Oral",
+                    Contraindication = "",
+                    ImageUrl = "/files/Medication/Hydrochlorothiazide.jpg",
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
                 });
         }
     }

@@ -13,7 +13,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 {
                     Id = "12345678912351",
                     BloodGroup = "A+",
-                    FamilyHistory = "الجد من الأب كان مصاب بالسكري",
+                    FamilyHistory = "Paternal grandfather had diabetes",
                     MedicalHistory = "",
                     DNAImageResultUrl = "",
                     CreatedAt = DateTime.Now,
@@ -23,8 +23,8 @@ namespace EHR_API.Entities.ModelsConfiguration
                 {
                     Id = "12345678912352",
                     BloodGroup = "O+",
-                    FamilyHistory = "الجد من الأب كان مصاب بمرض ذهني",
-                    MedicalHistory = "المريض أصيب بحالة من الهلوسة مرتين سابقا",
+                    FamilyHistory = "The paternal grandfather had a mental illness.",
+                    MedicalHistory = "The patient had hallucinations twice previously.",
                     DNAImageResultUrl = "",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,

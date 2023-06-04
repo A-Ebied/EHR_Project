@@ -14,7 +14,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 new Governorate
                 {
                     Id = 1,
-                    Title = "القاهرة",
+                    Title = "Cairo",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
 
@@ -22,7 +22,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 new Governorate
                 {
                     Id = 2,
-                    Title = "الجيزة",
+                    Title = "Giza",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
 
@@ -30,7 +30,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 new Governorate
                 {
                     Id = 3,
-                    Title = "مطروح",
+                    Title = "Matrouh",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
 
@@ -38,7 +38,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 new Governorate
                 {
                     Id = 4,
-                    Title = "شمال سيناء",
+                    Title = "North Sinai",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
 
@@ -46,7 +46,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 new Governorate
                 {
                     Id = 5,
-                    Title = "الشرقية",
+                    Title = "Sharkia",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
 
@@ -54,7 +54,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 new Governorate
                 {
                     Id = 6,
-                    Title = "الدقهلية",
+                    Title = "Dakahlia",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
 

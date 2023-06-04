@@ -12,9 +12,9 @@ namespace EHR_API.Entities.ModelsConfiguration
                  new HealthFacility
                  {
                      Id = 1,
-                     Title = "المستشفى العسكري بالشرقية",
-                     Type = "مستشفى عسكري",
-                     SubordinateTo = "المؤسسة العسكرية",
+                     Title = "Sharkia Military Hospital",
+                     Type = "Military Hospital",
+                     SubordinateTo = "The military Establishment",
                      Phone1 = "01123456878",
                      Phone2 = "",
                      Phone3 = "",
@@ -29,9 +29,9 @@ namespace EHR_API.Entities.ModelsConfiguration
                  new HealthFacility
                  {
                      Id = 2,
-                     Title = "المستشفى العام بالعريش",
-                     Type = "مستشفى عام",
-                     SubordinateTo = "وزارة الصحة",
+                     Title = "Arish Hospital",
+                     Type = "Government Hospital",
+                     SubordinateTo = "Ministry of Health",
                      Phone1 = "01122456878",
                      Phone2 = "",
                      Phone3 = "",
@@ -46,9 +46,9 @@ namespace EHR_API.Entities.ModelsConfiguration
                   new HealthFacility
                   {
                       Id = 3,
-                      Title = "مستشفى الجامعة بالزقازيق",
-                      Type = "مستشفى جامعي",
-                      SubordinateTo = "مستشفيات الجامعة",
+                      Title = "University Hospital, Zagazig",
+                      Type = "University Hospital",
+                      SubordinateTo = "University Hospitals",
                       Phone1 = "01123416878",
                       Phone2 = "",
                       Phone3 = "",

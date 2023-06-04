@@ -14,8 +14,8 @@ namespace EHR_API.Entities.ModelsConfiguration
             var user = new RegistrationData
             {
                 Id = "12345678912341",
-                Nationality = "مصري",
-                FullName = "أحمد محمد كمال",
+                Nationality = "Egyptian",
+                FullName = "Ahmed Mohamed Kamal",
                 UserName = "@Kamal123",
                 NormalizedUserName = "@KAMAL123",
                 Email = "k@gmail.com",
@@ -31,12 +31,12 @@ namespace EHR_API.Entities.ModelsConfiguration
             user = new RegistrationData
             {
                 Id = "12345678912342",
-                Nationality = "مصري",
-                FullName = "أحمد محمد أحمد",
+                Nationality = "Egyptian",
+                FullName = "Ahmed Mohamed Ahmed",
                 UserName = "@Ahmed123",
                 NormalizedUserName = "@AHMED123",
-                Email = "A@gmail.com",
-                NormalizedEmail = "A@GMAIL.COM",
+                Email = "muha75375@gmail.com",
+                NormalizedEmail = "MUHA75375@GMAIL.COM",
                 PhoneNumber = "",
                 EmailConfirmed = true,
             };
@@ -48,8 +48,8 @@ namespace EHR_API.Entities.ModelsConfiguration
             user = new RegistrationData
             {
                 Id = "12345678912343",
-                Nationality = "مصري",
-                FullName = "أحمد محمد محمد",
+                Nationality = "Egyptian",
+                FullName = "Ahmed Mohamed Mohamed",
                 UserName = "@Muhammad123",
                 NormalizedUserName = "@MUHAMMAD123",
                 Email = "M@gmail.com",
@@ -65,8 +65,8 @@ namespace EHR_API.Entities.ModelsConfiguration
             user = new RegistrationData
             {
                 Id = "12345678912344",
-                Nationality = "مصري",
-                FullName = "أحمد محمد علي",
+                Nationality = "Egyptian",
+                FullName = "Ahmed Mohammed Ali",
                 UserName = "@Ali123",
                 NormalizedUserName = "@ALI123",
                 Email = "Al@gmail.com",
@@ -82,8 +82,8 @@ namespace EHR_API.Entities.ModelsConfiguration
             user = new RegistrationData
             {
                 Id = "12345678912346",
-                Nationality = "مصري",
-                FullName = "أحمد خاطر علي",
+                Nationality = "Egyptian",
+                FullName = "Ahmed Khater Ali",
                 UserName = "@Khater123",
                 NormalizedUserName = "@KHATER123",
                 Email = "Ka@gmail.com",
@@ -99,8 +99,8 @@ namespace EHR_API.Entities.ModelsConfiguration
             user = new RegistrationData
             {
                 Id = "12345678912348",
-                Nationality = "مصري",
-                FullName = "منال خاطر أحمد",
+                Nationality = "Egyptian",
+                FullName = "Manal Khater Ahmed",
                 UserName = "@Manal2123",
                 NormalizedUserName = "@MANAL2123",
                 Email = "Ma2@gmail.com",
@@ -116,8 +116,8 @@ namespace EHR_API.Entities.ModelsConfiguration
             user = new RegistrationData
             {
                 Id = "12345678912349",
-                Nationality = "مصري",
-                FullName = "خاطر أحمد",
+                Nationality = "Egyptian",
+                FullName = "Khater Ahmed",
                 UserName = "@Khater2123",
                 NormalizedUserName = "@KHATER2123",
                 Email = "Ka2@gmail.com",
@@ -133,9 +133,9 @@ namespace EHR_API.Entities.ModelsConfiguration
             user = new RegistrationData
             {
                 Id = "12345678912350",
-                Nationality = "مصري",
-                FullName = "test",
-                UserName = "@Test2123",
+                Nationality = "Egyptian",
+                FullName = "Ali Khater Ahmed",
+                UserName = "@AlI2123",
                 NormalizedUserName = "@TEST2123",
                 Email = "TE@gmail.com",
                 NormalizedEmail = "TE@GMAIL.COM",
@@ -150,8 +150,8 @@ namespace EHR_API.Entities.ModelsConfiguration
             user = new RegistrationData
             {
                 Id = "12345678912351",
-                Nationality = "مصري",
-                FullName = "أحمد فوزي محمد",
+                Nationality = "Egyptian",
+                FullName = "Ahmed Fawzy Mohamed",
                 UserName = "@Fawzy123",
                 NormalizedUserName = "@FAWZY123",
                 Email = "Fa@gmail.com",
@@ -167,8 +167,8 @@ namespace EHR_API.Entities.ModelsConfiguration
             user = new RegistrationData
             {
                 Id = "12345678912352",
-                Nationality = "مصري",
-                FullName = "علي فوزي محمد",
+                Nationality = "Egyptian",
+                FullName = "Ali Fawzy Muhammad",
                 UserName = "@AliFawzy123",
                 NormalizedUserName = "@ALIFAWZY123",
                 Email = "AlFa@gmail.com",
@@ -184,8 +184,8 @@ namespace EHR_API.Entities.ModelsConfiguration
             user = new RegistrationData
             {
                 Id = "12345678912353",
-                Nationality = "مصري",
-                FullName = "علي فوزي أحمد",
+                Nationality = "Egyptian",
+                FullName = "Ali Fawzy Ahmed",
                 UserName = "@AFawzy123",
                 NormalizedUserName = "@AFAWZY123",
                 Email = "AFa@gmail.com",

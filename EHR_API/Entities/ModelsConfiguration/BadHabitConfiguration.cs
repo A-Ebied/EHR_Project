@@ -12,7 +12,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 new BadHabit
                 {
                     Id = 1,
-                    Habit = "التدخين",
+                    Habit = "Smoking",
                     Notes = "",
                     RegistrationDataId = "12345678912351",
                     CreatedAt = DateTime.Now,
@@ -21,7 +21,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 new BadHabit
                 {
                     Id = 2,
-                    Habit = "التدخين",
+                    Habit = "Smoking",
                     Notes = "",
                     RegistrationDataId = "12345678912352",
                     CreatedAt = DateTime.Now,
@@ -30,7 +30,7 @@ namespace EHR_API.Entities.ModelsConfiguration
                 new BadHabit
                 {
                     Id = 3,
-                    Habit = "شرب الخمور",
+                    Habit = "Drink Wine",
                     Notes = "",
                     RegistrationDataId = "12345678912353",
                     CreatedAt = DateTime.Now,
