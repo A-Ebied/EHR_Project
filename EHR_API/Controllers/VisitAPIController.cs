@@ -146,20 +146,26 @@ namespace EHR_API.Controllers
 
                 visitDTO.Diagnosis = _db._icd.GetAsync(h => h.Code == visitDTO.ICDId).Result.DiagnosisName;
 
-                var i = 0;
-                foreach (var item in entity.UserVaccinations)
+                if (entity.UserVaccinations != null && entity.UserVaccinations.Count > 0)
                 {
-                    item.Vaccination = await _db._vaccination.GetAsync(v => v.Id == item.Id);
-                    visitDTO.UserVaccinations.ToList()[i].VaccinationName = item.Vaccination.Name;
-                    ++i;
+                    var i = 0;
+                    foreach (var item in entity.UserVaccinations)
+                    {
+                        item.Vaccination = await _db._vaccination.GetAsync(v => v.Id == item.Id);
+                        visitDTO.UserVaccinations.ToList()[i].VaccinationName = item.Vaccination.Name;
+                        ++i;
+                    }
                 }
-                
-                i = 0;
-                foreach (var item in entity.VisitMedications)
+
+                if (entity.VisitMedications != null && entity.VisitMedications.Count > 0)
                 {
-                    item.Medication = await _db._medication.GetAsync(v => v.Id == item.Id);
-                    visitDTO.VisitMedications.ToList()[i].MedicationName = item.Medication.Name;
-                    ++i;
+                    var i = 0;
+                    foreach (var item in entity.VisitMedications)
+                    {
+                        item.Medication = await _db._medication.GetAsync(v => v.Id == item.Id);
+                        visitDTO.VisitMedications.ToList()[i].MedicationName = item.Medication.Name;
+                        ++i;
+                    }
                 }
 
                 _response.Result = visitDTO;

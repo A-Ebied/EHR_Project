@@ -12,10 +12,10 @@ namespace EHR_API.Entities.ModelsConfiguration
                 new Allergy
                 {
                     Id = 1,
-                    Type = "حساسية التراب",
-                    Allergen = "التراب",
-                    Reaction = "سيلان الأنف والكحة",
-                    Instruction = "---",
+                    Type = "Dust allergy",
+                    Allergen = "Dust mites, Pollen, Pet hair, fur, feathers",
+                    Reaction = "Sneezing ,Runny or stuffy nose, coughing, tightness in the chest, shortness of breath",
+                    Instruction = "Avoid allergens",
                     IsChronic = true,
                     RegistrationDataId = "12345678912351",
                     CreatedAt = DateTime.Now,

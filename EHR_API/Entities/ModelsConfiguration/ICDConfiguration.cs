@@ -39,15 +39,15 @@ namespace EHR_API.Entities.ModelsConfiguration
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
                 }
-                //,
-                //new ICD
-                //{
-                //    Id = 5,
-                //    Title = "الشرقية",
-                //    CreatedAt = DateTime.Now,
-                //    UpdatedAt = DateTime.Now,
+                ,
+                new ICD
+                {
+                    Code = "J18.9",
+                    DiagnosisName = "Pneumonia",
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
 
-                //}, 
+                }
                 //new ICD
                 //{
                 //    Id = 6,

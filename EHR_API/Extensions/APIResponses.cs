@@ -41,7 +41,7 @@ namespace EHR_API.Extensions
         public static APIResponse Unauthorized()
         {
             APIResponse _response = new();
-            _response.Errors = new() { "The Email and Password are wrong" };
+            _response.Errors = new() { "The Email or Password are wrong" };
             _response.IsSuccess = false;
             _response.Result = null;
             _response.StatusCode = HttpStatusCode.Unauthorized;

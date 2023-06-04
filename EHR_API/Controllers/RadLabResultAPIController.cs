@@ -269,7 +269,7 @@ namespace EHR_API.Controllers
                 expression: r => r.Id == visit.MedicalTeamId);
 
             var temp = visitRadLabTest.TestType.ToLower();
-            if (temp.Contains("lung radiology") || temp.Contains("pneumonia") || temp.Contains("lung x-ray"))
+            if (temp.Contains("lung radiology") || temp.Contains("pneumonia")|| temp.Contains("chest x-ray") || temp.Contains("lung x-ray"))
             {
                 string is_normal = await SD.MLAPIPneumoniaModelAsync(entity.ImageUrl.ToString());
                 if (is_normal.ToLower() == "false")

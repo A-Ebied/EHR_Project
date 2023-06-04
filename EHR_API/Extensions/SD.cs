@@ -26,7 +26,7 @@ namespace EHR_API.Extensions
                 var newUrl = imgUrl.Replace("/", "\\");
                 var url = new ImgUrl
                 {
-                    URL = @"D:\0_MY_DATA\2_IT\Level_4\IT Project\Project\Backend\##With new features\EHR_Project\EHR_API\wwwroot" + newUrl
+                    URL = @"D:\0_MY_DATA\2_IT\Level_4\IT Project\Project\#END\Backend\EHR_Project\EHR_API\wwwroot" + newUrl
                 };
 
                 string URL = JsonSerializer.Serialize(url);

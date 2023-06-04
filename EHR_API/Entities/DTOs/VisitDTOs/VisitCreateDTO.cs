@@ -25,8 +25,6 @@ namespace EHR_API.Entities.DTOs.VisitDTOs
         public string InstructionDescription { get; set; }
         public string Note { get; set; }
         public IFormFile ReportImage { get; set; }
-        // public double Price { get; set; }
-        // public bool UnderInsurance { get; set; }
         
         public ICollection<VisitVitalSignCreateDTO> VisitVitalSigns { get; set; }
         public ICollection<VisitMedicationCreateDTO> VisitMedications { get; set; }

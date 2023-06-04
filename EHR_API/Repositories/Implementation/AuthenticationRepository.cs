@@ -40,19 +40,23 @@ namespace EHR_API.Repositories.Implementation
             await _emailSender.SendEmailAsync(message);
         }
 
-        public async Task<IdentityResult> RegisterUser(RegistrationDataCreateDTO registrationDataDTO)
+        public async Task<IdentityResult> RegisterUser(RegistrationDataCreateDTO registrationDataDTO, bool x)
         {
             var user = _mapper.Map<RegistrationData>(registrationDataDTO);
             user.CreatedAt = DateTime.Now;
             user.UpdatedAt = DateTime.Now;
-            user.ConfirmEmailCode = ServiceExtensions.RandomCode();
+            
 
             var result = await _userManager.CreateAsync(user, registrationDataDTO.Password);
             if (result.Succeeded)
             {
                 await _userManager.AddToRolesAsync(user, new List<string>() { registrationDataDTO.Role });
 
-                await Code(registrationDataDTO.Email, user.ConfirmEmailCode);              
+                if (x)
+                {
+                    user.ConfirmEmailCode = ServiceExtensions.RandomCode();
+                    await Code(registrationDataDTO.Email, user.ConfirmEmailCode);
+                }              
             }
 
             return result;

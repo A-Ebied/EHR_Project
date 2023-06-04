@@ -346,7 +346,30 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Enter another Id"));
                 }
 
-                var result = await _db._authentication.RegisterUser(registrationDataDTO);
+                var x = true;
+                string jwtToken = null;
+                if (HttpContext.Request.Headers.Authorization.Count > 0)
+                {
+                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+
+                    string headerRole = null;
+                    if (jwtToken != null)
+                    {
+                        var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+                        headerRole = user.Claims.ToList()[4].Value;
+
+                        if (headerRole == SD.HealthFacilityManager || headerRole == SD.SystemManager)
+                        {
+                           x = false;
+                        }
+                        else
+                        {
+                            return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+                        }
+                    }
+                }
+                 
+                var result = await _db._authentication.RegisterUser(registrationDataDTO, x);
                 if (!result.Succeeded)
                 {
                     return BadRequest(APIResponses.BadRequest(result.ToString()));
