@@ -35,8 +35,8 @@ namespace EHR_API.Entities.ModelsConfiguration
                 FullName = "Ahmed Mohamed Ahmed",
                 UserName = "@Ahmed123",
                 NormalizedUserName = "@AHMED123",
-                Email = "muha75375@gmail.com",
-                NormalizedEmail = "MUHA75375@GMAIL.COM",
+                Email = "M@gmail.com",
+                NormalizedEmail = "M@GMAIL.COM",
                 PhoneNumber = "",
                 EmailConfirmed = true,
             };
@@ -52,8 +52,8 @@ namespace EHR_API.Entities.ModelsConfiguration
                 FullName = "Ahmed Mohamed Mohamed",
                 UserName = "@Muhammad123",
                 NormalizedUserName = "@MUHAMMAD123",
-                Email = "M@gmail.com",
-                NormalizedEmail = "M@GMAIL.COM",
+                Email = "muha75375@gmail.com",
+                NormalizedEmail = "MUHA75375@GMAIL.COM",
                 PhoneNumber = "01234567899",
                 EmailConfirmed = true,
             };

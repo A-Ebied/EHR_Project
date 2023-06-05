@@ -135,7 +135,7 @@ namespace EHR_API.Controllers
                 foreach (var entity in entities)
                 {
                     roles = await _userManager.GetRolesAsync(entity);
-                    if (roles.Contains("Physician") == true || roles.Contains("Nurse") == true || roles.Contains("Technician") == true || roles.Contains("Pharmacist") == true)
+                    if (roles.Contains("Physician") == true || roles.Contains("Nurse") == true || roles.Contains("Technician") == true || roles.Contains("Pharmacist") == true || roles.Contains("HealthFacilityManager") == true)
                     {
                         medicalUsers.Add(entity);
                     }
@@ -196,11 +196,18 @@ namespace EHR_API.Controllers
                     headerRole = user.Claims.ToList()[4].Value;
                     headerId = user.Claims.ToList()[0].Value;
 
-                    if (headerRole == SD.Physician || headerRole == SD.HealthFacilityManager|| headerRole == SD.SystemManager || headerRole == SD.Pharmacist || headerRole == SD.Technician || headerId == userId)
+                    if (headerRole == SD.Physician || headerRole == SD.HealthFacilityManager|| headerRole == SD.SystemManager || headerId == userId)
                     {
                         entity = await _db._authentication.GetAsync(
                             expression: g => g.Id == userId,
                             includeProperties: "PersonalData,MedicalTeam,MedicalData,UserInsurances,BadHabits,Contraindications,Allergies,Visits,Admits,BloodDonations,ChronicDiseases");
+                    }
+
+                    if (headerRole == SD.Pharmacist || headerRole == SD.Technician || headerId == userId)
+                    {
+                        entity = await _db._authentication.GetAsync(
+                            expression: g => g.Id == userId,
+                            includeProperties: "PersonalData,MedicalTeam,UserInsurances,Visits");
                     }
                 }
                 else
@@ -221,8 +228,19 @@ namespace EHR_API.Controllers
                         expression: t => t.MedicalTeamId == userId);
                 }
 
+               
+
                 var newEntity = _mapper.Map<RegistrationDataDTO>(entity);
                 newEntity.Roles = await _userManager.GetRolesAsync(_mapper.Map<RegistrationData>(entity));
+
+                if (entity.ChronicDiseases != null && entity.ChronicDiseases.Count > 0)
+                {
+                    var i = 0;
+                    foreach (var item in entity.ChronicDiseases)
+                    {
+                        newEntity.ChronicDiseases[i++].Icd = _db._icd.GetAsync(i => i.Code == item.ICDId).Result.DiagnosisName;
+                    }
+                }
 
                 _response.Result = newEntity;
                 _response.StatusCode = HttpStatusCode.OK;

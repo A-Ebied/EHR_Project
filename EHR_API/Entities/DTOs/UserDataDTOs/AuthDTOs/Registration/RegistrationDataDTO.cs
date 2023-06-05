@@ -35,6 +35,6 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs.AuthDTOs.Registration
         public ICollection<VisitDTOForOthers> Visits { get; set; }
         public ICollection<AdmitDTOForOthers> Admits { get; set; }
         public ICollection<BloodDonationDTOForOthers> BloodDonations { get; set; }
-        public ICollection<ChronicDiseaseDTOForOthers> ChronicDiseases { get; set; }
+        public List<ChronicDiseaseDTOForOthers> ChronicDiseases { get; set; }
     }
 }

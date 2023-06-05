@@ -134,12 +134,12 @@ namespace EHR_API.Controllers
                 entity.UpdatedAt = DateTime.Now;
                 entity.MedicalTeamId = headerId;
 
+
                 await _db._radLabResult.CreateAsync(entity);
+                await PneumoniaModelAsync(entity);
 
                 _response.Result = _mapper.Map<RadLabResultDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;
-
-                await PneumoniaModelAsync(entity);
 
                 return Ok(_response);
             }

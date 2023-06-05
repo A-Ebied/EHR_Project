@@ -82,7 +82,7 @@ namespace EHR_API.Controllers
         }
 
         [HttpPost("CreateICD")]
-        [Authorize(Roles = SD.SystemManager)]
+        //[Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> CreateICD([FromBody] ICDCreateDTO entityCreateDTO)
         {
             try

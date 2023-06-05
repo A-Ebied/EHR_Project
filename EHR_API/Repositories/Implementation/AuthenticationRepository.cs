@@ -56,7 +56,16 @@ namespace EHR_API.Repositories.Implementation
                 {
                     user.ConfirmEmailCode = ServiceExtensions.RandomCode();
                     await Code(registrationDataDTO.Email, user.ConfirmEmailCode);
-                }              
+                } 
+                else
+                {
+                     await _userManager.ConfirmEmailAsync(user,
+                         await _userManager.GenerateEmailConfirmationTokenAsync(user));
+
+                    //_user.EmailConfirmed = true;
+                    //user = null;
+                    //await _userManager.UpdateAsync(_user);
+                }
             }
 
             return result;
