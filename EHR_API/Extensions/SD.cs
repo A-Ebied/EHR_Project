@@ -21,7 +21,6 @@ namespace EHR_API.Extensions
             try
             {
                 HttpClient _httpClient = new HttpClient();
-                JsonSerializerOptions _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
                 var newUrl = imgUrl.Replace("/", "\\");
                 var url = new ImgUrl
@@ -30,7 +29,7 @@ namespace EHR_API.Extensions
                 };
 
                 string URL = JsonSerializer.Serialize(url);
-                StringContent requestContent = new StringContent(URL, Encoding.UTF8, "application/json");
+                StringContent requestContent = new(URL, Encoding.UTF8, "application/json");
 
                 var response = await _httpClient.PostAsync("http://localhost:8000/PneumoniaPredict", requestContent);
 

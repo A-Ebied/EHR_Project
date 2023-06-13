@@ -89,8 +89,7 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
-
-
+         
         [HttpPost("CreateRadLabResult")]
         [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician + "," + SD.Technician)]
         public async Task<ActionResult<APIResponse>> CreateRadLabResult([FromForm] RadLabResultCreateDTO entityCreateDTO)

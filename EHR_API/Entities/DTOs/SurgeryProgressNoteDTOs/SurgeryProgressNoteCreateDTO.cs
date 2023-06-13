@@ -6,9 +6,9 @@ namespace EHR_API.Entities.DTOs.SurgeryProgressNoteDTOs
     public class SurgeryProgressNoteCreateDTO
     {
         [Required]
-        public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        [Required]
         public IFormFile File { get; set; }
         [Required]
         public string MedicalTeamId { get; set; }

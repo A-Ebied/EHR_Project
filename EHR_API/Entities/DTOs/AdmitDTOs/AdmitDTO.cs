@@ -1,4 +1,5 @@
-﻿using EHR_API.Entities.DTOs.HealthFacilityDTOs;
+﻿using EHR_API.Entities.DTOs.AdmitProgressNoteDTOs;
+using EHR_API.Entities.DTOs.HealthFacilityDTOs;
 using EHR_API.Entities.DTOs.ReceiveBloodDTOs;
 using EHR_API.Entities.DTOs.SurgeryDTOs;
 
@@ -21,5 +22,6 @@ namespace EHR_API.Entities.DTOs.AdmitDTOs
         public HealthFacilityDTOForOthers HealthFacility { get; set; }
         public ICollection<SurgeryDTOForOthers> Surgeries { get; set; }
         public ICollection<ReceiveBloodDTOForOthers> ReceiveBloods { get; set; }
+        public ICollection<AdmitProgressNoteDTOForOthers> AdmitProgressNotes { get; set; }
     }
 }

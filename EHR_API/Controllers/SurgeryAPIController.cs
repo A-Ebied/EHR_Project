@@ -147,7 +147,7 @@ namespace EHR_API.Controllers
         }
 
         [HttpPost("CreateSurgery")]
-        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
+        //[Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> CreateSurgery([FromBody] SurgeryCreateDTO entityCreateDTO)
         {
             try

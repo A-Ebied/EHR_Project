@@ -129,7 +129,7 @@ namespace EHR_API.Controllers
 
                 await _db._medicalTeam.CreateAsync(entity);
 
-                if (entityCreateDTO.MedicalFacilityTeams.Count > 0)
+                if (entityCreateDTO.MedicalFacilityTeams != null && entityCreateDTO.MedicalFacilityTeams.Count > 0)
                 {
                     var facilityTeam = new List<MedicalFacilityTeam>();
                     var temp = new MedicalFacilityTeam();
@@ -158,34 +158,34 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpDelete("{userId}")]
-        [Authorize(Roles = SD.SystemManager)]
-        public async Task<ActionResult<APIResponse>> DeleteMedicalTeamUser(string userId)
-        {
-            try
-            {
-                if (userId == null)
-                {
-                    return BadRequest(APIResponses.BadRequest("Id is null"));
-                }
+        //[HttpDelete("{userId}")]
+        //[Authorize(Roles = SD.SystemManager)]
+        //public async Task<ActionResult<APIResponse>> DeleteMedicalTeamUser(string userId)
+        //{
+        //    try
+        //    {
+        //        if (userId == null)
+        //        {
+        //            return BadRequest(APIResponses.BadRequest("Id is null"));
+        //        }
 
-                var removedEntity = await _db._medicalTeam.GetAsync(expression: g => g.Id == userId);
-                if (removedEntity == null)
-                {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {userId} "));
-                }
+        //        var removedEntity = await _db._medicalTeam.GetAsync(expression: g => g.Id == userId);
+        //        if (removedEntity == null)
+        //        {
+        //            return NotFound(APIResponses.NotFound($"No object with Id = {userId} "));
+        //        }
 
-                await _db._medicalTeam.DeleteAsync(removedEntity);
+        //        await _db._medicalTeam.DeleteAsync(removedEntity);
 
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = "The object has been deleted";
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                return APIResponses.InternalServerError(ex);
-            }
-        }
+        //        _response.StatusCode = HttpStatusCode.OK;
+        //        _response.Result = "The object has been deleted";
+        //        return Ok(_response);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return APIResponses.InternalServerError(ex);
+        //    }
+        //}
 
         [HttpPut("{userId}")]
         [Authorize(Roles = SD.HealthFacilityManager + "," + SD.SystemManager)]
