@@ -170,7 +170,6 @@ namespace EHR_API.Controllers
             }
         }
 
-        //[Authorize]
         [HttpGet("{userId}")]
         public async Task<ActionResult<APIResponse>> GetUser(string userId)
         {

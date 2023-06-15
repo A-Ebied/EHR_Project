@@ -147,7 +147,7 @@ namespace EHR_API.Controllers
 
 
         [HttpPost("CreateSurgeryProgressNote")]
-        //[Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> CreateSurgeryProgressNote([FromForm] SurgeryProgressNoteCreateDTO entityCreateDTO)
         {
             try

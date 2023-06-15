@@ -138,36 +138,7 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
-
-        [HttpDelete("{userId}")]
-        [Authorize(Roles = SD.SystemManager)]
-        public async Task<ActionResult<APIResponse>> DeleteUserMedicalData(string userId)
-        {
-            try
-            {
-                if (userId == null)
-                {
-                    return BadRequest(APIResponses.BadRequest("Id is null"));
-                }
-
-                var removedEntity = await _db._medicalData.GetAsync(expression: g => g.Id == userId);
-                if (removedEntity == null)
-                {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {userId} "));
-                }
-
-                await _db._medicalData.DeleteAsync(removedEntity);
-
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = "The object has been deleted";
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                return APIResponses.InternalServerError(ex);
-            }
-        }
-
+      
         [HttpPut("{userId}")]
         [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> UpdateUserMedicalData(string userId, [FromForm] MedicalDataUpdateDTO entityUpdateDTO)
@@ -224,6 +195,35 @@ namespace EHR_API.Controllers
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = _mapper.Map<MedicalDataDTO>(entity);
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                return APIResponses.InternalServerError(ex);
+            }
+        }
+
+        [HttpDelete("{userId}")]
+        [Authorize(Roles = SD.SystemManager)]
+        public async Task<ActionResult<APIResponse>> DeleteUserMedicalData(string userId)
+        {
+            try
+            {
+                if (userId == null)
+                {
+                    return BadRequest(APIResponses.BadRequest("Id is null"));
+                }
+
+                var removedEntity = await _db._medicalData.GetAsync(expression: g => g.Id == userId);
+                if (removedEntity == null)
+                {
+                    return NotFound(APIResponses.NotFound($"No object with Id = {userId} "));
+                }
+
+                await _db._medicalData.DeleteAsync(removedEntity);
+
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.Result = "The object has been deleted";
                 return Ok(_response);
             }
             catch (Exception ex)

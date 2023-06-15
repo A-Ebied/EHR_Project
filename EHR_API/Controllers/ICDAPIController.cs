@@ -108,34 +108,34 @@ namespace EHR_API.Controllers
         }
 
 
-        [HttpDelete("{code}")]
-        [Authorize(Roles = SD.SystemManager)]
-        public async Task<ActionResult<APIResponse>> DeleteICD(string code)
-        {
-            try
-            {
-                if (code == null)
-                {
-                    return BadRequest(APIResponses.BadRequest("code is null"));
-                }
+        //[HttpDelete("{code}")]
+        //[Authorize(Roles = SD.SystemManager)]
+        //public async Task<ActionResult<APIResponse>> DeleteICD(string code)
+        //{
+        //    try
+        //    {
+        //        if (code == null)
+        //        {
+        //            return BadRequest(APIResponses.BadRequest("code is null"));
+        //        }
 
-                var removedEntity = await _db._icd.GetAsync(expression: g => g.Code == code);
-                if (removedEntity == null)
-                {
-                    return NotFound(APIResponses.NotFound($"No object with code = {code} "));
-                }
+        //        var removedEntity = await _db._icd.GetAsync(expression: g => g.Code == code);
+        //        if (removedEntity == null)
+        //        {
+        //            return NotFound(APIResponses.NotFound($"No object with code = {code} "));
+        //        }
 
-                await _db._icd.DeleteAsync(removedEntity);
+        //        await _db._icd.DeleteAsync(removedEntity);
 
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = "The object has been deleted";
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                return APIResponses.InternalServerError(ex);
-            }
-        }
+        //        _response.StatusCode = HttpStatusCode.OK;
+        //        _response.Result = "The object has been deleted";
+        //        return Ok(_response);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return APIResponses.InternalServerError(ex);
+        //    }
+        //}
 
         [HttpPut("{code}")]
         [Authorize(Roles = SD.SystemManager)]

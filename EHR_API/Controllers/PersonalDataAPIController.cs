@@ -125,39 +125,9 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
-
-        [HttpDelete("{userId}")]
-        [Authorize(Roles = SD.SystemManager)]
-        public async Task<ActionResult<APIResponse>> DeletePersonalData(string userId)
-        {
-            try
-            {
-                if (userId == null)
-                {
-                    return BadRequest(APIResponses.BadRequest("Id is null"));
-                }
-
-                var removedEntity = await _db._personal.GetAsync(expression: g => g.Id == userId);
-                if (removedEntity == null)
-                {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {userId} "));
-                }
-
-                await _db._personal.DeleteAsync(removedEntity);
-
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = "The object has been deleted";
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                return APIResponses.InternalServerError(ex);
-            }
-        }
-
-
-        [HttpPut("{userId}")]
+         
         [Authorize]
+        [HttpPut("{userId}")]
         public async Task<ActionResult<APIResponse>> UpdateUserPersonalData(string userId, [FromForm] PersonalDataUpdateDTO entityUpdateDTO)
         {
             try
@@ -224,5 +194,35 @@ namespace EHR_API.Controllers
                 return APIResponses.InternalServerError(ex);
             }
         }
+
+        [HttpDelete("{userId}")]
+        [Authorize(Roles = SD.SystemManager)]
+        public async Task<ActionResult<APIResponse>> DeletePersonalData(string userId)
+        {
+            try
+            {
+                if (userId == null)
+                {
+                    return BadRequest(APIResponses.BadRequest("Id is null"));
+                }
+
+                var removedEntity = await _db._personal.GetAsync(expression: g => g.Id == userId);
+                if (removedEntity == null)
+                {
+                    return NotFound(APIResponses.NotFound($"No object with Id = {userId} "));
+                }
+
+                await _db._personal.DeleteAsync(removedEntity);
+
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.Result = "The object has been deleted";
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                return APIResponses.InternalServerError(ex);
+            }
+        }
+
     }
 }

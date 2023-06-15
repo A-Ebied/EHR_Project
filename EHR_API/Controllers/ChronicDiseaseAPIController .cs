@@ -153,7 +153,7 @@ namespace EHR_API.Controllers
 
 
         [HttpPost("CreateChronicDisease")]
-        //[Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> CreateChronicDisease([FromBody] ChronicDiseaseCreateDTO entityCreateDTO)
         {
             try
@@ -230,56 +230,56 @@ namespace EHR_API.Controllers
         }
 
 
-        [HttpDelete("{id}")]
-        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
-        public async Task<ActionResult<APIResponse>> DeleteChronicDisease(int id)
-        {
-            try
-            {
-                if (id < 1)
-                {
-                    return BadRequest(APIResponses.BadRequest("Id is < 1"));
-                }
+        //[HttpDelete("{id}")]
+        //[Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
+        //public async Task<ActionResult<APIResponse>> DeleteChronicDisease(int id)
+        //{
+        //    try
+        //    {
+        //        if (id < 1)
+        //        {
+        //            return BadRequest(APIResponses.BadRequest("Id is < 1"));
+        //        }
 
-                var removedEntity = await _db._chronicDisease.GetAsync(expression: g => g.Id == id);
-                if (removedEntity == null)
-                {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {id}"));
-                }
+        //        var removedEntity = await _db._chronicDisease.GetAsync(expression: g => g.Id == id);
+        //        if (removedEntity == null)
+        //        {
+        //            return NotFound(APIResponses.NotFound($"No object with Id = {id}"));
+        //        }
 
-                string jwtToken = null;
-                if (HttpContext.Request.Headers.Authorization.Count > 0)
-                {
-                    jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
-                }
+        //        string jwtToken = null;
+        //        if (HttpContext.Request.Headers.Authorization.Count > 0)
+        //        {
+        //            jwtToken = HttpContext.Request.Headers.Authorization.ToString().Split(" ")[1];
+        //        }
 
-                string headerId = null;
-                if (jwtToken != null)
-                {
-                    var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
-                    headerId = user.Claims.ToList()[0].Value;
+        //        string headerId = null;
+        //        if (jwtToken != null)
+        //        {
+        //            var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+        //            headerId = user.Claims.ToList()[0].Value;
 
-                    if (headerId != removedEntity.MedicalTeamId)
-                    {
-                        return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
-                    }
-                }
-                else
-                {
-                    return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
-                }
+        //            if (headerId != removedEntity.MedicalTeamId)
+        //            {
+        //                return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+        //            }
+        //        }
+        //        else
+        //        {
+        //            return BadRequest(APIResponses.BadRequest($"Access Denied, you do not have permission to access this data."));
+        //        }
 
-                await _db._chronicDisease.DeleteAsync(removedEntity);
+        //        await _db._chronicDisease.DeleteAsync(removedEntity);
 
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = "The object has been deleted";
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                return APIResponses.InternalServerError(ex);
-            }
-        }
+        //        _response.StatusCode = HttpStatusCode.OK;
+        //        _response.Result = "The object has been deleted";
+        //        return Ok(_response);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return APIResponses.InternalServerError(ex);
+        //    }
+        //}
 
 
         [HttpPut("{id}")]

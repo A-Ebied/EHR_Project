@@ -151,7 +151,7 @@ namespace EHR_API.Controllers
         }
 
         [HttpPost("CreateContraindication")]
-       // [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> CreateContraindication([FromBody] ContraindicationCreateDTO entityCreateDTO)
         {
             try

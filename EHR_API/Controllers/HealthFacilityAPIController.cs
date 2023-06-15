@@ -275,32 +275,32 @@ namespace EHR_API.Controllers
         }
 
 
-        [HttpDelete("{id}")]
-        [Authorize(Roles = SD.SystemManager)]
-        public async Task<ActionResult<APIResponse>> DeleteHealthFacility(int id)
-        {
-            try
-            {
-                if (id < 1)
-                {
-                    return BadRequest(APIResponses.BadRequest("Id less than 1"));
-                }
+        //[HttpDelete("{id}")]
+        //[Authorize(Roles = SD.SystemManager)]
+        //public async Task<ActionResult<APIResponse>> DeleteHealthFacility(int id)
+        //{
+        //    try
+        //    {
+        //        if (id < 1)
+        //        {
+        //            return BadRequest(APIResponses.BadRequest("Id less than 1"));
+        //        }
 
-                var removedEntity = await _db._healthFacility.GetAsync(expression: g => g.Id == id);
-                if (removedEntity == null)
-                {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
-                }
+        //        var removedEntity = await _db._healthFacility.GetAsync(expression: g => g.Id == id);
+        //        if (removedEntity == null)
+        //        {
+        //            return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+        //        }
 
-                await _db._healthFacility.DeleteAsync(removedEntity);
+        //        await _db._healthFacility.DeleteAsync(removedEntity);
 
-                _response.StatusCode = HttpStatusCode.OK;
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                return APIResponses.InternalServerError(ex);
-            }
-        }
+        //        _response.StatusCode = HttpStatusCode.OK;
+        //        return Ok(_response);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return APIResponses.InternalServerError(ex);
+        //    }
+        //}
     }
 }

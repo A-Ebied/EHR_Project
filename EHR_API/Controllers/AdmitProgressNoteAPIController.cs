@@ -139,7 +139,7 @@ namespace EHR_API.Controllers
         }
 
 
-        //[Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         [HttpPost("CreateAdmitProgressNote")]
         public async Task<ActionResult<APIResponse>> CreateAdmitProgressNote([FromForm] AdmitProgressNoteCreateDTO entityCreateDTO)
         {
@@ -149,11 +149,6 @@ namespace EHR_API.Controllers
                 {
                     return BadRequest(APIResponses.BadRequest("No data has been sent"));
                 }
-
-                //if (await _db._admitProgressNote.GetAsync(expression: e => e.Id == entityCreateDTO.Id) == null)
-                //{
-                //    return BadRequest(APIResponses.BadRequest("ID is not exists"));
-                //}
 
                 if (await _db._admit.GetAsync(expression: e => e.Id == entityCreateDTO.AdmitId) == null)
                 {

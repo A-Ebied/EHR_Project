@@ -138,7 +138,7 @@ namespace EHR_API.Controllers
 
 
         [HttpPost("CreateBloodDonation")]
-        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician + "," + SD.Technician)]
         public async Task<ActionResult<APIResponse>> CreateBloodDonation([FromBody] BloodDonationCreateDTO entityCreateDTO)
         {
             try
@@ -175,7 +175,7 @@ namespace EHR_API.Controllers
 
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
+        [Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> DeleteBloodDonation(int id)
         {
             try
@@ -208,7 +208,7 @@ namespace EHR_API.Controllers
         [Authorize]
 
         [HttpPut("{id}")]
-        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician + "," + SD.Technician)]
         public async Task<ActionResult<APIResponse>> UpdateBloodDonation(int id, [FromBody] BloodDonationUpdateDTO entityUpdateDTO)
         {
             try

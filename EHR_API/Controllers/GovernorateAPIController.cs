@@ -173,33 +173,33 @@ namespace EHR_API.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        [Authorize(Roles = SD.SystemManager)]
-        public async Task<ActionResult<APIResponse>> DeleteGovernorate(int id)
-        {
-            try
-            {
-                if (id == 0)
-                {
-                    return BadRequest(APIResponses.BadRequest("Id less than 1"));
-                }
+        //[HttpDelete("{id}")]
+        //[Authorize(Roles = SD.SystemManager)]
+        //public async Task<ActionResult<APIResponse>> DeleteGovernorate(int id)
+        //{
+        //    try
+        //    {
+        //        if (id == 0)
+        //        {
+        //            return BadRequest(APIResponses.BadRequest("Id less than 1"));
+        //        }
 
-                var removedEntity = await _db._governorate.GetAsync(expression: g => g.Id == id);
-                if (removedEntity == null)
-                {
-                    return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
-                }
+        //        var removedEntity = await _db._governorate.GetAsync(expression: g => g.Id == id);
+        //        if (removedEntity == null)
+        //        {
+        //            return NotFound(APIResponses.NotFound($"No object with Id = {id} "));
+        //        }
 
-                await _db._governorate.DeleteAsync(removedEntity);
+        //        await _db._governorate.DeleteAsync(removedEntity);
 
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.Result = "The object has been deleted";
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                return APIResponses.InternalServerError(ex);
-            }
-        }
+        //        _response.StatusCode = HttpStatusCode.OK;
+        //        _response.Result = "The object has been deleted";
+        //        return Ok(_response);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return APIResponses.InternalServerError(ex);
+        //    }
+        //}
     }
 }
