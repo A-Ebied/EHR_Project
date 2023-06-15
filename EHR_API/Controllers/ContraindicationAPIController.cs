@@ -139,7 +139,7 @@ namespace EHR_API.Controllers
                 UserDTOForOthers medicalMember = APIResponses.User(reg, role);
 
                 var result = _mapper.Map<ContraindicationDTO>(entity);
-                result.MedicalTeam = medicalMember;
+                result.MedicalMember = medicalMember;
                 _response.Result = result;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);

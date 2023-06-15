@@ -11,7 +11,7 @@ namespace EHR_API.Entities.DTOs.ContraindicationDTOs
         public bool IsChronic { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public UserDTOForOthers MedicalTeam { get; set; }
+        public UserDTOForOthers MedicalMember { get; set; }
         public string RegistrationDataId { get; set; }
     }
 }

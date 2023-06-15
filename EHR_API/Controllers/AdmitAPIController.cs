@@ -139,7 +139,7 @@ namespace EHR_API.Controllers
         }
 
         [HttpPost("CreateAdmit")]
-        //[Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
+        [Authorize(Roles = SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> CreateAdmit([FromBody] AdmitCreateDTO entityCreateDTO)
         {
             try
@@ -167,11 +167,6 @@ namespace EHR_API.Controllers
                 var entity = _mapper.Map<Admit>(entityCreateDTO);
                 entity.CreatedAt = DateTime.Now;
                 entity.UpdatedAt = DateTime.Now;
-
-                //if (entity.LeaveAt == entity.AdmitAt)
-                //{
-                //    return BadRequest(APIResponses.BadRequest("Leave at can not be equal to Admit at"));
-                //}
 
                 await _db._admit.CreateAsync(entity);
 
