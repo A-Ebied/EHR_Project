@@ -32,10 +32,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 
 builder.Services.ConfigureInterfacesAPI();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
+
+// Registers services required by authentication services to enable the authentication middleware to process authentication requests.
 builder.Services.AddAuthentication();
+
 builder.Services.ConfigureIdentity();
 builder.Services.ConfigureJWT(builder.Configuration);
-builder.Services.AddResponseCaching();
+//builder.Services.AddResponseCaching();
 builder.Services.AddControllersConfiguration();
 builder.Services.AddScoped<DbInitializer>();
 

@@ -69,6 +69,9 @@ namespace EHR_API.Extensions
 
         public static void ConfigureIdentity(this IServiceCollection services)
         {
+            /*
+             * This configures the Identity services to use the IdentityUser/RegistrationData and IdentityRole classes as the default user and role models, and to store them in the ApplicationDbContext.
+             */
             var builder = services.AddIdentity<RegistrationData, IdentityRole>(
                 o =>
                 {
@@ -127,16 +130,16 @@ namespace EHR_API.Extensions
         public static void AddControllersConfiguration(this IServiceCollection services)
         {
             services.AddControllers(
-                option =>
-                {
-                    // option.ReturnHttpNotAcceptable = true;
-                    option.CacheProfiles.Add("DefCache",
-                        new CacheProfile
-                        {
-                            Duration = 10
-                        });
+                //option =>
+                //{
+                //    // option.ReturnHttpNotAcceptable = true;
+                //    option.CacheProfiles.Add("DefCache",
+                //        new CacheProfile
+                //        {
+                //            Duration = 10
+                //        });
 
-                }
+                //}
                 ).AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)/*.AddXmlDataContractSerializerFormatters()*/;
         }
 
@@ -176,7 +179,5 @@ namespace EHR_API.Extensions
                         });
                 });
         }
-
-
     }
 }

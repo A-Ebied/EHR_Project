@@ -168,7 +168,7 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("User is not exists"));
                 }
 
-                if (await _db._icd.GetAsync(expression: e => e.Code == entityCreateDTO.ICDId) == null)
+                if (await _db._icd.GetAsync(expression: e => e.Code == entityCreateDTO.ICDCode) == null)
                 {
                     return BadRequest(APIResponses.BadRequest("ICD is not exists"));
                 }
