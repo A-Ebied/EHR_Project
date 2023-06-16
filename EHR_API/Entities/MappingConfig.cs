@@ -176,7 +176,7 @@ namespace EHR_API.Entities
             CreateMap<BadHabit, BadHabitDTOForOthers>().ReverseMap();
 
             CreateMap<MedicalFacilityTeam, MedicalFacilityTeamCreateDTO>().ReverseMap();
-            //CreateMap<MedicalFacilityTeam, MedicalFacilityTeamUpdateDTO>().ReverseMap();
+            CreateMap<MedicalFacilityTeam, MedicalFacilityTeamUpdateDTO>().ReverseMap();
             CreateMap<MedicalFacilityTeam, MedicalFacilityTeamDTO>().ReverseMap();
             //CreateMap<MedicalFacilityTeam, MedicalFacilityTeamDTOForOthers>().ReverseMap();
 

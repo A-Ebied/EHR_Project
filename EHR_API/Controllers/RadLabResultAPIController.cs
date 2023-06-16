@@ -91,7 +91,7 @@ namespace EHR_API.Controllers
         }
          
         [HttpPost("CreateRadLabResult")]
-        [Authorize(Roles = SD.Technician)]
+        [Authorize(Roles = SD.Technician + "," + SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> CreateRadLabResult([FromForm] RadLabResultCreateDTO entityCreateDTO)
         {
             try
@@ -150,7 +150,7 @@ namespace EHR_API.Controllers
 
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = SD.SystemManager)]
+        [Authorize(Roles = SD .SystemManager)]
         public async Task<ActionResult<APIResponse>> DeleteRadLabResult(int id)
         {
             try
@@ -180,7 +180,7 @@ namespace EHR_API.Controllers
 
 
         [HttpPut("{id}")]
-        [Authorize(Roles = SD.Technician)]
+        [Authorize(Roles = SD.Technician + "," + SD.HealthFacilityManager + "," + SD.Physician)]
         public async Task<ActionResult<APIResponse>> UpdateRadLabResult(int id, [FromForm] RadLabResultUpdateDTO entityUpdateDTO)
         {
             try

@@ -66,14 +66,6 @@ namespace EHR_API.Extensions
             });
         }
 
-        /*
-            - IIS integration help us with the deployment to IIS
-         
-        public static void ConfigureIISIntegration(this IServiceCollection services)
-        {
-            services.Configure<IISOptions>(options => { });
-        }
-        */
 
         public static void ConfigureIdentity(this IServiceCollection services)
         {
@@ -94,9 +86,6 @@ namespace EHR_API.Extensions
 
         public static void ConfigureInterfacesAPI(this IServiceCollection services)
         {
-            //services.AddScoped<IGovernorateRepository, GovernorateRepository>();
-            //services.AddScoped<IAllergyRepository, AllergyRepository>();
-            //services.AddScoped<IAllergyDrugRepository, AllergyDrugRepository>();
             services.AddScoped<IMainRepository, MainRepository>();
             services.AddScoped<IEmailSender, EmailSender>();
         }
@@ -112,6 +101,7 @@ namespace EHR_API.Extensions
             var secretKey = jwtSettings.GetValue<string>("Secret");
 
             services.AddAuthentication(
+                // to make Jwt Bearer the default scheme for authen
                 opt =>
                 {
                     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

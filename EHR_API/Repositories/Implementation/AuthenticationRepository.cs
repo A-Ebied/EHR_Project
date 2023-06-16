@@ -22,14 +22,14 @@ namespace EHR_API.Repositories.Implementation
         private readonly IConfiguration _configuration;
         private readonly IEmailSender _emailSender;
         private RegistrationData _user;
-        private ApplicationDbContext _db;
+        //private ApplicationDbContext _db;
 
         public AuthenticationRepository(IMapper mapper, UserManager<RegistrationData> userManager, IConfiguration configuration, ApplicationDbContext db, IEmailSender emailSender)
         {
             _mapper = mapper;
             _userManager = userManager;
             _configuration = configuration;
-            _db = db;
+            //_db = db;
             _emailSender = emailSender;
         }
 

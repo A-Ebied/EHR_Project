@@ -8,13 +8,23 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 /*-------------------*/
+/* 
+ * adds the CorsPolicy service to the dependency injection container.
+ * 
+ * Cross-Origin Resource Sharing (CORS) is a security feature support to an application:
+ *  - to specify which origins are allowed to access the resources on the server.
+ *  - to specify which headers are allowed.
+ *   - to specify which methods are allowed.
+ */
 builder.Services.ConfigureCors();
+
 builder.Services.AddDbContext<ApplicationDbContext>(
     options =>
     {
         options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection"));
         options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
     });
+
 builder.Services.ConfigureInterfacesAPI();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 builder.Services.AddAuthentication();
@@ -42,7 +52,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 /*-------------------*/
 // enables using static files for the request.
-
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, "wwwroot/files")),
@@ -52,10 +61,15 @@ app.UseStaticFiles(new StaticFileOptions
 app.UseCors("CorsPolicy");
 SeedDatabase();
 /*-------------------*/
+//added to the pipeline to establish the identity of the user making the request
 app.UseAuthentication();
 /*-------------------*/
+
+// checks whether the request is authorized based on the user's roles, claims, and policies
 app.UseAuthorization();
 
+//   a middleware which maps controller actions to HTTP requests
+//  route HTTP requests to the appropriate controller action based on the URL and HTTP method of the request
 app.MapControllers();
 
 app.Run();

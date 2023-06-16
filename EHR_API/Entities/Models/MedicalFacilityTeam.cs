@@ -10,6 +10,7 @@ namespace EHR_API.Entities.Models
         public string MedicalTeamId { get; set; }
         public int HealthFacilityId { get; set; }
         public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         public MedicalTeam MedicalTeam { get; set; }
         public HealthFacility HealthFacility { get; set; }

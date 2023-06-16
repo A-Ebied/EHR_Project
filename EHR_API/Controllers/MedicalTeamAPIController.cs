@@ -7,6 +7,7 @@ using EHR_API.Entities.Models.UsersData;
 using EHR_API.Extensions;
 using EHR_API.Repositories.Contracts;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
@@ -129,24 +130,35 @@ namespace EHR_API.Controllers
 
                 await _db._medicalTeam.CreateAsync(entity);
 
-                if (entityCreateDTO.MedicalFacilityTeams != null && entityCreateDTO.MedicalFacilityTeams.Count > 0)
+                //if (entityCreateDTO.MedicalFacilityTeams != null && entityCreateDTO.MedicalFacilityTeams.Count > 0)
+                //{
+                //    var facilityTeam = new List<MedicalFacilityTeam>();
+                //    var temp = new MedicalFacilityTeam();
+
+                //    foreach (var item in entityCreateDTO.MedicalFacilityTeams)
+                //    {
+                //        temp = _mapper.Map<MedicalFacilityTeam>(item);
+                //        temp.MedicalTeamId = entity.Id;
+                //        temp.CreatedAt = DateTime.Now;
+
+                //        facilityTeam.Add(temp);
+                //    }
+
+                //    await _db._facilityTeam.CreateRangeAsync(facilityTeam);
+                //    entity.MedicalFacilityTeams = facilityTeam;
+                //}
+
+                if (entityCreateDTO.MedicalFacilityTeam != null)
                 {
-                    var facilityTeam = new List<MedicalFacilityTeam>();
-                    var temp = new MedicalFacilityTeam();
+                    var facilityTeam = _mapper.Map<MedicalFacilityTeam>(entityCreateDTO.MedicalFacilityTeam);
 
-                    foreach (var item in entityCreateDTO.MedicalFacilityTeams)
-                    {
-                        temp = _mapper.Map<MedicalFacilityTeam>(item);
-                        temp.MedicalTeamId = entity.Id;
-                        temp.CreatedAt = DateTime.Now;
-
-                        facilityTeam.Add(temp);
-                    }
-
-                    await _db._facilityTeam.CreateRangeAsync(facilityTeam);
-                    entity.MedicalFacilityTeams = facilityTeam;
+                    facilityTeam.MedicalTeamId = entity.Id;
+                    facilityTeam.CreatedAt = DateTime.Now;
+                    facilityTeam.UpdatedAt = DateTime.Now;
+                     
+                    await _db._facilityTeam.CreateAsync(facilityTeam);
+                    entity.MedicalFacilityTeams = new List<MedicalFacilityTeam>() { facilityTeam };
                 }
-
 
                 _response.Result = _mapper.Map<MedicalTeamDTO>(entity);
                 _response.StatusCode = HttpStatusCode.Created;
@@ -240,8 +252,21 @@ namespace EHR_API.Controllers
 
                 entity.UpdatedAt = DateTime.Now;
                 entity.CreatedAt = oldOne.CreatedAt;
+                entity.MedicalFacilityTeams = null;
+
                 await _db._medicalTeam.UpdateAsync(entity);
 
+                if (entityUpdateDTO.MedicalFacilityTeam != null)
+                {
+                    var facilityTeam = _mapper.Map<MedicalFacilityTeam>(entityUpdateDTO.MedicalFacilityTeam);
+
+                    facilityTeam.MedicalTeamId = entity.Id;
+                    facilityTeam.CreatedAt = DateTime.Now;
+                    facilityTeam.UpdatedAt = DateTime.Now;
+
+                    await _db._facilityTeam.UpdateAsync(facilityTeam);
+                    entity.MedicalFacilityTeams = new List<MedicalFacilityTeam>() { facilityTeam };
+                }
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = _mapper.Map<MedicalTeamDTO>(entity);

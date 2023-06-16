@@ -12,6 +12,7 @@ namespace EHR_API.Entities.DTOs.UserDataDTOs.MedicalTeamDTOs
         [Required]
         public string Degree { get; set; }
 
-        public ICollection<MedicalFacilityTeamCreateDTO> MedicalFacilityTeams { get; set; }
+       // public ICollection<MedicalFacilityTeamCreateDTO> MedicalFacilityTeams { get; set; }
+        public MedicalFacilityTeamCreateDTO MedicalFacilityTeam { get; set; }
     }
 }

@@ -3,7 +3,6 @@ using EHR_API.Entities.Models.UsersData;
 using EHR_API.Entities.ModelsConfiguration;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace EHR_API.Entities
 {
