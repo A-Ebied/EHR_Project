@@ -237,7 +237,7 @@ namespace EHR_API.Controllers
                     var i = 0;
                     foreach (var item in entity.ChronicDiseases)
                     {
-                        newEntity.ChronicDiseases[i++].Icd = _db._icd.GetAsync(i => i.Code == item.ICDId).Result.DiagnosisName;
+                        newEntity.ChronicDiseases[i++].Icd = _db._icd.GetAsync(i => i.Code == item.ICDCode).Result.DiagnosisName;
                     }
                 }
 

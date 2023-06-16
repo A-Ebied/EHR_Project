@@ -7,7 +7,7 @@ namespace EHR_API.Entities.Models
     {
         [Key]
         public int Id { get; set; }
-        public string ICDId { get; set; }
+        public string ICDCode { get; set; }
         public string RegistrationDataId { get; set; }      
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

@@ -6,7 +6,6 @@ using Microsoft.Extensions.FileProviders;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 /*-------------------*/
 /* 
  * adds the CorsPolicy service to the dependency injection container.
@@ -16,8 +15,14 @@ var builder = WebApplication.CreateBuilder(args);
  *  - to specify which headers are allowed.
  *   - to specify which methods are allowed.
  */
+
 builder.Services.ConfigureCors();
 
+/* 
+ * adds a database context to the dependency injection container
+ *
+ * The database context represents a session with the database, and is responsible for handling database connections, managing transactions, and providing access to the database tables and entities. 
+ */
 builder.Services.AddDbContext<ApplicationDbContext>(
     options =>
     {
