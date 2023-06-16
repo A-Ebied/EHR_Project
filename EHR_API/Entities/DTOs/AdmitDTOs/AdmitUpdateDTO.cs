@@ -15,9 +15,9 @@ namespace EHR_API.Entities.DTOs.AdmitDTOs
         public int HealthFacilityId { get; set; }
         [Required]
         public string RegistrationDataId { get; set; }
-        [Required]
+        [Required, MinLength(3)]
         public string Reason { get; set; }
-        [Required]
+        [Required, MinLength(3)]
         public string Place { get; set; }
         public string Note { get; set; }
     }

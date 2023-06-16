@@ -163,6 +163,12 @@ namespace EHR_API.Repositories.Implementation
         //tells the JwtSecurityToken how to cryptographically sign the token.
         private SigningCredentials GetSigningCredentials()
         {
+            /*
+            * To generate a JWT, the server signs the header and payload with a secret key using the specified algorithm. 
+            * 
+            * The resulting signature is then appended to the header and payload to create the final token.
+
+            */
             var key = Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JwtSettings:Secret"));
             var secret = new SymmetricSecurityKey(key);
             //the algorithm to use to produce key.

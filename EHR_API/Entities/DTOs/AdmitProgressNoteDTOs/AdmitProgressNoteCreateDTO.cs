@@ -6,6 +6,8 @@ namespace EHR_API.Entities.DTOs.AdmitProgressNoteDTOs
     {
         [Required]
         public string Title { get; set; }
+        [Required]
+        public DateTime Date { get; set; }
         public string Description { get; set; }
         [Required]
         public IFormFile File { get; set; }

@@ -7,11 +7,17 @@ namespace EHR_API.Entities.Models
     {
         [Key]
         public int Id { get; set; }
+        [Required]
         public string MedicalTeamId { get; set; }
+        [Required]
         public int HealthFacilityId { get; set; }
+        [Required]
         public string RegistrationDataId { get; set; }
+        [Required, MinLength(3)]
         public string Reason { get; set; }
+        [Required, MinLength(3)]
         public string Place { get; set; }
+        [Required]
         public DateTime AdmitAt { get; set; }
         public DateTime? LeaveAt { get; set; }
         public string Note { get; set; }

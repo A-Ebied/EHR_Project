@@ -37,6 +37,16 @@ builder.Services.AddAutoMapper(typeof(MappingConfig));
 builder.Services.AddAuthentication();
 
 builder.Services.ConfigureIdentity();
+
+/*
+ * standard for securely transmitting information as a JSON object between parties. 
+ * used for authentication and authorization purposes
+ * 
+ * consists of three parts:
+     - header {contains information about the algorithm used to sign the token, such as HS256}
+     - payload {contains the claims}
+     - signature {used to verify the integrity of the token}  
+ */
 builder.Services.ConfigureJWT(builder.Configuration);
 //builder.Services.AddResponseCaching();
 builder.Services.AddControllersConfiguration();
