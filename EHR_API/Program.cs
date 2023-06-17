@@ -43,7 +43,7 @@ builder.Services.ConfigureIdentity();
  * used for authentication and authorization purposes
  * 
  * consists of three parts:
-     - header {contains information about the algorithm used to sign the token, such as HS256}
+     - header {It contains information like the type of token and the name of the algorithm}
      - payload {contains the claims}
      - signature {used to verify the integrity of the token}  
  */
@@ -52,7 +52,9 @@ builder.Services.ConfigureJWT(builder.Configuration);
 builder.Services.AddControllersConfiguration();
 builder.Services.AddScoped<DbInitializer>();
 
-var emailConfig = builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
+// MailKit Library
+var emailConfig = builder.Configuration
+                         .GetSection("EmailConfiguration").Get<EmailConfiguration>();
 builder.Services.AddSingleton(emailConfig);
 /*-------------------*/
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

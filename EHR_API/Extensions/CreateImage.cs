@@ -6,7 +6,7 @@
         {
             var extension = Path.GetExtension(image.FileName);
 
-            string fileName = image.FileName;
+            string fileName = Guid.NewGuid().ToString() + extension;
             var uploads = Path.Combine(_webHost.WebRootPath, $@"files\{folderName}");
 
             using (var fileStreams = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))

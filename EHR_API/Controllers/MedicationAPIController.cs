@@ -29,7 +29,7 @@ namespace EHR_API.Controllers
         }
 
         [HttpPost("CreateMedication")]
-        [Authorize(Roles = SD.SystemManager)]
+        //[Authorize(Roles = SD.SystemManager)]
         public async Task<ActionResult<APIResponse>> CreateMedication([FromForm] MedicationCreateDTO entityCreateDTO)
         {
             try

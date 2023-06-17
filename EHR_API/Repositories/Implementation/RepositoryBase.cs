@@ -28,14 +28,9 @@ namespace EHR_API.Repositories.Implementation
             await _db.SaveChangesAsync();
         }
 
-        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> expression = null, string includeProperties = null, int pageNumber = 1, int pageSize = 0)
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> expression = null, string includeProperties = null)
         {
             IQueryable<T> entities = expression != null ? _dbSet.Where(expression) : _dbSet;
-
-            if (pageSize > 0)
-            {
-                entities = entities.Skip(pageSize * (pageNumber - 1)).Take(pageSize);
-            }
 
             if (includeProperties != null)
             {

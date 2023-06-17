@@ -323,21 +323,11 @@ namespace EHR_API.Controllers
                         result = entities.Where(r => r.Name == SD.Physician || r.Name == SD.Technician || r.Name == SD.Pharmacist);
                     }
                 }
-
-                if (headerRole == null)
+                else
                 {
                     result = entities.Where(r => r.Name == SD.Patient);
                 }
-
-                //if (result != null)
-                //{
-                //    _response.Result = _mapper.Map<List<RolesDTO>>(result);
-                //}
-                //else
-                //{
-                //    _response.Result = _mapper.Map<List<RolesDTO>>(entities);
-                //}
-
+ 
                 _response.Result = _mapper.Map<List<RolesDTO>>(result);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -363,7 +353,7 @@ namespace EHR_API.Controllers
                     return BadRequest(APIResponses.BadRequest("Enter another Id"));
                 }
 
-                var x = true;
+                var flag = true;
                 string jwtToken = null;
                 if (HttpContext.Request.Headers.Authorization.Count > 0)
                 {
@@ -375,9 +365,9 @@ namespace EHR_API.Controllers
                         var user = new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
                         headerRole = user.Claims.ToList()[4].Value;
 
-                        if (headerRole == SD.HealthFacilityManager || headerRole == SD.SystemManager)
+                        if (headerRole == SD.HealthFacilityManager || headerRole == SD.SystemManager || headerRole == SD.Physician)
                         {
-                           x = false;
+                            flag = false;
                         }
                         else
                         {
@@ -386,7 +376,7 @@ namespace EHR_API.Controllers
                     }
                 }
                  
-                var result = await _db._authentication.RegisterUser(registrationDataDTO, x);
+                var result = await _db._authentication.RegisterUser(registrationDataDTO, flag);
                 if (!result.Succeeded)
                 {
                     return BadRequest(APIResponses.BadRequest(result.ToString()));
@@ -506,7 +496,7 @@ namespace EHR_API.Controllers
 
                 if (result)
                 {
-                    _response.Result = "The code has been sent, you must register first.";
+                    _response.Result = "The code has been sent.";
                     _response.StatusCode = HttpStatusCode.OK;
                     return Ok(_response);
                 }

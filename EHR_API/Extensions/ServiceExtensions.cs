@@ -1,17 +1,12 @@
 ﻿using EHR_API.Entities;
-using EHR_API.Entities.Models;
 using EHR_API.Entities.Models.UsersData;
 using EHR_API.Repositories.Contracts;
 using EHR_API.Repositories.Implementation;
-using EHR_MVC.Repositories.Contracts;
-using EHR_MVC.Repositories.Implementation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using System.Text.Json;
 
 namespace EHR_API.Extensions
 {
@@ -38,7 +33,7 @@ namespace EHR_API.Extensions
             for (int i = 0; i < length; i++)
             {
                 int a = ran.Next(b.Length);
-                random +=  b.ElementAt(a);
+                random +=  b.ElementAt(a); //b[a];
             }
 
             return random;

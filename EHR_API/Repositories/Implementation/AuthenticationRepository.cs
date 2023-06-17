@@ -22,49 +22,43 @@ namespace EHR_API.Repositories.Implementation
         private readonly IConfiguration _configuration;
         private readonly IEmailSender _emailSender;
         private RegistrationData _user;
-        //private ApplicationDbContext _db;
 
-        public AuthenticationRepository(IMapper mapper, UserManager<RegistrationData> userManager, IConfiguration configuration, ApplicationDbContext db, IEmailSender emailSender)
+        public AuthenticationRepository(IMapper mapper, UserManager<RegistrationData> userManager, IConfiguration configuration, IEmailSender emailSender)
         {
             _mapper = mapper;
             _userManager = userManager;
             _configuration = configuration;
-            //_db = db;
             _emailSender = emailSender;
         }
 
-        private async Task Code(string email, string code) 
+        private async Task Code(string email, string code)
         {
             var message = new Message(new string[] { email }, "Confirm Email", code);
 
             await _emailSender.SendEmailAsync(message);
         }
 
-        public async Task<IdentityResult> RegisterUser(RegistrationDataCreateDTO registrationDataDTO, bool x)
+        public async Task<IdentityResult> RegisterUser(RegistrationDataCreateDTO registrationDataDTO, bool flag)
         {
             var user = _mapper.Map<RegistrationData>(registrationDataDTO);
             user.CreatedAt = DateTime.Now;
             user.UpdatedAt = DateTime.Now;
-            
+
 
             var result = await _userManager.CreateAsync(user, registrationDataDTO.Password);
             if (result.Succeeded)
             {
                 await _userManager.AddToRolesAsync(user, new List<string>() { registrationDataDTO.Role });
 
-                if (x)
+                if (flag)
                 {
                     user.ConfirmEmailCode = ServiceExtensions.RandomCode();
                     await Code(registrationDataDTO.Email, user.ConfirmEmailCode);
-                } 
+                }
                 else
                 {
-                     await _userManager.ConfirmEmailAsync(user,
-                         await _userManager.GenerateEmailConfirmationTokenAsync(user));
-
-                    //_user.EmailConfirmed = true;
-                    //user = null;
-                    //await _userManager.UpdateAsync(_user);
+                    await _userManager.ConfirmEmailAsync(user,
+                        await _userManager.GenerateEmailConfirmationTokenAsync(user));
                 }
             }
 
@@ -112,7 +106,7 @@ namespace EHR_API.Repositories.Implementation
                     await _emailSender.SendEmailAsync(message);
                 }
 
-                return result.Succeeded; 
+                return result.Succeeded;
             }
 
             return false;
@@ -145,6 +139,7 @@ namespace EHR_API.Repositories.Implementation
             {
                 _user = null;
             }
+
             return _user;
         }
 
