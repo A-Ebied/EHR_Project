@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
  * Cross-Origin Resource Sharing (CORS) is a security feature support to an application:
  *  - to specify which origins are allowed to access the resources on the server.
  *  - to specify which headers are allowed.
- *   - to specify which methods are allowed.
+ *  - to specify which methods are allowed.
  */
 
 builder.Services.ConfigureCors();

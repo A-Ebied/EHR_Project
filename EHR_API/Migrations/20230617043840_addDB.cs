@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EHRAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class db1 : Migration
+    public partial class addDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -424,7 +424,7 @@ namespace EHRAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ICDId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ICDCode = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     RegistrationDataId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -439,8 +439,8 @@ namespace EHRAPI.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ChronicDiseases_ICDs_ICDId",
-                        column: x => x.ICDId,
+                        name: "FK_ChronicDiseases_ICDs_ICDCode",
+                        column: x => x.ICDCode,
                         principalTable: "ICDs",
                         principalColumn: "Code");
                     table.ForeignKey(
@@ -578,11 +578,11 @@ namespace EHRAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    MedicalTeamId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    MedicalTeamId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     HealthFacilityId = table.Column<int>(type: "int", nullable: false),
-                    RegistrationDataId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Place = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RegistrationDataId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Place = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AdmitAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LeaveAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -596,7 +596,8 @@ namespace EHRAPI.Migrations
                         name: "FK_Admits_AspNetUsers_RegistrationDataId",
                         column: x => x.RegistrationDataId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Admits_HealthFacilities_HealthFacilityId",
                         column: x => x.HealthFacilityId,
@@ -607,7 +608,8 @@ namespace EHRAPI.Migrations
                         name: "FK_Admits_MedicalTeam_MedicalTeamId",
                         column: x => x.MedicalTeamId,
                         principalTable: "MedicalTeam",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -618,7 +620,8 @@ namespace EHRAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MedicalTeamId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     HealthFacilityId = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -979,7 +982,7 @@ namespace EHRAPI.Migrations
                 values: new object[,]
                 {
                     { "1", null, "SystemManager", "SYSTEMMANAGER" },
-                    { "2", null, "HealthFacilityManager", "HEALTHFACILITYAMANAGER" },
+                    { "2", null, "HealthFacilityManager", "HEALTHFACILITYMANAGER" },
                     { "3", null, "Physician", "PHYSICIAN" },
                     { "5", null, "Pharmacist", "PHARMACIST" },
                     { "6", null, "Patient", "PATIENT" },
@@ -991,17 +994,17 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "ConfirmEmailCode", "CreatedAt", "Email", "EmailConfirmed", "ForgotPasswordCode", "FullName", "LockoutEnabled", "LockoutEnd", "Nationality", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UpdatedAt", "UserName" },
                 values: new object[,]
                 {
-                    { "12345678912341", 0, "4c291b57-31c8-4497-a038-6072b9c81137", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "k@gmail.com", true, null, "Ahmed Mohamed Kamal", false, null, "Egyptian", "K@GMAIL.COM", "@KAMAL123", "AQAAAAIAAYagAAAAEH2Nu/2gHOGO5PgK+M38aAkuRHE5qbHoR47eVsJmfruCXQYeo+9wY+P5G2LI7ggTEw==", "01234567890", false, "a7ab55bf-7a07-42d3-871a-e9cf0e1a9770", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Kamal123" },
-                    { "12345678912342", 0, "d23d2ff5-89d5-45ea-989d-6b901b52e4cb", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "muha75375@gmail.com", true, null, "Ahmed Mohamed Ahmed", false, null, "Egyptian", "MUHA75375@GMAIL.COM", "@AHMED123", "AQAAAAIAAYagAAAAEINpCo1H4/k3ZeU8c3LO3hrrri6yS0ppKeeM0ioV8POQ9dAQBom6Ds7/w4hv5aZwWA==", "", false, "5ba8b154-7307-4433-8232-c8a2f6a8b33b", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Ahmed123" },
-                    { "12345678912343", 0, "d0b3069e-c5b7-4124-a88d-4002516210f1", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "M@gmail.com", true, null, "Ahmed Mohamed Mohamed", false, null, "Egyptian", "M@GMAIL.COM", "@MUHAMMAD123", "AQAAAAIAAYagAAAAEKBtT33FfZCgd0/begGMJd2p8l3Rfp/HoY5COBAiokZvi5e910WjXddbV+I2jkrKug==", "01234567899", false, "00128e3e-d50c-4bcc-9533-7a9b6fdd705e", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Muhammad123" },
-                    { "12345678912344", 0, "7a01e0ca-9c4b-42a2-93ff-d71cf3a49693", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Al@gmail.com", true, null, "Ahmed Mohammed Ali", false, null, "Egyptian", "AL@GMAIL.COM", "@ALI123", "AQAAAAIAAYagAAAAEB7gmTiXV9fxuXj2/u2E8mvQ6xJv+X5HFDGk9mn+bVrh8Yshf+pwxv06Mj6qHJtTaA==", "01234567890", false, "dff4c33f-cae9-4343-a540-b6713d6d4708", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Ali123" },
-                    { "12345678912346", 0, "88044977-449c-4d75-8de6-b13746568dea", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ka@gmail.com", true, null, "Ahmed Khater Ali", false, null, "Egyptian", "KA@GMAIL.COM", "@KHATER123", "AQAAAAIAAYagAAAAEG1lU/Y3SHNAW6eZ9SH8F6VcVtbavc0BkucLGtYdsFl374yADD+efUpNx7O9EmGChw==", "", false, "3c428ad5-f449-4767-9865-733c9522072e", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Khater123" },
-                    { "12345678912348", 0, "459ef04b-8de6-4a76-8f7a-2171b4659f9b", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ma2@gmail.com", true, null, "Manal Khater Ahmed", false, null, "Egyptian", "MA2@GMAIL.COM", "@MANAL2123", "AQAAAAIAAYagAAAAEMYRWydwUt02vyKLND3oIos+Q9RRE5bc1VEPPiMQqBJkUiTTsJ5+gBKzN3cUe2zU6g==", "", false, "5a5383ee-6972-4f17-b46b-2f4aff2f7947", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Manal2123" },
-                    { "12345678912349", 0, "65748285-bd44-4f34-95d8-68c5ec6b51c0", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ka2@gmail.com", true, null, "Khater Ahmed", false, null, "Egyptian", "KA2@GMAIL.COM", "@KHATER2123", "AQAAAAIAAYagAAAAEGd0LLfvOiTp+RbYblK2TYNr0sRWuVtS8Vq4GGENCD0TgngN3jky7xdr+NUoMfv3Wg==", "", false, "cb535913-0f88-45c8-9f87-e4a59a6dc46f", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Khater2123" },
-                    { "12345678912350", 0, "e6505e3c-cb34-4658-bc0e-98603a7b3e5a", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "TE@gmail.com", true, null, "Ali Khater Ahmed", false, null, "Egyptian", "TE@GMAIL.COM", "@TEST2123", "AQAAAAIAAYagAAAAEDoBhypo0Fv454B3grCIWSTfBsd+vVi7ts39jEubolSKVL5er6h9/0//SfThClD/Sw==", "", false, "468599b5-35ff-480d-b55f-c4cd65703d2a", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@AlI2123" },
-                    { "12345678912351", 0, "0d199e11-62a2-4b56-bad2-1a1f902b9f4b", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Fa@gmail.com", true, null, "Ahmed Fawzy Mohamed", false, null, "Egyptian", "FA@GMAIL.COM", "@FAWZY123", "AQAAAAIAAYagAAAAEC60k4G+pNopH9f9DZARhYuueMg4b3z4zdSDROGtK+2PLKKPy1XAFB+kbRLBvpXsaQ==", "", false, "23574571-19de-4499-8dee-c7d564308084", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Fawzy123" },
-                    { "12345678912352", 0, "6e31363e-a108-46ec-8b2b-185de9f4c8cc", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "AlFa@gmail.com", true, null, "Ali Fawzy Muhammad", false, null, "Egyptian", "ALFA@GMAIL.COM", "@ALIFAWZY123", "AQAAAAIAAYagAAAAEPzoHgrgP/Yp/VZMNVjrZVfQDMG0ZLSJuZww1PJ/x9DofJIR/iQ/1QNgEkQOQ9nz+g==", "", false, "3396e4a0-1757-4a2b-90f8-106752d8dcb6", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@AliFawzy123" },
-                    { "12345678912353", 0, "fb9795b2-66ed-4ac7-97ba-105f6fc196b3", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "AFa@gmail.com", true, null, "Ali Fawzy Ahmed", false, null, "Egyptian", "AFA@GMAIL.COM", "@AFAWZY123", "AQAAAAIAAYagAAAAENigmlHWsGwDooZMTqnBzJFAoTRZK+8Q9tdyzHScFEyx6xDBoZ+IBhkK6IvS8DsRHg==", "", false, "2ffd9b5b-e1bd-4206-bac4-4e692d20ec2b", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@AFawzy123" }
+                    { "12345678912341", 0, "fb9bc665-550c-4271-a3e9-7e02b87cdb92", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "k@gmail.com", true, null, "Ahmed Mohamed Kamal", false, null, "Egyptian", "K@GMAIL.COM", "@KAMAL123", "AQAAAAIAAYagAAAAEKM1ydMO6xLNu7po/Kd5vuqN4GkmvMblE+S27mD/aLH61WwsWVLcZFAh+G7rBA/NCA==", "01234567890", false, "982ad2f2-10be-4a01-b124-8e29f13be08d", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Kamal123" },
+                    { "12345678912342", 0, "aee19fe2-d0c1-4673-9e24-527d100b3137", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "M@gmail.com", true, null, "Ahmed Mohamed Ahmed", false, null, "Egyptian", "M@GMAIL.COM", "@AHMED123", "AQAAAAIAAYagAAAAEJREFfB7nxbKE5PVSuh1Gri59SIQTcuFI3RtFUW2tFYDvaJw5xcW3SbAhtYkEdW5Iw==", "", false, "21bdfa27-4912-45d6-9cc8-d82b13473f94", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Ahmed123" },
+                    { "12345678912343", 0, "1216a800-6649-4d01-a79e-ee7bb66e57cd", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "muha75375@gmail.com", true, null, "Ahmed Mohamed Mohamed", false, null, "Egyptian", "MUHA75375@GMAIL.COM", "@MUHAMMAD123", "AQAAAAIAAYagAAAAEIN1vTDAer6Yq31bfgZ7y9Lv/QPnbohYboOWrwTWAya0+/OPrTEaROLDH8ytIwFljA==", "01234567899", false, "ccdfbfa3-f8e3-46af-9ff4-1d3b11e53af5", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Muhammad123" },
+                    { "12345678912344", 0, "088b41c4-dc8a-4678-a7ff-8d230ef7dc09", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Al@gmail.com", true, null, "Ahmed Mohammed Ali", false, null, "Egyptian", "AL@GMAIL.COM", "@ALI123", "AQAAAAIAAYagAAAAENxHAAEru2RrhymvwxJO+I9Ou4M65c7vd7aPBFSFLvK30Rw1HdpTRUjE0XNX56ltdg==", "01234567890", false, "198cdb0d-caf5-4f68-a0a2-b52cf3c03cc6", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Ali123" },
+                    { "12345678912346", 0, "5c9a77c0-6e84-4111-b336-569aaa49ca91", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ka@gmail.com", true, null, "Ahmed Khater Ali", false, null, "Egyptian", "KA@GMAIL.COM", "@KHATER123", "AQAAAAIAAYagAAAAEGF7DfdmB1xqH85mXpvEkMpbNdOwVf62zkrBrSItTWiQRxHuUCp7jKob0yC/vrMuwg==", "", false, "88ac3138-2790-4a8c-9436-12cd23fb23a7", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Khater123" },
+                    { "12345678912348", 0, "22947a20-b5f3-45f3-98a0-6afbdd49493a", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ma2@gmail.com", true, null, "Manal Khater Ahmed", false, null, "Egyptian", "MA2@GMAIL.COM", "@MANAL2123", "AQAAAAIAAYagAAAAELL/umv4TIUxSB8MkqIdJMqhaMNIKF1a01ROwmo0vDDlR8dojVlWOLQrgzn+Ppjdiw==", "", false, "e43309c7-75ab-4d5a-93ee-7e3d3e3ed8c2", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Manal2123" },
+                    { "12345678912349", 0, "a92b45da-6f35-43e1-979f-992b84fa7d96", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ka2@gmail.com", true, null, "Khater Ahmed", false, null, "Egyptian", "KA2@GMAIL.COM", "@KHATER2123", "AQAAAAIAAYagAAAAENsBSvfgTDQzJZBryl6ibe9syxjKpT5pMnp2DxB6xiV6obO3z2QxG+xD0L/owa5bZw==", "", false, "4df55336-959c-4699-bf74-8a393bb8a2a7", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Khater2123" },
+                    { "12345678912350", 0, "a0b37472-e2cd-4ab3-956c-0fd76d0bf539", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "TE@gmail.com", true, null, "Ali Khater Ahmed", false, null, "Egyptian", "TE@GMAIL.COM", "@TEST2123", "AQAAAAIAAYagAAAAEN1oBbfFqocPgfp46llWJg0Ir3DwH6v3VR3yquydZquh4cjuABb7SIcDRIvcOm/f4A==", "", false, "03d242ac-6fba-4f11-8cda-6446a3685394", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@AlI2123" },
+                    { "12345678912351", 0, "98106888-c2b3-4c9e-810e-1519c5975446", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Fa@gmail.com", true, null, "Ahmed Fawzy Mohamed", false, null, "Egyptian", "FA@GMAIL.COM", "@FAWZY123", "AQAAAAIAAYagAAAAEFu/mNopzDsZw6pbi4UiNhU3dIbe9rX6mfJFlV6aG/RVskzji0w9iLQ073QA65E0ug==", "", false, "0f7a97cd-f4f9-44d1-a64d-24c87f8f4630", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@Fawzy123" },
+                    { "12345678912352", 0, "89927822-6610-4aac-832b-a1be3696c593", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "AlFa@gmail.com", true, null, "Ali Fawzy Muhammad", false, null, "Egyptian", "ALFA@GMAIL.COM", "@ALIFAWZY123", "AQAAAAIAAYagAAAAEGQe+Spv8t1md2VGyfQgDIxD7ZDwn03wTSVJ2cjSCrfJfxAPjNewiFgaLVFMo06ufg==", "", false, "16221327-ce54-44ff-bcb6-64e1667d5704", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@AliFawzy123" },
+                    { "12345678912353", 0, "61b82134-3247-40cf-8803-8c9200723dbf", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "AFa@gmail.com", true, null, "Ali Fawzy Ahmed", false, null, "Egyptian", "AFA@GMAIL.COM", "@AFAWZY123", "AQAAAAIAAYagAAAAEJYDFrgcdSItfXcLFtO0pITtcgkMbM1ckd0M+d36S46CwUzgXdvveZEL6wvOxW+lTQ==", "", false, "3cee919e-c8a4-415a-966b-7362354ecc50", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "@AFawzy123" }
                 });
 
             migrationBuilder.InsertData(
@@ -1009,12 +1012,12 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "CreatedAt", "Title", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 6, 4, 16, 27, 39, 717, DateTimeKind.Local).AddTicks(8568), "Cairo", new DateTime(2023, 6, 4, 16, 27, 39, 717, DateTimeKind.Local).AddTicks(8722) },
-                    { 2, new DateTime(2023, 6, 4, 16, 27, 39, 717, DateTimeKind.Local).AddTicks(8735), "Giza", new DateTime(2023, 6, 4, 16, 27, 39, 717, DateTimeKind.Local).AddTicks(8739) },
-                    { 3, new DateTime(2023, 6, 4, 16, 27, 39, 717, DateTimeKind.Local).AddTicks(8745), "Matrouh", new DateTime(2023, 6, 4, 16, 27, 39, 717, DateTimeKind.Local).AddTicks(8750) },
-                    { 4, new DateTime(2023, 6, 4, 16, 27, 39, 717, DateTimeKind.Local).AddTicks(8755), "North Sinai", new DateTime(2023, 6, 4, 16, 27, 39, 717, DateTimeKind.Local).AddTicks(8759) },
-                    { 5, new DateTime(2023, 6, 4, 16, 27, 39, 717, DateTimeKind.Local).AddTicks(8765), "Sharkia", new DateTime(2023, 6, 4, 16, 27, 39, 717, DateTimeKind.Local).AddTicks(8769) },
-                    { 6, new DateTime(2023, 6, 4, 16, 27, 39, 717, DateTimeKind.Local).AddTicks(8775), "Dakahlia", new DateTime(2023, 6, 4, 16, 27, 39, 717, DateTimeKind.Local).AddTicks(8779) }
+                    { 1, new DateTime(2023, 6, 17, 7, 38, 39, 710, DateTimeKind.Local).AddTicks(4220), "Cairo", new DateTime(2023, 6, 17, 7, 38, 39, 710, DateTimeKind.Local).AddTicks(4268) },
+                    { 2, new DateTime(2023, 6, 17, 7, 38, 39, 710, DateTimeKind.Local).AddTicks(4272), "Giza", new DateTime(2023, 6, 17, 7, 38, 39, 710, DateTimeKind.Local).AddTicks(4274) },
+                    { 3, new DateTime(2023, 6, 17, 7, 38, 39, 710, DateTimeKind.Local).AddTicks(4276), "Matrouh", new DateTime(2023, 6, 17, 7, 38, 39, 710, DateTimeKind.Local).AddTicks(4277) },
+                    { 4, new DateTime(2023, 6, 17, 7, 38, 39, 710, DateTimeKind.Local).AddTicks(4279), "North Sinai", new DateTime(2023, 6, 17, 7, 38, 39, 710, DateTimeKind.Local).AddTicks(4281) },
+                    { 5, new DateTime(2023, 6, 17, 7, 38, 39, 710, DateTimeKind.Local).AddTicks(4283), "Sharkia", new DateTime(2023, 6, 17, 7, 38, 39, 710, DateTimeKind.Local).AddTicks(4285) },
+                    { 6, new DateTime(2023, 6, 17, 7, 38, 39, 710, DateTimeKind.Local).AddTicks(4287), "Dakahlia", new DateTime(2023, 6, 17, 7, 38, 39, 710, DateTimeKind.Local).AddTicks(4288) }
                 });
 
             migrationBuilder.InsertData(
@@ -1022,11 +1025,12 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Code", "CreatedAt", "DiagnosisName", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { "A00.0", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(1813), "Cholera due to Vibrio cholerae 01, biovar cholerae", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(1816) },
-                    { "A00.1", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(1820), "Cholera due to Vibrio cholerae 01, biovar eltor", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(1821) },
-                    { "A00.9", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(1823), "Cholera, unspecified", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(1825) },
-                    { "A01.00", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(1826), "Typhoid fever, unspecified", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(1828) },
-                    { "J18.9", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(1830), "Pneumonia", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(1831) }
+                    { " I10", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(3389), "Essential (primary) hypertension", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(3390) },
+                    { "A00.0", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(3374), "Cholera due to Vibrio cholerae 01, biovar cholerae", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(3377) },
+                    { "A00.1", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(3378), "Cholera due to Vibrio cholerae 01, biovar eltor", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(3380) },
+                    { "A00.9", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(3381), "Cholera, unspecified", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(3382) },
+                    { "A01.00", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(3384), "Typhoid fever, unspecified", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(3385) },
+                    { "J18.9", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(3386), "Pneumonia", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(3387) }
                 });
 
             migrationBuilder.InsertData(
@@ -1034,12 +1038,13 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "Contraindication", "CreatedAt", "Description", "ImageUrl", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, "Forbidden for patients with kidneys and liver.", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(4584), "Route, Oral", "/files/Medication/fexofenadine.jpg", "Fexofenadine", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(4588) },
-                    { 2, "-", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(4592), "Nasal Spray", "/files/Medication/NASONEX.jpg", "Nasonex", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(4593) },
-                    { 3, "Do not use with any other paracetamol containing products.", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(4596), "Route, Oral", "/files/Medication/advance.jpg", "Panadol Advance", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(4597) },
-                    { 4, "-", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(4599), "Route, Oral", "/files/Medication/Kerovit.jpg", "Kerovit", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(4600) },
-                    { 5, "Allergy to any of the components of the drug", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(4603), "Route, Oral", "/files/Medication/CiproCoupons.png", "Cipro", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(4604) },
-                    { 6, "Allergy to any of the components of the drug", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(4606), "Route, Oral", "/files/Medication/Oracea.jpg", "Oracea", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(4608) }
+                    { 1, "Forbidden for patients with kidneys and liver.", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5029), "Route, Oral", "/files/Medication/fexofenadine.jpg", "Fexofenadine", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5031) },
+                    { 2, "-", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5034), "Nasal Spray", "/files/Medication/NASONEX.jpg", "Nasonex", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5035) },
+                    { 3, "Do not use with any other paracetamol containing products.", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5037), "Route, Oral", "/files/Medication/advance.jpg", "Panadol Advance", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5038) },
+                    { 4, "-", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5039), "Route, Oral", "/files/Medication/Kerovit.jpg", "Kerovit", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5040) },
+                    { 5, "Allergy to any of the components of the drug", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5042), "Route, Oral", "/files/Medication/CiproCoupons.png", "Cipro", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5043) },
+                    { 6, "Allergy to any of the components of the drug", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5045), "Route, Oral", "/files/Medication/Oracea.jpg", "Oracea", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5046) },
+                    { 7, "", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5048), "Route, Oral", "/files/Medication/Hydrochlorothiazide.jpg", "Hydrochlorothiazide", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5049) }
                 });
 
             migrationBuilder.InsertData(
@@ -1047,11 +1052,11 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "AgeRange", "Contraindication", "CreatedAt", "Dosage", "Name", "Note", "Reason", "Route", "SideEffects", "Type", "UpdatedAt", "VaccinationEffectiveness" },
                 values: new object[,]
                 {
-                    { 1, "Typically given in two doses during childhood", "Severe allergic reaction to a previous dose or vaccine components", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(6868), "Two doses, usually administered at 12-15 months and 4-6 years of age", "Measles, Mumps, and Rubella (MMR)", "MMR vaccination is an important part of Egypt's immunization program.", "Protection against measles, mumps, and rubella", "Subcutaneous injection", "Mild side effects include fever, rash, and temporary joint pain", "Live attenuated vaccine", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(6871), "Highly effective in preventing the target diseases" },
-                    { 2, "Multiple doses given during infancy and childhood", "Severe allergic reaction to a previous dose", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(6876), "Typically administered as a series of four doses", "Polio", "Polio vaccination is crucial for maintaining Egypt's polio-free status.", "Protection against poliovirus infection", "Intramuscular injection or oral administration", "Mild side effects include pain or swelling at the injection site", "Inactivated vaccine (inactivated polio vaccine or IPV)", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(6877), "Highly effective in preventing polio" },
-                    { 3, "Usually given during childhood or as a catch-up vaccine for older individuals", "Allergy to vaccine components", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(6880), "Typically administered as a series of two doses", "Hepatitis A", "Hepatitis A vaccination is recommended for individuals traveling to areas with a high prevalence of the disease.", "Protection against hepatitis A virus infection", "Intramuscular injection", "Mild side effects include pain at the injection site, headache, and fatigue", "Inactivated vaccine", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(6882), "Highly effective in preventing hepatitis A" },
-                    { 4, "Recommended for individuals six months of age and older", "Severe allergic reaction to a previous dose or vaccine components", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(6885), "Annual vaccination, as the flu strains change every year", "Influenza (Flu)", "Annual influenza vaccination is recommended, especially for high-risk groups.", "Protection against seasonal influenza viruses", "Intramuscular injection or nasal spray", "Mild side effects include soreness at the injection site, low-grade fever, and muscle aches", "Inactivated vaccine (influenza vaccine)", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(6886), "Varies each year due to different strains, but overall effective in reducing the severity of flu symptoms" },
-                    { 5, "It is recommended for infants and young children, as well as adults with certain medical conditions or risk factors. The specific age recommendations may vary by country.", "Severe allergic reaction (anaphylaxis) to a previous dose of PCV13 or any vaccine component.", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(6889), "The number of doses and schedule can vary depending on the age at initial vaccination and the individual's risk factors.", "Pneumococcal Conjugate Vaccine (PCV13)", "PCV13 is often given as a series of doses during infancy and early childhood, followed by a booster dose in some individuals.", " Protection against infections caused by Streptococcus pneumoniae, including pneumonia, meningitis, and bloodstream infections.", "Intramuscular injection", "Common side effects include pain, redness, or swelling at the injection site, as well as fever, fussiness, and fatigue.", "Conjugate vaccine", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(6968), "PCV13 has been shown to be highly effective in preventing pneumococcal disease caused by the serotypes included in the vaccine." }
+                    { 1, "Typically given in two doses during childhood", "Severe allergic reaction to a previous dose or vaccine components", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(6323), "Two doses, usually administered at 12-15 months and 4-6 years of age", "Measles, Mumps, and Rubella (MMR)", "MMR vaccination is an important part of Egypt's immunization program.", "Protection against measles, mumps, and rubella", "Subcutaneous injection", "Mild side effects include fever, rash, and temporary joint pain", "Live attenuated vaccine", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(6325), "Highly effective in preventing the target diseases" },
+                    { 2, "Multiple doses given during infancy and childhood", "Severe allergic reaction to a previous dose", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(6328), "Typically administered as a series of four doses", "Polio", "Polio vaccination is crucial for maintaining Egypt's polio-free status.", "Protection against poliovirus infection", "Intramuscular injection or oral administration", "Mild side effects include pain or swelling at the injection site", "Inactivated vaccine (inactivated polio vaccine or IPV)", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(6329), "Highly effective in preventing polio" },
+                    { 3, "Usually given during childhood or as a catch-up vaccine for older individuals", "Allergy to vaccine components", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(6332), "Typically administered as a series of two doses", "Hepatitis A", "Hepatitis A vaccination is recommended for individuals traveling to areas with a high prevalence of the disease.", "Protection against hepatitis A virus infection", "Intramuscular injection", "Mild side effects include pain at the injection site, headache, and fatigue", "Inactivated vaccine", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(6333), "Highly effective in preventing hepatitis A" },
+                    { 4, "Recommended for individuals six months of age and older", "Severe allergic reaction to a previous dose or vaccine components", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(6335), "Annual vaccination, as the flu strains change every year", "Influenza (Flu)", "Annual influenza vaccination is recommended, especially for high-risk groups.", "Protection against seasonal influenza viruses", "Intramuscular injection or nasal spray", "Mild side effects include soreness at the injection site, low-grade fever, and muscle aches", "Inactivated vaccine (influenza vaccine)", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(6336), "Varies each year due to different strains, but overall effective in reducing the severity of flu symptoms" },
+                    { 5, "It is recommended for infants and young children, as well as adults with certain medical conditions or risk factors. The specific age recommendations may vary by country.", "Severe allergic reaction (anaphylaxis) to a previous dose of PCV13 or any vaccine component.", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(6339), "The number of doses and schedule can vary depending on the age at initial vaccination and the individual's risk factors.", "Pneumococcal Conjugate Vaccine (PCV13)", "PCV13 is often given as a series of doses during infancy and early childhood, followed by a booster dose in some individuals.", " Protection against infections caused by Streptococcus pneumoniae, including pneumonia, meningitis, and bloodstream infections.", "Intramuscular injection", "Common side effects include pain, redness, or swelling at the injection site, as well as fever, fussiness, and fatigue.", "Conjugate vaccine", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(6340), "PCV13 has been shown to be highly effective in preventing pneumococcal disease caused by the serotypes included in the vaccine." }
                 });
 
             migrationBuilder.InsertData(
@@ -1077,9 +1082,9 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "CreatedAt", "Habit", "Notes", "RegistrationDataId", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(5551), "Smoking", "", "12345678912351", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(5555) },
-                    { 2, new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(5558), "Smoking", "", "12345678912352", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(5559) },
-                    { 3, new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(5561), "Drink Wine", "", "12345678912353", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(5563) }
+                    { 1, new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5564), "Smoking", "", "12345678912351", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5566) },
+                    { 2, new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5568), "Smoking", "", "12345678912352", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5569) },
+                    { 3, new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5571), "Drink Wine", "", "12345678912353", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5572) }
                 });
 
             migrationBuilder.InsertData(
@@ -1087,9 +1092,9 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "BloodGroup", "CreatedAt", "DNAImageResultUrl", "FamilyHistory", "MedicalHistory", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { "12345678912351", "A+", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(3349), "", "Paternal grandfather had diabetes", "", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(3353) },
-                    { "12345678912352", "O+", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(3362), "", "The paternal grandfather had a mental illness.", "The patient had hallucinations twice previously.", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(3363) },
-                    { "12345678912353", "AB+", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(3439), "", "", "", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(3441) }
+                    { "12345678912351", "A+", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4431), "", "Paternal grandfather had diabetes", "", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4433) },
+                    { "12345678912352", "O+", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4435), "", "The paternal grandfather had a mental illness.", "The patient had hallucinations twice previously.", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4437) },
+                    { "12345678912353", "AB+", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4439), "", "", "", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4440) }
                 });
 
             migrationBuilder.InsertData(
@@ -1097,13 +1102,13 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "CreatedAt", "Degree", "MedicalSpecialization", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { "12345678912342", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(3837), "PhD in pulmonary diseases", "Pulmonologist", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(3840) },
-                    { "12345678912343", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(3855), "Master of Otolaryngology", "Otolaryngology", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(3857) },
-                    { "12345678912344", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(3859), "Bachelor's degree in pharmacy", "Pharmacist", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(3861) },
-                    { "12345678912346", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(3863), "Institute of Technical healthy", "Radiology technician", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(3864) },
-                    { "12345678912348", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(3845), "Master of Orthopedic Oncology", "Orthopaedic Oncology Surgeon", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(3846) },
-                    { "12345678912349", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(3848), "PhD in urological oncology", "Urologic Oncologist", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(3850) },
-                    { "12345678912350", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(3852), "PhD in Internal medicine", "Internal medicine physician", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(3853) }
+                    { "12345678912342", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4754), "PhD in pulmonary diseases", "Pulmonologist", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4757) },
+                    { "12345678912343", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4767), "Master of Otolaryngology", "Otolaryngology", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4768) },
+                    { "12345678912344", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4769), "Bachelor's degree in pharmacy", "Pharmacist", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4770) },
+                    { "12345678912346", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4772), "Institute of Technical healthy", "Radiology technician", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4773) },
+                    { "12345678912348", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4759), "Master of Orthopedic Oncology", "Orthopaedic Oncology Surgeon", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4760) },
+                    { "12345678912349", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4761), "PhD in urological oncology", "Urologic Oncologist", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4763) },
+                    { "12345678912350", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4764), "PhD in Internal medicine", "Internal medicine physician", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4765) }
                 });
 
             migrationBuilder.InsertData(
@@ -1111,9 +1116,9 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "Address", "AgeGroup", "BirthDate", "CreatedAt", "EmergencyPhone1", "EmergencyPhone2", "Gender", "GovernorateId", "NumOfChildren", "Occupation", "Phone1", "UpdatedAt", "UserImageUrl" },
                 values: new object[,]
                 {
-                    { "12345678912351", "", "", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(2784), "01234546788", "", "Male", 1, 3, "Teacher", "01234546787", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(2788), "" },
-                    { "12345678912352", "", "", new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(2801), "01234746788", "", "Male", 3, 1, "Professor", "01234544487", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(2803), "" },
-                    { "12345678912353", "", "", new DateTime(1980, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(2810), "01234506788", "", "Male", 2, 3, "", "01234500787", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(2811), "" }
+                    { "12345678912351", "", "", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4131), "01234546788", "", "Male", 1, 3, "Teacher", "01234546787", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4134), "" },
+                    { "12345678912352", "", "", new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4143), "01234746788", "", "Male", 3, 1, "Professor", "01234544487", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4144), "" },
+                    { "12345678912353", "", "", new DateTime(1980, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4150), "01234506788", "", "Male", 2, 3, "", "01234500787", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(4151), "" }
                 });
 
             migrationBuilder.InsertData(
@@ -1121,8 +1126,8 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "CreatedAt", "InsuranceNo", "InsuranceOrganizationName", "InsuranceType", "RegistrationDataId", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(2249), "123OP", "Egyptian health insurance", "Governmental", "12345678912351", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(2252) },
-                    { 2, new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(2255), "124OP", "Egyptian health insurance", "Governmental", "12345678912352", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(2257) }
+                    { 1, new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(3650), "123OP", "Egyptian health insurance", "Governmental", "12345678912351", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(3652) },
+                    { 2, new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(3655), "124OP", "Egyptian health insurance", "Governmental", "12345678912352", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(3656) }
                 });
 
             migrationBuilder.InsertData(
@@ -1130,8 +1135,8 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "Allergen", "CreatedAt", "Instruction", "IsChronic", "MedicalTeamId", "Reaction", "RegistrationDataId", "Type", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, "Dust mites, Pollen, Pet hair, fur, feathers", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(6045), "Avoid allergens", true, "12345678912343", "Sneezing ,Runny or stuffy nose, coughing, tightness in the chest, shortness of breath", "12345678912351", "Dust allergy", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(6048) },
-                    { 2, "Peanuts, Milk, Eggs", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(6052), "", true, "12345678912350", "Rash", "12345678912352", "Food Allergy", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(6054) }
+                    { 1, "Dust mites, Pollen, Pet hair, fur, feathers", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5815), "Avoid allergens", true, "12345678912343", "Sneezing ,Runny or stuffy nose, coughing, tightness in the chest, shortness of breath", "12345678912351", "Dust allergy", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5818) },
+                    { 2, "Peanuts, Milk, Eggs", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5820), "", true, "12345678912350", "Rash", "12345678912352", "Food Allergy", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5821) }
                 });
 
             migrationBuilder.InsertData(
@@ -1139,8 +1144,8 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "CreatedAt", "DonationDateTime", "MedicalTeamId", "RegistrationDataId", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(5100), new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(5094), "12345678912348", "12345678912351", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(5102) },
-                    { 2, new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(5106), new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(5104), "12345678912348", "12345678912352", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(5107) }
+                    { 1, new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5319), new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5315), "12345678912348", "12345678912351", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5320) },
+                    { 2, new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5323), new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5322), "12345678912348", "12345678912352", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(5325) }
                 });
 
             migrationBuilder.InsertData(
@@ -1148,9 +1153,9 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "Address", "CreatedAt", "Description", "Email", "GovernorateId", "MedicalTeamId", "Phone1", "Phone2", "Phone3", "SubordinateTo", "Title", "Type", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, "Address1", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(1269), "Description1", "m@gmail.com", 1, "12345678912342", "01123456878", "", "", "The military Establishment", "Sharkia Military Hospital", "Military Hospital", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(1336) },
-                    { 2, "Address2", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(1392), "Description2", "a@gmail.com", 1, "12345678912348", "01122456878", "", "", "Ministry of Health", "Arish Hospital", "Government Hospital", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(1394) },
-                    { 3, "Address3", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(1397), "Description3", "j@gmail.com", 1, "12345678912349", "01123416878", "", "", "University Hospitals", "University Hospital, Zagazig", "University Hospital", new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(1398) }
+                    { 1, "Address1", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(2969), "Description1", "m@gmail.com", 1, "12345678912342", "01123456878", "", "", "The military Establishment", "Sharkia Military Hospital", "Military Hospital", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(3082) },
+                    { 2, "Address2", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(3088), "Description2", "a@gmail.com", 1, "12345678912348", "01122456878", "", "", "Ministry of Health", "Arish Hospital", "Government Hospital", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(3089) },
+                    { 3, "Address3", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(3092), "Description3", "j@gmail.com", 1, "12345678912349", "01123416878", "", "", "University Hospitals", "University Hospital, Zagazig", "University Hospital", new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(3093) }
                 });
 
             migrationBuilder.InsertData(
@@ -1158,8 +1163,8 @@ namespace EHRAPI.Migrations
                 columns: new[] { "Id", "AllergyId", "CreatedAt", "MedicationId", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(6478), 1, new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(6482) },
-                    { 2, 1, new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(6485), 2, new DateTime(2023, 6, 4, 16, 27, 41, 64, DateTimeKind.Local).AddTicks(6486) }
+                    { 1, 1, new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(6077), 1, new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(6079) },
+                    { 2, 1, new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(6081), 2, new DateTime(2023, 6, 17, 7, 38, 40, 422, DateTimeKind.Local).AddTicks(6082) }
                 });
 
             migrationBuilder.CreateIndex(
@@ -1274,9 +1279,9 @@ namespace EHRAPI.Migrations
                 column: "MedicationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChronicDiseases_ICDId",
+                name: "IX_ChronicDiseases_ICDCode",
                 table: "ChronicDiseases",
-                column: "ICDId");
+                column: "ICDCode");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ChronicDiseases_MedicalTeamId",
@@ -1284,11 +1289,11 @@ namespace EHRAPI.Migrations
                 column: "MedicalTeamId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChronicDiseases_RegistrationDataId_ICDId",
+                name: "IX_ChronicDiseases_RegistrationDataId_ICDCode",
                 table: "ChronicDiseases",
-                columns: new[] { "RegistrationDataId", "ICDId" },
+                columns: new[] { "RegistrationDataId", "ICDCode" },
                 unique: true,
-                filter: "[RegistrationDataId] IS NOT NULL AND [ICDId] IS NOT NULL");
+                filter: "[RegistrationDataId] IS NOT NULL AND [ICDCode] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Contraindications_MedicalTeamId",
